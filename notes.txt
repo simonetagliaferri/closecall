@@ -1,0 +1,1 @@
+Uso la libreria gson per gestire la dipendenza su fs con json.

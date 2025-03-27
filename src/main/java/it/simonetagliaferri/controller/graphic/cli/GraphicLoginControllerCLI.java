@@ -10,7 +10,7 @@ public class GraphicLoginControllerCLI {
     LoginCLIView view = new LoginCLIView();
     LoginController controller = new LoginController();
     public void start() {
-        int choice = 0;
+        int choice;
         try {
             choice = view.showMenu();
         } catch (IOException e) {
