@@ -1,7 +1,7 @@
 package it.simonetagliaferri.model.dao;
 
 public class LoginDAOFactory {
-    private static LoginDAOFactory instance = new LoginDAOFactory();
+    private final static LoginDAOFactory instance = new LoginDAOFactory();
 
     private Class<? extends LoginDAO> loginDaoImplClazz;
 

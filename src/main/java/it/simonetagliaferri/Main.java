@@ -20,6 +20,17 @@ public class Main {
         catch (IOException e) {
             e.printStackTrace();
         }
+        String uiMode;
+        try (InputStream input = new FileInputStream("src/main/resources/ui.properties")) {
+            Properties properties = new Properties();
+            properties.load(input);
+
+            uiMode = properties.getProperty("UI_MODE");
+            System.out.println(uiMode);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         StartController startController = new StartController();
         startController.setPersistenceProvider(persistenceMode);
         new GraphicStartControllerCLI().start();
