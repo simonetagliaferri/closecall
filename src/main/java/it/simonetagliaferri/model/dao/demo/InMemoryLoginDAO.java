@@ -17,18 +17,12 @@ public class InMemoryLoginDAO implements LoginDAO {
     private final Map<String, User> logins = new HashMap<>();
 
     @Override
-    public User login(User user) {
-        if (logins.containsKey(user.getUsername())) {
-            return logins.get(user.getUsername());
-        }
-        return null;
+    public User findByUsername(User user) {
+        return logins.get(user.getUsername());
     }
 
     @Override
     public User signup(User user) {
-        if (logins.containsKey(user.getUsername())) {
-            return null;
-        }
         logins.put(user.getUsername(), user);
         return user;
     }

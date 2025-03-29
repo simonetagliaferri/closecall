@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
+import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
@@ -30,36 +31,41 @@ public class GraphicLoginControllerCLI {
 
     public void login() {
         UserBean user;
-        int res;
+        LoginResponseBean res;
         try {
             user=view.authenticate();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         res=this.controller.login(user);
-        if (res==1) {
-            view.successfulLogin();
-        }
-        else {
-            view.failedLogin();
+        switch (res.getResult()) {
+            case SUCCESS:
+                view.successfulLogin();
+                break;
+            case FAIL:
+                view.failedLogin();
+                break;
         }
     }
 
     public void signup() {
         UserBean user;
-        int res;
+        LoginResponseBean res;
         try {
             user=view.signup();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         res=this.controller.signup(user);
-        if (res==1) {
-            view.successfulSignup();
+        switch (res.getResult()) {
+            case SUCCESS:
+                view.successfulSignup();
+                break;
+            case FAIL:
+                view.failedSignup();
+                break;
         }
-        else {
-            view.failedSignup();
-        }
+        start();
     }
 
 }

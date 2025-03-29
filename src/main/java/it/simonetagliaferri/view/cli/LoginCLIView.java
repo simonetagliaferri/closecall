@@ -8,16 +8,16 @@ import java.io.IOException;
 
 public class LoginCLIView {
     public int showMenu() throws IOException {
-        System.out.println("Welcome to login");
+        CliUtils.println("Welcome to login");
         while (true) {
-            System.out.println("1. Login");
-            System.out.println("2. Sign up");
-            System.out.println("3. Go back");
+            CliUtils.println("1. Login");
+            CliUtils.println("2. Sign up");
+            CliUtils.println("3. Go back");
             int choice = CliUtils.promptInt("Enter your choice: ");
             if (choice >= 1 && choice <= 3) {
                 return choice;
             }
-            System.out.println("Invalid choice. Try again.");
+            CliUtils.println("Invalid choice. Try again.");
         }
     }
     public UserBean authenticate() throws IOException {
@@ -35,32 +35,31 @@ public class LoginCLIView {
             if (password.equals(confirmPassword)) {
                 break;
             }
-            System.out.println("Passwords do not match. Try again.");
+            CliUtils.println("Passwords do not match. Try again.");
         }
         String roleStr;
         Role role;
         while (true) {
-            System.out.print("Enter role(Player or Host): ");
-            roleStr = CliUtils.prompt("Enter role: ");
+            roleStr = CliUtils.prompt("Enter role(Player or Host): ");
             try {
                 role=Role.valueOf(roleStr.toUpperCase());
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("Invalid role. Try again.");
+                CliUtils.println("Invalid role. Try again.");
             }
         }
         return new UserBean(username, email, password, role);
     }
     public void successfulLogin() {
-        System.out.println("Login successful");
+        CliUtils.println("Login successful");
     }
     public void failedLogin() {
-        System.out.println("Login failed");
+        CliUtils.println("Login failed");
     }
     public void successfulSignup() {
-        System.out.println("Signup successful");
+        CliUtils.println("Signup successful");
     }
     public void failedSignup() {
-        System.out.println("Signup failed");
+        CliUtils.println("Signup failed");
     }
 }

@@ -47,7 +47,7 @@ public class FsLoginDAO implements LoginDAO {
         return user;
     }
     @Override
-    public User login(User user) {
+    public User findByUsername(User user) {
         return users.get(user.getUsername());
     }
 

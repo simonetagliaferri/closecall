@@ -27,4 +27,9 @@ public class CliUtils {
             }
         }
     }
+
+    public static void println(String label) {
+        System.out.println(label);
+    }
+
 }
