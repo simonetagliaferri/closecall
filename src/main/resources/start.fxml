@@ -70,12 +70,10 @@
       <GridPane.margin>
          <Insets />
       </GridPane.margin>
-      <HBox alignment="CENTER">
+      <Line endX="55.0" startX="-100.0">
          <HBox.margin>
-            <Insets right="2.0" />
-         </HBox.margin>
-         <Line endX="55.0" startX="-100.0" />
-      </HBox>
+            <Insets right="3.0" />
+         </HBox.margin></Line>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="or" textAlignment="CENTER" textOrigin="CENTER">
          <font>
             <Font name="Symbol" size="12.0" />
@@ -84,12 +82,7 @@
             <Insets bottom="5.0" />
          </HBox.margin>
       </Text>
-      <HBox alignment="CENTER">
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
-         <Line endX="100.0" startX="-55.0" startY="-0.0" />
-      </HBox>
+      <Line endX="100.0" startX="-55.0" startY="-0.0" />
    </HBox>
    <Button fx:id="mainButton" defaultButton="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleMainButton" prefHeight="25.0" prefWidth="225.0" styleClass="blue-button" text="Continue" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
       <GridPane.margin>
