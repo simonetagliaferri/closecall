@@ -1,44 +1,69 @@
-package it.simonetagliaferri.controller.graphic;
+package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.beans.UserBean;
+import it.simonetagliaferri.controller.logic.LoginController;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 public class GraphicLoginControllerGUI extends Application {
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/start.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/start.css").toExternalForm());
+        Group scalable = (Group) scene.lookup("#scalableContent");
+        double baseWidth = 854;
+        double baseHeight = 480;
+        stage.setMinWidth(baseWidth);
+        stage.setMinHeight(baseHeight);
+        bindScale(scene, scalable, baseWidth, baseHeight);
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.setTitle("CloseCall");
-        stage.setMinWidth(600);
-        stage.setMinHeight(400);
         stage.show();
     }
     public static void main(String[] args) {
         launch(args);
     }
+
+    private void bindScale(Scene scene, Group scalable, double baseWidth, double baseHeight) {
+        ChangeListener<Number> listener = (obs, oldVal, newVal) -> {
+            double scaleX = scene.getWidth() / baseWidth;
+            double scaleY = scene.getHeight() / baseHeight;
+            double scale = Math.min(scaleX, scaleY);
+            scalable.setScaleX(scale);
+            scalable.setScaleY(scale);
+        };
+
+        scene.widthProperty().addListener(listener);
+        scene.heightProperty().addListener(listener);
+    }
+    LoginController controller = new LoginController();
     private enum UIState {
         USERNAME_INPUT,
-        PASSWORD_INPUT
+        PASSWORD_INPUT,
+        SIGNUP
     }
 
     private UIState state = UIState.USERNAME_INPUT;
 
+    @FXML private Group scalableContent;
     @FXML private Text welcomeText;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -53,10 +78,16 @@ public class GraphicLoginControllerGUI extends Application {
     @FXML private TextField passwordField1;
     @FXML private TextField confirmPassField;
     @FXML private Button signupButton;
+    @FXML private Spinner roleSpinner;
 
     @FXML
     private void initialize() {
         state = UIState.USERNAME_INPUT;
+        roleSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(
+                FXCollections.observableArrayList("Host", "Player")
+        ));
+        roleSpinner.getValueFactory().setWrapAround(true);
+        roleSpinner.setVisible(false);
         usernameField.setVisible(true);
         passwordField.setVisible(false);
         passResetHyper.setVisible(false);
@@ -105,67 +136,100 @@ public class GraphicLoginControllerGUI extends Application {
     private void handleSubHyperClick() {
         // Reset UI to username entry state
         if (state == UIState.PASSWORD_INPUT) {
-            usernameField.clear();
-            passwordField.clear();
-
-            usernameField.setVisible(true);
-            passwordField.setVisible(false);
-            passResetHyper.setVisible(false);
-
-            welcomeText.setText("Welcome to the court.");
-            mainButton.setText("Continue");
-
-            subText.setText("First time here?");
-            subHyper.setText("Create account");
-
-            googleLogin.setVisible(true);
-            divider.setVisible(true);
-            subtitle.setVisible(true);
-
-            mainButton.requestFocus();
-            state = UIState.USERNAME_INPUT;
+            switchToLogin();
         }
         else if (state == UIState.USERNAME_INPUT) {
             switchToSignup();
+        }
+        else if (state == UIState.SIGNUP) {
+            clearSignup();
+            switchToLogin();
         }
     }
 
     @FXML
     private void handleSignupButton() {
-        welcomeText.setText("Signed up successfully!");
-        mainButton.setVisible(true);
-        googleLogin.setVisible(true);
-        divider.setVisible(true);
-        subtitle.setVisible(true);
+        //String selectedRole = roleSpinner.getValue();
+        //UserBean user = new UserBean(usernameField.getText(), emailField.getText(), passwordField.getText());
+        //this.controller.signup(user);
+        clearSignup();
+        switchToLogin();
+
+        welcomeText.setText("Signed up successfully");
+    }
+
+    @FXML
+    private void handleGoogleLogin() {
+        notImplemented();
+    }
+
+    @FXML
+    private void handlePassResetHyper() {
+        notImplemented();
+    }
+
+    private void switchToSignup() {
+        subText.setText("Made a mistake?");
+        subHyper.setText("Go back to login");
+        mainButton.setVisible(false);
+        googleLogin.setVisible(false);
+        divider.setVisible(false);
+        emailField.setVisible(true);
+        passwordField1.setVisible(true);
+        confirmPassField.setVisible(true);
+        signupButton.setVisible(true);
+        signupButton.setDefaultButton(true);
+        roleSpinner.setVisible(true);
+        state = UIState.SIGNUP;
+    }
+
+    private void clearSignup() {
+        signupButton.setDefaultButton(false);
         emailField.setVisible(false);
         passwordField1.setVisible(false);
         confirmPassField.setVisible(false);
         signupButton.setVisible(false);
+        roleSpinner.setVisible(false);
+    }
+
+    private void switchToLogin() {
+        usernameField.clear();
         passwordField.clear();
 
         usernameField.setVisible(true);
         passwordField.setVisible(false);
         passResetHyper.setVisible(false);
 
+        welcomeText.setText("Welcome to the court.");
         mainButton.setText("Continue");
 
         subText.setText("First time here?");
         subHyper.setText("Create account");
 
+        googleLogin.setVisible(true);
+        divider.setVisible(true);
+        subtitle.setVisible(true);
+        mainButton.setVisible(true);
 
         mainButton.requestFocus();
         state = UIState.USERNAME_INPUT;
     }
 
-    private void switchToSignup() {
-        mainButton.setVisible(false);
-        googleLogin.setVisible(false);
-        divider.setVisible(false);
-        subtitle.setVisible(false);
-        emailField.setVisible(true);
-        passwordField1.setVisible(true);
-        confirmPassField.setVisible(true);
-        signupButton.setVisible(true);
+    private boolean showingTempMessage = false;
+
+    private void notImplemented() {
+        if (showingTempMessage) return;
+
+        showingTempMessage = true;
+        String old = welcomeText.getText();
+        welcomeText.setText("This is not implemented yet.");
+
+        PauseTransition pause = new PauseTransition(Duration.millis(500));
+        pause.setOnFinished(e -> {
+            welcomeText.setText(old);
+            showingTempMessage = false;
+        });
+        pause.play();
     }
 
 }

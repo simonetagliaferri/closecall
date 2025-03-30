@@ -1,6 +1,6 @@
 package it.simonetagliaferri.controller.graphic.config;
 
-import it.simonetagliaferri.controller.graphic.GraphicLoginControllerGUI;
+import it.simonetagliaferri.controller.graphic.gui.GraphicLoginControllerGUI;
 import it.simonetagliaferri.controller.graphic.cli.GraphicLoginControllerCLI;
 import javafx.application.Application;
 

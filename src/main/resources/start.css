@@ -16,3 +16,52 @@
 .blue-button:hover {
     -fx-background-color: #2466d1;
 }
+
+.hyperlink {
+    -fx-border-color: transparent;
+}
+
+.text-field {
+    -fx-background-radius: 10;
+    -fx-background-color: white;
+    -fx-border-radius: 10;
+    -fx-border-color: #bdc1c7;
+    -fx-text-fill: #131314;
+}
+.text-field:focused {
+    -fx-border-color: #131314;
+}
+
+.spinner {
+    -fx-background-color: white;
+    -fx-border-color: #bdc1c7;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 0 10 0 10;
+    -fx-font-family: "Symbol";
+    -fx-font-size: 12px;
+}
+
+.spinner .increment-arrow-button ,
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 2 0 2 0;
+}
+
+.spinner .increment-arrow-button .increment-arrow,
+.spinner .decrement-arrow-button .decrement-arrow {
+    -fx-background-color: #bdc1c7;
+}
+
+.spinner .increment-arrow-button:hover .increment-arrow,
+.spinner .decrement-arrow-button:hover .decrement-arrow {
+    -fx-background-color: #131314;
+}
+
+.spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
+}
+
+

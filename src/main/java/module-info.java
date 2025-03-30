@@ -6,8 +6,8 @@ module it.simonetagliaferri {
     requires javafx.graphics;
     requires javafx.controls;
 
-    opens it.simonetagliaferri.controller.graphic to javafx.graphics, javafx.fxml;
     opens it.simonetagliaferri.model.domain to com.google.gson;
     opens it.simonetagliaferri to javafx.fxml;
     exports it.simonetagliaferri;
+    opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
 }
