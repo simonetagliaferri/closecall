@@ -13,7 +13,7 @@ public class LoginController {
     public LoginController() {}
     public LoginResponseBean login(UserBean bean) {
         User user=loginDAO.findByUsername(bean.getUsername());
-        String hashedPass=PasswordUtils.md5(bean.getPassword());
+        String hashedPass=PasswordUtils.sha256Hex(bean.getPassword());
         if(user!=null && user.getPassword().equals(hashedPass)) {
             return new LoginResponseBean(LoginResult.SUCCESS, user.getRole());
         }
@@ -25,7 +25,7 @@ public class LoginController {
         if(existingUser!=null) {
             return new LoginResponseBean(LoginResult.FAIL);
         }
-        User user = new User(bean.getUsername(), bean.getEmail(), PasswordUtils.md5(bean.getPassword()), bean.getRole());
+        User user = new User(bean.getUsername(), bean.getEmail(), PasswordUtils.sha256Hex(bean.getPassword()), bean.getRole());
         loginDAO.signup(user);
         return new LoginResponseBean(LoginResult.SUCCESS);
     }
