@@ -1,6 +1,5 @@
 package it.simonetagliaferri.model.dao.jdbc;
 
-import it.simonetagliaferri.model.dao.ConnectionFactory;
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
@@ -14,20 +13,17 @@ public class JdbcLoginDAO implements LoginDAO {
     public static JdbcLoginDAO getInstance() { return instance; }
     private JdbcLoginDAO() {}
     @Override
-    public User findByUsername(User user) throws DAOException {
-        String username = user.getUsername();
-        String password = user.getPassword();
+    public User findByUsername(String username) throws DAOException {
+        String password;
         Role role;
 
         //Ora dobbiamo ricavare il ruolo
         try {
             Connection conn = ConnectionFactory.getConnection();
-            CallableStatement cs = conn.prepareCall("{call findByUsername(?,?)}");
+            CallableStatement cs = conn.prepareCall("{call findByUsername(?)}");
             cs.setString(1, username);
-            cs.setString(2, password);
             ResultSet rs = cs.executeQuery();
             if (rs.next()) {
-                username = rs.getString("username");
                 password = rs.getString("password");
                 role = Role.valueOf(rs.getString("role"));
                 return new User(username, password, role);

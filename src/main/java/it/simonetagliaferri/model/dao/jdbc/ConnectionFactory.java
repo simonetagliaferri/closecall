@@ -1,4 +1,4 @@
-package it.simonetagliaferri.model.dao;
+package it.simonetagliaferri.model.dao.jdbc;
 
 import it.simonetagliaferri.model.domain.Role;
 

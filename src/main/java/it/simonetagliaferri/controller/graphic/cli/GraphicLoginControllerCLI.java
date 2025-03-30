@@ -25,7 +25,7 @@ public class GraphicLoginControllerCLI {
                 signup();
                 break;
             case 3:
-                new GraphicStartControllerCLI().start();
+                this.controller.end();
         }
     }
 

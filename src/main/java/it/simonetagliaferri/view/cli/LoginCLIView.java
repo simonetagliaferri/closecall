@@ -12,7 +12,7 @@ public class LoginCLIView {
         while (true) {
             CliUtils.println("1. Login");
             CliUtils.println("2. Sign up");
-            CliUtils.println("3. Go back");
+            CliUtils.println("3. Exit");
             int choice = CliUtils.promptInt("Enter your choice: ");
             if (choice >= 1 && choice <= 3) {
                 return choice;

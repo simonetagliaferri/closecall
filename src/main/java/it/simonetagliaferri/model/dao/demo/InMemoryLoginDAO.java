@@ -17,8 +17,8 @@ public class InMemoryLoginDAO implements LoginDAO {
     private final Map<String, User> logins = new HashMap<>();
 
     @Override
-    public User findByUsername(User user) {
-        return logins.get(user.getUsername());
+    public User findByUsername(String username) {
+        return logins.get(username);
     }
 
     @Override
