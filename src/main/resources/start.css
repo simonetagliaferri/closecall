@@ -1,0 +1,18 @@
+
+#googleLogin {
+    -fx-background-color: white;
+}
+#googleLogin:hover {
+    -fx-background-color: #e1e2e3;
+}
+
+.blue-button {
+    -fx-background-color: #2770e6;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-text-fill: white;
+}
+
+.blue-button:hover {
+    -fx-background-color: #2466d1;
+}

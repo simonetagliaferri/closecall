@@ -21,6 +21,7 @@ public class GraphicLoginControllerGUI extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/start.fxml"));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/start.css").toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.setTitle("CloseCall");
