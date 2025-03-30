@@ -16,133 +16,156 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.GraphicLoginControllerGUI">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" />
-    <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" />
-      <ColumnConstraints hgrow="SOMETIMES" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
-      <RowConstraints vgrow="NEVER" />
-    <RowConstraints vgrow="NEVER" />
-      <RowConstraints vgrow="NEVER" />
-      <RowConstraints vgrow="NEVER" />
-      <RowConstraints vgrow="NEVER" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-      <RowConstraints vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Text fx:id="welcomeText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the court." textOrigin="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0"
+          style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="it.simonetagliaferri.controller.graphic.GraphicLoginControllerGUI">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES"/>
+      <ColumnConstraints hgrow="NEVER" minWidth="-Infinity"/>
+      <ColumnConstraints hgrow="SOMETIMES"/>
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES"/>
+      <RowConstraints vgrow="NEVER"/>
+      <RowConstraints vgrow="NEVER"/>
+      <RowConstraints vgrow="NEVER"/>
+      <RowConstraints vgrow="NEVER"/>
+      <RowConstraints vgrow="NEVER"/>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
+      <RowConstraints vgrow="SOMETIMES"/>
+   </rowConstraints>
+   <Text fx:id="welcomeText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the court."
+         textOrigin="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+      <font>
+         <Font name="Symbol" size="36.0"/>
+      </font>
+      <GridPane.margin>
+         <Insets bottom="30.0"/>
+      </GridPane.margin>
+   </Text>
+   <TextField fx:id="usernameField" promptText="Username"
+              style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;"
+              GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <font>
+         <Font name="Symbol" size="12.0"/>
+      </font>
+      <GridPane.margin>
+         <Insets/>
+      </GridPane.margin>
+   </TextField>
+   <TextFlow fx:id="subtitle" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+             minWidth="-Infinity" prefHeight="12.0" prefWidth="330.0" textAlignment="CENTER" GridPane.columnIndex="1"
+             GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+      <GridPane.margin>
+         <Insets bottom="15.0"/>
+      </GridPane.margin>
+      <Text fx:id="subText" strokeType="OUTSIDE" strokeWidth="0.0" text="First time here?">
          <font>
-            <Font name="Symbol" size="36.0" />
+            <Font name="Symbol" size="12.0"/>
          </font>
-         <GridPane.margin>
-            <Insets bottom="30.0" />
-         </GridPane.margin>
       </Text>
-      <TextField fx:id="usernameField" promptText="Username" style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <Hyperlink fx:id="subHyper" onAction="#handleSubHyperClick" text="Create account">
          <font>
-            <Font name="Symbol" size="12.0" />
+            <Font name="Symbol" size="12.0"/>
          </font>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </TextField>
-      <TextFlow fx:id="subtitle" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="12.0" prefWidth="330.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
-         <children>
-            <Text fx:id="subText" strokeType="OUTSIDE" strokeWidth="0.0" text="First time here?">
-               <font>
-                  <Font name="Symbol" size="12.0" />
-               </font>
-            </Text>
-            <Hyperlink fx:id="subHyper" onAction="#handleSubHyperClick" text="Create account">
-               <font>
-                  <Font name="Symbol" size="12.0" />
-               </font>
-            </Hyperlink>
-         </children>
-         <GridPane.margin>
-            <Insets bottom="15.0" />
-         </GridPane.margin>
-      </TextFlow>
-      <HBox fx:id="divider" alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-         <children>
-            <Line endX="55.0" startX="-100.0">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Line>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="or">
-               <font>
-                  <Font name="Symbol" size="12.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="5.0" left="3.0" />
-               </HBox.margin>
-            </Text>
-            <Line endX="100.0" startX="-55.0" startY="-0.0">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Line>
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </HBox>
-      <Button fx:id="mainButton" defaultButton="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleMainButton" prefHeight="25.0" prefWidth="225.0" styleClass="blue-button" text="Continue" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-         <GridPane.margin>
-            <Insets bottom="5.0" top="5.0" />
-         </GridPane.margin>
-      </Button>
-      <Button fx:id="googleLogin" alignment="BOTTOM_LEFT" graphicTextGap="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="225.0" style="-fx-background-radius: 25; -fx-border-radius: 25; -fx-border-color: #2770e6;" text="Continue with Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-         <graphic>
-            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@google-login.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <GridPane.margin>
-            <Insets bottom="5.0" top="5.0" />
-         </GridPane.margin>
-      </Button>
-      <Hyperlink fx:id="passResetHyper" text="Reset your password" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-         <font>
-            <Font name="Symbol" size="12.0" />
-         </font>
-         <padding>
-            <Insets top="5.0" />
-         </padding>
       </Hyperlink>
-      <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+   </TextFlow>
+   <HBox fx:id="divider" alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+         GridPane.rowIndex="4" GridPane.valignment="CENTER">
+      <opaqueInsets>
+         <Insets/>
+      </opaqueInsets>
+      <GridPane.margin>
+         <Insets/>
+      </GridPane.margin>
+      <HBox alignment="CENTER">
+         <HBox.margin>
+            <Insets right="2.0"/>
+         </HBox.margin>
+         <Line endX="55.0" startX="-100.0"/>
+      </HBox>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="or" textAlignment="CENTER" textOrigin="CENTER">
          <font>
-            <Font name="Symbol" size="12.0" />
+            <Font name="Symbol" size="12.0"/>
          </font>
-      </PasswordField>
-      <Button fx:id="signupButton" defaultButton="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleSignupButton" prefHeight="25.0" prefWidth="225.0" styleClass="blue-button" text="Sign up" textFill="WHITE" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </Button>
-      <TextField fx:id="emailField" promptText="Email" style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-         <font>
-            <Font name="Symbol" size="12.0" />
-         </font>
-      </TextField>
-      <PasswordField fx:id="passwordField1" promptText="Password" style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-         <font>
-            <Font name="Symbol" size="12.0" />
-         </font>
-      </PasswordField>
-      <PasswordField fx:id="confirmPassField" promptText="Confirm password" style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
-         <font>
-            <Font name="Symbol" size="12.0" />
-         </font>
-      </PasswordField>
-   </children>
+         <HBox.margin>
+            <Insets bottom="5.0"/>
+         </HBox.margin>
+      </Text>
+      <HBox alignment="CENTER">
+         <HBox.margin>
+            <Insets/>
+         </HBox.margin>
+         <Line endX="100.0" startX="-55.0" startY="-0.0"/>
+      </HBox>
+   </HBox>
+   <Button fx:id="mainButton" defaultButton="true" maxWidth="-Infinity" mnemonicParsing="false"
+           onAction="#handleMainButton" prefHeight="25.0" prefWidth="225.0" styleClass="blue-button" text="Continue"
+           textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+      <GridPane.margin>
+         <Insets bottom="5.0" top="5.0"/>
+      </GridPane.margin>
+   </Button>
+   <Button fx:id="googleLogin" alignment="BOTTOM_LEFT" graphicTextGap="35.0" mnemonicParsing="false" prefHeight="25.0"
+           prefWidth="225.0" style="-fx-background-radius: 25; -fx-border-radius: 25; -fx-border-color: #2770e6;"
+           text="Continue with Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+      <graphic>
+         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@google-login.png"/>
+         </ImageView>
+      </graphic>
+      <GridPane.margin>
+         <Insets bottom="5.0" top="5.0"/>
+      </GridPane.margin>
+   </Button>
+   <Hyperlink fx:id="passResetHyper" text="Reset your password" visible="false" GridPane.columnIndex="1"
+              GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+      <font>
+         <Font name="Symbol" size="12.0"/>
+      </font>
+      <padding>
+         <Insets top="5.0"/>
+      </padding>
+   </Hyperlink>
+   <PasswordField fx:id="passwordField" promptText="Password"
+                  style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;"
+                  visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                  GridPane.valignment="CENTER">
+      <font>
+         <Font name="Symbol" size="12.0"/>
+      </font>
+   </PasswordField>
+   <Button fx:id="signupButton" defaultButton="true" maxWidth="-Infinity" mnemonicParsing="false"
+           onAction="#handleSignupButton" prefHeight="25.0" prefWidth="225.0" styleClass="blue-button" text="Sign up"
+           textFill="WHITE" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6"
+           GridPane.valignment="CENTER">
+      <GridPane.margin>
+         <Insets/>
+      </GridPane.margin>
+   </Button>
+   <TextField fx:id="emailField" promptText="Email"
+              style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;"
+              visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"
+              GridPane.valignment="CENTER">
+      <font>
+         <Font name="Symbol" size="12.0"/>
+      </font>
+   </TextField>
+   <PasswordField fx:id="passwordField1" promptText="Password"
+                  style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;"
+                  visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4"
+                  GridPane.valignment="CENTER">
+      <font>
+         <Font name="Symbol" size="12.0"/>
+      </font>
+   </PasswordField>
+   <PasswordField fx:id="confirmPassField" promptText="Confirm password"
+                  style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #bdc1c7;"
+                  visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5"
+                  GridPane.valignment="CENTER">
+      <font>
+         <Font name="Symbol" size="12.0"/>
+      </font>
+   </PasswordField>
 </GridPane>
