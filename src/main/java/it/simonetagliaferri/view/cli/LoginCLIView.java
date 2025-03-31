@@ -25,31 +25,49 @@ public class LoginCLIView {
         String password = CliUtils.prompt("Enter password: ");
         return new UserBean(username, password);
     }
-    public UserBean signup() throws IOException {
-        String email = CliUtils.prompt("Enter email: ");
+
+    public UserBean signupFirstStep() throws IOException {
         String username = CliUtils.prompt("Enter username: ");
+        return new UserBean(username);
+    }
+
+    public UserBean signupSecondStep(UserBean user) throws IOException {
+        while (true) {
+            String email = CliUtils.prompt("Enter email: ");
+            if (user.validEmail(email)) {
+                user.setEmail(email);
+                break;
+            }
+            CliUtils.println("Invalid email. Try again.");
+        }
         String password;
         while (true) {
             password = CliUtils.prompt("Enter password: ");
+            user.setPassword(password);
             String confirmPassword = CliUtils.prompt("Confirm password: ");
-            if (password.equals(confirmPassword)) {
+            if (user.confirmPassword(confirmPassword)) {
                 break;
             }
             CliUtils.println("Passwords do not match. Try again.");
         }
         String roleStr;
-        Role role;
         while (true) {
             roleStr = CliUtils.prompt("Enter role(Player or Host): ");
             try {
-                role=Role.valueOf(roleStr.toUpperCase());
+                Role role = user.validRole(roleStr);
+                user.setRole(role);
                 break;
             } catch (IllegalArgumentException e) {
                 CliUtils.println("Invalid role. Try again.");
             }
         }
-        return new UserBean(username, email, password, role);
+        return user;
     }
+
+    public void userAlreadyExists() {
+        CliUtils.println("User already exists. Try again.");
+    }
+
     public void successfulLogin() {
         CliUtils.println("Login successful");
     }

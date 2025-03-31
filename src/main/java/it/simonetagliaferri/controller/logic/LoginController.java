@@ -29,6 +29,12 @@ public class LoginController {
         loginDAO.signup(user);
         return new LoginResponseBean(LoginResult.SUCCESS);
     }
+
+    public boolean userLookUp(UserBean bean) {
+        User user=loginDAO.findByUsername(bean.getUsername());
+        return user != null;
+    }
+
     public void end() {
         System.exit(0);
     }

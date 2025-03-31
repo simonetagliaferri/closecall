@@ -26,6 +26,8 @@ public class GraphicLoginControllerCLI {
                 break;
             case 3:
                 this.controller.end();
+                break;
+            default:
         }
     }
 
@@ -49,10 +51,19 @@ public class GraphicLoginControllerCLI {
     }
 
     public void signup() {
-        UserBean user;
+        UserBean user=null;
         LoginResponseBean res;
         try {
-            user=view.signup();
+            boolean validUsername=false;
+            while (!validUsername) {
+                validUsername=true;
+                user = view.signupFirstStep();
+                if (this.controller.userLookUp(user)) {
+                    validUsername=false;
+                    view.userAlreadyExists();
+                }
+            }
+            user=view.signupSecondStep(user);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

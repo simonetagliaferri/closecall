@@ -8,6 +8,13 @@ public class UserBean {
     private String password;
     private String email;
     private Role role;
+
+    public UserBean() {}
+
+    public UserBean(String username) {
+        this.username = username;
+    }
+
     public UserBean(String username, String password) {
         this.username = username;
         this.password = password;
@@ -23,8 +30,12 @@ public class UserBean {
         return EmailValidator.getInstance().isValid(email);
     }
 
-    public boolean confirmPassword(UserBean user, String password) {
-        return user.getPassword().equals(password);
+    public boolean confirmPassword(String confirmPassword) {
+        return this.getPassword().equals(confirmPassword);
+    }
+
+    public Role validRole(String roleStr) {
+        return Role.valueOf(roleStr.toUpperCase());
     }
 
     public String getUsername() { return username; }

@@ -17,7 +17,7 @@ public class JDBCLoginDAO implements LoginDAO {
         String password;
         Role role;
 
-        //Ora dobbiamo ricavare il ruolo
+        // Checking if the user exists, if so take the role and the password.
         try {
             Connection conn = ConnectionFactory.getConnection();
             CallableStatement cs = conn.prepareCall("{call findByUsername(?)}");
@@ -31,7 +31,7 @@ public class JDBCLoginDAO implements LoginDAO {
                 return null;
             }
         } catch (SQLException e) {
-            throw new DAOException("Errore nella procedura di login: " + e.getMessage());
+            throw new DAOException("Error in login procedure: " + e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class JDBCLoginDAO implements LoginDAO {
         String password = user.getPassword();
         String role = user.getRole().toString();
 
-        //Ora dobbiamo ricavare il ruolo
+        // Signing up the user.
         try {
             Connection conn = ConnectionFactory.getConnection();
             CallableStatement cs = conn.prepareCall("{call signup(?,?,?,?)}");
@@ -52,7 +52,7 @@ public class JDBCLoginDAO implements LoginDAO {
             cs.setString(4, role);
             cs.executeQuery();
         } catch (SQLException e) {
-            throw new DAOException("Errore nella procedura di registrazione: " + e.getMessage());
+            throw new DAOException("Error in signup procedure: " + e.getMessage());
         }
         return user;
     }
