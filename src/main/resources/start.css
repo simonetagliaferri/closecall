@@ -1,11 +1,4 @@
 
-#googleLogin {
-    -fx-background-color: white;
-}
-#googleLogin:hover {
-    -fx-background-color: #e1e2e3;
-}
-
 .blue-button {
     -fx-background-color: #2770e6;
     -fx-background-radius: 25;
@@ -17,8 +10,23 @@
     -fx-background-color: #2466d1;
 }
 
+.blue-button:disabled {
+    -fx-background-color: #a7abb0;
+}
+
+.border-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-border-color: #131314;
+}
+
+.border-button:hover {
+    -fx-background-color: #e1e2e3;
+}
 .hyperlink {
     -fx-border-color: transparent;
+    -fx-text-fill: #2466d1;
 }
 
 .text-field {

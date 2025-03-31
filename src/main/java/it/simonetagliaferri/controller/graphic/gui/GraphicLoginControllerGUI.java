@@ -5,6 +5,7 @@ import it.simonetagliaferri.controller.logic.LoginController;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -28,10 +29,10 @@ public class GraphicLoginControllerGUI extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/start.css").toExternalForm());
         Group scalable = (Group) scene.lookup("#scalableContent");
-        double baseWidth = 854;
-        double baseHeight = 480;
-        stage.setMinWidth(baseWidth);
-        stage.setMinHeight(baseHeight);
+        double baseWidth = 1280;
+        double baseHeight = 720;
+        stage.setMinWidth(baseWidth/2);
+        stage.setMinHeight(baseHeight/2);
         bindScale(scene, scalable, baseWidth, baseHeight);
         stage.setScene(scene);
         stage.centerOnScreen();
@@ -91,18 +92,15 @@ public class GraphicLoginControllerGUI extends Application {
         usernameField.setVisible(true);
         passwordField.setVisible(false);
         passResetHyper.setVisible(false);
-        Platform.runLater(() -> mainButton.requestFocus());
+        bindMainButtonToFieldStates();
+        bindSignupButtonToFieldStates();
+        Platform.runLater(() -> subHyper.requestFocus());
     }
 
     @FXML
     private void handleMainButton() {
         if (state == UIState.USERNAME_INPUT) {
             String username = usernameField.getText().trim();
-            if (username.isBlank()) {
-                // Optional: show warning to user
-                return;
-            }
-
             // Transition to password phase
             welcomeText.setText("Welcome back!");
             usernameField.setVisible(false);
@@ -160,12 +158,12 @@ public class GraphicLoginControllerGUI extends Application {
 
     @FXML
     private void handleGoogleLogin() {
-        notImplemented();
+        tempMessage("This is not implemented yet.");
     }
 
     @FXML
     private void handlePassResetHyper() {
-        notImplemented();
+        tempMessage("This is not implemented yet.");
     }
 
     private void switchToSignup() {
@@ -184,6 +182,9 @@ public class GraphicLoginControllerGUI extends Application {
     }
 
     private void clearSignup() {
+        emailField.clear();
+        passwordField1.clear();
+        confirmPassField.clear();
         signupButton.setDefaultButton(false);
         emailField.setVisible(false);
         passwordField1.setVisible(false);
@@ -217,12 +218,12 @@ public class GraphicLoginControllerGUI extends Application {
 
     private boolean showingTempMessage = false;
 
-    private void notImplemented() {
+    private void tempMessage(String message) {
         if (showingTempMessage) return;
 
         showingTempMessage = true;
         String old = welcomeText.getText();
-        welcomeText.setText("This is not implemented yet.");
+        welcomeText.setText(message);
 
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(e -> {
@@ -230,6 +231,31 @@ public class GraphicLoginControllerGUI extends Application {
             showingTempMessage = false;
         });
         pause.play();
+    }
+
+    private void bindMainButtonToFieldStates() {
+        mainButton.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                        (usernameField.isVisible() && usernameField.getText().trim().isEmpty()) ||
+                                (passwordField.isVisible() && passwordField.getText().trim().isEmpty()),
+                usernameField.textProperty(),
+                passwordField.textProperty(),
+                usernameField.visibleProperty(),
+                passwordField.visibleProperty()
+        ));
+    }
+
+    private void bindSignupButtonToFieldStates() {
+        signupButton.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                        (emailField.isVisible() && emailField.getText().trim().isEmpty()) ||
+                                (passwordField1.isVisible() && passwordField1.getText().trim().isEmpty()) ||
+                                (confirmPassField.isVisible() && confirmPassField.getText().trim().isEmpty()),
+                emailField.textProperty(),
+                passwordField1.textProperty(),
+                confirmPassField.textProperty(),
+                emailField.visibleProperty(),
+                passwordField1.visibleProperty(),
+                confirmPassField.visibleProperty()
+        ));
     }
 
 }

@@ -1,6 +1,7 @@
 package it.simonetagliaferri.beans;
 
 import it.simonetagliaferri.model.domain.Role;
+import org.apache.commons.validator.routines.EmailValidator;
 
 public class UserBean {
     private String username;
@@ -17,6 +18,15 @@ public class UserBean {
         this.password = password;
         this.role = role;
     }
+
+    public boolean validEmail(String email) {
+        return EmailValidator.getInstance().isValid(email);
+    }
+
+    public boolean confirmPassword(UserBean user, String password) {
+        return user.getPassword().equals(password);
+    }
+
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }

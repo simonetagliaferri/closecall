@@ -19,9 +19,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicLoginControllerGUI">
+<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicLoginControllerGUI">
    <Group fx:id="scalableContent">
       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0"
                 prefWidth="1280.0" style="-fx-background-color: white;">
@@ -53,8 +51,8 @@
          </Text>
          <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                     minWidth="-Infinity" prefHeight="27.0" prefWidth="331.0" promptText="Username"
-                    styleClass="text-field" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                    GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                    styleClass="text-field" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                    GridPane.rowIndex="2" GridPane.valignment="CENTER">
             <font>
                <Font name="Symbol" size="12.0"/>
             </font>
@@ -113,7 +111,7 @@
          </Button>
          <Button fx:id="googleLogin" alignment="BOTTOM_LEFT" graphicTextGap="35.0" mnemonicParsing="false"
                  onAction="#handleGoogleLogin" prefHeight="25.0" prefWidth="225.0"
-                 style="-fx-background-radius: 25; -fx-border-radius: 25; -fx-border-color: #2770e6;"
+                 styleClass="border-button"
                  text="Continue with Google" GridPane.columnIndex="1" GridPane.halignment="CENTER"
                  GridPane.hgrow="NEVER" GridPane.rowIndex="5">
             <graphic>
@@ -152,8 +150,8 @@
             </GridPane.margin>
          </Button>
          <TextField fx:id="emailField" promptText="Email" styleClass="text-field" visible="false"
-                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                    GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3"
+                    GridPane.valignment="CENTER">
             <font>
                <Font name="Symbol" size="12.0"/>
             </font>
@@ -165,8 +163,8 @@
                <Font name="Symbol" size="12.0"/>
             </font>
          </PasswordField>
-         <PasswordField fx:id="confirmPassField" promptText="Confirm password" styleClass="text-field"
-                        visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+         <PasswordField fx:id="confirmPassField" promptText="Confirm password" styleClass="text-field" visible="false"
+                        GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
                         GridPane.rowIndex="5" GridPane.valignment="CENTER">
             <font>
                <Font name="Symbol" size="12.0"/>
