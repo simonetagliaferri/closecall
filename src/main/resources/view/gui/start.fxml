@@ -116,7 +116,7 @@
                  GridPane.hgrow="NEVER" GridPane.rowIndex="5">
             <graphic>
                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@google-login.png"/>
+                  <Image url="@../../images/google-login.png"/>
                </ImageView>
             </graphic>
             <GridPane.margin>

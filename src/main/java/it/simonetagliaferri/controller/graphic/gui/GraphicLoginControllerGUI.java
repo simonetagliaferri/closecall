@@ -24,9 +24,9 @@ public class GraphicLoginControllerGUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/start.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/gui/start.fxml"));
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/start.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/view/css/start.css").toExternalForm());
         Group scalable = (Group) scene.lookup("#scalableContent");
         double baseWidth = 1280;
         double baseHeight = 720;

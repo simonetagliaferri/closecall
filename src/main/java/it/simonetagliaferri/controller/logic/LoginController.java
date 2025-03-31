@@ -9,7 +9,7 @@ import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.PasswordUtils;
 
 public class LoginController {
-    LoginDAO loginDAO = LoginDAOFactory.getInstance().getLoginDAO();
+    LoginDAO loginDAO = LoginDAOFactory.getInstance().getDAO();
     public LoginController() {}
     public LoginResponseBean login(UserBean bean) {
         User user=loginDAO.findByUsername(bean.getUsername());

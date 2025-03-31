@@ -7,11 +7,11 @@ import it.simonetagliaferri.exception.DAOException;
 
 import java.sql.*;
 
-public class JdbcLoginDAO implements LoginDAO {
-    private static final JdbcLoginDAO instance = new JdbcLoginDAO();
+public class JDBCLoginDAO implements LoginDAO {
+    private static final JDBCLoginDAO instance = new JDBCLoginDAO();
 
-    public static JdbcLoginDAO getInstance() { return instance; }
-    private JdbcLoginDAO() {}
+    public static JDBCLoginDAO getInstance() { return instance; }
+    private JDBCLoginDAO() {}
     @Override
     public User findByUsername(String username) throws DAOException {
         String password;

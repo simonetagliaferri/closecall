@@ -2,36 +2,29 @@ package it.simonetagliaferri.model.dao;
 
 import it.simonetagliaferri.model.dao.demo.InMemoryLoginDAO;
 import it.simonetagliaferri.model.dao.fs.FsLoginDAO;
-import it.simonetagliaferri.model.dao.jdbc.JdbcLoginDAO;
+import it.simonetagliaferri.model.dao.jdbc.JDBCLoginDAO;
 
-public class LoginDAOFactory {
+public class LoginDAOFactory extends DAOFactory<LoginDAO> {
+    // Singleton factory: created once, accessed via getInstance().
     private static final LoginDAOFactory instance = new LoginDAOFactory();
-
-    private Class<? extends LoginDAO> loginDaoImplClazz;
 
     public static LoginDAOFactory getInstance() { return instance; }
 
     private LoginDAOFactory() {}
 
-    public void setLoginDaoImpl(Class<? extends LoginDAO> loginDaoClazz) {
-        loginDaoImplClazz = loginDaoClazz;
-        System.out.println("Setting loginDAOImplClazz: " + loginDaoImplClazz);
-    }
-
-    public LoginDAO getLoginDAO() {
-        if (loginDaoImplClazz == InMemoryLoginDAO.class) {
-            System.out.println("In Memory LoginDAO");
+    @Override
+    public LoginDAO getDAO() {
+        Class<? extends LoginDAO> impl = getImplClass();
+        if (impl == null) {
+            throw new IllegalStateException("LoginDAO implementation not set.");
+        }
+        if (impl == InMemoryLoginDAO.class) {
             return InMemoryLoginDAO.getInstance();
-        }
-        if (loginDaoImplClazz == FsLoginDAO.class) {
-            System.out.println("In Fs LoginDAO");
+        } else if (impl == FsLoginDAO.class) {
             return FsLoginDAO.getInstance();
+        } else if (impl == JDBCLoginDAO.class) {
+            return JDBCLoginDAO.getInstance();
         }
-        if (loginDaoImplClazz == JdbcLoginDAO.class) {
-            System.out.println("In JDBC LoginDAO");
-            return JdbcLoginDAO.getInstance();
-        }
-        else System.out.println("Problem");
-        return null;
+        throw new IllegalArgumentException("Unsupported LoginDAO implementation: " + impl.getName());
     }
 }

@@ -1,32 +1,30 @@
 package it.simonetagliaferri.model.dao.jdbc;
 
 import it.simonetagliaferri.model.domain.Role;
+import it.simonetagliaferri.utils.CliUtils;
+import it.simonetagliaferri.utils.PropertiesUtils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class ConnectionFactory {
+    private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
     private static Connection connection;
     private ConnectionFactory() {}
-    //Uso un blocco static così da istaurare la connessione una sola volta, alla prima chiamata
+    //Static block so that only one connection is opened in a run.
     static {
-        try (InputStream input = new FileInputStream("src/main/resources/db.properties")) {
-            Properties properties = new Properties();
-            properties.load(input);
-
-            String connection_url = properties.getProperty("CONNECTION_URL");
-            String user = properties.getProperty("LOGIN_USER");
-            String pass = properties.getProperty("LOGIN_PASS");
-
-            connection = DriverManager.getConnection(connection_url, user, pass);
-        }
-        catch (IOException | SQLException e) {
-            e.printStackTrace();
+        // Getting the persistence layer to use in this run.
+        try {
+            String connection_url = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
+            String username = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_USER");
+            String password = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_PASS");
+            connection = DriverManager.getConnection(connection_url, username, password);
+        } catch (IOException e) {
+            CliUtils.println("Error in reading database info: " + e.getMessage());
+        } catch (SQLException e) {
+            CliUtils.println("SQLExceptio: " + e.getMessage());
         }
     }
 
@@ -38,18 +36,15 @@ public class ConnectionFactory {
 
         connection.close();
 
-        try (InputStream input = new FileInputStream("src/main/resources/db.properties")) {
-            Properties properties = new Properties();
-            properties.load(input);
+        try {
+            String connection_url = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
+            String username = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_USER");
+            String password = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_PASS");
 
-            String connection_url = properties.getProperty("CONNECTION_URL");
-            String user = properties.getProperty(role.name() + "_USER");
-            String pass = properties.getProperty(role.name() + "_PASS");
-
-            connection = DriverManager.getConnection(connection_url, user, pass);
+            connection = DriverManager.getConnection(connection_url, username, password);
         }
         catch (IOException | SQLException e) {
-            e.printStackTrace();
+            CliUtils.println("IO or SQL exception:" + e.getMessage());
         }
 
     }
