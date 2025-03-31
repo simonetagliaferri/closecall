@@ -4,7 +4,8 @@ module it.simonetagliaferri {
     requires com.google.gson;
     requires javafx.graphics;
     requires javafx.controls;
-    requires commons.validator;
+    requires org.apache.commons.codec;
+    requires org.apache.commons.validator;
 
     opens it.simonetagliaferri.model.domain to com.google.gson;
     opens it.simonetagliaferri to javafx.fxml;
