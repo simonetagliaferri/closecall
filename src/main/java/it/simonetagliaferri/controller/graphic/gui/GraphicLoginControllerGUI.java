@@ -1,5 +1,8 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.beans.LoginResponseBean;
+import it.simonetagliaferri.beans.LoginResult;
+import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.logic.LoginController;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -100,7 +103,6 @@ public class GraphicLoginControllerGUI extends Application {
     private void handleMainButton() {
         if (state == UIState.USERNAME_INPUT) {
             String username = usernameField.getText().trim();
-            // Transition to password phase
             welcomeText.setText("Welcome back!");
             usernameField.setVisible(false);
             passwordField.setVisible(true);
@@ -113,19 +115,18 @@ public class GraphicLoginControllerGUI extends Application {
             googleLogin.setVisible(false);
             divider.setVisible(false);
             mainButton.requestFocus();
-
             state = UIState.PASSWORD_INPUT;
         }
-
         else if (state == UIState.PASSWORD_INPUT) {
             String password = passwordField.getText().trim();
-            if (password.isBlank()) {
-                // Optional: show warning
-                return;
-            }
-
             System.out.println("Login: " + usernameField.getText() + " / " + password);
-            // TODO: Call logic controller for login
+            switch(login(usernameField.getText(), password)) {
+                case SUCCESS:
+                    welcomeText.setText("Logged in");
+                    break;
+                case FAIL:
+                    welcomeText.setText("Log in failed");
+            }
         }
     }
 
@@ -257,4 +258,10 @@ public class GraphicLoginControllerGUI extends Application {
         ));
     }
 
+    private LoginResult login(String username, String password) {
+        System.out.println("Checking: "+username + " " + password);
+        LoginResponseBean loginResponse = this.controller.login(new UserBean(username, password));
+        System.out.println(loginResponse.getResult());
+        return loginResponse.getResult();
+    }
 }
