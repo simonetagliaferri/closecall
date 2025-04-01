@@ -20,11 +20,6 @@ public class LoginController {
         return new LoginResponseBean(LoginResult.FAIL);
     }
     public LoginResponseBean signup(UserBean bean) {
-        User existingUser;
-        existingUser=loginDAO.findByUsername(bean.getUsername());
-        if(existingUser!=null) {
-            return new LoginResponseBean(LoginResult.FAIL);
-        }
         User user = new User(bean.getUsername(), bean.getEmail(), PasswordUtils.sha256Hex(bean.getPassword()), bean.getRole());
         loginDAO.signup(user);
         return new LoginResponseBean(LoginResult.SUCCESS);

@@ -4,6 +4,7 @@ import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.logic.LoginController;
+import it.simonetagliaferri.model.domain.Role;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -147,13 +148,38 @@ public class GraphicLoginControllerGUI extends Application {
 
     @FXML
     private void handleSignupButton() {
-        //String selectedRole = roleSpinner.getValue();
-        //UserBean user = new UserBean(usernameField.getText(), emailField.getText(), passwordField.getText());
-        //this.controller.signup(user);
-        clearSignup();
-        switchToLogin();
+        UserBean user = new UserBean(usernameField.getText(), emailField.getText(),
+                passwordField1.getText(), Role.valueOf(roleSpinner.getValue().toString().toUpperCase()));
+        LoginResponseBean response;
+        if (this.controller.userLookUp(user)) {
+            usernameField.clear();
+            roleSpinner.requestFocus();
+            usernameField.setPromptText("Username already exists");
+        }
+        else if (!user.confirmPassword(confirmPassField.getText())) {
+            confirmPassField.clear();
+            roleSpinner.requestFocus();
+            passwordField.setPromptText("Passwords do not match");
+            confirmPassField.setPromptText("Passwords do not match");
+        }
+        else if (!user.validEmail(emailField.getText())) {
+            emailField.clear();
+            roleSpinner.requestFocus();
+            emailField.setPromptText("Invalid email");
+        }
+        else {
+            response=this.controller.signup(user);
+            switch(response.getResult()) {
+                case SUCCESS:
+                    clearSignup();
+                    switchToLogin();
+                    welcomeText.setText("Signed up successfully");
+                    break;
+                case FAIL:
+                    welcomeText.setText("Signup failed");
+            }
+        }
 
-        welcomeText.setText("Signed up successfully");
     }
 
     @FXML
@@ -196,7 +222,7 @@ public class GraphicLoginControllerGUI extends Application {
     private void switchToLogin() {
         usernameField.clear();
         passwordField.clear();
-
+        mainButton.requestFocus();
         usernameField.setVisible(true);
         passwordField.setVisible(false);
         passResetHyper.setVisible(false);
@@ -212,7 +238,6 @@ public class GraphicLoginControllerGUI extends Application {
         subtitle.setVisible(true);
         mainButton.setVisible(true);
 
-        mainButton.requestFocus();
         state = UIState.USERNAME_INPUT;
     }
 
@@ -259,9 +284,8 @@ public class GraphicLoginControllerGUI extends Application {
     }
 
     private LoginResult login(String username, String password) {
-        System.out.println("Checking: "+username + " " + password);
         LoginResponseBean loginResponse = this.controller.login(new UserBean(username, password));
-        System.out.println(loginResponse.getResult());
         return loginResponse.getResult();
     }
+
 }
