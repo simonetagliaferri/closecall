@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class LoginCLIView {
     public int showMenu() throws IOException {
-        CliUtils.println("Welcome to login");
+        CliUtils.println("Welcome to the court.");
         while (true) {
             CliUtils.println("1. Login");
             CliUtils.println("2. Sign up");
@@ -34,8 +34,13 @@ public class LoginCLIView {
     public UserBean signupSecondStep(UserBean user) throws IOException {
         while (true) {
             String email = CliUtils.prompt("Enter email: ");
-            if (user.validEmail(email)) {
-                user.setEmail(email);
+            user.setEmail(email);
+
+            /* For email, password and role input validation I decided to call the bean's methods directly from the view,
+            * without going through the GraphicController because I wanted to have direct validation after
+            * each field was filled by the user and not just at the end, it's just less messy doing it this way*/
+
+            if (user.validEmail()) {
                 break;
             }
             CliUtils.println("Invalid email. Try again.");
@@ -65,19 +70,19 @@ public class LoginCLIView {
     }
 
     public void userAlreadyExists() {
-        CliUtils.println("User already exists. Try again.");
+        CliUtils.println("Username already taken.");
     }
 
     public void successfulLogin() {
         CliUtils.println("Login successful");
     }
     public void failedLogin() {
-        CliUtils.println("Login failed");
+        CliUtils.println("Invalid credentials. Try again.");
     }
     public void successfulSignup() {
         CliUtils.println("Signup successful");
     }
     public void failedSignup() {
-        CliUtils.println("Signup failed");
+        CliUtils.println("Signup failed. Try again.");
     }
 }

@@ -46,7 +46,6 @@ public class GraphicLoginControllerCLI {
                 break;
             case FAIL:
                 view.failedLogin();
-                break;
         }
     }
 

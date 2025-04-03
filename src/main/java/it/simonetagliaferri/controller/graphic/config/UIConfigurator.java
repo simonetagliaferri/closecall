@@ -5,7 +5,7 @@ import it.simonetagliaferri.controller.graphic.cli.GraphicLoginControllerCLI;
 import javafx.application.Application;
 
 public class UIConfigurator {
-    public static void configure(UIMode ui) {
+    public static void configureUI(UIMode ui) {
         switch (ui) {
             case CLI:
                 new GraphicLoginControllerCLI().start();

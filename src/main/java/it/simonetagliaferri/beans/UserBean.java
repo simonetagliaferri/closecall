@@ -9,7 +9,6 @@ public class UserBean {
     private String email;
     private Role role;
 
-    public UserBean() {}
 
     public UserBean(String username) {
         this.username = username;
@@ -26,8 +25,8 @@ public class UserBean {
         this.role = role;
     }
 
-    public boolean validEmail(String email) {
-        return EmailValidator.getInstance().isValid(email);
+    public boolean validEmail() {
+        return EmailValidator.getInstance().isValid(this.email);
     }
 
     public boolean confirmPassword(String confirmPassword) {

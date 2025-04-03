@@ -39,7 +39,7 @@ public class Main {
             System.exit(1);
         }
         //Calls to persistence and UI configurators.
-        DAOConfigurator.configure(provider);
-        UIConfigurator.configure(ui);
+        DAOConfigurator.configureDAOs(provider);
+        UIConfigurator.configureUI(ui);
     }
 }

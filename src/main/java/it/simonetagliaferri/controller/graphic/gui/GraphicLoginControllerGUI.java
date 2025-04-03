@@ -23,14 +23,16 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.Objects;
+
 
 public class GraphicLoginControllerGUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/gui/start.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/gui/start.fxml")));
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/view/css/start.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/css/start.css")).toExternalForm());
         Group scalable = (Group) scene.lookup("#scalableContent");
         double baseWidth = 1280;
         double baseHeight = 720;
@@ -47,6 +49,7 @@ public class GraphicLoginControllerGUI extends Application {
     }
 
     private void bindScale(Scene scene, Group scalable, double baseWidth, double baseHeight) {
+        // Listener for GUI scaling based on window size
         ChangeListener<Number> listener = (obs, oldVal, newVal) -> {
             double scaleX = scene.getWidth() / baseWidth;
             double scaleY = scene.getHeight() / baseHeight;
@@ -162,7 +165,7 @@ public class GraphicLoginControllerGUI extends Application {
             passwordField.setPromptText("Passwords do not match");
             confirmPassField.setPromptText("Passwords do not match");
         }
-        else if (!user.validEmail(emailField.getText())) {
+        else if (!user.validEmail()) {
             emailField.clear();
             roleSpinner.requestFocus();
             emailField.setPromptText("Invalid email");
