@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class CliUtils {
+
+    private CliUtils() {}
+
     private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static String prompt(String label) {

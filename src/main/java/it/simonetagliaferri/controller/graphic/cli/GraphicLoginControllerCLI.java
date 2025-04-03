@@ -5,18 +5,11 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
 
-import java.io.IOException;
-
 public class GraphicLoginControllerCLI {
     LoginCLIView view = new LoginCLIView();
     LoginController controller = new LoginController();
     public void start() {
-        int choice;
-        try {
-            choice = view.showMenu();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        int choice = view.showMenu();
         switch (choice) {
             case 1:
                 login();
@@ -32,13 +25,8 @@ public class GraphicLoginControllerCLI {
     }
 
     public void login() {
-        UserBean user;
         LoginResponseBean res;
-        try {
-            user=view.authenticate();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        UserBean user=view.authenticate();
         res=this.controller.login(user);
         switch (res.getResult()) {
             case SUCCESS:
@@ -52,20 +40,16 @@ public class GraphicLoginControllerCLI {
     public void signup() {
         UserBean user=null;
         LoginResponseBean res;
-        try {
-            boolean validUsername=false;
-            while (!validUsername) {
-                validUsername=true;
-                user = view.signupFirstStep();
-                if (this.controller.userLookUp(user)) {
-                    validUsername=false;
-                    view.userAlreadyExists();
-                }
+        boolean validUsername=false;
+        while (!validUsername) {
+            validUsername=true;
+            user = view.signupFirstStep();
+            if (this.controller.userLookUp(user)) {
+                validUsername=false;
+                view.userAlreadyExists();
             }
-            user=view.signupSecondStep(user);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+        user=view.signupSecondStep(user);
         res=this.controller.signup(user);
         switch (res.getResult()) {
             case SUCCESS:

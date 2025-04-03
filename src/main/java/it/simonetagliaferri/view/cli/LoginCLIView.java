@@ -4,10 +4,8 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.CliUtils;
 
-import java.io.IOException;
-
 public class LoginCLIView {
-    public int showMenu() throws IOException {
+    public int showMenu() {
         CliUtils.println("Welcome to the court.");
         while (true) {
             CliUtils.println("1. Login");
@@ -20,18 +18,18 @@ public class LoginCLIView {
             CliUtils.println("Invalid choice. Try again.");
         }
     }
-    public UserBean authenticate() throws IOException {
+    public UserBean authenticate() {
         String username = CliUtils.prompt("Enter username: ");
         String password = CliUtils.prompt("Enter password: ");
         return new UserBean(username, password);
     }
 
-    public UserBean signupFirstStep() throws IOException {
+    public UserBean signupFirstStep() {
         String username = CliUtils.prompt("Enter username: ");
         return new UserBean(username);
     }
 
-    public UserBean signupSecondStep(UserBean user) throws IOException {
+    public UserBean signupSecondStep(UserBean user) {
         while (true) {
             String email = CliUtils.prompt("Enter email: ");
             user.setEmail(email);
