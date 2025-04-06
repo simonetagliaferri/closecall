@@ -8,11 +8,12 @@ import java.util.Properties;
 
 public class PropertiesUtils {
 
-    private PropertiesUtils() {}
+    private PropertiesUtils() {
+    }
 
     public static String readProperty(String fileName, String property) throws IOException {
         // Using try with resources so that after the try block the BufferedReader is closed.
-        try(BufferedReader input = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader input = new BufferedReader(new FileReader(fileName))) {
             Properties properties = new Properties();
             properties.load(input);
             return properties.getProperty(property);

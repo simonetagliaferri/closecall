@@ -18,6 +18,7 @@ public class LoginCLIView {
             CliUtils.println("Invalid choice. Try again.");
         }
     }
+
     public UserBean authenticate() {
         String username = CliUtils.prompt("Enter username: ");
         String password = CliUtils.prompt("Enter password: ");
@@ -35,8 +36,8 @@ public class LoginCLIView {
             user.setEmail(email);
 
             /* For email, password and role input validation I decided to call the bean's methods directly from the view,
-            * without going through the GraphicController because I wanted to have direct validation after
-            * each field was filled by the user and not just at the end, it's just less messy doing it this way*/
+             * without going through the GraphicController because I wanted to have direct validation after
+             * each field was filled by the user and not just at the end, it's just less messy doing it this way*/
 
             if (user.validEmail()) {
                 break;
@@ -74,12 +75,15 @@ public class LoginCLIView {
     public void successfulLogin() {
         CliUtils.println("Login successful");
     }
+
     public void failedLogin() {
         CliUtils.println("Invalid credentials. Try again.");
     }
+
     public void successfulSignup() {
         CliUtils.println("Signup successful");
     }
+
     public void failedSignup() {
         CliUtils.println("Signup failed. Try again.");
     }

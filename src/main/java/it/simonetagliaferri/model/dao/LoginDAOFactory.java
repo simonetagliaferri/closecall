@@ -8,9 +8,12 @@ public class LoginDAOFactory extends DAOFactory<LoginDAO> {
     // Singleton factory: created once, accessed via getInstance().
     private static final LoginDAOFactory instance = new LoginDAOFactory();
 
-    public static LoginDAOFactory getInstance() { return instance; }
+    private LoginDAOFactory() {
+    }
 
-    private LoginDAOFactory() {}
+    public static LoginDAOFactory getInstance() {
+        return instance;
+    }
 
     @Override
     public LoginDAO getDAO() {

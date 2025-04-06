@@ -10,8 +10,13 @@ import java.sql.*;
 public class JDBCLoginDAO implements LoginDAO {
     private static final JDBCLoginDAO instance = new JDBCLoginDAO();
 
-    public static JDBCLoginDAO getInstance() { return instance; }
-    private JDBCLoginDAO() {}
+    private JDBCLoginDAO() {
+    }
+
+    public static JDBCLoginDAO getInstance() {
+        return instance;
+    }
+
     @Override
     public User findByUsername(String username) throws DAOException {
         String password;

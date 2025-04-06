@@ -6,7 +6,7 @@ public final class DAOConfigurator {
         DAOConfiguratorStrategy strategy;
         switch (provider) {
             case IN_MEMORY:
-               strategy = new InMemoryDAOConfigurator();
+                strategy = new InMemoryDAOConfigurator();
                 break;
             case FS:
                 strategy = new FSDAOConfigurator();

@@ -11,21 +11,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FsLoginDAO implements LoginDAO {
+    private static final FsLoginDAO instance = new FsLoginDAO();
     private final File file = new File("users.json");
     private final Map<String, User> users = new HashMap<>();
     private final Gson gson = new Gson();
-    private static final FsLoginDAO instance = new FsLoginDAO();
-
-    public static FsLoginDAO getInstance() { return instance; }
 
     private FsLoginDAO() {
         loadUsers();
     }
 
+    public static FsLoginDAO getInstance() {
+        return instance;
+    }
+
     private void loadUsers() {
         if (!file.exists()) return;
         try (Reader reader = new FileReader(file)) {
-            Type type = new TypeToken<Map<String, User>>() {}.getType();
+            Type type = new TypeToken<Map<String, User>>() {
+            }.getType();
             Map<String, User> loaded = gson.fromJson(reader, type);
             if (loaded != null) users.putAll(loaded);
         } catch (IOException e) {
@@ -40,12 +43,14 @@ public class FsLoginDAO implements LoginDAO {
             System.out.println("Error saving users: " + e.getMessage());
         }
     }
+
     @Override
     public User signup(User user) {
         users.put(user.getUsername(), user);
         saveUsers();
         return user;
     }
+
     @Override
     public User findByUsername(String username) {
         return users.get(username);

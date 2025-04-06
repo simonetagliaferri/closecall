@@ -6,86 +6,57 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.logic.LoginController;
 import it.simonetagliaferri.model.domain.Role;
 import javafx.animation.PauseTransition;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.Objects;
+import java.io.IOException;
 
 
-public class GraphicLoginControllerGUI extends Application {
+public class GraphicLoginControllerGUI {
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/gui/start.fxml")));
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/css/start.css")).toExternalForm());
-        Group scalable = (Group) scene.lookup("#scalableContent");
-        double baseWidth = 1280;
-        double baseHeight = 720;
-        stage.setMinWidth(baseWidth/2);
-        stage.setMinHeight(baseHeight/2);
-        bindScale(scene, scalable, baseWidth, baseHeight);
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.setTitle("CloseCall");
-        stage.show();
-    }
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    private void bindScale(Scene scene, Group scalable, double baseWidth, double baseHeight) {
-        // Listener for GUI scaling based on window size
-        ChangeListener<Number> listener = (obs, oldVal, newVal) -> {
-            double scaleX = scene.getWidth() / baseWidth;
-            double scaleY = scene.getHeight() / baseHeight;
-            double scale = Math.min(scaleX, scaleY);
-            scalable.setScaleX(scale);
-            scalable.setScaleY(scale);
-        };
-
-        scene.widthProperty().addListener(listener);
-        scene.heightProperty().addListener(listener);
-    }
     LoginController controller = new LoginController();
-    private enum UIState {
-        USERNAME_INPUT,
-        PASSWORD_INPUT,
-        SIGNUP
-    }
-
     private UIState state = UIState.USERNAME_INPUT;
-
-    @FXML private Group scalableContent;
-    @FXML private Text welcomeText;
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private Button mainButton;
-    @FXML private Button googleLogin;
-    @FXML private TextFlow subtitle;
-    @FXML private Text subText;
-    @FXML private Hyperlink subHyper;
-    @FXML private HBox divider;
-    @FXML private Hyperlink passResetHyper;
-    @FXML private TextField emailField;
-    @FXML private TextField passwordField1;
-    @FXML private TextField confirmPassField;
-    @FXML private Button signupButton;
-    @FXML private Spinner roleSpinner;
+    @FXML
+    private Group scalableContent;
+    @FXML
+    private Text welcomeText;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Button mainButton;
+    @FXML
+    private Button googleLogin;
+    @FXML
+    private TextFlow subtitle;
+    @FXML
+    private Text subText;
+    @FXML
+    private Hyperlink subHyper;
+    @FXML
+    private HBox divider;
+    @FXML
+    private Hyperlink passResetHyper;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField passwordField1;
+    @FXML
+    private TextField confirmPassField;
+    @FXML
+    private Button signupButton;
+    @FXML
+    private Spinner roleSpinner;
+    private boolean showingTempMessage = false;
 
     @FXML
     private void initialize() {
@@ -104,7 +75,7 @@ public class GraphicLoginControllerGUI extends Application {
     }
 
     @FXML
-    private void handleMainButton() {
+    private void handleMainButton() throws IOException {
         if (state == UIState.USERNAME_INPUT) {
             String username = usernameField.getText().trim();
             welcomeText.setText("Welcome back!");
@@ -120,14 +91,9 @@ public class GraphicLoginControllerGUI extends Application {
             divider.setVisible(false);
             mainButton.requestFocus();
             state = UIState.PASSWORD_INPUT;
-        }
-        else if (state == UIState.PASSWORD_INPUT) {
+        } else if (state == UIState.PASSWORD_INPUT) {
             String password = passwordField.getText().trim();
-            System.out.println("Login: " + usernameField.getText() + " / " + password);
-            switch(login(usernameField.getText(), password)) {
-                case SUCCESS:
-                    welcomeText.setText("Logged in");
-                    break;
+            switch (login(usernameField.getText(), password)) {
                 case FAIL:
                     welcomeText.setText("Log in failed");
             }
@@ -139,11 +105,9 @@ public class GraphicLoginControllerGUI extends Application {
         // Reset UI to username entry state
         if (state == UIState.PASSWORD_INPUT) {
             switchToLogin();
-        }
-        else if (state == UIState.USERNAME_INPUT) {
+        } else if (state == UIState.USERNAME_INPUT) {
             switchToSignup();
-        }
-        else if (state == UIState.SIGNUP) {
+        } else if (state == UIState.SIGNUP) {
             clearSignup();
             switchToLogin();
         }
@@ -158,21 +122,18 @@ public class GraphicLoginControllerGUI extends Application {
             usernameField.clear();
             roleSpinner.requestFocus();
             usernameField.setPromptText("Username already exists");
-        }
-        else if (!user.confirmPassword(confirmPassField.getText())) {
+        } else if (!user.confirmPassword(confirmPassField.getText())) {
             confirmPassField.clear();
             roleSpinner.requestFocus();
             passwordField.setPromptText("Passwords do not match");
             confirmPassField.setPromptText("Passwords do not match");
-        }
-        else if (!user.validEmail()) {
+        } else if (!user.validEmail()) {
             emailField.clear();
             roleSpinner.requestFocus();
             emailField.setPromptText("Invalid email");
-        }
-        else {
-            response=this.controller.signup(user);
-            switch(response.getResult()) {
+        } else {
+            response = this.controller.signup(user);
+            switch (response.getResult()) {
                 case SUCCESS:
                     clearSignup();
                     switchToLogin();
@@ -244,8 +205,6 @@ public class GraphicLoginControllerGUI extends Application {
         state = UIState.USERNAME_INPUT;
     }
 
-    private boolean showingTempMessage = false;
-
     private void tempMessage(String message) {
         if (showingTempMessage) return;
 
@@ -289,6 +248,12 @@ public class GraphicLoginControllerGUI extends Application {
     private LoginResult login(String username, String password) {
         LoginResponseBean loginResponse = this.controller.login(new UserBean(username, password));
         return loginResponse.getResult();
+    }
+
+    private enum UIState {
+        USERNAME_INPUT,
+        PASSWORD_INPUT,
+        SIGNUP
     }
 
 }

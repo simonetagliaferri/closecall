@@ -6,6 +6,7 @@ module it.simonetagliaferri {
     requires javafx.controls;
     requires org.apache.commons.codec;
     requires org.apache.commons.validator;
+    requires java.desktop;
 
     opens it.simonetagliaferri.model.domain to com.google.gson;
     opens it.simonetagliaferri to javafx.fxml;

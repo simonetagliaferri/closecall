@@ -6,9 +6,10 @@ import java.io.InputStreamReader;
 
 public class CliUtils {
 
-    private CliUtils() {}
-
     private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+    private CliUtils() {
+    }
 
     public static String prompt(String label) {
         System.out.print(label + ": ");

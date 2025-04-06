@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class ConnectionFactory {
     private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
     private static Connection connection;
-    private ConnectionFactory() {}
+
     //Static block so that only one connection is opened in a run.
     static {
         // Getting the persistence layer to use in this run.
@@ -26,6 +26,9 @@ public class ConnectionFactory {
         } catch (SQLException e) {
             CliUtils.println("SQLExceptio: " + e.getMessage());
         }
+    }
+
+    private ConnectionFactory() {
     }
 
     public static Connection getConnection() throws SQLException {
@@ -42,8 +45,7 @@ public class ConnectionFactory {
             String password = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_PASS");
 
             connection = DriverManager.getConnection(connection_url, username, password);
-        }
-        catch (IOException | SQLException e) {
+        } catch (IOException | SQLException e) {
             CliUtils.println("IO or SQL exception:" + e.getMessage());
         }
 
