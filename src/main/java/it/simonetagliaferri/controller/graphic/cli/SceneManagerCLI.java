@@ -10,4 +10,13 @@ public class SceneManagerCLI {
         hostDashboardControllerCLI.showHome();
     }
 
+    public void playerDashboard() {
+        GraphicPlayerDashboardControllerCLI playerDashboardControllerCLI = new GraphicPlayerDashboardControllerCLI();
+    }
+
+    public void addTournament() {
+        GraphicAddTournamentControllerCLI addTournamentControllerCLI = new GraphicAddTournamentControllerCLI();
+        addTournamentControllerCLI.start();
+    }
+
 }

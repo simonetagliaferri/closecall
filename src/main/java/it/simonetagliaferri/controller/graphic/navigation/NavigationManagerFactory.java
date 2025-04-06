@@ -3,7 +3,7 @@ package it.simonetagliaferri.controller.graphic.navigation;
 
 public class NavigationManagerFactory {
     private static final NavigationManagerFactory instance = new NavigationManagerFactory();
-    private Class<?> implClass;
+    private Class<? extends NavigationManager> implClass;
 
     private NavigationManagerFactory() {
     }
@@ -12,7 +12,7 @@ public class NavigationManagerFactory {
         return instance;
     }
 
-    public void setImplClass(final Class<?> implClass) {
+    public void setImplClass(final Class<? extends NavigationManager> implClass) {
         this.implClass = implClass;
     }
 

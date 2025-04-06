@@ -30,17 +30,20 @@ public class LoginController {
             SessionManager.setCurrentUser(currentUser);
             try {
                 navigationManager.goToDashboard(currentUser.getRole());
+                return new LoginResponseBean(LoginResult.SUCCESS);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        return new LoginResponseBean(LoginResult.FAIL);
+        else return new LoginResponseBean(LoginResult.FAIL);
     }
 
     public LoginResponseBean signup(UserBean bean) {
         user = new User(bean.getUsername(), bean.getEmail(), PasswordUtils.sha256Hex(bean.getPassword()), bean.getRole());
-        loginDAO.signup(user);
-        return new LoginResponseBean(LoginResult.SUCCESS);
+        if (loginDAO.signup(user)!=null) {
+            return new LoginResponseBean(LoginResult.SUCCESS);
+        }
+        else { return new LoginResponseBean(LoginResult.FAIL); }
     }
 
     public boolean userLookUp(UserBean bean) {

@@ -30,4 +30,8 @@ public class NavigationManagerGUI implements NavigationManager {
             SceneManagerGUI.setRoot("hostDashboard");
         } else SceneManagerGUI.setRoot("playerDashboard");
     }
+
+    public void goToAddTournament() {
+
+    }
 }

@@ -31,10 +31,6 @@ public class GraphicHostDashboardControllerCLI {
 
     }
 
-    private void logout() {
-
-
-    }
 
     private void settings() {
 

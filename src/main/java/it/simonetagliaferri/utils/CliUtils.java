@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class CliUtils {
 
-    private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     private CliUtils() {
     }
@@ -14,7 +14,12 @@ public class CliUtils {
     public static String prompt(String label) {
         System.out.print(label + ": ");
         try {
-            return reader.readLine();
+            String input = reader.readLine();
+            if (input == null) {
+                println("EOF used as input.");
+                System.exit(-1);
+            }
+            return input;
         } catch (IOException e) {
             System.out.println("Input error. Try again.");
             return "";
@@ -25,7 +30,12 @@ public class CliUtils {
         while (true) {
             System.out.print(label + ": ");
             try {
-                return Integer.parseInt(reader.readLine());
+                String input = reader.readLine();
+                if (input==null) {
+                    println("EOF used as input.");
+                    System.exit(-1);
+                }
+                return Integer.parseInt(input);
             } catch (NumberFormatException | IOException e) {
                 System.out.println("Please enter a valid number.");
             }

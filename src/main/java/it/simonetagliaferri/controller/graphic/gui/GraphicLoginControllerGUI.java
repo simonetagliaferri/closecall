@@ -148,12 +148,12 @@ public class GraphicLoginControllerGUI {
 
     @FXML
     private void handleGoogleLogin() {
-        tempMessage("This is not implemented yet.");
+        tempMessage("Not implemented yet.");
     }
 
     @FXML
     private void handlePassResetHyper() {
-        tempMessage("This is not implemented yet.");
+        tempMessage("Not implemented yet.");
     }
 
     private void switchToSignup() {

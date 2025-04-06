@@ -29,4 +29,8 @@ public class NavigationManagerCLI implements NavigationManager {
             sceneManager.hostDashboard();
         }
     }
+
+    public void goToAddTournament() {
+
+    }
 }

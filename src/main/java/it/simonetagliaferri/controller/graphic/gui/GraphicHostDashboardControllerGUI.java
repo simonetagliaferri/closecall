@@ -4,20 +4,22 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.SessionManager;
 import it.simonetagliaferri.controller.logic.HostDashboardController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.text.Text;
+import javafx.geometry.Side;
+import javafx.scene.Group;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 
 public class GraphicHostDashboardControllerGUI {
-    @FXML
-    private Text text;
-    @FXML
-    private Button logoutButton;
     private final UserBean user = SessionManager.getCurrentUser();
     private final HostDashboardController controller = new HostDashboardController();
 
+
+    @FXML private TabPane tabPane;
+    @FXML private MenuButton account;
     @FXML
-    public void initialize() {
-        text.setText("Hello " + user.getUsername());
+    private void initialize() {
+        account.setText(user.getUsername());
+        setTabPaneLeftTabsHorizontal(tabPane);
     }
 
     @FXML
@@ -25,4 +27,22 @@ public class GraphicHostDashboardControllerGUI {
         this.controller.logout();
     }
 
+    void setTabPaneLeftTabsHorizontal(TabPane tabPane){
+
+        tabPane.setSide(Side.LEFT);
+        tabPane.setRotateGraphic(true);
+
+        Label l = null;
+        StackPane stp = null;
+        for(Tab t : tabPane.getTabs()){
+            l = new Label(t.getText());
+            l.setRotate(90);
+            stp = new StackPane(new Group(l));
+            stp.setRotate(90);
+            t.setGraphic(stp);
+            t.setText("");
+        }
+        tabPane.setTabMinHeight(100);
+        tabPane.setTabMaxHeight(100);
+    }
 }

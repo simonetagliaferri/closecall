@@ -12,5 +12,5 @@ public interface NavigationManager {
 
     void goToDashboard(Role role) throws IOException;
 
-
+    void goToAddTournament();
 }

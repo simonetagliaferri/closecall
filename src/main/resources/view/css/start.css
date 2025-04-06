@@ -45,9 +45,9 @@
     -fx-border-color: #bdc1c7;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
-    -fx-padding: 0 10 0 10;
+    -fx-padding: 0 10 0 0;
     -fx-font-family: "Symbol";
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
 }
 
 .spinner .increment-arrow-button ,
@@ -71,5 +71,7 @@
     -fx-border-color: transparent;
     -fx-alignment: center-left;
 }
+
+
 
 
