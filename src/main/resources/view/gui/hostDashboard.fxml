@@ -1,14 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI">
-   <center>
-      <Text fx:id="text" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello" BorderPane.alignment="CENTER" />
-   </center>
-   <bottom>
-      <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" text="Logout" BorderPane.alignment="CENTER" />
-   </bottom>
-</BorderPane>
+
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="594.0"
+      prefWidth="999.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI">
+    <GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              HBox.hgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="1.7976931348623157E308" vgrow="NEVER"/>
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="519.0" vgrow="ALWAYS"/>
+        </rowConstraints>
+        <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                   GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets top="20.0"/>
+            </GridPane.margin>
+        </TextField>
+        <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="2"
+              GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER"
+              GridPane.vgrow="NEVER">
+            <GridPane.margin>
+                <Insets/>
+            </GridPane.margin>
+            <MenuButton fx:id="account" alignment="CENTER_RIGHT" mnemonicParsing="false" text="MenuButton">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#logout" text="Logout"/>
+                    <MenuItem mnemonicParsing="false" text="Action 2"/>
+                </items>
+                <HBox.margin>
+                    <Insets top="20.0"/>
+                </HBox.margin>
+            </MenuButton>
+        </HBox>
+        <TabPane fx:id="tabPane" minHeight="200.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE"
+                 GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="1"
+                 GridPane.valignment="CENTER">
+            <Tab text="Home">
+                <StackPane prefHeight="150.0" prefWidth="200.0"/>
+            </Tab>
+            <Tab text="Add tournaments">
+                <StackPane>
+                    <Button mnemonicParsing="false" text="Button"/>
+                </StackPane>
+            </Tab>
+            <Tab text="My tournaments">
+                <StackPane prefHeight="150.0" prefWidth="200.0"/>
+            </Tab>
+        </TabPane>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CloseCall"/>
+    </GridPane>
+</HBox>
