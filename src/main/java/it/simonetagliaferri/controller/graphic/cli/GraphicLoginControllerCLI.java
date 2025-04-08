@@ -1,6 +1,7 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.LoginResponseBean;
+import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
@@ -29,10 +30,9 @@ public class GraphicLoginControllerCLI {
         LoginResponseBean res;
         UserBean user = view.authenticate();
         res = this.controller.login(user);
-        switch (res.getResult()) {
-            case FAIL:
-                view.failedLogin();
-                start();
+        if (res.getResult()== LoginResult.FAIL) {
+            view.failedLogin();
+            start();
         }
     }
 
@@ -50,13 +50,11 @@ public class GraphicLoginControllerCLI {
         }
         user = view.signupSecondStep(user);
         res = this.controller.signup(user);
-        switch (res.getResult()) {
-            case SUCCESS:
-                view.successfulSignup();
-                break;
-            case FAIL:
-                view.failedSignup();
-                break;
+        if (res.getResult()==LoginResult.SUCCESS) {
+            view.successfulSignup();
+        }
+        else {
+            view.failedSignup();
         }
         start();
     }

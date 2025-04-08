@@ -2,6 +2,9 @@ package it.simonetagliaferri.model.dao.config;
 
 
 public final class DAOConfigurator {
+
+    private DAOConfigurator() {}
+
     public static void configureDAOs(PersistenceProvider provider) {
         DAOConfiguratorStrategy strategy;
         switch (provider) {

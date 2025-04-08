@@ -10,8 +10,6 @@ public class NavigationManagerGUI implements NavigationManager {
 
     private static final NavigationManagerGUI instance = new NavigationManagerGUI();
 
-    private NavigationManagerGUI() {
-    }
 
     public static NavigationManagerGUI getInstance() {
         return instance;

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.User;
+import it.simonetagliaferri.utils.CliUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -32,7 +33,7 @@ public class FsLoginDAO implements LoginDAO {
             Map<String, User> loaded = gson.fromJson(reader, type);
             if (loaded != null) users.putAll(loaded);
         } catch (IOException e) {
-            System.out.println("Error loading users: " + e.getMessage());
+            CliUtils.println("Error loading users: " + e.getMessage());
         }
     }
 
@@ -40,7 +41,7 @@ public class FsLoginDAO implements LoginDAO {
         try (Writer writer = new FileWriter(file)) {
             gson.toJson(users, writer);
         } catch (IOException e) {
-            System.out.println("Error saving users: " + e.getMessage());
+            CliUtils.println("Error saving users: " + e.getMessage());
         }
     }
 

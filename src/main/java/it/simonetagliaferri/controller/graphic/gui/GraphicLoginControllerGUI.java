@@ -93,9 +93,8 @@ public class GraphicLoginControllerGUI {
             state = UIState.PASSWORD_INPUT;
         } else if (state == UIState.PASSWORD_INPUT) {
             String password = passwordField.getText().trim();
-            switch (login(usernameField.getText(), password)) {
-                case FAIL:
-                    welcomeText.setText("Log in failed");
+            if (login(usernameField.getText(), password)==LoginResult.FAIL) {
+                welcomeText.setText("Log in failed");
             }
         }
     }
@@ -133,17 +132,15 @@ public class GraphicLoginControllerGUI {
             emailField.setPromptText("Invalid email");
         } else {
             response = this.controller.signup(user);
-            switch (response.getResult()) {
-                case SUCCESS:
-                    clearSignup();
-                    switchToLogin();
-                    welcomeText.setText("Signed up successfully");
-                    break;
-                case FAIL:
-                    welcomeText.setText("Signup failed");
+            if (response.getResult()==LoginResult.SUCCESS) {
+                clearSignup();
+                switchToLogin();
+                welcomeText.setText("Signed up successfully");
+            }
+            else {
+                welcomeText.setText("Signup failed");
             }
         }
-
     }
 
     @FXML

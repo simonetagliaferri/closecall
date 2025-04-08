@@ -8,8 +8,6 @@ public class NavigationManagerCLI implements NavigationManager {
     private static final NavigationManagerCLI instance = new NavigationManagerCLI();
     private static final SceneManagerCLI sceneManager = new SceneManagerCLI();
 
-    private NavigationManagerCLI() {
-    }
 
     public static NavigationManagerCLI getInstance() {
         return instance;

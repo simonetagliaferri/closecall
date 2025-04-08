@@ -9,6 +9,7 @@ import it.simonetagliaferri.controller.graphic.navigation.NavigationManagerFacto
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.dao.LoginDAOFactory;
 import it.simonetagliaferri.model.domain.User;
+import it.simonetagliaferri.utils.CliUtils;
 import it.simonetagliaferri.utils.PasswordUtils;
 
 import java.io.IOException;
@@ -17,9 +18,6 @@ public class LoginController {
     LoginDAO loginDAO = LoginDAOFactory.getInstance().getDAO();
     NavigationManager navigationManager = NavigationManagerFactory.getInstance().getNavigationManager();
     private User user;
-
-    public LoginController() {
-    }
 
     public LoginResponseBean login(UserBean bean) {
         user = loginDAO.findByUsername(bean.getUsername());
@@ -32,7 +30,9 @@ public class LoginController {
                 navigationManager.goToDashboard(currentUser.getRole());
                 return new LoginResponseBean(LoginResult.SUCCESS);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                // Need further review
+                CliUtils.println("Error: " + e.getMessage());
+                return new LoginResponseBean(LoginResult.FAIL);
             }
         }
         else return new LoginResponseBean(LoginResult.FAIL);

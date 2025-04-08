@@ -31,7 +31,7 @@ public class ConnectionFactory {
     private ConnectionFactory() {
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
         return connection;
     }
 
@@ -40,11 +40,11 @@ public class ConnectionFactory {
         connection.close();
 
         try {
-            String connection_url = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
+            String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
             String username = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_USER");
             String password = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_PASS");
 
-            connection = DriverManager.getConnection(connection_url, username, password);
+            connection = DriverManager.getConnection(connectionUrl, username, password);
         } catch (IOException | SQLException e) {
             CliUtils.println("IO or SQL exception:" + e.getMessage());
         }

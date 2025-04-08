@@ -2,6 +2,7 @@ package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManagerFactory;
+import it.simonetagliaferri.utils.CliUtils;
 
 import java.io.IOException;
 
@@ -12,7 +13,8 @@ public class HostDashboardController {
         try {
             navigationManager.login();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            // To review
+            CliUtils.println("Error: " + e.getMessage());
         }
     }
 }
