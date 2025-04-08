@@ -5,6 +5,7 @@ import it.simonetagliaferri.controller.graphic.navigation.NavigationManagerFacto
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManagerGUI;
 
 public class UIConfigurator {
+    private UIConfigurator() {}
     public static void configureUI(UIMode ui) {
         switch (ui) {
             case CLI:
