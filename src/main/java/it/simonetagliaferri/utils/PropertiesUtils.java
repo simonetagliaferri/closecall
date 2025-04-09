@@ -8,6 +8,11 @@ import java.util.Properties;
 
 public class PropertiesUtils {
 
+    public static final String PERSISTENCE_PROPERTIES = "src/main/resources/properties/persistence.properties";
+    public static final String UI_PROPERTIES = "src/main/resources/properties/ui.properties";
+    public static final String PERSISTENCE_KEY = "PERSISTENCE_MODE";
+    public static final String UI_KEY = "UI_MODE";
+
     private PropertiesUtils() {
     }
 

@@ -6,6 +6,8 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
 
+import java.io.IOException;
+
 public class GraphicLoginControllerCLI {
     LoginCLIView view = new LoginCLIView();
     LoginController controller = new LoginController();

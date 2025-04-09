@@ -1,9 +1,8 @@
 package it.simonetagliaferri;
 
-import it.simonetagliaferri.controller.graphic.config.UIConfigurator;
-import it.simonetagliaferri.controller.graphic.config.UIMode;
-import it.simonetagliaferri.model.dao.config.PersistenceProvider;
-import it.simonetagliaferri.model.dao.config.DAOConfigurator;
+import it.simonetagliaferri.controller.graphic.UIMode;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
+import it.simonetagliaferri.model.dao.PersistenceProvider;
 import it.simonetagliaferri.utils.CliUtils;
 
 import java.io.*;
@@ -41,8 +40,6 @@ public class Main {
             CliUtils.println("UI mode not recognized");
             System.exit(1);
         }
-        //Calls to persistence and UI configurators.
-        DAOConfigurator.configureDAOs(provider);
-        UIConfigurator.configureUI(ui);
+        NavigationManager.getNavigationManager().start();
     }
 }

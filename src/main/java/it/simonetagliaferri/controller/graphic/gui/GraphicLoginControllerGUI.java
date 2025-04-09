@@ -58,6 +58,9 @@ public class GraphicLoginControllerGUI {
     private Spinner roleSpinner;
     private boolean showingTempMessage = false;
 
+    public GraphicLoginControllerGUI() throws IOException {
+    }
+
     @FXML
     private void initialize() {
         state = UIState.USERNAME_INPUT;

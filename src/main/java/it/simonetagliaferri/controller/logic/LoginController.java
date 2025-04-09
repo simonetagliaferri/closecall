@@ -5,9 +5,8 @@ import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.SessionManager;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
-import it.simonetagliaferri.controller.graphic.navigation.NavigationManagerFactory;
+import it.simonetagliaferri.model.dao.DAOFactory;
 import it.simonetagliaferri.model.dao.LoginDAO;
-import it.simonetagliaferri.model.dao.LoginDAOFactory;
 import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.CliUtils;
 import it.simonetagliaferri.utils.PasswordUtils;
@@ -15,9 +14,17 @@ import it.simonetagliaferri.utils.PasswordUtils;
 import java.io.IOException;
 
 public class LoginController {
-    LoginDAO loginDAO = LoginDAOFactory.getInstance().getDAO();
-    NavigationManager navigationManager = NavigationManagerFactory.getInstance().getNavigationManager();
+    LoginDAO loginDAO;
+    NavigationManager navigationManager = NavigationManager.getNavigationManager();
     private User user;
+
+    public LoginController() {
+        try {
+            loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public LoginResponseBean login(UserBean bean) {
         user = loginDAO.findByUsername(bean.getUsername());

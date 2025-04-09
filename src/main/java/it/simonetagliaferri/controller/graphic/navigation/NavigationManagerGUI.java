@@ -6,14 +6,7 @@ import javafx.application.Application;
 
 import java.io.IOException;
 
-public class NavigationManagerGUI implements NavigationManager {
-
-    private static final NavigationManagerGUI instance = new NavigationManagerGUI();
-
-
-    public static NavigationManagerGUI getInstance() {
-        return instance;
-    }
+public class NavigationManagerGUI extends NavigationManager {
 
     public void start() {
         Application.launch(SceneManagerGUI.class);

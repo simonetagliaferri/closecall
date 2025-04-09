@@ -1,4 +1,4 @@
-package it.simonetagliaferri.model.dao.config;
+package it.simonetagliaferri.model.dao;
 
 public enum PersistenceProvider {
     IN_MEMORY,

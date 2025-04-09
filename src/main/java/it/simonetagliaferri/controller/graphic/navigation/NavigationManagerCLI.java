@@ -3,15 +3,9 @@ package it.simonetagliaferri.controller.graphic.navigation;
 import it.simonetagliaferri.controller.graphic.cli.SceneManagerCLI;
 import it.simonetagliaferri.model.domain.Role;
 
-public class NavigationManagerCLI implements NavigationManager {
+public class NavigationManagerCLI extends NavigationManager {
 
-    private static final NavigationManagerCLI instance = new NavigationManagerCLI();
-    private static final SceneManagerCLI sceneManager = new SceneManagerCLI();
-
-
-    public static NavigationManagerCLI getInstance() {
-        return instance;
-    }
+    private final SceneManagerCLI sceneManager = new SceneManagerCLI();
 
     public void login() {
         sceneManager.login();
