@@ -3,7 +3,6 @@ package it.simonetagliaferri.controller.graphic;
 import it.simonetagliaferri.beans.UserBean;
 
 public class SessionManager {
-
     private SessionManager() {}
 
     private static UserBean currentUser;

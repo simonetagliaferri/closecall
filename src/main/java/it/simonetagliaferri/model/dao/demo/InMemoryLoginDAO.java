@@ -8,8 +8,20 @@ import java.util.Map;
 
 public class InMemoryLoginDAO implements LoginDAO {
 
-    private static final Map<String, User> logins = new HashMap<>();
+    private final Map<String, User> logins = new HashMap<>();
 
+    private static InMemoryLoginDAO instance;
+
+    private InMemoryLoginDAO() {
+    }
+
+
+    public static InMemoryLoginDAO getInstance() {
+        if (instance == null) {
+            instance = new InMemoryLoginDAO();
+        }
+        return instance;
+    }
     @Override
     public User findByUsername(String username) {
         return logins.get(username);

@@ -6,28 +6,23 @@ import it.simonetagliaferri.model.dao.jdbc.JDBCLoginDAO;
 
 public class LoginDAOFactory extends DAOFactory<LoginDAO> {
 
-    private static LoginDAOFactory loginDAOFactory;
-
+    private static final LoginDAOFactory loginDAOFactory = new LoginDAOFactory();
+    private LoginDAOFactory() {}
     public static LoginDAOFactory getInstance() {
-        if (loginDAOFactory == null) {
-            loginDAOFactory = new LoginDAOFactory();
-        }
         return loginDAOFactory;
     }
-
     @Override
     public LoginDAO getDAO() {
-        Class<? extends LoginDAO> impl = getImplClass();
-        if (impl == null) {
+        if (implClass == null) {
             throw new IllegalStateException("LoginDAO implementation not set.");
         }
-        if (impl == InMemoryLoginDAO.class) {
-            return new InMemoryLoginDAO();
-        } else if (impl == FSLoginDAO.class) {
+        if (implClass == InMemoryLoginDAO.class) {
+            return InMemoryLoginDAO.getInstance();
+        } else if (implClass == FSLoginDAO.class) {
             return new FSLoginDAO();
-        } else if (impl == JDBCLoginDAO.class) {
+        } else if (implClass == JDBCLoginDAO.class) {
             return new JDBCLoginDAO();
         }
-        throw new IllegalArgumentException("Unsupported LoginDAO implementation: " + impl.getName());
+        throw new IllegalArgumentException("Unsupported LoginDAO implementation: " + implClass.getName());
     }
 }
