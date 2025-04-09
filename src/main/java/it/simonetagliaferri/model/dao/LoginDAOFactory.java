@@ -1,20 +1,18 @@
 package it.simonetagliaferri.model.dao;
 
 import it.simonetagliaferri.model.dao.demo.InMemoryLoginDAO;
-import it.simonetagliaferri.model.dao.fs.FsLoginDAO;
+import it.simonetagliaferri.model.dao.fs.FSLoginDAO;
 import it.simonetagliaferri.model.dao.jdbc.JDBCLoginDAO;
 
 public class LoginDAOFactory extends DAOFactory<LoginDAO> {
 
-    private LoginDAOFactory() {
-    }
-
-    private static class LazyHolder {
-        private static final LoginDAOFactory instance = new LoginDAOFactory();
-    }
+    private static LoginDAOFactory loginDAOFactory;
 
     public static LoginDAOFactory getInstance() {
-        return LazyHolder.instance;
+        if (loginDAOFactory == null) {
+            loginDAOFactory = new LoginDAOFactory();
+        }
+        return loginDAOFactory;
     }
 
     @Override
@@ -24,11 +22,11 @@ public class LoginDAOFactory extends DAOFactory<LoginDAO> {
             throw new IllegalStateException("LoginDAO implementation not set.");
         }
         if (impl == InMemoryLoginDAO.class) {
-            return InMemoryLoginDAO.getInstance();
-        } else if (impl == FsLoginDAO.class) {
-            return FsLoginDAO.getInstance();
+            return new InMemoryLoginDAO();
+        } else if (impl == FSLoginDAO.class) {
+            return new FSLoginDAO();
         } else if (impl == JDBCLoginDAO.class) {
-            return JDBCLoginDAO.getInstance();
+            return new JDBCLoginDAO();
         }
         throw new IllegalArgumentException("Unsupported LoginDAO implementation: " + impl.getName());
     }

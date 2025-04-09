@@ -16,7 +16,7 @@ public class ConnectionFactory {
     private ConnectionFactory() {
     }
 
-    public static synchronized Connection getConnection() {
+    public static Connection getConnection() {
         if (connection == null) {
             try {
                 String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
