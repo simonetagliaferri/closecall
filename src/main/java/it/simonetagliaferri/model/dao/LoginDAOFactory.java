@@ -6,7 +6,7 @@ import it.simonetagliaferri.model.dao.jdbc.JDBCLoginDAO;
 
 public class LoginDAOFactory extends DAOFactory<LoginDAO> {
     // Singleton factory: created once, accessed via getInstance().
-    private static final LoginDAOFactory instance = new LoginDAOFactory();
+    private static LoginDAOFactory instance = new LoginDAOFactory();
 
     private LoginDAOFactory() {
     }

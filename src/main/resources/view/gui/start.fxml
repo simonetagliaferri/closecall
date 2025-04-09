@@ -22,7 +22,7 @@
    <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white;">
       <columnConstraints>
          <ColumnConstraints hgrow="SOMETIMES" />
-         <ColumnConstraints hgrow="NEVER" />
+         <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" prefWidth="441.0" />
          <ColumnConstraints hgrow="SOMETIMES" />
       </columnConstraints>
       <rowConstraints>
@@ -36,16 +36,13 @@
          <RowConstraints vgrow="NEVER" />
          <RowConstraints vgrow="SOMETIMES" />
       </rowConstraints>
-      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="33.0" prefWidth="441.0"
-            GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="BOTTOM"
-            GridPane.vgrow="NEVER">
+      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="33.0" prefWidth="441.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
          <GridPane.margin>
-            <Insets bottom="30.0"/>
+            <Insets bottom="30.0" />
          </GridPane.margin>
-         <Text fx:id="welcomeText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0"
-               text="Welcome to the court." textOrigin="CENTER">
+         <Text fx:id="welcomeText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the court." textOrigin="CENTER">
             <font>
-               <Font name="Symbol" size="48.0"/>
+               <Font name="Symbol" size="48.0" />
             </font>
          </Text>
       </HBox>
