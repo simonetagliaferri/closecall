@@ -15,12 +15,11 @@ public class ConnectionFactory {
 
     //Static block so that only one connection is opened in a run.
     static {
-        // Getting the persistence layer to use in this run.
         try {
-            String connection_url = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
+            String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
             String username = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_USER");
             String password = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_PASS");
-            connection = DriverManager.getConnection(connection_url, username, password);
+            connection = DriverManager.getConnection(connectionUrl, username, password);
         } catch (IOException e) {
             CliUtils.println("Error in reading database info: " + e.getMessage());
         } catch (SQLException e) {

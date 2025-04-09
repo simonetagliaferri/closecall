@@ -5,14 +5,16 @@ import it.simonetagliaferri.model.dao.fs.FsLoginDAO;
 import it.simonetagliaferri.model.dao.jdbc.JDBCLoginDAO;
 
 public class LoginDAOFactory extends DAOFactory<LoginDAO> {
-    // Singleton factory: created once, accessed via getInstance().
-    private static LoginDAOFactory instance = new LoginDAOFactory();
 
     private LoginDAOFactory() {
     }
 
+    private static class LazyHolder {
+        private static final LoginDAOFactory instance = new LoginDAOFactory();
+    }
+
     public static LoginDAOFactory getInstance() {
-        return instance;
+        return LazyHolder.instance;
     }
 
     @Override
@@ -24,9 +26,9 @@ public class LoginDAOFactory extends DAOFactory<LoginDAO> {
         if (impl == InMemoryLoginDAO.class) {
             return InMemoryLoginDAO.getInstance();
         } else if (impl == FsLoginDAO.class) {
-            return FsLoginDAO.getInstance();
+            return new FsLoginDAO();
         } else if (impl == JDBCLoginDAO.class) {
-            return JDBCLoginDAO.getInstance();
+            return new JDBCLoginDAO();
         }
         throw new IllegalArgumentException("Unsupported LoginDAO implementation: " + impl.getName());
     }

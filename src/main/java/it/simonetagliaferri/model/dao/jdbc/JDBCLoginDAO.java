@@ -8,14 +8,6 @@ import it.simonetagliaferri.exception.DAOException;
 import java.sql.*;
 
 public class JDBCLoginDAO implements LoginDAO {
-    private static final JDBCLoginDAO instance = new JDBCLoginDAO();
-
-    private JDBCLoginDAO() {
-    }
-
-    public static JDBCLoginDAO getInstance() {
-        return instance;
-    }
 
     @Override
     public User findByUsername(String username) throws DAOException {

@@ -8,16 +8,17 @@ import java.util.Map;
 
 public class InMemoryLoginDAO implements LoginDAO {
 
-    private static final InMemoryLoginDAO instance = new InMemoryLoginDAO();
     private final Map<String, User> logins = new HashMap<>();
-
     private InMemoryLoginDAO() {
     }
 
-    public static InMemoryLoginDAO getInstance() {
-        return instance;
+    private static class LazyHolder {
+        private static final InMemoryLoginDAO instance = new InMemoryLoginDAO();
     }
 
+    public static InMemoryLoginDAO getInstance() {
+        return InMemoryLoginDAO.LazyHolder.instance;
+    }
     @Override
     public User findByUsername(String username) {
         return logins.get(username);

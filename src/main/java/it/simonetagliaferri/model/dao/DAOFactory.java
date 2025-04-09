@@ -14,6 +14,6 @@ public abstract class DAOFactory<T> {
         this.implClass = implementationClass;
     }
 
-    // Returns the instance of the chosen implementation of LoginDAO.
+    // Returns the instance of the chosen implementation of the DAO.
     public abstract T getDAO();
 }
