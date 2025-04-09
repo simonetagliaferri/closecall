@@ -8,6 +8,6 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     @Override
     public LoginDAO getLoginDAO() {
-        return InMemoryLoginDAO.getInstance();
+        return new InMemoryLoginDAO();
     }
 }
