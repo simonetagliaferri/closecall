@@ -8,19 +8,7 @@ import java.util.Map;
 
 public class InMemoryLoginDAO implements LoginDAO {
 
-    private final Map<String, User> logins = new HashMap<>();
-
-
-    private InMemoryLoginDAO() {
-    }
-
-    private static class SingletonHolder {
-        private static final InMemoryLoginDAO instance = new InMemoryLoginDAO();
-    }
-
-    public static InMemoryLoginDAO getInstance() {
-        return SingletonHolder.instance;
-    }
+    private static final Map<String, User> logins = new HashMap<>();
 
     @Override
     public User findByUsername(String username) {
