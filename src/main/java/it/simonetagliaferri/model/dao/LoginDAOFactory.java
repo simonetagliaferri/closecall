@@ -26,9 +26,9 @@ public class LoginDAOFactory extends DAOFactory<LoginDAO> {
         if (impl == InMemoryLoginDAO.class) {
             return InMemoryLoginDAO.getInstance();
         } else if (impl == FsLoginDAO.class) {
-            return new FsLoginDAO();
+            return FsLoginDAO.getInstance();
         } else if (impl == JDBCLoginDAO.class) {
-            return new JDBCLoginDAO();
+            return JDBCLoginDAO.getInstance();
         }
         throw new IllegalArgumentException("Unsupported LoginDAO implementation: " + impl.getName());
     }

@@ -13,24 +13,22 @@ public class ConnectionFactory {
     private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
     private static Connection connection;
 
-    //Static block so that only one connection is opened in a run.
-    static {
-        try {
-            String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
-            String username = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_USER");
-            String password = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_PASS");
-            connection = DriverManager.getConnection(connectionUrl, username, password);
-        } catch (IOException e) {
-            CliUtils.println("Error in reading database info: " + e.getMessage());
-        } catch (SQLException e) {
-            CliUtils.println("SQLExceptio: " + e.getMessage());
-        }
-    }
-
     private ConnectionFactory() {
     }
 
-    public static Connection getConnection() {
+    public static synchronized Connection getConnection() {
+        if (connection == null) {
+            try {
+                String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
+                String username = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_USER");
+                String password = PropertiesUtils.readProperty(DB_PROPERTIES, "LOGIN_PASS");
+                connection = DriverManager.getConnection(connectionUrl, username, password);
+            } catch (IOException e) {
+                CliUtils.println("Error in reading database info: " + e.getMessage());
+            } catch (SQLException e) {
+                CliUtils.println("SQLExceptio: " + e.getMessage());
+            }
+        }
         return connection;
     }
 

@@ -12,12 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FsLoginDAO implements LoginDAO {
+    private static FsLoginDAO instance;
     private final File file = new File("users.json");
     private final Map<String, User> users = new HashMap<>();
     private final Gson gson = new Gson();
 
-    public FsLoginDAO() {
+    private FsLoginDAO() {
         loadUsers();
+    }
+
+    public synchronized static FsLoginDAO getInstance() {
+        if (instance == null) {
+            instance = new FsLoginDAO();
+        }
+        return instance;
     }
 
     private void loadUsers() {
