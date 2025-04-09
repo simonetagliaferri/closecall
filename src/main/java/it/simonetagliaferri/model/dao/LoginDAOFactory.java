@@ -6,11 +6,16 @@ import it.simonetagliaferri.model.dao.jdbc.JDBCLoginDAO;
 
 public class LoginDAOFactory extends DAOFactory<LoginDAO> {
 
-    private static final LoginDAOFactory loginDAOFactory = new LoginDAOFactory();
     private LoginDAOFactory() {}
-    public static LoginDAOFactory getInstance() {
-        return loginDAOFactory;
+
+    private static class SingletonHolder {
+        private static final LoginDAOFactory instance = new LoginDAOFactory();
     }
+
+    public static LoginDAOFactory getInstance() {
+        return SingletonHolder.instance;
+    }
+
     @Override
     public LoginDAO getDAO() {
         if (implClass == null) {

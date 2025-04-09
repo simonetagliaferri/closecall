@@ -10,18 +10,18 @@ public class InMemoryLoginDAO implements LoginDAO {
 
     private final Map<String, User> logins = new HashMap<>();
 
-    private static InMemoryLoginDAO instance;
 
     private InMemoryLoginDAO() {
     }
 
+    private static class SingletonHolder {
+        private static final InMemoryLoginDAO instance = new InMemoryLoginDAO();
+    }
 
     public static InMemoryLoginDAO getInstance() {
-        if (instance == null) {
-            instance = new InMemoryLoginDAO();
-        }
-        return instance;
+        return SingletonHolder.instance;
     }
+
     @Override
     public User findByUsername(String username) {
         return logins.get(username);
