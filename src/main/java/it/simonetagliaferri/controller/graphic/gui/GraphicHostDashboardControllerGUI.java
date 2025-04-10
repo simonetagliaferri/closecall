@@ -10,7 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
 public class GraphicHostDashboardControllerGUI {
-    private final UserBean user = SessionManager.getCurrentUser();
+    private final SessionManager sessionManager = SessionManager.getInstance();
+    private final UserBean user = sessionManager.getCurrentUser();
     private final HostDashboardController controller = new HostDashboardController();
 
 
@@ -32,8 +33,8 @@ public class GraphicHostDashboardControllerGUI {
         tabPane.setSide(Side.LEFT);
         tabPane.setRotateGraphic(true);
 
-        Label l = null;
-        StackPane stp = null;
+        Label l;
+        StackPane stp;
         for(Tab t : tabPane.getTabs()){
             l = new Label(t.getText());
             l.setRotate(90);

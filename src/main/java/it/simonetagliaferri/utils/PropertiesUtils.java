@@ -26,10 +26,15 @@ public class PropertiesUtils {
     }
 
     // Used generics to make it work with any kind of ENUM.
-    public static <T extends Enum<T>> T loadProperty(String filePath, String property, Class<T> enumType) throws IOException {
+    public static <T extends Enum<T>> T loadProperty(String filePath, String property, Class<T> enumType) {
         // Trim spaces and set to upper case to avoid false negatives.
-        String value = readProperty(filePath, property).trim().toUpperCase();
-        if (value.isEmpty()) {
+        String value = null;
+        try {
+            value = readProperty(filePath, property).trim().toUpperCase();
+        } catch (IOException e) {
+            CliUtils.println("Error in reading persistence mode: " + e.getMessage());
+        }
+        if (value == null) {
             throw new IllegalArgumentException("Empty property: " + property);
         }
         try {

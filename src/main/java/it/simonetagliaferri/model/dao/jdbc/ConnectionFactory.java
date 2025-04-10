@@ -1,6 +1,5 @@
 package it.simonetagliaferri.model.dao.jdbc;
 
-import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.CliUtils;
 import it.simonetagliaferri.utils.PropertiesUtils;
 
@@ -16,6 +15,7 @@ public class ConnectionFactory {
     private ConnectionFactory() {
     }
 
+    // Lazy initialization, no need to establish a connection if JDBC is not the chosen persistence provider.
     public static Connection getConnection() {
         if (connection == null) {
             try {
@@ -26,25 +26,9 @@ public class ConnectionFactory {
             } catch (IOException e) {
                 CliUtils.println("Error in reading database info: " + e.getMessage());
             } catch (SQLException e) {
-                CliUtils.println("SQLExceptio: " + e.getMessage());
+                CliUtils.println("SQLException: " + e.getMessage());
             }
         }
         return connection;
-    }
-
-    public static void changeRole(Role role) throws SQLException {
-
-        connection.close();
-
-        try {
-            String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");
-            String username = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_USER");
-            String password = PropertiesUtils.readProperty(DB_PROPERTIES, role.name() + "_PASS");
-
-            connection = DriverManager.getConnection(connectionUrl, username, password);
-        } catch (IOException | SQLException e) {
-            CliUtils.println("IO or SQL exception:" + e.getMessage());
-        }
-
     }
 }

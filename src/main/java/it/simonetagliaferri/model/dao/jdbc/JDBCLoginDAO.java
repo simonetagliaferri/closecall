@@ -39,7 +39,6 @@ public class JDBCLoginDAO implements LoginDAO {
         String password = user.getPassword();
         String role = user.getRole().toString();
 
-        // Signing up the user.
         try {
             Connection conn = ConnectionFactory.getConnection();
             CallableStatement cs = conn.prepareCall("{call signup(?,?,?,?)}");

@@ -13,15 +13,10 @@ public abstract class NavigationManager {
 
     protected NavigationManager() {
     }
-
-    public static synchronized NavigationManager getNavigationManager() {
+    // Returns the appropriate NavigationManager implementation based on ui.properties config.
+    public static synchronized NavigationManager getInstance() {
         if (instance == null) {
-            UIMode uiMode = null;
-            try {
-                uiMode = loadProperty(UI_PROPERTIES, UI_KEY, UIMode.class);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            UIMode uiMode = loadProperty(UI_PROPERTIES, UI_KEY, UIMode.class);
             switch (uiMode) {
                 case CLI:
                     instance = new NavigationManagerCLI();

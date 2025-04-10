@@ -31,7 +31,7 @@ public class SceneManagerGUI extends Application {
         double baseHeight = 720;
         stage.setMinWidth(baseWidth / 2);
         stage.setMinHeight(baseHeight / 2);
-        scene = new Scene(loadFXML("start"), baseWidth, baseHeight);
+        scene = new Scene(loadFXML("login"), baseWidth, baseHeight);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/css/start.css")).toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();

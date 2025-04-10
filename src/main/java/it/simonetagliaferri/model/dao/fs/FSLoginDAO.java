@@ -16,6 +16,7 @@ public class FSLoginDAO implements LoginDAO {
     private final Map<String, User> users = new HashMap<>();
     private final Gson gson = new Gson();
 
+    // Loading the users every time a new LoginDAO is instantiated so that users' list is always updated.
     public FSLoginDAO() {
         loadUsers();
     }

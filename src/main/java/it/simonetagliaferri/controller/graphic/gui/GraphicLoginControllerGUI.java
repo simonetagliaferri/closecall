@@ -3,6 +3,8 @@ package it.simonetagliaferri.controller.graphic.gui;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
+import it.simonetagliaferri.controller.graphic.SessionManager;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.LoginController;
 import it.simonetagliaferri.model.domain.Role;
 import javafx.animation.PauseTransition;
@@ -10,7 +12,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -24,8 +25,6 @@ public class GraphicLoginControllerGUI {
 
     LoginController controller = new LoginController();
     private UIState state = UIState.USERNAME_INPUT;
-    @FXML
-    private Group scalableContent;
     @FXML
     private Text welcomeText;
     @FXML
@@ -57,9 +56,8 @@ public class GraphicLoginControllerGUI {
     @FXML
     private Spinner roleSpinner;
     private boolean showingTempMessage = false;
+    private final SessionManager sessionManager=SessionManager.getInstance();
 
-    public GraphicLoginControllerGUI() throws IOException {
-    }
 
     @FXML
     private void initialize() {
@@ -98,6 +96,10 @@ public class GraphicLoginControllerGUI {
             String password = passwordField.getText().trim();
             if (login(usernameField.getText(), password)==LoginResult.FAIL) {
                 welcomeText.setText("Log in failed");
+            }
+            else {
+                System.out.println(sessionManager.getCurrentUser().getUsername());
+                NavigationManager.getInstance().goToDashboard(sessionManager.getCurrentUser().getRole());
             }
         }
     }
@@ -148,12 +150,12 @@ public class GraphicLoginControllerGUI {
 
     @FXML
     private void handleGoogleLogin() {
-        tempMessage("Not implemented yet.");
+        tempMessage();
     }
 
     @FXML
     private void handlePassResetHyper() {
-        tempMessage("Not implemented yet.");
+        tempMessage();
     }
 
     private void switchToSignup() {
@@ -205,12 +207,12 @@ public class GraphicLoginControllerGUI {
         state = UIState.USERNAME_INPUT;
     }
 
-    private void tempMessage(String message) {
+    private void tempMessage() {
         if (showingTempMessage) return;
 
         showingTempMessage = true;
         String old = welcomeText.getText();
-        welcomeText.setText(message);
+        welcomeText.setText("Not implemented yet.");
 
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(e -> {

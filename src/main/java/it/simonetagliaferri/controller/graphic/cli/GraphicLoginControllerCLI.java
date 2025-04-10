@@ -6,8 +6,6 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
 
-import java.io.IOException;
-
 public class GraphicLoginControllerCLI {
     LoginCLIView view = new LoginCLIView();
     LoginController controller = new LoginController();
@@ -21,8 +19,7 @@ public class GraphicLoginControllerCLI {
             case 2:
                 signup();
                 break;
-            case 3:
-                this.controller.end();
+            case 3: // Exit case.
                 break;
             default:
         }
@@ -38,6 +35,7 @@ public class GraphicLoginControllerCLI {
         }
     }
 
+    // Signup done in 2 steps so that if an already existing username is chosen, it fails before asking the other fields.
     public void signup() {
         UserBean user = null;
         LoginResponseBean res;

@@ -26,9 +26,8 @@ public class UserBean {
         this.role = role;
     }
 
-    public UserBean(String username, String email, Role role) {
+    public UserBean(String username, Role role) {
         this.username = username;
-        this.email = email;
         this.role = role;
     }
 

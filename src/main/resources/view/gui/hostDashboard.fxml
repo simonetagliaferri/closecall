@@ -41,7 +41,7 @@
             <GridPane.margin>
                 <Insets/>
             </GridPane.margin>
-            <MenuButton fx:id="account" alignment="CENTER_RIGHT" mnemonicParsing="false" text="MenuButton">
+            <MenuButton fx:id="account" alignment="CENTER_RIGHT" styleClass="blue-button" mnemonicParsing="false" text="MenuButton">
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#logout" text="Logout"/>
                     <MenuItem mnemonicParsing="false" text="Action 2"/>

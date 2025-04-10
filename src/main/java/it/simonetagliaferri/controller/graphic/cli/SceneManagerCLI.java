@@ -6,17 +6,17 @@ public class SceneManagerCLI {
     }
 
     public void hostDashboard() {
-        GraphicHostDashboardControllerCLI hostDashboardControllerCLI = new GraphicHostDashboardControllerCLI();
-        hostDashboardControllerCLI.showHome();
+        GraphicHostDashboardControllerCLI graphicHostDashboardControllerCLI = new GraphicHostDashboardControllerCLI();
+        graphicHostDashboardControllerCLI.showHome();
     }
 
     public void playerDashboard() {
-        GraphicPlayerDashboardControllerCLI playerDashboardControllerCLI = new GraphicPlayerDashboardControllerCLI();
+        GraphicPlayerDashboardControllerCLI graphicPlayerDashboardControllerCLI = new GraphicPlayerDashboardControllerCLI();
     }
 
     public void addTournament() {
-        GraphicAddTournamentControllerCLI addTournamentControllerCLI = new GraphicAddTournamentControllerCLI();
-        addTournamentControllerCLI.start();
+        GraphicAddTournamentControllerCLI graphicAddTournamentControllerCLI = new GraphicAddTournamentControllerCLI();
+        graphicAddTournamentControllerCLI.start();
     }
 
 }

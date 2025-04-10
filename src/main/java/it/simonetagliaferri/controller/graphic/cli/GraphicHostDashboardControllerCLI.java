@@ -6,8 +6,9 @@ import it.simonetagliaferri.controller.logic.HostDashboardController;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
 public class GraphicHostDashboardControllerCLI {
+    private final SessionManager sessionManager = SessionManager.getInstance();
     HostDashboardCLIView view = new HostDashboardCLIView();
-    UserBean currentUser = SessionManager.getCurrentUser();
+    UserBean currentUser = sessionManager.getCurrentUser();
     HostDashboardController controller = new HostDashboardController();
 
     public void showHome() {

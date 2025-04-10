@@ -36,7 +36,7 @@
     -fx-border-color: #bdc1c7;
     -fx-text-fill: #131314;
 }
-.text-field:focused {
+.text-field:focused { //NOSONAR
     -fx-border-color: #131314;
 }
 

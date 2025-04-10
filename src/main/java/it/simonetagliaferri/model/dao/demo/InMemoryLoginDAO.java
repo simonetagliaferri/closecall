@@ -3,21 +3,24 @@ package it.simonetagliaferri.model.dao.demo;
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.User;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryLoginDAO implements LoginDAO {
 
-    private static final Map<String, User> logins = new HashMap<>();
+    private final Map<String, User> users;
+
+    public InMemoryLoginDAO(Map<String, User> users) {
+        this.users = users;
+    }
 
     @Override
     public User findByUsername(String username) {
-        return logins.get(username);
+        return users.get(username);
     }
 
     @Override
     public User signup(User user) {
-        logins.put(user.getUsername(), user);
+        users.put(user.getUsername(), user);
         return user;
     }
 }
