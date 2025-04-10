@@ -6,17 +6,6 @@ import it.simonetagliaferri.beans.UserBean;
     Class needed to propagate the active user through the run.
  */
 public class SessionManager {
-    private static SessionManager instance;
-
-    private SessionManager() {
-    }
-
-    public static SessionManager getInstance() {
-        if (instance == null) {
-            instance = new SessionManager();
-        }
-        return instance;
-    }
 
     private UserBean currentUser;
 

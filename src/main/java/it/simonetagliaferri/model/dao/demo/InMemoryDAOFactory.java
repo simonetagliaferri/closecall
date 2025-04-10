@@ -12,8 +12,6 @@ public class InMemoryDAOFactory extends DAOFactory {
     // Storing here the hashmaps, that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
     private final Map<String, User> users = new HashMap<>();
 
-    public InMemoryDAOFactory() {}
-
     @Override
     public LoginDAO getLoginDAO() {
         return new InMemoryLoginDAO(users);

@@ -53,4 +53,11 @@ public class FSLoginDAO implements LoginDAO {
         return users.get(username);
     }
 
+    @Override
+    public User findByEmail(String email) {
+        for (User user : users.values()) {
+            if (user.getEmail().equals(email)) return user;
+        }
+        return null;
+    }
 }

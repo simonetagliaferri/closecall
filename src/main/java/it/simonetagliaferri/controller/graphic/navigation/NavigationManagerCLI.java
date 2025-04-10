@@ -23,9 +23,12 @@ public class NavigationManagerCLI extends NavigationManager {
         if (role == Role.HOST) {
             sceneManager.hostDashboard();
         }
+        else {
+            sceneManager.playerDashboard();
+        }
     }
 
     public void goToAddTournament() {
-
+        sceneManager.addTournament();
     }
 }

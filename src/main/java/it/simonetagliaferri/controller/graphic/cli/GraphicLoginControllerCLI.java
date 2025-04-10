@@ -3,12 +3,15 @@ package it.simonetagliaferri.controller.graphic.cli;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
+import it.simonetagliaferri.controller.graphic.SessionManager;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
 
 public class GraphicLoginControllerCLI {
     LoginCLIView view = new LoginCLIView();
     LoginController controller = new LoginController();
+    private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
 
     public void start() {
         int choice = view.showMenu();
@@ -33,6 +36,9 @@ public class GraphicLoginControllerCLI {
             view.failedLogin();
             start();
         }
+        else {
+            NavigationManager.getInstance().goToDashboard(sessionManager.getCurrentUser().getRole());
+        }
     }
 
     // Signup done in 2 steps so that if an already existing username is chosen, it fails before asking the other fields.
@@ -48,7 +54,16 @@ public class GraphicLoginControllerCLI {
                 view.userAlreadyExists();
             }
         }
-        user = view.signupSecondStep(user);
+        boolean validEmail = false;
+        while (!validEmail) {
+            validEmail = true;
+            user = view.signupSecondStep(user);
+            if (this.controller.emailLookUp(user)) {
+                validEmail = false;
+                view.emailAlreadyTaken();
+            }
+        }
+        user = view.signupThirdStep(user);
         res = this.controller.signup(user);
         if (res.getResult()==LoginResult.SUCCESS) {
             view.successfulSignup();

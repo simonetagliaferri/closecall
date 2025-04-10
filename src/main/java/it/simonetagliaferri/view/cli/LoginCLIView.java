@@ -30,20 +30,25 @@ public class LoginCLIView {
         return new UserBean(username);
     }
 
+    /* For email, password and role input validation I decided to call the bean's methods directly from the view,
+   without going through the GraphicController because I wanted to have direct validation after
+   each field was filled by the user and not just at the end, it's just less messy doing it this way.
+   This is what is done in sigmupSecondStep and signupThirdStep. The need to split signup in the CLI UI is given by
+   the fact that it would be inappropriate to ask the user multiple fields without giving a feedback on invalid inputs.*/
+
     public UserBean signupSecondStep(UserBean user) {
         while (true) {
             String email = CliUtils.prompt("Enter email: ");
             user.setEmail(email);
-
-            /* For email, password and role input validation I decided to call the bean's methods directly from the view,
-               without going through the GraphicController because I wanted to have direct validation after
-               each field was filled by the user and not just at the end, it's just less messy doing it this way*/
-
             if (user.validEmail()) {
                 break;
             }
             CliUtils.println("Invalid email. Try again.");
         }
+        return user;
+    }
+
+    public UserBean signupThirdStep(UserBean user) {
         String password;
         while (true) {
             password = CliUtils.prompt("Enter password: ");
@@ -82,5 +87,9 @@ public class LoginCLIView {
 
     public void failedSignup() {
         CliUtils.println("Signup failed. Try again.");
+    }
+
+    public void emailAlreadyTaken() {
+        CliUtils.println("Email already taken. Try again.");
     }
 }

@@ -6,4 +6,6 @@ public interface LoginDAO {
     User findByUsername(String username);
 
     User signup(User user);
+
+    User findByEmail(String email);
 }

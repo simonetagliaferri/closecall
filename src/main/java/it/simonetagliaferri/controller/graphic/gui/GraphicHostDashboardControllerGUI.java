@@ -2,6 +2,7 @@ package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.SessionManager;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.HostDashboardController;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -10,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
 public class GraphicHostDashboardControllerGUI {
-    private final SessionManager sessionManager = SessionManager.getInstance();
+    private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
     private final UserBean user = sessionManager.getCurrentUser();
     private final HostDashboardController controller = new HostDashboardController();
 

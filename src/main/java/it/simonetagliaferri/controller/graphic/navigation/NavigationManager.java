@@ -1,15 +1,16 @@
 package it.simonetagliaferri.controller.graphic.navigation;
 
 
+import it.simonetagliaferri.controller.graphic.SessionManager;
 import it.simonetagliaferri.controller.graphic.UIMode;
 import it.simonetagliaferri.model.domain.Role;
 
-import java.io.IOException;
 
 import static it.simonetagliaferri.utils.PropertiesUtils.*;
 
 public abstract class NavigationManager {
     private static NavigationManager instance;
+    private final SessionManager sessionManager = new SessionManager();
 
     protected NavigationManager() {
     }
@@ -30,11 +31,15 @@ public abstract class NavigationManager {
         return instance;
     }
 
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
+
     public abstract void start();
 
-    public abstract void login() throws IOException;
+    public abstract void login();
 
-    public abstract void goToDashboard(Role role) throws IOException;
+    public abstract void goToDashboard(Role role);
 
     public abstract void goToAddTournament();
 }

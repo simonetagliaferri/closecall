@@ -13,6 +13,7 @@ public class JDBCLoginDAO implements LoginDAO {
     public User findByUsername(String username) throws DAOException {
         String password;
         Role role;
+        String email;
 
         // Checking if the user exists, if so take the role and the password.
         try {
@@ -23,7 +24,8 @@ public class JDBCLoginDAO implements LoginDAO {
             if (rs.next()) {
                 password = rs.getString("password");
                 role = Role.valueOf(rs.getString("role"));
-                return new User(username, password, role);
+                email = rs.getString("email");
+                return new User(username, email, password, role);
             } else {
                 return null;
             }
@@ -38,7 +40,6 @@ public class JDBCLoginDAO implements LoginDAO {
         String email = user.getEmail();
         String password = user.getPassword();
         String role = user.getRole().toString();
-
         try {
             Connection conn = ConnectionFactory.getConnection();
             CallableStatement cs = conn.prepareCall("{call signup(?,?,?,?)}");
@@ -51,6 +52,31 @@ public class JDBCLoginDAO implements LoginDAO {
             throw new DAOException("Error in signup procedure: " + e.getMessage());
         }
         return user;
+    }
+
+    @Override
+    public User findByEmail(String email) throws DAOException {
+        String password;
+        Role role;
+        String username;
+
+        // Checking if the user exists, if so take the role and the password.
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+            CallableStatement cs = conn.prepareCall("{call findByEmail(?)}");
+            cs.setString(1, email);
+            ResultSet rs = cs.executeQuery();
+            if (rs.next()) {
+                password = rs.getString("password");
+                role = Role.valueOf(rs.getString("role"));
+                username = rs.getString("email");
+                return new User(username, email, password, role);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error in login procedure: " + e.getMessage());
+        }
     }
 }
 

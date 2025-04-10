@@ -18,8 +18,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
-import java.io.IOException;
-
 
 public class GraphicLoginControllerGUI {
 
@@ -56,7 +54,7 @@ public class GraphicLoginControllerGUI {
     @FXML
     private Spinner roleSpinner;
     private boolean showingTempMessage = false;
-    private final SessionManager sessionManager=SessionManager.getInstance();
+    private final SessionManager sessionManager=NavigationManager.getInstance().getSessionManager();
 
 
     @FXML
@@ -76,7 +74,7 @@ public class GraphicLoginControllerGUI {
     }
 
     @FXML
-    private void handleMainButton() throws IOException {
+    private void handleMainButton() {
         if (state == UIState.USERNAME_INPUT) {
             String username = usernameField.getText().trim();
             welcomeText.setText("Welcome back!");
@@ -98,7 +96,6 @@ public class GraphicLoginControllerGUI {
                 welcomeText.setText("Log in failed");
             }
             else {
-                System.out.println(sessionManager.getCurrentUser().getUsername());
                 NavigationManager.getInstance().goToDashboard(sessionManager.getCurrentUser().getRole());
             }
         }
@@ -135,7 +132,12 @@ public class GraphicLoginControllerGUI {
             emailField.clear();
             roleSpinner.requestFocus();
             emailField.setPromptText("Invalid email");
-        } else {
+        } else if (this.controller.emailLookUp(user)) {
+            emailField.clear();
+            roleSpinner.requestFocus();
+            emailField.setPromptText("Email already in use");
+        }
+        else {
             response = this.controller.signup(user);
             if (response.getResult()==LoginResult.SUCCESS) {
                 clearSignup();

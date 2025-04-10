@@ -4,6 +4,7 @@ import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.SessionManager;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.model.dao.DAOFactory;
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.User;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class LoginController {
     LoginDAO loginDAO;
     private User user;
-    private final SessionManager sessionManager = SessionManager.getInstance();
+    private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
 
     //The correct DAO is set on initialization.
     public LoginController() {
@@ -59,6 +60,11 @@ public class LoginController {
      */
     public boolean userLookUp(UserBean bean) {
         user = loginDAO.findByUsername(bean.getUsername());
+        return user != null;
+    }
+
+    public boolean emailLookUp(UserBean bean) {
+        user = loginDAO.findByEmail(bean.getEmail());
         return user != null;
     }
 

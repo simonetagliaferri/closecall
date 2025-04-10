@@ -2,11 +2,12 @@ package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.SessionManager;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.HostDashboardController;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
 public class GraphicHostDashboardControllerCLI {
-    private final SessionManager sessionManager = SessionManager.getInstance();
+    private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
     HostDashboardCLIView view = new HostDashboardCLIView();
     UserBean currentUser = sessionManager.getCurrentUser();
     HostDashboardController controller = new HostDashboardController();
@@ -29,7 +30,7 @@ public class GraphicHostDashboardControllerCLI {
     }
 
     private void addTournament() {
-
+        NavigationManager.getInstance().goToAddTournament();
     }
 
 
