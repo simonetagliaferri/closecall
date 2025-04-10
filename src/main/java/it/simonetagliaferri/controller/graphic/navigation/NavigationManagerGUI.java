@@ -7,6 +7,7 @@ import javafx.application.Application;
 import java.io.IOException;
 
 public class NavigationManagerGUI extends NavigationManager {
+    private final SceneManagerGUI sceneManagerGUI = new SceneManagerGUI();
 
     /*
         Implemented a SceneManager class to handle FXML loading and JavaFX launching.
@@ -17,7 +18,7 @@ public class NavigationManagerGUI extends NavigationManager {
     // Added a login operation for readability on logout calls.
     public void login() {
         try {
-            SceneManagerGUI.setRoot("login");
+            sceneManagerGUI.setRoot("login");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -26,8 +27,8 @@ public class NavigationManagerGUI extends NavigationManager {
     public void goToDashboard(Role role) {
         try {
             if (role == Role.HOST) {
-                SceneManagerGUI.setRoot("hostDashboard");
-            } else SceneManagerGUI.setRoot("playerDashboard");
+                sceneManagerGUI.setRoot("hostDashboard");
+            } else sceneManagerGUI.setRoot("playerDashboard");
         } catch (IOException e) {
         throw new RuntimeException(e);}
     }

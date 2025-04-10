@@ -7,8 +7,12 @@ public class GraphicAddTournamentControllerCLI {
 
     AddTournamentCLIView view = new AddTournamentCLIView();
     public void start() {
-        TournamentBean tournamentBean = new TournamentBean();
+        TournamentBean tournamentBean;
         view.welcome();
         String tournamentName=view.tournamentName();
+        String tournamentType=view.tournamentType();
+        String tournamentFormat=view.tournamentFormat();
+        String matchFormat=view.matchFormat();
+        tournamentBean = new TournamentBean(tournamentName,tournamentType,tournamentFormat,matchFormat);
     }
 }

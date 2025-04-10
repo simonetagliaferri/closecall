@@ -31,13 +31,33 @@ public class CliUtils {
             print(label + ": ");
             try {
                 String input = reader.readLine();
-                if (input==null) {
+                if (input == null) {
                     println("EOF used as input.");
                     System.exit(-1);
                 }
                 return Integer.parseInt(input);
             } catch (NumberFormatException | IOException e) {
                 println("Please enter a valid number.");
+            }
+        }
+    }
+
+    public static String multipleChoice(String label, String... choices) {
+        int i = 1;
+        int result;
+        CliUtils.println(label);
+        while (true) {
+            for (String choice : choices) {
+                CliUtils.println(i + ". " + choice);
+                i++;
+            }
+            result = CliUtils.promptInt("Enter choice: ");
+            if (result >= 1 && result <= choices.length) {
+                return choices[result-1];
+            }
+            else {
+                CliUtils.println("Please enter a valid choice.");
+                i=1;
             }
         }
     }
