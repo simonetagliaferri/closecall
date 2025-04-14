@@ -7,16 +7,18 @@ import it.simonetagliaferri.controller.graphic.SessionManager;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.model.dao.DAOFactory;
 import it.simonetagliaferri.model.dao.LoginDAO;
+import it.simonetagliaferri.model.domain.Host;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.PasswordUtils;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController extends Controller {
     LoginDAO loginDAO;
     private User user;
     private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
-
     //The correct DAO is set on initialization.
     public LoginController() {
         try {
@@ -35,9 +37,15 @@ public class LoginController {
     public LoginResponseBean login(UserBean bean) {
         user = loginDAO.findByUsername(bean.getUsername());
         String hashedPass = PasswordUtils.sha256Hex(bean.getPassword());
+        User currentUser;
         if (user != null && user.getPassword().equals(hashedPass)) {
+            if (user.getRole() == Role.PLAYER) {
+                currentUser = new Player(user.getUsername(), user.getEmail(),user.getRole());
+            }
+            else {
+                currentUser = new Host(user.getUsername(), user.getEmail(),user.getRole());
+            }
             // Creating new bean that has no reference to the password, no need to keep that around.
-            UserBean currentUser = new UserBean(user.getUsername(), user.getRole());
             sessionManager.setCurrentUser(currentUser);
             return new LoginResponseBean(LoginResult.SUCCESS);
         } else return new LoginResponseBean(LoginResult.FAIL);

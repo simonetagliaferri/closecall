@@ -4,12 +4,13 @@ import it.simonetagliaferri.model.domain.Role;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class UserBean {
-    private String username;
+    protected String username;
     private String password;
-    private String email;
+    protected String email;
     private Role role;
 
 
+    protected UserBean() {}
     public UserBean(String username) {
         this.username = username;
     }
@@ -28,6 +29,12 @@ public class UserBean {
 
     public UserBean(String username, Role role) {
         this.username = username;
+        this.role = role;
+    }
+
+    public UserBean(String username, String email, Role role) {
+        this.username = username;
+        this.email = email;
         this.role = role;
     }
 

@@ -42,6 +42,22 @@ public class CliUtils {
         }
     }
 
+    public static double promptDouble(String label) {
+        while (true) {
+            print(label + ": ");
+            try {
+                String input = reader.readLine();
+                if (input == null) {
+                    println("EOF used as input.");
+                    System.exit(-1);
+                }
+                return Double.parseDouble(input);
+            } catch (NumberFormatException | IOException e) {
+                println("Please enter a valid number.");
+            }
+        }
+    }
+
     public static String multipleChoice(String label, String... choices) {
         int i = 1;
         int result;

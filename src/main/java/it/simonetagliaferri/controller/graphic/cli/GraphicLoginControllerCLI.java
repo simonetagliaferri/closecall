@@ -3,7 +3,6 @@ package it.simonetagliaferri.controller.graphic.cli;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
-import it.simonetagliaferri.controller.graphic.SessionManager;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginController;
@@ -11,7 +10,6 @@ import it.simonetagliaferri.controller.logic.LoginController;
 public class GraphicLoginControllerCLI {
     LoginCLIView view = new LoginCLIView();
     LoginController controller = new LoginController();
-    private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
 
     public void start() {
         int choice = view.showMenu();
@@ -37,7 +35,7 @@ public class GraphicLoginControllerCLI {
             start();
         }
         else {
-            NavigationManager.getInstance().goToDashboard(sessionManager.getCurrentUser().getRole());
+            NavigationManager.getInstance().goToDashboard(this.controller.getCurrentUserRole());
         }
     }
 

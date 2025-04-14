@@ -1,19 +1,19 @@
 package it.simonetagliaferri.controller.graphic;
 
-import it.simonetagliaferri.beans.UserBean;
+import it.simonetagliaferri.model.domain.User;
 
 /*
     Class needed to propagate the active user through the run.
  */
 public class SessionManager {
 
-    private UserBean currentUser;
+    private User currentUser;
 
-    public UserBean getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(UserBean currentUser) {
+    public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 

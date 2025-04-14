@@ -2,6 +2,8 @@ package it.simonetagliaferri.view.cli;
 
 import it.simonetagliaferri.utils.CliUtils;
 
+import java.util.ArrayList;
+
 public class AddTournamentCLIView {
     public void welcome() {
         CliUtils.println("Welcome to the tournament generation.");
@@ -30,12 +32,42 @@ public class AddTournamentCLIView {
     }
 
     public String matchFormat() {
-        CliUtils.println("Enter match format: ");
-        CliUtils.println("1. Best-of-three sets");
-        CliUtils.println("2. Best-of-five sets");
         String label = "Enter match format: ";
         String choice1 = "Best-of-three sets";
         String choice2 = "Best-of-five sets";
         return CliUtils.multipleChoice(label, choice1, choice2);
+    }
+
+    public String courtType() {
+        String label = "Enter court type: ";
+        String choice1 = "Hard";
+        String choice2 = "Clay";
+        String choice3 = "Grass";
+        return CliUtils.multipleChoice(label, choice1, choice2, choice3);
+    }
+
+    public int numberOfTeams() {
+        return CliUtils.promptInt("Enter number of teams: ");
+    }
+
+    public ArrayList<Double> prizes() {
+        int numOfPrizes = CliUtils.promptInt("Enter number of prizes: ");
+        ArrayList<Double> prizes = new ArrayList<>(numOfPrizes);
+        for (int i = 0; i < numOfPrizes; i++) {
+            CliUtils.promptDouble("Enter prize " + (i + 1) + ": ");
+        }
+        return prizes;
+    }
+
+    public String startDate() {
+        return CliUtils.prompt("Enter start date(MM/dd/yyyy): ");
+    }
+
+    public String signupDeadline() {
+        return CliUtils.prompt("Enter signup deadline(MM/dd/yyyy): ");
+    }
+
+    public void invalidDate() {
+        CliUtils.println("Invalid date entered. Try again.");
     }
 }

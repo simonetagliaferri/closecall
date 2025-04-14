@@ -3,7 +3,6 @@ package it.simonetagliaferri.controller.graphic.gui;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
-import it.simonetagliaferri.controller.graphic.SessionManager;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.LoginController;
 import it.simonetagliaferri.model.domain.Role;
@@ -54,7 +53,6 @@ public class GraphicLoginControllerGUI {
     @FXML
     private Spinner roleSpinner;
     private boolean showingTempMessage = false;
-    private final SessionManager sessionManager=NavigationManager.getInstance().getSessionManager();
 
 
     @FXML
@@ -77,26 +75,32 @@ public class GraphicLoginControllerGUI {
     private void handleMainButton() {
         if (state == UIState.USERNAME_INPUT) {
             String username = usernameField.getText().trim();
-            welcomeText.setText("Welcome back!");
-            usernameField.setVisible(false);
-            passwordField.setVisible(true);
-            mainButton.setText("Sign in");
+            if (this.controller.userLookUp(new UserBean(username))) {
+                welcomeText.setText("Welcome back!");
+                usernameField.setVisible(false);
+                passwordField.setVisible(true);
+                mainButton.setText("Sign in");
 
-            subText.setText(username);
-            subHyper.setText("switch account");
-            passResetHyper.setVisible(true);
+                subText.setText(username);
+                subHyper.setText("switch account");
+                passResetHyper.setVisible(true);
 
-            googleLogin.setVisible(false);
-            divider.setVisible(false);
-            mainButton.requestFocus();
-            state = UIState.PASSWORD_INPUT;
+                googleLogin.setVisible(false);
+                divider.setVisible(false);
+                mainButton.requestFocus();
+                state = UIState.PASSWORD_INPUT;
+            }
+            else {
+                welcomeText.setText("Username not found.");
+                usernameField.clear();
+            }
         } else if (state == UIState.PASSWORD_INPUT) {
             String password = passwordField.getText().trim();
             if (login(usernameField.getText(), password)==LoginResult.FAIL) {
                 welcomeText.setText("Log in failed");
             }
             else {
-                NavigationManager.getInstance().goToDashboard(sessionManager.getCurrentUser().getRole());
+                NavigationManager.getInstance().goToDashboard(this.controller.getCurrentUserRole());
             }
         }
     }

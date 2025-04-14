@@ -6,18 +6,25 @@ public class User {
     private final String email;
     private final Role role;
 
-    public User(String username, String password, Role role) {
-        this.username = username;
-        this.email = null;
-        this.password = password;
-        this.role = role;
-    }
-
     public User(String username, String email, String password, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
+    }
+
+    public User(String username, String email, Role role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.password = null;
+    }
+
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+        this.role = null;
+        this.password = null;
     }
 
     public String getUsername() {
