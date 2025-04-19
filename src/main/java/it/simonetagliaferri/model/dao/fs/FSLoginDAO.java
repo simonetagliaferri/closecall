@@ -16,11 +16,6 @@ public class FSLoginDAO implements LoginDAO {
     private final Map<String, User> users = new HashMap<>();
     private final Gson gson = new Gson();
 
-    // Loading the users every time a new LoginDAO is instantiated so that users' list is always updated.
-    public FSLoginDAO() {
-        loadUsers();
-    }
-
     private void loadUsers() {
         if (!file.exists()) return;
         try (Reader reader = new FileReader(file)) {
@@ -48,13 +43,16 @@ public class FSLoginDAO implements LoginDAO {
         return user;
     }
 
+    // Loading the users at every look up so that the user's map is always up to date.
     @Override
     public User findByUsername(String username) {
+        loadUsers();
         return users.get(username);
     }
 
     @Override
     public User findByEmail(String email) {
+        loadUsers();
         for (User user : users.values()) {
             if (user.getEmail().equals(email)) return user;
         }

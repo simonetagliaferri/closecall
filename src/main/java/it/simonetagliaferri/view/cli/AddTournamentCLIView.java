@@ -46,6 +46,10 @@ public class AddTournamentCLIView {
         return CliUtils.multipleChoice(label, choice1, choice2, choice3);
     }
 
+    public int courtNumber() {
+        return CliUtils.promptInt("Enter number of courts available for the tournament: ");
+    }
+
     public int numberOfTeams() {
         return CliUtils.promptInt("Enter number of teams: ");
     }

@@ -1,6 +1,7 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.beans.HostBean;
+import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.HostDashboardController;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -11,6 +12,7 @@ import javafx.scene.layout.StackPane;
 public class GraphicHostDashboardControllerGUI {
     private final HostDashboardController controller = new HostDashboardController();
     private final HostBean user = this.controller.getHostBean();
+    private NavigationManager navigationManager = NavigationManager.getInstance();
 
 
     @FXML private TabPane tabPane;
@@ -24,6 +26,7 @@ public class GraphicHostDashboardControllerGUI {
     @FXML
     private void logout() {
         this.controller.logout();
+        navigationManager.login();
     }
 
     void setTabPaneLeftTabsHorizontal(TabPane tabPane){

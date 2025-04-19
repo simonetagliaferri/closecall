@@ -10,6 +10,11 @@ public class HostBean extends UserBean {
         this.email=email;
     }
 
+    public HostBean(String username) {
+        super();
+        this.username=username;
+    }
+
     public String getClubName() {
         return clubName;
     }

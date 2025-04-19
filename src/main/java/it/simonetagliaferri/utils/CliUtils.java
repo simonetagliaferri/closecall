@@ -12,7 +12,7 @@ public class CliUtils {
     }
 
     public static String prompt(String label) {
-        print(label + ": ");
+        print(label);
         try {
             String input = reader.readLine();
             if (input == null) {
@@ -28,7 +28,7 @@ public class CliUtils {
 
     public static int promptInt(String label) {
         while (true) {
-            print(label + ": ");
+            print(label);
             try {
                 String input = reader.readLine();
                 if (input == null) {
@@ -44,7 +44,7 @@ public class CliUtils {
 
     public static double promptDouble(String label) {
         while (true) {
-            print(label + ": ");
+            print(label);
             try {
                 String input = reader.readLine();
                 if (input == null) {

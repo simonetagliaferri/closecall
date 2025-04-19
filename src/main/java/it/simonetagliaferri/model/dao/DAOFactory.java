@@ -36,5 +36,5 @@ public abstract class DAOFactory {
     }
 
     public abstract LoginDAO getLoginDAO();
-
+    public abstract TournamentDAO getTournamentDAO();
 }

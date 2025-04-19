@@ -7,6 +7,7 @@ import it.simonetagliaferri.controller.logic.HostDashboardController;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
 public class GraphicHostDashboardControllerCLI {
+    private NavigationManager navigationManager = NavigationManager.getInstance();
     private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
     HostDashboardCLIView view = new HostDashboardCLIView();
     HostDashboardController controller = new HostDashboardController();
@@ -14,19 +15,31 @@ public class GraphicHostDashboardControllerCLI {
 
     public void showHome() {
         view.hello(currentUser);
-        int choice = view.showMenu();
-        switch (choice) {
-            case 1:
-                addTournament();
-                break;
-            case 2:
-                this.controller.logout();
-                break;
-            case 3:
-                settings();
-                break;
-            default:
+        boolean home = true;
+        while (home) {
+            int choice = view.showMenu();
+            switch (choice) {
+                case 1:
+                    addTournament();
+                    break;
+                case 2:
+                    listTournaments();
+                    break;
+                case 3:
+                    home=false;
+                    logout();
+                    break;
+                case 4:
+                    settings();
+                    break;
+                default:
+            }
         }
+    }
+
+    private void logout() {
+        this.controller.logout();
+        navigationManager.login();
     }
 
     private void addTournament() {
@@ -36,5 +49,9 @@ public class GraphicHostDashboardControllerCLI {
 
     private void settings() {
 
+    }
+
+    private void listTournaments() {
+        view.listTournaments(this.controller.getTournaments());
     }
 }
