@@ -14,7 +14,12 @@ public class FSTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public List<Tournament> getTournaments(String hostUsername) {
+    public List<Tournament> getTournaments(Host host) {
         return null;
+    }
+
+    @Override
+    public void updateTournament(Host host, Tournament tournament) {
+
     }
 }

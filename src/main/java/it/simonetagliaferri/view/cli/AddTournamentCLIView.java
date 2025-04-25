@@ -2,6 +2,7 @@ package it.simonetagliaferri.view.cli;
 
 import it.simonetagliaferri.utils.CliUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AddTournamentCLIView {
@@ -63,6 +64,30 @@ public class AddTournamentCLIView {
         return prizes;
     }
 
+    public int showEstimatedEndDate(LocalDate endDate) {
+        CliUtils.println("The estimated end date is: " + endDate);
+        String label = "Would you like to edit the estimated end date?";
+        String choice1 = "Yes";
+        String choice2 = "No";
+        return CliUtils.multipleChoiceInt(label, choice1, choice2);
+    }
+
+    public String editEndDate() {
+        return CliUtils.prompt("Enter an estimated end date(MM/dd/yyyy): ");
+    }
+
+    public int askToAddPlayer() {
+        String label = "Do you want to add a player/team to the tournament?";
+        String choice1 = "Yes";
+        String choice2 = "No";
+        return CliUtils.multipleChoiceInt(label, choice1, choice2);
+    }
+
+    public String getPlayer() {
+        return CliUtils.prompt("Enter the player username or email: ");
+    }
+
+
     public String startDate() {
         return CliUtils.prompt("Enter start date(MM/dd/yyyy): ");
     }
@@ -73,5 +98,9 @@ public class AddTournamentCLIView {
 
     public void invalidDate() {
         CliUtils.println("Invalid date entered. Try again.");
+    }
+
+    public void invalidPlayer() {
+        CliUtils.println("Player not found. Try again.");
     }
 }

@@ -37,4 +37,6 @@ public abstract class DAOFactory {
 
     public abstract LoginDAO getLoginDAO();
     public abstract TournamentDAO getTournamentDAO();
+    public abstract HostDAO getHostDAO();
+    public abstract PlayerDAO getPlayerDAO();
 }

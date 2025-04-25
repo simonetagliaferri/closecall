@@ -1,14 +1,15 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.HostBean;
-import it.simonetagliaferri.controller.graphic.SessionManager;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.HostDashboardController;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
+import java.util.List;
+
 public class GraphicHostDashboardControllerCLI {
-    private NavigationManager navigationManager = NavigationManager.getInstance();
-    private final SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
+    private final NavigationManager navigationManager = NavigationManager.getInstance();
     HostDashboardCLIView view = new HostDashboardCLIView();
     HostDashboardController controller = new HostDashboardController();
     HostBean currentUser = this.controller.getHostBean();
@@ -52,6 +53,12 @@ public class GraphicHostDashboardControllerCLI {
     }
 
     private void listTournaments() {
-        view.listTournaments(this.controller.getTournaments());
+        List<TournamentBean> tournaments = this.controller.getTournaments();
+        if (tournaments!=null) {
+            view.listTournaments(tournaments);
+        }
+        else {
+            view.noTournaments();
+        }
     }
 }

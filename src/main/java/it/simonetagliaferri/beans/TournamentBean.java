@@ -20,10 +20,13 @@ public class TournamentBean {
     private LocalDate endDate;
     private LocalDate signupDeadline;
     private String hostUsername;
+    private List<TeamBean> teams;
 
     public TournamentBean() {
 
     }
+
+
     public void setHostUsername(String hostUsername) { this.hostUsername = hostUsername; }
     public void setTournamentName(String tournamentName) {
         this.name=tournamentName;
@@ -54,6 +57,7 @@ public class TournamentBean {
         this.signupDeadline = signupDeadline;
     }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public void setTeams(List<TeamBean> teams) { this.teams = teams; }
     public String getHostUsername() { return hostUsername; }
     public String getTournamentName() { return name; }
     public String getTournamentType() { return tournamentType; }
@@ -68,7 +72,7 @@ public class TournamentBean {
     public LocalDate getSignupDeadline() { return signupDeadline; }
 
 
-    public static LocalDate isDateValid(String date) {
+    public LocalDate isDateValid(String date) {
         try {
             DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_FORMAT);
             LocalDate d = LocalDate.parse(date, df);
@@ -82,6 +86,15 @@ public class TournamentBean {
     }
 
     public boolean isDeadlineValid(LocalDate deadline) {
-        return !deadline.isAfter(this.startDate);
+        return deadline.isBefore(this.startDate);
     }
+
+    public boolean isEndDateValid(LocalDate endDate) { return endDate.isAfter(this.startDate); }
+
+    public boolean isSingles() {
+        return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
+    }
+
+    public List<TeamBean> getTeams() { return teams; }
+
 }

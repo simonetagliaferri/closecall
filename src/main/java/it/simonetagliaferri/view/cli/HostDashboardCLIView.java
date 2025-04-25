@@ -1,5 +1,7 @@
 package it.simonetagliaferri.view.cli;
 
+import it.simonetagliaferri.beans.PlayerBean;
+import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.utils.CliUtils;
@@ -29,7 +31,17 @@ public class HostDashboardCLIView {
     public void listTournaments(List<TournamentBean> tournaments) {
         for (TournamentBean tournamentBean : tournaments) {
             CliUtils.println("Tournament " + tournamentBean.getTournamentName());
+            CliUtils.println("Teams: ");
+            for (TeamBean teamBean : tournamentBean.getTeams()) {
+                for (PlayerBean playerBean : teamBean.getPlayers()) {
+                    CliUtils.println("\t" + playerBean.getUsername());
+                }
+            }
             CliUtils.println("");
         }
+    }
+
+    public void noTournaments() {
+        CliUtils.println("No tournaments found.");
     }
 }

@@ -2,6 +2,7 @@ package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.logic.AddTournamentController;
+import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
 
 import java.time.LocalDate;
@@ -13,9 +14,11 @@ public class GraphicAddTournamentControllerCLI {
     AddTournamentController controller = new AddTournamentController();
     public void start() {
         view.welcome();
+        if (this.controller.firstTime()) {
+            askNeededInfo();
+        }
         boolean validDate = false;
         String strDate;
-        LocalDate date;
         tournamentBean.setHostUsername(this.controller.getHostBean().getUsername());
         tournamentBean.setTournamentName(view.tournamentName());
         tournamentBean.setTournamentType(view.tournamentType());
@@ -27,39 +30,77 @@ public class GraphicAddTournamentControllerCLI {
         tournamentBean.setPrizes(view.prizes());
         while (!validDate) {
             strDate=view.startDate();
-            date=TournamentBean.isDateValid(strDate);
-            if (date != null) {
+            try {
+                this.controller.setStartDate(tournamentBean, strDate);
                 validDate = true;
-                tournamentBean.setStartDate(date);
-            }
-            else {
+            } catch (InvalidDateException e) {
                 view.invalidDate();
             }
         }
         validDate = false;
         while (!validDate) {
-            strDate = view.signupDeadline();
-            date=TournamentBean.isDateValid(strDate);
-            if (date!=null && tournamentBean.isDeadlineValid(date)) {
+            strDate=view.signupDeadline();
+            try {
+                this.controller.setSignupDeadline(tournamentBean, strDate);
                 validDate = true;
-                tournamentBean.setSignupDeadline(date);
-            }
-            else {
+            } catch (InvalidDateException e) {
                 view.invalidDate();
             }
         }
         System.out.println("You: " + tournamentBean.getHostUsername() + " Created tournament " + tournamentBean.getTournamentName() + ".");
         EstimatedEndDate();
+        addPlayersToTournament();
         this.controller.addTournament(tournamentBean);
+    }
+
+    public void askNeededInfo() {
+        //Todo
     }
 
     public void EstimatedEndDate() {
         LocalDate endDate = this.controller.EstimatedEndDate(tournamentBean);
-        //view.showEstimatedEndDate();
-        int choice;
-        //view.changeEndDate();
-        tournamentBean.setEndDate(endDate);
-        System.out.println("The tournament starts at " + tournamentBean.getStartDate() + " and the estimated end date is " + endDate);
+        int choice = view.showEstimatedEndDate(endDate);
+        if (choice == 1) {
+            String strEndDate;
+            boolean validDate = false;
+            while (!validDate) {
+                strEndDate=view.editEndDate();
+                try {
+                    this.controller.setEndDate(tournamentBean, strEndDate);
+                    validDate = true;
+                } catch (InvalidDateException e) {
+                    view.invalidDate();
+                }
+            }
+        }
+        System.out.println("The tournament starts at " + tournamentBean.getStartDate() + " and the estimated end date is " + tournamentBean.getEndDate());
     }
 
+    public void addPlayersToTournament() {
+        int choice = view.askToAddPlayer();
+        if (choice == 1) {
+            if (tournamentBean.isSingles()) addSoloTeam();
+            else addDuoTeam();
+        }
+    }
+
+    public void addSoloTeam() {
+        String player;
+        boolean added = false;
+        while (!added) {
+            player = view.getPlayer();
+            if (this.controller.addPlayer(player)) {
+                added = true;
+                System.out.println("Player " + player + " added to tournament.");
+            } else {
+                view.invalidPlayer();
+            }
+        }
+    }
+
+    public void addDuoTeam() {
+        String player1 = view.getPlayer();
+        String player2 = view.getPlayer();
+        this.controller.addTeam(player1, player2);
+    }
 }

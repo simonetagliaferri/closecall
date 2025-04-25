@@ -1,8 +1,6 @@
 package it.simonetagliaferri.model.dao.fs;
 
-import it.simonetagliaferri.model.dao.DAOFactory;
-import it.simonetagliaferri.model.dao.LoginDAO;
-import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.dao.*;
 
 public class FSDAOFactory extends DAOFactory {
 
@@ -12,5 +10,11 @@ public class FSDAOFactory extends DAOFactory {
     }
 
     @Override
-    public TournamentDAO getTournamentDAO() { return new FSTournamentDAO(); }
+    public TournamentDAO getTournamentDAO() { return new FSTournamentDAO();}
+
+    @Override
+    public HostDAO getHostDAO() { return new FSHostDAO();}
+
+    @Override
+    public PlayerDAO getPlayerDAO() { return new FSPlayerDAO();}
 }

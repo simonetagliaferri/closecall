@@ -70,6 +70,18 @@ public class LoginCLIView {
                 CliUtils.println("Invalid role. Try again.");
             }
         }
+        while (true) {
+            String choice = CliUtils.prompt("Are you sure you want to signup? (Y/N): ");
+            if (choice.equalsIgnoreCase("Y")) {
+                break;
+            }
+            else if (choice.equalsIgnoreCase("N")) {
+                return null;
+            }
+            else {
+                CliUtils.println("Invalid choice. Try again.");
+            }
+        }
         return user;
     }
 

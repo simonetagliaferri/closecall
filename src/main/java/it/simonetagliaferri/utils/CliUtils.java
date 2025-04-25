@@ -78,6 +78,17 @@ public class CliUtils {
         }
     }
 
+    public static int multipleChoiceInt(String label, String... choices) {
+        String choice = multipleChoice(label, choices);
+        int i;
+        for (i = 0; i <= choices.length; i++) {
+            if (choices[i].equals(choice)) {
+                break;
+            }
+        }
+        return i+1;
+    }
+
     public static void println(String label) {
         System.out.println(label); //NOSONAR
     }

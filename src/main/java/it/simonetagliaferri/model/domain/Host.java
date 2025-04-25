@@ -1,6 +1,8 @@
 package it.simonetagliaferri.model.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Host extends User{
     private List<Tournament> tournaments;
@@ -21,6 +23,6 @@ public class Host extends User{
     }
 
     public void setTournaments(List<Tournament> tournaments) {
-        this.tournaments = tournaments;
+        this.tournaments = Objects.requireNonNullElseGet(tournaments, ArrayList::new);
     }
 }

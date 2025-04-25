@@ -8,4 +8,8 @@ public class PlayerBean extends UserBean {
         this.username=username;
         this.email=email;
     }
+
+    public PlayerBean() {
+
+    }
 }

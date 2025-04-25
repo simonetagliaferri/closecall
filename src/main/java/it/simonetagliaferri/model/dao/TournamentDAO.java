@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface TournamentDAO {
     void addTournament(Host host, Tournament tournament);
-    List<Tournament> getTournaments(String hostUsername);
+    List<Tournament> getTournaments(Host host);
+    void updateTournament(Host host, Tournament tournament);
 }

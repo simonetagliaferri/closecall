@@ -9,6 +9,7 @@ import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.domain.User;
+import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,13 +44,14 @@ public class HostDashboardController extends Controller {
     }
 
     public List<TournamentBean> getTournaments() {
-        List<Tournament> tournaments = tournamentDAO.getTournaments(host.getUsername());
+        List<Tournament> tournaments = tournamentDAO.getTournaments(host);
         List<TournamentBean> tournamentBeans = new ArrayList<>();
-        for (Tournament tournament : tournaments) {
-            TournamentBean tournamentBean = new TournamentBean();
-            tournamentBean.setTournamentName(tournament.getTournamentName());
-            tournamentBeans.add(tournamentBean);
+        if (!tournaments.isEmpty()) {
+            for (Tournament tournament : tournaments) {
+                tournamentBeans.add(TournamentMapper.toBean(tournament));
+            }
+            return tournamentBeans;
         }
-        return tournamentBeans;
+        return null;
     }
 }

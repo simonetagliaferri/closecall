@@ -12,30 +12,36 @@ public class GraphicLoginControllerCLI {
     LoginController controller = new LoginController();
 
     public void start() {
-        int choice = view.showMenu();
-        switch (choice) {
-            case 1:
-                login();
-                break;
-            case 2:
-                signup();
-                break;
-            case 3: // Exit case.
-                break;
-            default:
+        int choice;
+        boolean loginScreen = true;
+        while (loginScreen) {
+            choice = view.showMenu();
+            switch (choice) {
+                case 1:
+                    loginScreen=login();
+                    break;
+                case 2:
+                    signup();
+                    break;
+                case 3: // Exit case.
+                    loginScreen=false;
+                    break;
+                default:
+            }
         }
     }
 
-    public void login() {
+    public boolean login() {
         LoginResponseBean res;
         UserBean user = view.authenticate();
         res = this.controller.login(user);
         if (res.getResult()== LoginResult.FAIL) {
             view.failedLogin();
-            start();
+            return true;
         }
         else {
             NavigationManager.getInstance().goToDashboard(this.controller.getCurrentUserRole());
+            return false;
         }
     }
 
@@ -62,14 +68,13 @@ public class GraphicLoginControllerCLI {
             }
         }
         user = view.signupThirdStep(user);
-        res = this.controller.signup(user);
-        if (res.getResult()==LoginResult.SUCCESS) {
-            view.successfulSignup();
+        if (user!=null) {
+            res = this.controller.signup(user);
+            if (res.getResult() == LoginResult.SUCCESS) {
+                view.successfulSignup();
+            } else {
+                view.failedSignup();
+            }
         }
-        else {
-            view.failedSignup();
-        }
-        start();
     }
-
 }

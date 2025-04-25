@@ -1,12 +1,13 @@
 package it.simonetagliaferri.model.domain;
 
 import it.simonetagliaferri.beans.TournamentBean;
+import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tournament {
-    private final static int MATCHES_A_DAY_PER_COURT=3;
     private String name;
     private String tournamentType;
     private String tournamentFormat;
@@ -19,8 +20,14 @@ public class Tournament {
     private LocalDate endDate;
     private LocalDate signupDeadline;
     private String hostUsername;
+    private TournamentFormatStrategy tournamentFormatStrategy;
+    private List<Team> teams;
 
-    public Tournament(TournamentBean tournament) {
+    public Tournament() {
+        this.teams = new ArrayList<>();
+    }
+
+    public void setStats(TournamentBean tournament) {
         this.name=tournament.getTournamentName();
         this.tournamentType = tournament.getTournamentType();
         this.tournamentFormat = tournament.getTournamentFormat();
@@ -32,50 +39,55 @@ public class Tournament {
         this.startDate = tournament.getStartDate();
         this.signupDeadline = tournament.getSignupDeadline();
         this.hostUsername = tournament.getHostUsername();
+        this.endDate = tournament.getEndDate();
     }
 
     public String getHostUsername() { return hostUsername; }
     public String getTournamentName() { return name; }
 
-    // It needs to be reviewed.
+    public void setTournamentFormatStrategy(TournamentFormatStrategy strategy) {
+        this.tournamentFormatStrategy = strategy;
+    }
     public LocalDate estimateEndDate() {
-        int matchNum=0;
-        int matchesADay;
-        int matchNumNoFinals;
-        int days;
-        int rounds;
-        matchesADay = this.courtNumber * MATCHES_A_DAY_PER_COURT;
-        if (tournamentFormat=="RoundRobin") {
-            matchNum = this.teamsNumber*(this.teamsNumber-1)/2;
-            if (matchesADay<=this.teamsNumber) { // Every team plays a match a day.
-                days=matchNum/matchesADay;
-            }
-            else {
-                days=matchNum/this.teamsNumber;
-            }
-        }
-        else {
-            rounds = log2(this.teamsNumber);
-            System.out.println(rounds);
-            if (tournamentFormat=="Single-elimination") {
-                matchNum = this.teamsNumber-1;
-            }
-            else if (tournamentFormat=="Double-elimination") {
-                matchNum=(this.teamsNumber*2)-1;
-            }
-            matchNumNoFinals=matchNum-2;
-            if (matchesADay<=this.teamsNumber) {
-                days=(matchNumNoFinals/(matchesADay/rounds))+2;
-            }
-            else {
-                days=(matchNumNoFinals/(this.teamsNumber/rounds))+2;
-            }
-        }
+        int days = this.tournamentFormatStrategy.estimateNeededDays(this.teamsNumber, this.courtNumber);
         return this.startDate.plusDays(days);
     }
 
-
-    private int log2(int n) {
-        return ((Double)(Math.ceil(Math.log(n)/Math.log(2)))).intValue();
+    public int availableSpots() {
+        return this.teamsNumber - this.teams.size();
     }
+
+    public void addTeam(Player... players) {
+        Team team;
+        if (players.length == 1 && isSingles()) {
+            team = new Team(players[0]);
+            this.teams.add(team);
+        }
+        else if (players.length == 2 && !isSingles()) {
+            team = new Team(players[0], players[1]);
+            this.teams.add(team);
+        }
+        else {
+            throw new IllegalArgumentException("A team must have either 1 or 2 players.");
+        }
+    }
+
+    public List<Team> getTeams() {
+        return this.teams;
+    }
+
+    public boolean isSingles() {
+        return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
+    }
+
+    public String getTournamentType() { return tournamentType; }
+    public String getMatchFormat() { return matchFormat; }
+    public String getCourtType() { return courtType; }
+    public int getCourtNumber() { return courtNumber; }
+    public int getTeamsNumber() { return teamsNumber; }
+    public String getTournamentFormat() { return tournamentFormat; }
+    public List<Double> getPrizes() { return prizes; }
+    public LocalDate getStartDate() { return startDate; }
+    public LocalDate getEndDate() { return endDate; }
+    public LocalDate getSignupDeadline() { return signupDeadline; }
 }
