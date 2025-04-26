@@ -20,7 +20,7 @@ import javafx.util.Duration;
 
 public class GraphicLoginControllerGUI {
 
-    LoginController controller = new LoginController();
+    private final LoginController controller = new LoginController();
     private UIState state = UIState.USERNAME_INPUT;
     @FXML
     private Text welcomeText;

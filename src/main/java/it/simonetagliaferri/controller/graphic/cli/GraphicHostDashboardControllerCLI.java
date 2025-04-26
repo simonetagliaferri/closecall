@@ -54,7 +54,7 @@ public class GraphicHostDashboardControllerCLI {
 
     private void listTournaments() {
         List<TournamentBean> tournaments = this.controller.getTournaments();
-        if (tournaments!=null) {
+        if (!tournaments.isEmpty()) {
             view.listTournaments(tournaments);
         }
         else {

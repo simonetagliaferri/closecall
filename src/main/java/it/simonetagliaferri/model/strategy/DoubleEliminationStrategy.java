@@ -1,7 +1,7 @@
 package it.simonetagliaferri.model.strategy;
 
 public class DoubleEliminationStrategy implements TournamentFormatStrategy{
-    private final static int MATCHES_A_DAY_PER_COURT = 3;
+    private static final int MATCHES_A_DAY_PER_COURT = 3;
 
     @Override
     public int estimateNeededDays(int teamsNumber, int courtNumber) {

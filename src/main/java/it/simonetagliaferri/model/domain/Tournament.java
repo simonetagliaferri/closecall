@@ -1,6 +1,5 @@
 package it.simonetagliaferri.model.domain;
 
-import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 
 import java.time.LocalDate;
@@ -27,19 +26,22 @@ public class Tournament {
         this.teams = new ArrayList<>();
     }
 
-    public void setStats(TournamentBean tournament) {
-        this.name=tournament.getTournamentName();
-        this.tournamentType = tournament.getTournamentType();
-        this.tournamentFormat = tournament.getTournamentFormat();
-        this.matchFormat = tournament.getMatchFormat();
-        this.courtType = tournament.getCourtType();
-        this.courtNumber = tournament.getCourtNumber();
-        this.teamsNumber = tournament.getTeamsNumber();
-        this.prizes = tournament.getPrizes();
-        this.startDate = tournament.getStartDate();
-        this.signupDeadline = tournament.getSignupDeadline();
-        this.hostUsername = tournament.getHostUsername();
-        this.endDate = tournament.getEndDate();
+    public Tournament(String tournamentName, String tournamentType, String tournamentFormat, String matchFormat,
+                      String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
+                      LocalDate endDate, LocalDate signupDeadline, String hostUsername, List<Team> teams) {
+        this.name = tournamentName;
+        this.tournamentType = tournamentType;
+        this.tournamentFormat = tournamentFormat;
+        this.matchFormat = matchFormat;
+        this.courtType = courtType;
+        this.courtNumber = courtNumber;
+        this.teamsNumber = teamsNumber;
+        this.prizes = prizes;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.signupDeadline = signupDeadline;
+        this.hostUsername = hostUsername;
+        this.teams = teams;
     }
 
     public String getHostUsername() { return hostUsername; }
@@ -57,7 +59,7 @@ public class Tournament {
         return this.teamsNumber - this.teams.size();
     }
 
-    public void addTeam(Player... players) {
+    public Team addTeam(Player... players) {
         Team team;
         if (players.length == 1 && isSingles()) {
             team = new Team(players[0]);
@@ -70,6 +72,7 @@ public class Tournament {
         else {
             throw new IllegalArgumentException("A team must have either 1 or 2 players.");
         }
+        return team;
     }
 
     public List<Team> getTeams() {
@@ -90,4 +93,5 @@ public class Tournament {
     public LocalDate getStartDate() { return startDate; }
     public LocalDate getEndDate() { return endDate; }
     public LocalDate getSignupDeadline() { return signupDeadline; }
+
 }

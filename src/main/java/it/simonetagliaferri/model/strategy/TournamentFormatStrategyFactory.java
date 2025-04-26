@@ -1,6 +1,8 @@
 package it.simonetagliaferri.model.strategy;
 
 public class TournamentFormatStrategyFactory {
+    private TournamentFormatStrategyFactory() {}
+
     public static TournamentFormatStrategy createTournamentFormatStrategy(String tournamentType) {
         switch(tournamentType) {
             case "RoundRobin":

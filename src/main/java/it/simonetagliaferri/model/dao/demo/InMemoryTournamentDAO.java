@@ -22,7 +22,6 @@ public class InMemoryTournamentDAO implements TournamentDAO {
             tournamentList = new ArrayList<>();
         }
         tournamentList.add(tournament);
-        System.out.println("Adding tournament " + tournament.getTournamentName());
         tournaments.put(hostUsername, tournamentList);
     }
 

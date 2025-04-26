@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 
 public class CliUtils {
 
+    private static final String EOF = "EOF used as input.";
+
     private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     private CliUtils() {
@@ -16,7 +18,7 @@ public class CliUtils {
         try {
             String input = reader.readLine();
             if (input == null) {
-                println("EOF used as input.");
+                println(EOF);
                 System.exit(-1);
             }
             return input;
@@ -32,7 +34,7 @@ public class CliUtils {
             try {
                 String input = reader.readLine();
                 if (input == null) {
-                    println("EOF used as input.");
+                    println(EOF);
                     System.exit(-1);
                 }
                 return Integer.parseInt(input);
@@ -48,7 +50,7 @@ public class CliUtils {
             try {
                 String input = reader.readLine();
                 if (input == null) {
-                    println("EOF used as input.");
+                    println(EOF);
                     System.exit(-1);
                 }
                 return Double.parseDouble(input);

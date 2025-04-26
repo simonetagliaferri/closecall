@@ -2,31 +2,22 @@ package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.controller.graphic.SessionManager;
-import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.model.dao.DAOFactory;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.domain.User;
+import it.simonetagliaferri.utils.converters.HostMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HostDashboardController extends Controller {
-    SessionManager sessionManager = NavigationManager.getInstance().getSessionManager();
-    User user = sessionManager.getCurrentUser();
-    Host host = new Host(user.getUsername(), user.getEmail());
     TournamentDAO tournamentDAO;
 
     public HostDashboardController() {
-        try {
-            tournamentDAO = DAOFactory.getDAOFactory().getTournamentDAO();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        tournamentDAO = DAOFactory.getDAOFactory().getTournamentDAO();
     }
 
     /*
@@ -35,23 +26,22 @@ public class HostDashboardController extends Controller {
     just the first time, the other times the flag I suppose will be set to 1 in persistence and so nothing will be asked
      */
 
-    public void logout() {
-        sessionManager.clearSession();
-    }
-
     public HostBean getHostBean() {
-        return new HostBean(host.getUsername(), host.getEmail());
+        User user = getCurrentUser();
+        Host host = Host.fromUser(user);
+        return HostMapper.toBean(host);
     }
 
     public List<TournamentBean> getTournaments() {
+        User user = getCurrentUser();
+        Host host = Host.fromUser(user);
         List<Tournament> tournaments = tournamentDAO.getTournaments(host);
         List<TournamentBean> tournamentBeans = new ArrayList<>();
-        if (!tournaments.isEmpty()) {
+        if (tournaments != null && !tournaments.isEmpty()) {
             for (Tournament tournament : tournaments) {
                 tournamentBeans.add(TournamentMapper.toBean(tournament));
             }
-            return tournamentBeans;
         }
-        return null;
+        return tournamentBeans;
     }
 }

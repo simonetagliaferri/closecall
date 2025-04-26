@@ -1,12 +1,14 @@
 package it.simonetagliaferri.beans;
 
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentBean {
-    private final static String DATE_FORMAT = "MM/dd/yyyy";
+    private static final String DATE_FORMAT = "MM/dd/yyyy";
 
     private String name;
     private String tournamentType;
@@ -23,7 +25,7 @@ public class TournamentBean {
     private List<TeamBean> teams;
 
     public TournamentBean() {
-
+        teams = new ArrayList<>();
     }
 
 
@@ -97,4 +99,7 @@ public class TournamentBean {
 
     public List<TeamBean> getTeams() { return teams; }
 
+    public void addTeam(TeamBean team) {
+        teams.add(team);
+    }
 }

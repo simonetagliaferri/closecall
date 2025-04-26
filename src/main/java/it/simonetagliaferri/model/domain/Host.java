@@ -14,6 +14,10 @@ public class Host extends User{
         super(username, email);
     }
 
+    public static Host fromUser(User user) {
+        return new Host(user.getUsername(), user.getEmail(), user.getRole());
+    }
+
     public void addTournament(Tournament tournament) {
         tournaments.add(tournament);
     }

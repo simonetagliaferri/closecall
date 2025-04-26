@@ -7,6 +7,7 @@ module it.simonetagliaferri {
     requires org.apache.commons.codec;
     requires org.apache.commons.validator;
     requires java.desktop;
+    requires mysql.connector.j;
 
     opens it.simonetagliaferri.model.domain to com.google.gson;
     opens it.simonetagliaferri to javafx.fxml;

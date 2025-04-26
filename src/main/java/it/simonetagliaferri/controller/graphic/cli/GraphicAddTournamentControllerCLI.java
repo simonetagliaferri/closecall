@@ -31,7 +31,7 @@ public class GraphicAddTournamentControllerCLI {
         while (!validDate) {
             strDate=view.startDate();
             try {
-                this.controller.setStartDate(tournamentBean, strDate);
+                tournamentBean.setStartDate(this.controller.getStartDate(tournamentBean, strDate));
                 validDate = true;
             } catch (InvalidDateException e) {
                 view.invalidDate();
@@ -41,13 +41,12 @@ public class GraphicAddTournamentControllerCLI {
         while (!validDate) {
             strDate=view.signupDeadline();
             try {
-                this.controller.setSignupDeadline(tournamentBean, strDate);
+                tournamentBean.setSignupDeadline(this.controller.getSignupDeadline(tournamentBean, strDate));
                 validDate = true;
             } catch (InvalidDateException e) {
                 view.invalidDate();
             }
         }
-        System.out.println("You: " + tournamentBean.getHostUsername() + " Created tournament " + tournamentBean.getTournamentName() + ".");
         EstimatedEndDate();
         addPlayersToTournament();
         this.controller.addTournament(tournamentBean);
@@ -58,7 +57,7 @@ public class GraphicAddTournamentControllerCLI {
     }
 
     public void EstimatedEndDate() {
-        LocalDate endDate = this.controller.EstimatedEndDate(tournamentBean);
+        LocalDate endDate = this.controller.estimatedEndDate(tournamentBean);
         int choice = view.showEstimatedEndDate(endDate);
         if (choice == 1) {
             String strEndDate;
@@ -66,14 +65,13 @@ public class GraphicAddTournamentControllerCLI {
             while (!validDate) {
                 strEndDate=view.editEndDate();
                 try {
-                    this.controller.setEndDate(tournamentBean, strEndDate);
+                    tournamentBean.setEndDate(this.controller.getEndDate(tournamentBean, strEndDate));
                     validDate = true;
                 } catch (InvalidDateException e) {
                     view.invalidDate();
                 }
             }
         }
-        System.out.println("The tournament starts at " + tournamentBean.getStartDate() + " and the estimated end date is " + tournamentBean.getEndDate());
     }
 
     public void addPlayersToTournament() {
@@ -89,9 +87,8 @@ public class GraphicAddTournamentControllerCLI {
         boolean added = false;
         while (!added) {
             player = view.getPlayer();
-            if (this.controller.addPlayer(player)) {
+            if (this.controller.addPlayer(player, tournamentBean)) {
                 added = true;
-                System.out.println("Player " + player + " added to tournament.");
             } else {
                 view.invalidPlayer();
             }
@@ -101,6 +98,6 @@ public class GraphicAddTournamentControllerCLI {
     public void addDuoTeam() {
         String player1 = view.getPlayer();
         String player2 = view.getPlayer();
-        this.controller.addTeam(player1, player2);
+        this.controller.addTeam(player1, player2, tournamentBean);
     }
 }

@@ -4,7 +4,6 @@ import it.simonetagliaferri.model.dao.demo.InMemoryDAOFactory;
 import it.simonetagliaferri.model.dao.fs.FSDAOFactory;
 import it.simonetagliaferri.model.dao.jdbc.JDBCDAOFactory;
 
-import java.io.IOException;
 
 import static it.simonetagliaferri.utils.PropertiesUtils.*;
 
@@ -15,7 +14,7 @@ public abstract class DAOFactory {
     protected DAOFactory() {
     }
 
-    public static synchronized DAOFactory getDAOFactory() throws IOException {
+    public static synchronized DAOFactory getDAOFactory() {
         if (instance == null) {
             PersistenceProvider provider = loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
             switch (provider) {

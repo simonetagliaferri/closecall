@@ -10,6 +10,8 @@ import java.util.List;
 
 public class TournamentMapper {
 
+    private TournamentMapper() {}
+
     public static TournamentBean toBean(Tournament tournament) {
         TournamentBean tournamentBean = new TournamentBean();
         List<TeamBean> teamsBean = new ArrayList<>();
@@ -25,10 +27,25 @@ public class TournamentMapper {
         tournamentBean.setEndDate(tournament.getEndDate());
         tournamentBean.setSignupDeadline(tournament.getSignupDeadline());
         tournamentBean.setHostUsername(tournament.getHostUsername());
-        for (Team team : tournament.getTeams()) {
-            teamsBean.add(TeamMapper.toBean(team));
+        if (tournament.getTeams() != null) {
+            for (Team team : tournament.getTeams()) {
+                teamsBean.add(TeamMapper.toBean(team));
+            }
         }
         tournamentBean.setTeams(teamsBean);
         return tournamentBean;
+    }
+
+    public static Tournament fromBean(TournamentBean tournamentBean) {
+        List<Team> teams = new ArrayList<>();
+        if (tournamentBean.getTeams() != null) {
+            for (TeamBean teamBean : tournamentBean.getTeams()) {
+                teams.add(TeamMapper.fromBean(teamBean));
+            }
+        }
+        return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
+                tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
+                tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
+                tournamentBean.getHostUsername(), teams);
     }
 }

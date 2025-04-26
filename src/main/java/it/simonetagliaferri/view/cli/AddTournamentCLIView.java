@@ -4,6 +4,7 @@ import it.simonetagliaferri.utils.CliUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AddTournamentCLIView {
     public void welcome() {
@@ -55,7 +56,7 @@ public class AddTournamentCLIView {
         return CliUtils.promptInt("Enter number of teams: ");
     }
 
-    public ArrayList<Double> prizes() {
+    public List<Double> prizes() {
         int numOfPrizes = CliUtils.promptInt("Enter number of prizes: ");
         ArrayList<Double> prizes = new ArrayList<>(numOfPrizes);
         for (int i = 0; i < numOfPrizes; i++) {

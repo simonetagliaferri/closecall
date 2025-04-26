@@ -13,4 +13,8 @@ public class Player extends User{
     public Player(PlayerBean playerBean) {
         super(playerBean);
     }
+
+    public static Player fromUser(User user) {
+        return new Player(user.getUsername(), user.getEmail(), user.getRole());
+    }
 }
