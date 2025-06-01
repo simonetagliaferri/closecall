@@ -31,6 +31,8 @@ public class HostDashboardCLIView {
     public void listTournaments(List<TournamentBean> tournaments) {
         for (TournamentBean tournamentBean : tournaments) {
             CliUtils.println("Tournament " + tournamentBean.getTournamentName());
+            CliUtils.println("Join fee " + tournamentBean.getJoinFee());
+            CliUtils.println("Court price " + tournamentBean.getCourtPrice());
             CliUtils.println("Teams: ");
             for (TeamBean teamBean : tournamentBean.getTeams()) {
                 for (PlayerBean playerBean : teamBean.getPlayers()) {

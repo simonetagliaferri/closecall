@@ -21,6 +21,10 @@ public class Tournament {
     private String hostUsername;
     private TournamentFormatStrategy tournamentFormatStrategy;
     private List<Team> teams;
+    private double joinFee;
+    private double courtPrice;
+
+    private String id = "";
 
     public Tournament() {
         this.teams = new ArrayList<>();
@@ -28,7 +32,7 @@ public class Tournament {
 
     public Tournament(String tournamentName, String tournamentType, String tournamentFormat, String matchFormat,
                       String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
-                      LocalDate endDate, LocalDate signupDeadline, String hostUsername, List<Team> teams) {
+                      LocalDate endDate, LocalDate signupDeadline, String hostUsername, List<Team> teams, double joinFee, double courtPrice) {
         this.name = tournamentName;
         this.tournamentType = tournamentType;
         this.tournamentFormat = tournamentFormat;
@@ -42,6 +46,8 @@ public class Tournament {
         this.signupDeadline = signupDeadline;
         this.hostUsername = hostUsername;
         this.teams = teams;
+        this.joinFee = joinFee;
+        this.courtPrice = courtPrice;
     }
 
     public String getHostUsername() { return hostUsername; }
@@ -93,5 +99,8 @@ public class Tournament {
     public LocalDate getStartDate() { return startDate; }
     public LocalDate getEndDate() { return endDate; }
     public LocalDate getSignupDeadline() { return signupDeadline; }
-
+    public double getJoinFee() { return joinFee; }
+    public double getCourtPrice() { return courtPrice; }
+    public void setId(String id) { this.id = id; }
+    public String getId() { return id; }
 }

@@ -8,9 +8,14 @@ module it.simonetagliaferri {
     requires org.apache.commons.validator;
     requires java.desktop;
     requires mysql.connector.j;
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.javafx;
+    // add icon pack modules
+    requires org.kordamp.ikonli.octicons;
 
     opens it.simonetagliaferri.model.domain to com.google.gson;
     opens it.simonetagliaferri to javafx.fxml;
     exports it.simonetagliaferri;
     opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
+    exports it.simonetagliaferri.model.strategy to com.google.gson;
 }

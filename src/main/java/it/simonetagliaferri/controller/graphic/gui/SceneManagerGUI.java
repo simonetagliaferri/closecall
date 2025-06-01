@@ -27,6 +27,8 @@ public class SceneManagerGUI extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        System.setProperty("prism.lcdtext", "false");
+        System.setProperty("prism.text", "t2k");
         double baseWidth = 1280;
         double baseHeight = 720;
         stage.setMinWidth(baseWidth / 2);

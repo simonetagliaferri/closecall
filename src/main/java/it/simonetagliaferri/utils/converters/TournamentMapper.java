@@ -33,6 +33,8 @@ public class TournamentMapper {
             }
         }
         tournamentBean.setTeams(teamsBean);
+        tournamentBean.setJoinFee(tournament.getJoinFee());
+        tournamentBean.setCourtPrice(tournament.getCourtPrice());
         return tournamentBean;
     }
 
@@ -46,6 +48,6 @@ public class TournamentMapper {
         return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
                 tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
                 tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
-                tournamentBean.getHostUsername(), teams);
+                tournamentBean.getHostUsername(), teams, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
     }
 }

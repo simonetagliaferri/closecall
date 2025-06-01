@@ -23,6 +23,8 @@ public class TournamentBean {
     private LocalDate signupDeadline;
     private String hostUsername;
     private List<TeamBean> teams;
+    private double joinFee;
+    private double courtPrice;
 
     public TournamentBean() {
         teams = new ArrayList<>();
@@ -60,6 +62,8 @@ public class TournamentBean {
     }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
     public void setTeams(List<TeamBean> teams) { this.teams = teams; }
+    public void setJoinFee(double joinFee) { this.joinFee = joinFee; }
+    public void setCourtPrice(double courtPrice) {}
     public String getHostUsername() { return hostUsername; }
     public String getTournamentName() { return name; }
     public String getTournamentType() { return tournamentType; }
@@ -72,23 +76,46 @@ public class TournamentBean {
     public LocalDate getStartDate() { return startDate; }
     public LocalDate getEndDate() { return endDate; }
     public LocalDate getSignupDeadline() { return signupDeadline; }
+    public double getJoinFee() { return joinFee; }
+    public double getCourtPrice() { return courtPrice; }
 
-
-    public LocalDate isDateValid(String date) {
+    public LocalDate formatDate(String date) {
         try {
             DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_FORMAT);
             LocalDate d = LocalDate.parse(date, df);
-            if (d.isBefore(LocalDate.now())) {
-                return null;
-            }
             return d;
         } catch (DateTimeException e) {
             return null;
         }
     }
 
+    public String dateToString(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    }
+
+
+    public LocalDate isDateValid(LocalDate date) {
+        if (date.isBefore(LocalDate.now())) {
+            return null;
+        }
+        return date;
+    }
+
+    public boolean isStartDateValid(LocalDate startDate) {
+        if (this.signupDeadline != null) {
+            return startDate.isAfter(this.signupDeadline);
+        }
+        if (this.endDate != null) {
+            return startDate.isBefore(this.endDate);
+        }
+        return true;
+    }
+
     public boolean isDeadlineValid(LocalDate deadline) {
-        return deadline.isBefore(this.startDate);
+        if (this.startDate != null) {
+            return deadline.isBefore(this.startDate);
+        }
+        return true;
     }
 
     public boolean isEndDateValid(LocalDate endDate) { return endDate.isAfter(this.startDate); }

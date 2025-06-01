@@ -3,3 +3,7 @@ Uso la libreria gson per gestire la dipendenza su fs con json.
 Aggiungere nella CLI la conferma al sign up prima di confermare.
 
 Aggiustare le GUI per usare sempre lo styling CSS, così da non mischiare styling diretto nell'FXML con del css.
+
+Aggiungere nella creazione del torneo la join fee e se il costo dell'affitto del campo di ogni partita è compreso nella join fee o meno.
+
+addTournament.fxml sistemare l'allineamento verticale di label e hyperlink della estimated end date.

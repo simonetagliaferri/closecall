@@ -45,24 +45,28 @@ public class AddTournamentController extends Controller {
         return tournament.estimateEndDate();
     }
 
-    public LocalDate getStartDate(TournamentBean tournamentBean, String strDate) {
-        LocalDate startDate = tournamentBean.isDateValid(strDate);
+    public LocalDate getStartDate(TournamentBean tournamentBean, LocalDate startDate) {
+        startDate = tournamentBean.isDateValid(startDate);
         if (startDate == null) {
+            throw new InvalidDateException();
+        }
+        if (!tournamentBean.isStartDateValid(startDate)) {
             throw new InvalidDateException();
         }
         return startDate;
     }
 
-    public LocalDate getSignupDeadline(TournamentBean tournamentBean, String strDate) {
-        LocalDate deadline = tournamentBean.isDateValid(strDate);
+    public LocalDate getSignupDeadline(TournamentBean tournamentBean, LocalDate deadline) {
+        deadline = tournamentBean.isDateValid(deadline);
         if (deadline == null || !tournamentBean.isDeadlineValid(deadline)) {
             throw new InvalidDateException();
         }
         return deadline;
     }
 
-    public LocalDate getEndDate(TournamentBean tournamentBean, String strDate) {
-        LocalDate endDate = tournamentBean.isDateValid(strDate);
+    public LocalDate getEndDate(TournamentBean tournamentBean, LocalDate endDate) {
+
+        endDate = tournamentBean.isDateValid(endDate);
         if (endDate == null || !tournamentBean.isEndDateValid(endDate)) {
             throw new InvalidDateException();
         }
@@ -116,4 +120,25 @@ public class AddTournamentController extends Controller {
         }
         return p;
     }
+
+    public LocalDate MinimumStartDate() {
+        return LocalDate.now().plusDays(2);
+    }
+
+    public LocalDate MinimumStartDate(TournamentBean tournamentBean) {
+        return tournamentBean.getSignupDeadline().plusDays(1);
+    }
+
+    public LocalDate MinimumDeadline() {
+        return LocalDate.now().plusDays(1);
+    }
+
+    public LocalDate MinimumDeadline(TournamentBean tournamentBean) {
+        return tournamentBean.getStartDate().minusDays(1);
+    }
+
+    public LocalDate MinimumEndDate(TournamentBean tournamentBean) {
+        return tournamentBean.getStartDate();
+    }
+
 }

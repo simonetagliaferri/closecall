@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<HBox fx:id="addTournaments" alignment="TOP_RIGHT" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.AddTournamentFormController">
+   <children>
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" HBox.hgrow="NEVER">
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+         <content>
+            <VBox alignment="TOP_RIGHT" styleClass="box">
+               <children>
+                  <VBox fx:id="tournamentDataPanel" styleClass="box">
+                     <children>
+                        <Label styleClass="text" text="Tournament name" />
+                        <TextField fx:id="tournamentNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox styleClass="box">
+                     <children>
+                        <Label text="Tournament type" />
+                        <ChoiceBox fx:id="tournamentTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="box">
+                     <children>
+                        <Label text="Tournament format" />
+                        <ChoiceBox fx:id="tournamentFormatChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setTournamentFormat" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="box">
+                     <children>
+                        <Label text="Match format" />
+                        <ChoiceBox fx:id="matchFormatChoice" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="box">
+                     <children>
+                        <Label text="Court type" />
+                        <ChoiceBox fx:id="courtTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel1" styleClass="box">
+                     <children>
+                        <Label styleClass="text" text="Number of available courts" />
+                        <TextField fx:id="numOfCourtsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel11" styleClass="box">
+                     <children>
+                        <Label styleClass="text" text="Number of teams" />
+                        <TextField fx:id="numOfTeamsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel113" styleClass="box">
+                     <children>
+                        <Label styleClass="text" text="Join fee" />
+                        <TextField fx:id="joinFeeField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" />
+                        <CheckBox fx:id="courtCostCheckBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#courtCost" selected="true" text="Court costs included" wrapText="true" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel114" styleClass="box">
+                     <children>
+                        <Label styleClass="text" text="Court cost" />
+                        <TextField fx:id="courtCostField" disable="true" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel112" styleClass="box">
+                     <children>
+                        <Label fx:id="numOfPrizes" styleClass="text" text="Number of prizes" />
+                        <TextField fx:id="numOfPrizesField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel111" styleClass="box">
+                     <children>
+                        <Label fx:id="startDateLabel" styleClass="text" text="Start date" />
+                        <DatePicker fx:id="startDatePicker" onAction="#checkStartDate" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel1111" styleClass="box">
+                     <children>
+                        <Label fx:id="deadlineLabel" styleClass="text" text="Signup deadline" />
+                        <DatePicker fx:id="deadlinePicker" onAction="#checkSignupDeadline" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="tournamentDataPanel11111" styleClass="box">
+                     <children>
+                        <Label fx:id="endDateLabel1" styleClass="text" text="Estimated end date:" visible="false" />
+                        <HBox>
+                           <children>
+                              <Label fx:id="endDateLabel2" styleClass="text" visible="false" />
+                              <Hyperlink fx:id="endDateHyper" onAction="#editEndDate" text="Edit" visible="false" />
+                              <DatePicker fx:id="endDatePicker" onAction="#updateEndDate" visible="false" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+         <padding>
+            <Insets right="20.0" />
+         </padding>
+      </ScrollPane>
+      <VBox alignment="BOTTOM_RIGHT" styleClass="box" HBox.hgrow="ALWAYS">
+         <children>
+            <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#confirmTournamentData" prefHeight="30.0" prefWidth="125.0" styleClass="blue-button" text="Confirm" />
+         </children>
+         <HBox.margin>
+            <Insets bottom="20.0" right="20.0" />
+         </HBox.margin>
+      </VBox>
+   </children>
+</HBox>

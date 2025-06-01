@@ -23,4 +23,9 @@ public class JDBCTournamentDAO implements TournamentDAO {
     public void updateTournament(Host host, Tournament tournament) {
 
     }
+
+    @Override
+    public Tournament getTournament(Host host, String id) {
+        return null;
+    }
 }

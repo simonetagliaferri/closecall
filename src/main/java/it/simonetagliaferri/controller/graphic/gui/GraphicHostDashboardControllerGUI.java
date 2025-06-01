@@ -4,23 +4,64 @@ import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
 import it.simonetagliaferri.controller.logic.HostDashboardController;
 import javafx.fxml.FXML;
-import javafx.geometry.Side;
-import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import org.kordamp.ikonli.javafx.FontIcon;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 public class GraphicHostDashboardControllerGUI {
     private final HostDashboardController controller = new HostDashboardController();
     private final HostBean user = this.controller.getHostBean();
-    private NavigationManager navigationManager = NavigationManager.getInstance();
+    private final NavigationManager navigationManager = NavigationManager.getInstance();
 
 
-    @FXML private TabPane tabPane;
+    @FXML private Text logo;
     @FXML private MenuButton account;
+    @FXML private ToggleButton home;
+    @FXML private ToggleButton newTournaments;
+    @FXML private ToggleButton searchScreen;
+    @FXML private VBox addTournamentWrapper;
+    @FXML private AddTournamentFormController addTournamentsGUI;
+
+
+
     @FXML
     private void initialize() {
+        FontIcon icon1 = new FontIcon("oct-home-16");
+        icon1.setIconSize(24);
+        FontIcon icon2 = new FontIcon("oct-plus-16");
+        icon2.setIconSize(24);
+        FontIcon icon3 = new FontIcon("oct-search-16");
+        icon3.setIconSize(24);
+        List<FontIcon> icons = Arrays.asList(icon1, icon2, icon3);
         account.setText(user.getUsername());
-        setTabPaneLeftTabsHorizontal(tabPane);
+        List<ToggleButton> buttons = Arrays.asList(home, newTournaments, searchScreen);
+        setButtons(buttons, icons);
+    }
+
+    private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
+        ToggleGroup tabs = new ToggleGroup();
+        for (int i=0; i<buttons.size(); i++) {
+            ToggleButton button = buttons.get(i);
+            button.setToggleGroup(tabs);
+            button.setText("");
+            button.setGraphic(icons.get(i));
+            button.setMinHeight(40);
+            button.setMaxHeight(40);
+            button.setMinWidth(40);
+            button.setMaxWidth(40);
+        }
+        tabs.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                oldToggle.setSelected(true); // Re-select the old one
+            }
+        });
+        buttons.get(0).setSelected(true);
+        addTournamentWrapper.setVisible(false);
     }
 
     @FXML
@@ -29,22 +70,16 @@ public class GraphicHostDashboardControllerGUI {
         navigationManager.login();
     }
 
-    void setTabPaneLeftTabsHorizontal(TabPane tabPane){
-
-        tabPane.setSide(Side.LEFT);
-        tabPane.setRotateGraphic(true);
-
-        Label l;
-        StackPane stp;
-        for(Tab t : tabPane.getTabs()){
-            l = new Label(t.getText());
-            l.setRotate(90);
-            stp = new StackPane(new Group(l));
-            stp.setRotate(90);
-            t.setGraphic(stp);
-            t.setText("");
+    @FXML
+    private void changeScreen() {
+        if (newTournaments.isSelected()) {
+            addTournamentWrapper.setVisible(true);
         }
-        tabPane.setTabMinHeight(100);
-        tabPane.setTabMaxHeight(100);
+        else if (searchScreen.isSelected()) {
+            addTournamentWrapper.setVisible(false);
+        }
+        else if (home.isSelected()) {
+            addTournamentWrapper.setVisible(false);
+        }
     }
 }

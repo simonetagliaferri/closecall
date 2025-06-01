@@ -7,17 +7,12 @@ import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
 
-import java.io.IOException;
 
 public class InMemoryPlayerDAO implements PlayerDAO {
     @Override
     public Player findByUsername(String username) {
         LoginDAO loginDAO;
-        try {
-            loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
         User user = loginDAO.findByUsername(username);
         if (user.getRole() == Role.PLAYER) {
             return new Player(user.getUsername(), user.getEmail());
@@ -28,11 +23,7 @@ public class InMemoryPlayerDAO implements PlayerDAO {
     @Override
     public Player findByEmail(String email) {
         LoginDAO loginDAO;
-        try {
-            loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
         User user = loginDAO.findByEmail(email);
         if (user.getRole() == Role.PLAYER) {
             return new Player(user.getUsername(), user.getEmail());

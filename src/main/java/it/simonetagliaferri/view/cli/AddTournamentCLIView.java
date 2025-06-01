@@ -47,6 +47,18 @@ public class AddTournamentCLIView {
         String choice3 = "Grass";
         return CliUtils.multipleChoice(label, choice1, choice2, choice3);
     }
+    public double joinFee() {
+        return CliUtils.promptDouble("Enter join fee: ");
+    }
+    public int includedCourt() {
+        String label = "Is the court cost included in the join fee?";
+        String choice1 = "Yes";
+        String choice2 = "No";
+        return CliUtils.multipleChoiceInt(label, choice1, choice2);
+    }
+    public double courtCost() {
+        return CliUtils.promptDouble("Enter court cost: ");
+    }
 
     public int courtNumber() {
         return CliUtils.promptInt("Enter number of courts available for the tournament: ");
