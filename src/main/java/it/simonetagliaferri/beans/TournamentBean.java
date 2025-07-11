@@ -95,7 +95,7 @@ public class TournamentBean {
 
 
     public LocalDate isDateValid(LocalDate date) {
-        if (date.isBefore(LocalDate.now())) {
+        if (date.isBefore(LocalDate.now()) || date == null) {
             return null;
         }
         return date;

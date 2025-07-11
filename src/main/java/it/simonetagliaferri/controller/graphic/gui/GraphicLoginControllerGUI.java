@@ -1,10 +1,11 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
-import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
-import it.simonetagliaferri.controller.logic.LoginController;
+import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.controller.logic.LoginLogicController;
 import it.simonetagliaferri.model.domain.Role;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -18,9 +19,9 @@ import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 
-public class GraphicLoginControllerGUI {
+public class GraphicLoginControllerGUI extends GraphicController {
 
-    private final LoginController controller = new LoginController();
+    private LoginLogicController controller;
     private UIState state = UIState.USERNAME_INPUT;
     @FXML
     private Text welcomeText;
@@ -54,21 +55,27 @@ public class GraphicLoginControllerGUI {
     private Spinner roleSpinner;
     private boolean showingTempMessage = false;
 
+    @Override
+    public void setAppContext(AppContext appContext) {
+        this.appContext = appContext;
+        this.controller = new LoginLogicController(appContext);
+    }
+
 
     @FXML
     private void initialize() {
-        state = UIState.USERNAME_INPUT;
-        roleSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(
-                FXCollections.observableArrayList("Host", "Player")
-        ));
-        roleSpinner.getValueFactory().setWrapAround(true);
-        roleSpinner.setVisible(false);
-        usernameField.setVisible(true);
-        passwordField.setVisible(false);
-        passResetHyper.setVisible(false);
-        bindMainButtonToFieldStates();
-        bindSignupButtonToFieldStates();
-        Platform.runLater(() -> subHyper.requestFocus());
+            state = UIState.USERNAME_INPUT;
+            roleSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(
+                    FXCollections.observableArrayList("Host", "Player")
+            ));
+            roleSpinner.getValueFactory().setWrapAround(true);
+            roleSpinner.setVisible(false);
+            usernameField.setVisible(true);
+            passwordField.setVisible(false);
+            passResetHyper.setVisible(false);
+            bindMainButtonToFieldStates();
+            bindSignupButtonToFieldStates();
+            Platform.runLater( () -> subHyper.requestFocus());
     }
 
     @FXML
@@ -100,7 +107,7 @@ public class GraphicLoginControllerGUI {
                 welcomeText.setText("Log in failed");
             }
             else {
-                NavigationManager.getInstance().goToDashboard(this.controller.getCurrentUserRole());
+                appContext.getNavigationManager().goToDashboard(this.controller.getCurrentUserRole());
             }
         }
     }

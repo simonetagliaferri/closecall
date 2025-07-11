@@ -26,7 +26,10 @@ public class FSLoginDAO implements LoginDAO {
             Type type = new TypeToken<Map<String, User>>() {
             }.getType();
             Map<String, User> loaded = gson.fromJson(reader, type);
-            if (loaded != null) users.putAll(loaded);
+            if (loaded != null) {
+                users.clear();
+                users.putAll(loaded);
+            }
         } catch (IOException e) {
             CliUtils.println("Error loading users: " + e.getMessage());
         }
@@ -38,6 +41,7 @@ public class FSLoginDAO implements LoginDAO {
         } catch (IOException e) {
             CliUtils.println("Error saving users: " + e.getMessage());
         }
+        loadUsers();
     }
 
     @Override

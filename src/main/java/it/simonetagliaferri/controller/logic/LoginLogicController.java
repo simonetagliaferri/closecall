@@ -1,9 +1,9 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
-import it.simonetagliaferri.model.dao.DAOFactory;
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
@@ -11,12 +11,13 @@ import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.PasswordUtils;
 
-public class LoginController extends Controller {
+public class LoginLogicController extends LogicController {
 
     private final LoginDAO loginDAO;
 
-    public LoginController() {
-        loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
+    public LoginLogicController(AppContext appContext) {
+        super(appContext);
+        loginDAO = this.appContext.getDAOFactory().getLoginDAO();
     }
 
     /*

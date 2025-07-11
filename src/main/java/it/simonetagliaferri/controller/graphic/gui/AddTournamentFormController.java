@@ -1,9 +1,10 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
-import it.simonetagliaferri.controller.logic.AddTournamentController;
+import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
 import it.simonetagliaferri.exception.InvalidDateException;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -18,10 +19,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddTournamentFormController {
-    private final AddTournamentController controller = new AddTournamentController();
-    private final HostBean user = this.controller.getHostBean();
-    private NavigationManager navigationManager = NavigationManager.getInstance();
+public class AddTournamentFormController extends GraphicController {
+
+
+    private AddTournamentLogicController controller;
+    private HostBean user;
 
 
     @FXML private VBox addTournamentContent;
@@ -55,6 +57,13 @@ public class AddTournamentFormController {
 
     public void setParentController(GraphicAddTournamentControllerGUI parentController) {
         this.parentController = parentController;
+    }
+
+    @Override
+    public void setAppContext(AppContext appContext) {
+        this.appContext = appContext;
+        this.controller = new AddTournamentLogicController(appContext);
+        user = controller.getHostBean();
     }
 
     @FXML private void initialize() {

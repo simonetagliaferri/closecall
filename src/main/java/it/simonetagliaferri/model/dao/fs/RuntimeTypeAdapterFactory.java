@@ -44,7 +44,7 @@ public class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
             subtypeToDelegate.put(entry.getValue(), delegate);
         }
 
-        return new TypeAdapter<R>() {
+        return new TypeAdapter<>() {
             @Override
             public void write(JsonWriter out, R value) throws IOException {
                 Class<?> srcType = value.getClass();
@@ -57,7 +57,7 @@ public class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
             }
 
             @Override
-            public R read(JsonReader in) throws IOException {
+            public R read(JsonReader in) {
                 JsonObject jsonObject = JsonParser.parseReader(in).getAsJsonObject();
                 JsonElement labelJsonElement = jsonObject.remove(typeFieldName);
                 String label = labelJsonElement.getAsString();

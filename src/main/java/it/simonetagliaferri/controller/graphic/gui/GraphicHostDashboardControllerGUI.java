@@ -1,8 +1,9 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.HostBean;
-import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
-import it.simonetagliaferri.controller.logic.HostDashboardController;
+import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.controller.logic.HostDashboardLogicController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -13,10 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class GraphicHostDashboardControllerGUI {
-    private final HostDashboardController controller = new HostDashboardController();
-    private final HostBean user = this.controller.getHostBean();
-    private final NavigationManager navigationManager = NavigationManager.getInstance();
+public class GraphicHostDashboardControllerGUI extends GraphicController {
+    private HostDashboardLogicController controller;
+    private HostBean user;
 
 
     @FXML private Text logo;
@@ -28,6 +28,17 @@ public class GraphicHostDashboardControllerGUI {
     @FXML private AddTournamentFormController addTournamentsGUI;
 
 
+    @Override
+    public void setAppContext(AppContext appContext) {
+        this.appContext = appContext;
+        this.controller = new HostDashboardLogicController(appContext);
+        postInit();
+    }
+
+    public void postInit() {
+        user = this.controller.getHostBean();
+        account.setText(user.getUsername());
+    }
 
     @FXML
     private void initialize() {
@@ -38,7 +49,6 @@ public class GraphicHostDashboardControllerGUI {
         FontIcon icon3 = new FontIcon("oct-search-16");
         icon3.setIconSize(24);
         List<FontIcon> icons = Arrays.asList(icon1, icon2, icon3);
-        account.setText(user.getUsername());
         List<ToggleButton> buttons = Arrays.asList(home, newTournaments, searchScreen);
         setButtons(buttons, icons);
     }
@@ -67,7 +77,7 @@ public class GraphicHostDashboardControllerGUI {
     @FXML
     private void logout() {
         this.controller.logout();
-        navigationManager.login();
+        appContext.getNavigationManager().login();
     }
 
     @FXML

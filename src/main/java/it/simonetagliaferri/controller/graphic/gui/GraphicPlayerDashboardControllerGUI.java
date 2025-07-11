@@ -1,4 +1,10 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-public class GraphicPlayerDashboardControllerGUI {
+import it.simonetagliaferri.controller.graphic.GraphicController;
+
+public class GraphicPlayerDashboardControllerGUI extends GraphicController {
+
+    private void initialize() {
+
+    }
 }

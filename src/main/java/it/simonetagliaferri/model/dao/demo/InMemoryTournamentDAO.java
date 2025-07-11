@@ -18,13 +18,7 @@ public class InMemoryTournamentDAO implements TournamentDAO {
     @Override
     public void addTournament(Host host, Tournament tournament) {
         tournament.setId(UUID.randomUUID().toString()); // UUID used so that there is no need to check for collisions.
-        String hostUsername = host.getUsername();
-        List<Tournament> tournamentList = tournaments.get(hostUsername);
-        if (tournamentList == null) {
-            tournamentList = new ArrayList<>();
-        }
-        tournamentList.add(tournament);
-        tournaments.put(hostUsername, tournamentList);
+        tournaments.computeIfAbsent(host.getUsername(), k -> new ArrayList<>()).add(tournament);
     }
 
     @Override

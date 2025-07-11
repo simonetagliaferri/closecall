@@ -1,4 +1,11 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
-public class GraphicPlayerDashboardControllerCLI {
+import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.controller.graphic.GraphicController;
+
+public class GraphicPlayerDashboardControllerCLI extends GraphicController {
+
+    public GraphicPlayerDashboardControllerCLI(AppContext appContext) {
+        super(appContext);
+    }
 }

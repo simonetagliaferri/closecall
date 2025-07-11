@@ -14,7 +14,7 @@ public abstract class DAOFactory {
     protected DAOFactory() {
     }
 
-    public static synchronized DAOFactory getDAOFactory() {
+    public static DAOFactory getDAOFactory() {
         if (instance == null) {
             PersistenceProvider provider = loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
             switch (provider) {

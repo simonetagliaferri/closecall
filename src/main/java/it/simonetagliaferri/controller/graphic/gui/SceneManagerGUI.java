@@ -1,5 +1,7 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.controller.graphic.GraphicController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +14,22 @@ import java.util.Objects;
 public class SceneManagerGUI extends Application {
 
     private static Scene scene;
+    private static AppContext appContext = null;
+
+    public static void setAppContext(AppContext context) {
+        appContext = context;
+    }
 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        return new FXMLLoader(SceneManagerGUI.class.getResource("/view/gui/" + fxml + ".fxml")).load();
+        FXMLLoader fxmlLoader = new FXMLLoader(SceneManagerGUI.class.getResource("/view/gui/" + fxml + ".fxml"));
+        Parent root = fxmlLoader.load();
+        GraphicController controller = fxmlLoader.getController();
+        controller.setAppContext(appContext);
+        return root;
     }
 
     public static void main(String[] args) {

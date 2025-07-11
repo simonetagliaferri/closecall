@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.controller.graphic.GraphicController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -7,7 +8,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class GraphicAddTournamentControllerGUI {
+public class GraphicAddTournamentControllerGUI extends GraphicController {
 
     @FXML private VBox addTournamentContent;
 

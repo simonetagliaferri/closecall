@@ -1,15 +1,22 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
-import it.simonetagliaferri.controller.graphic.navigation.NavigationManager;
+import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.view.cli.LoginCLIView;
-import it.simonetagliaferri.controller.logic.LoginController;
+import it.simonetagliaferri.controller.logic.LoginLogicController;
 
-public class GraphicLoginControllerCLI {
-    LoginCLIView view = new LoginCLIView();
-    LoginController controller = new LoginController();
+public class GraphicLoginControllerCLI extends GraphicController {
+    LoginCLIView view;
+    LoginLogicController controller;
+
+    public GraphicLoginControllerCLI(AppContext appContext) {
+        super(appContext);
+        this.view = new LoginCLIView();
+        this.controller = new LoginLogicController(this.appContext);
+    }
 
     public void start() {
         int choice;
@@ -40,7 +47,7 @@ public class GraphicLoginControllerCLI {
             return true;
         }
         else {
-            NavigationManager.getInstance().goToDashboard(this.controller.getCurrentUserRole());
+            appContext.getNavigationManager().goToDashboard(this.controller.getCurrentUserRole());
             return false;
         }
     }

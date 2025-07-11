@@ -1,17 +1,25 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.controller.logic.AddTournamentController;
+import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
 
 import java.time.LocalDate;
 
-public class GraphicAddTournamentControllerCLI {
+public class GraphicAddTournamentControllerCLI extends GraphicController {
 
-    AddTournamentCLIView view = new AddTournamentCLIView();
-    TournamentBean tournamentBean = new TournamentBean();
-    AddTournamentController controller = new AddTournamentController();
+    AddTournamentCLIView view;
+    TournamentBean tournamentBean;
+    AddTournamentLogicController controller;
+    public GraphicAddTournamentControllerCLI(AppContext appContext) {
+        super(appContext);
+        this.controller = new AddTournamentLogicController(this.appContext);
+        this.view = new AddTournamentCLIView();
+        this.tournamentBean = new TournamentBean();
+    }
     public void start() {
         view.welcome();
         if (this.controller.firstTime()) {

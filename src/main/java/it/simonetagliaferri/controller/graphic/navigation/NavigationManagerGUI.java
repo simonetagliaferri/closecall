@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.navigation;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.controller.graphic.gui.SceneManagerGUI;
 import it.simonetagliaferri.model.domain.Role;
 import javafx.application.Application;
@@ -7,10 +8,15 @@ import javafx.application.Application;
 import java.io.IOException;
 
 public class NavigationManagerGUI extends NavigationManager {
+    protected NavigationManagerGUI(AppContext context) {
+        super(context);
+    }
+
     /*
-        Implemented a SceneManager class to handle FXML loading and JavaFX launching.
+     Implemented a SceneManager class to handle FXML loading and JavaFX launching.
      */
     public void start() {
+        SceneManagerGUI.setAppContext(appContext);
         Application.launch(SceneManagerGUI.class);
     }
     // Added a login operation for readability on logout calls.

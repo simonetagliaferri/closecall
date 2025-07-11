@@ -42,7 +42,10 @@ public class FSTournamentDAO implements TournamentDAO {
             Type type = new TypeToken<Map<String, List<Tournament>>>() {
             }.getType();
             Map<String, List<Tournament>> loaded = gson.fromJson(reader, type);
-            if (loaded != null) tournaments.putAll(loaded);
+            if (loaded != null) {
+                tournaments.clear();
+                tournaments.putAll(loaded);
+            }
         } catch (IOException e) {
             CliUtils.println("Error loading users: " + e.getMessage());
         }
@@ -52,12 +55,7 @@ public class FSTournamentDAO implements TournamentDAO {
     @Override
     public void addTournament(Host host, Tournament tournament) {
         tournament.setId(UUID.randomUUID().toString());
-        List<Tournament> tournamentList = tournaments.get(host.getUsername());
-        if (tournamentList == null) {
-            tournamentList = new ArrayList<>();
-        }
-        tournamentList.add(tournament);
-        tournaments.put(host.getUsername(), tournamentList);
+        tournaments.computeIfAbsent(host.getUsername(), k -> new ArrayList<>()).add(tournament);
         saveTournaments();
     }
 
@@ -71,12 +69,23 @@ public class FSTournamentDAO implements TournamentDAO {
 
     @Override
     public List<Tournament> getTournaments(Host host) {
+        loadTournaments();
         return tournaments.get(host.getUsername());
     }
 
     @Override
     public void updateTournament(Host host, Tournament tournament) {
-
+        String hostUsername = host.getUsername();
+        List<Tournament> tournamentList = tournaments.get(hostUsername);
+        if (tournamentList != null) {
+            for (int i = 0; i < tournamentList.size(); i++) {
+                if (tournamentList.get(i).getId().equals(tournament.getId())) {
+                    tournamentList.set(i, tournament);
+                    saveTournaments();
+                    return;
+                }
+            }
+        }
     }
 
     @Override

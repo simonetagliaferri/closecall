@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
@@ -17,11 +18,12 @@ import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.time.LocalDate;
 
-public class AddTournamentController extends Controller {
+public class AddTournamentLogicController extends LogicController {
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
     PlayerDAO playerDAO;
-    public AddTournamentController() {
+    public AddTournamentLogicController(AppContext appContext) {
+        super(appContext);
         tournamentDAO = DAOFactory.getDAOFactory().getTournamentDAO();
         hostDAO = DAOFactory.getDAOFactory().getHostDAO();
         playerDAO = DAOFactory.getDAOFactory().getPlayerDAO();
@@ -34,7 +36,6 @@ public class AddTournamentController extends Controller {
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
-        host.addTournament(tournament);
         tournamentDAO.addTournament(host, tournament);
     }
 

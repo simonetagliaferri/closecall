@@ -1,8 +1,8 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.model.dao.DAOFactory;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Tournament;
@@ -13,11 +13,12 @@ import it.simonetagliaferri.utils.converters.TournamentMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HostDashboardController extends Controller {
+public class HostDashboardLogicController extends LogicController {
     TournamentDAO tournamentDAO;
 
-    public HostDashboardController() {
-        tournamentDAO = DAOFactory.getDAOFactory().getTournamentDAO();
+    public HostDashboardLogicController(AppContext appContext) {
+        super(appContext);
+        tournamentDAO = this.appContext.getDAOFactory().getTournamentDAO();
     }
 
     /*

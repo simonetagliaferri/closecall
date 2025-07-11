@@ -16,6 +16,10 @@ module it.simonetagliaferri {
     opens it.simonetagliaferri.model.domain to com.google.gson;
     opens it.simonetagliaferri to javafx.fxml;
     exports it.simonetagliaferri;
+    exports it.simonetagliaferri.model.dao;
+    exports it.simonetagliaferri.controller.graphic;
+    exports it.simonetagliaferri.controller.graphic.navigation;
+    exports it.simonetagliaferri.model.domain;
     opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
     exports it.simonetagliaferri.model.strategy to com.google.gson;
 }
