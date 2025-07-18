@@ -1,7 +1,5 @@
 package it.simonetagliaferri.model.domain;
 
-import it.simonetagliaferri.beans.UserBean;
-
 public class User {
     private final String username;
     private final String password;
@@ -29,11 +27,11 @@ public class User {
         this.password = null;
     }
 
-    public User(UserBean userBean) {
-        this.username = userBean.getUsername();
-        this.email = userBean.getEmail();
-        this.role = userBean.getRole();
-        this.password = userBean.getPassword();
+    public User(String username) {
+        this.username = username;
+        this.email = null;
+        this.password = null;
+        this.role = null;
     }
 
     public String getUsername() {

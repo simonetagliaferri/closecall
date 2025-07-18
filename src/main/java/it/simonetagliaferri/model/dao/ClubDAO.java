@@ -1,0 +1,11 @@
+package it.simonetagliaferri.model.dao;
+
+import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Host;
+
+import java.util.List;
+
+public interface ClubDAO {
+
+    List<Club> getClubs(Host host);
+}

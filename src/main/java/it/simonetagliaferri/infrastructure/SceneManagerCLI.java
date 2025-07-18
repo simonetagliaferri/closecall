@@ -1,8 +1,16 @@
-package it.simonetagliaferri.controller.graphic.cli;
+package it.simonetagliaferri.infrastructure;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.controller.graphic.cli.GraphicAddTournamentControllerCLI;
+import it.simonetagliaferri.controller.graphic.cli.GraphicHostDashboardControllerCLI;
+import it.simonetagliaferri.controller.graphic.cli.GraphicLoginControllerCLI;
+import it.simonetagliaferri.controller.graphic.cli.GraphicPlayerDashboardControllerCLI;
 
+/**
+ * SceneManagerCLI implemented more than anything to be coherent with NavigationManagerGUI, in which SceneManager is needed to load FXMLs.
+ * It just declutters NavigationManager from GraphicControllers' instantiation.
+ */
 public class SceneManagerCLI {
+
     public void login(AppContext appContext) {
         new GraphicLoginControllerCLI(appContext).start();
     }
@@ -21,4 +29,8 @@ public class SceneManagerCLI {
         graphicAddTournamentControllerCLI.start();
     }
 
+    public void addClub(AppContext appContext) {
+        GraphicAddTournamentControllerCLI addTournamentControllerCLI = new GraphicAddTournamentControllerCLI(appContext);
+        addTournamentControllerCLI.start();
+    }
 }

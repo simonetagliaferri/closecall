@@ -1,18 +1,14 @@
 package it.simonetagliaferri.controller.graphic;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.AppContext;
+import it.simonetagliaferri.infrastructure.navigation.NavigationManager;
 
 public abstract class GraphicController {
-    protected AppContext appContext;
+    protected NavigationManager navigationManager; // Not final only because I need to initialize it with initializeController for GUI controllers.
 
-    public GraphicController() {
-
-    }
+    public GraphicController() {}
 
     public GraphicController(AppContext appContext) {
-        this.appContext = appContext;
-    }
-    public void setAppContext(AppContext appContext) {
-        this.appContext = appContext;
+        this.navigationManager = appContext.getNavigationManager();
     }
 }

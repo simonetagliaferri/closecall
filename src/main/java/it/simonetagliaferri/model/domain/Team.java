@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Team {
     // At first I was using Player[], but using a List<Player> is just more comfortable.
-    private List<Player> players;
+    private final List<Player> players;
 
     public Team(Player player) {
         players = new ArrayList<>();

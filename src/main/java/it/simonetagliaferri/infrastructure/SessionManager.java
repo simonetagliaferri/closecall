@@ -1,11 +1,15 @@
-package it.simonetagliaferri.controller.graphic;
+package it.simonetagliaferri.infrastructure;
 
 import it.simonetagliaferri.model.domain.User;
 
-/*
-    Class needed to propagate the active user through the run.
+/**
+ * SessionManager is a stateful component that tracks the currently logged-in user.
+ * It is created once by the AppContext at application startup and used throughout the lifecycle.
+ * It should not be instantiated or used outside of that context.
  */
 public class SessionManager {
+
+    SessionManager() {}
 
     private User currentUser;
 

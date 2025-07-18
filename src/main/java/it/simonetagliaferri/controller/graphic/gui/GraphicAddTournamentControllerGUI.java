@@ -1,6 +1,7 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.infrastructure.SceneManagerGUI;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,33 +19,30 @@ public class GraphicAddTournamentControllerGUI extends GraphicController {
         loadAddTournamentForm();
     }
 
+    // Need to revise how the root changes
     @FXML
     public void loadAddTournamentForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gui/addTournament.fxml"));
-            Node node = loader.load();
-
-            AddTournamentFormController controller = loader.getController();
+            FXMLLoader loader = SceneManagerGUI.getLoader("addTournament");
+            Node node = SceneManagerGUI.getRoot(loader);
+            AddTournamentFormController controller = SceneManagerGUI.getController(loader);
             controller.setParentController(this); // inject wrapper controller
-
             addTournamentContent.getChildren().setAll(node);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @FXML
     public void loadAddPlayersForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gui/addPlayers.fxml"));
-            Node node = loader.load();
-
-            AddPlayersFormController controller = loader.getController();
+            FXMLLoader loader = SceneManagerGUI.getLoader("addPlayers");
+            Node node = SceneManagerGUI.getRoot(loader);
+            AddTournamentFormController controller = SceneManagerGUI.getController(loader);
             controller.setParentController(this); // inject wrapper controller
-
             addTournamentContent.getChildren().setAll(node);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

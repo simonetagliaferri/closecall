@@ -101,7 +101,7 @@
       </Button>
       <TextField fx:id="emailField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Email" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
       </TextField>
-      <PasswordField fx:id="passwordField1" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Password" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+      <PasswordField fx:id="passwordFieldSignup" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Password" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
       </PasswordField>
       <PasswordField fx:id="confirmPassField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Confirm password" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
       </PasswordField>

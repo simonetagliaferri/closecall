@@ -6,16 +6,13 @@ import java.util.Objects;
 
 public class Host extends User{
     private List<Tournament> tournaments;
+    private List<Club> clubs;
 
     public Host(String username, String email, Role role) {
         super(username, email, role);
     }
     public Host(String username, String email) {
         super(username, email);
-    }
-
-    public static Host fromUser(User user) {
-        return new Host(user.getUsername(), user.getEmail(), user.getRole());
     }
 
     public void addTournament(Tournament tournament) {
@@ -28,5 +25,13 @@ public class Host extends User{
 
     public void setTournaments(List<Tournament> tournaments) {
         this.tournaments = Objects.requireNonNullElseGet(tournaments, ArrayList::new);
+    }
+
+    public void setClubs(List<Club> clubs) {
+        this.clubs = Objects.requireNonNullElseGet(clubs, ArrayList::new);
+    }
+
+    public boolean hasClubs() {
+        return clubs != null && !clubs.isEmpty();
     }
 }

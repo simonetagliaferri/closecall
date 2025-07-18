@@ -18,8 +18,12 @@ module it.simonetagliaferri {
     exports it.simonetagliaferri;
     exports it.simonetagliaferri.model.dao;
     exports it.simonetagliaferri.controller.graphic;
-    exports it.simonetagliaferri.controller.graphic.navigation;
+    exports it.simonetagliaferri.infrastructure.navigation;
     exports it.simonetagliaferri.model.domain;
+    exports it.simonetagliaferri.controller.graphic.gui;
     opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
     exports it.simonetagliaferri.model.strategy to com.google.gson;
+    exports it.simonetagliaferri.infrastructure;
+    opens it.simonetagliaferri.infrastructure to javafx.fxml, javafx.graphics;
+    opens it.simonetagliaferri.infrastructure.navigation to javafx.fxml, javafx.graphics;
 }

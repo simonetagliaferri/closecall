@@ -1,7 +1,5 @@
 package it.simonetagliaferri.view.cli;
 
-import it.simonetagliaferri.beans.UserBean;
-import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.CliUtils;
 
 public class LoginCLIView {
@@ -19,70 +17,51 @@ public class LoginCLIView {
         }
     }
 
-    public UserBean authenticate() {
-        String username = CliUtils.prompt("Enter username: ");
-        String password = CliUtils.prompt("Enter password: ");
-        return new UserBean(username, password);
+    public String getUsername() {
+        return CliUtils.prompt("Enter username: ");
     }
 
-    public UserBean signupFirstStep() {
-        String username = CliUtils.prompt("Enter username: ");
-        return new UserBean(username);
+    public String getPassword() {
+        return CliUtils.prompt("Enter password: ");
     }
+
 
     /* For email, password and role input validation I decided to call the bean's methods directly from the view,
    without going through the GraphicController because I wanted to have direct validation after
    each field was filled by the user and not just at the end, it's just less messy doing it this way.
-   This is what is done in sigmupSecondStep and signupThirdStep. The need to split signup in the CLI UI is given by
+   This is what is done in signupSecondStep and signupThirdStep. The need to split signup in the CLI UI is given by
    the fact that it would be inappropriate to ask the user multiple fields without giving a feedback on invalid inputs.*/
 
-    public UserBean signupSecondStep(UserBean user) {
-        while (true) {
-            String email = CliUtils.prompt("Enter email: ");
-            user.setEmail(email);
-            if (user.validEmail()) {
-                break;
-            }
-            CliUtils.println("Invalid email. Try again.");
-        }
-        return user;
+    public String getEmail() {
+        return CliUtils.prompt("Enter email: ");
     }
 
-    public UserBean signupThirdStep(UserBean user) {
-        String password;
-        while (true) {
-            password = CliUtils.prompt("Enter password: ");
-            user.setPassword(password);
-            String confirmPassword = CliUtils.prompt("Confirm password: ");
-            if (user.confirmPassword(confirmPassword)) {
-                break;
-            }
-            CliUtils.println("Passwords do not match. Try again.");
-        }
-        String roleStr;
-        while (true) {
-            roleStr = CliUtils.prompt("Enter role(Player or Host): ");
-            try {
-                Role role = user.validRole(roleStr);
-                user.setRole(role);
-                break;
-            } catch (IllegalArgumentException e) {
-                CliUtils.println("Invalid role. Try again.");
-            }
-        }
-        while (true) {
-            String choice = CliUtils.prompt("Are you sure you want to signup? (Y/N): ");
-            if (choice.equalsIgnoreCase("Y")) {
-                break;
-            }
-            else if (choice.equalsIgnoreCase("N")) {
-                return null;
-            }
-            else {
-                CliUtils.println("Invalid choice. Try again.");
-            }
-        }
-        return user;
+    public String getPasswordConfirm() {
+        return CliUtils.prompt("Confirm password: ");
+    }
+
+    public String getRole() {
+        return CliUtils.prompt("Enter role(Player or Host): ");
+    }
+
+    public String getConfirmation() {
+        return CliUtils.prompt("Are you sure you want to signup? (Y/N): ");
+    }
+
+    public void invalidRole() {
+        CliUtils.println("Invalid role. Try again.");
+    }
+
+    public void passwordsDoNotMatch() {
+        CliUtils.println("Passwords do not match or the password is invalid. Try again.");
+    }
+
+    public void invalidChoice() {
+        CliUtils.println("Invalid choice. Try again.");
+    }
+
+    public void invalidUsername() {
+        CliUtils.println("Invalid username. Try again.");
     }
 
     public void userAlreadyExists() {

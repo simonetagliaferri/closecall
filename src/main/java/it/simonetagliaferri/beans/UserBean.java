@@ -10,7 +10,7 @@ public class UserBean {
     private Role role;
 
 
-    protected UserBean() {}
+    public UserBean() {}
     public UserBean(String username) {
         this.username = username;
     }
@@ -38,47 +38,62 @@ public class UserBean {
         this.role = role;
     }
 
-    public boolean validEmail() {
-        return EmailValidator.getInstance().isValid(this.email);
-    }
-
-    public boolean confirmPassword(String confirmPassword) {
-        return this.getPassword().equals(confirmPassword);
-    }
-
-    public Role validRole(String roleStr) {
-        return Role.valueOf(roleStr.toUpperCase());
+    private boolean validEmail(String email) {
+        return EmailValidator.getInstance().isValid(email);
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public boolean setUsername(String username) {
+        if (!username.isEmpty()) {
+            this.username = username;
+            return true;
+        }
+        else {
+            this.username = null;
+            return false;
+        }
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public boolean setPassword(String password, String confirmPassword) {
+        if (!password.isEmpty() && password.equals(confirmPassword)) {
+            this.password = password;
+            return true;
+        }
+        return false;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public boolean setEmail(String email) {
+        if (validEmail(email)) {
+            this.email = email;
+            return true;
+        }
+        else {
+            this.email = null;
+            return false;
+        }
     }
 
     public Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public boolean setRole(String role) {
+        try {
+            this.role = Role.valueOf(role.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }

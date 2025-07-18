@@ -1,10 +1,10 @@
-package it.simonetagliaferri.controller.graphic.navigation;
+package it.simonetagliaferri.infrastructure.navigation;
 
-
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
 
 public abstract class NavigationManager {
+
     protected final AppContext appContext;
 
     protected NavigationManager(AppContext appContext) {
@@ -18,4 +18,7 @@ public abstract class NavigationManager {
     public abstract void goToDashboard(Role role);
 
     public abstract void goToAddTournament();
+
+    public abstract void goToAddClub();
+
 }

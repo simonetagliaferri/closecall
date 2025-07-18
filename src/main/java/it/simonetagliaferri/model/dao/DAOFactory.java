@@ -9,33 +9,26 @@ import static it.simonetagliaferri.utils.PropertiesUtils.*;
 
 public abstract class DAOFactory {
 
-    private static DAOFactory instance;
-
     protected DAOFactory() {
     }
 
     public static DAOFactory getDAOFactory() {
-        if (instance == null) {
-            PersistenceProvider provider = loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
-            switch (provider) {
-                case IN_MEMORY:
-                    instance = new InMemoryDAOFactory();
-                    break;
-                case FS:
-                    instance = new FSDAOFactory();
-                    break;
-                case JDBC:
-                    instance = new JDBCDAOFactory();
-                    break;
-                default:
-
-            }
+        PersistenceProvider provider = loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
+        switch (provider) {
+            case IN_MEMORY:
+                return new InMemoryDAOFactory();
+            case FS:
+                return new FSDAOFactory();
+            case JDBC:
+                return new JDBCDAOFactory();
+            default:
+                throw new RuntimeException("Unknown persistence provider: " + provider);
         }
-        return instance;
     }
 
     public abstract LoginDAO getLoginDAO();
     public abstract TournamentDAO getTournamentDAO();
     public abstract HostDAO getHostDAO();
     public abstract PlayerDAO getPlayerDAO();
+    public abstract ClubDAO getClubDAO();
 }

@@ -63,7 +63,7 @@ public class TournamentBean {
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
     public void setTeams(List<TeamBean> teams) { this.teams = teams; }
     public void setJoinFee(double joinFee) { this.joinFee = joinFee; }
-    public void setCourtPrice(double courtPrice) {}
+    public void setCourtPrice(double courtPrice) { this.courtPrice = courtPrice; }
     public String getHostUsername() { return hostUsername; }
     public String getTournamentName() { return name; }
     public String getTournamentType() { return tournamentType; }

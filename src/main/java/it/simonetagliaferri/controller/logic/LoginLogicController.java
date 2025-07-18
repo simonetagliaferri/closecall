@@ -1,10 +1,12 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
+import it.simonetagliaferri.infrastructure.SessionManager;
+import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.LoginDAO;
+import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Role;
@@ -14,16 +16,20 @@ import it.simonetagliaferri.utils.PasswordUtils;
 public class LoginLogicController extends LogicController {
 
     private final LoginDAO loginDAO;
+    private final HostDAO hostDAO;
+    private final PlayerDAO playerDAO;
 
-    public LoginLogicController(AppContext appContext) {
-        super(appContext);
-        loginDAO = this.appContext.getDAOFactory().getLoginDAO();
+    public LoginLogicController(SessionManager sessionManager, LoginDAO loginDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
+        super(sessionManager);
+        this.loginDAO = loginDAO;
+        this.hostDAO = hostDAO;
+        this.playerDAO = playerDAO;
     }
 
-    /*
+    /**
         It tries to get a user from the DAO passing to it the provided username, it hashes the provided password,
         then it checks that the user exists and then that the provided password matches.
-        If the checks are successful a new UserBean is instantiated with retrieved role and the session current user is set.
+        If the checks are successful a new UserBean is instantiated with retrieved role and the session's current user is set.
         A login response bean is used to communicate the outcome of the login process to the graphic controller.
      */
     public LoginResponseBean login(UserBean bean) {
@@ -36,10 +42,10 @@ public class LoginLogicController extends LogicController {
             } else {
                 currentUser = new Host(user.getUsername(), user.getEmail(), user.getRole());
             }
-            // Creating new bean that has no reference to the password, no need to keep that around.
             setCurrentUser(currentUser);
             return new LoginResponseBean(LoginResult.SUCCESS);
-        } else return new LoginResponseBean(LoginResult.FAIL);
+        }
+        else return new LoginResponseBean(LoginResult.FAIL);
     }
 
     /*
@@ -48,6 +54,12 @@ public class LoginLogicController extends LogicController {
     public LoginResponseBean signup(UserBean bean) {
         User user = new User(bean.getUsername(), bean.getEmail(), PasswordUtils.sha256Hex(bean.getPassword()), bean.getRole());
         if (loginDAO.signup(user) != null) {
+            if (user.getRole() == Role.HOST) {
+                hostDAO.addHost(new Host(user.getUsername(), user.getEmail()));
+            }
+            else {
+                playerDAO.addPlayer(new Player(user.getUsername(), user.getEmail()));
+            }
             return new LoginResponseBean(LoginResult.SUCCESS);
         } else {
             return new LoginResponseBean(LoginResult.FAIL);

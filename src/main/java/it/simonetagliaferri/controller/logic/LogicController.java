@@ -1,30 +1,30 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
 
 public class LogicController {
-    protected final AppContext appContext;
 
-    public LogicController(AppContext appContext) {
-        this.appContext = appContext;
+    protected final SessionManager sessionManager;
+
+    public LogicController(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     public Role getCurrentUserRole() {
-        return appContext.getSessionManager().getCurrentUser().getRole();
+        return sessionManager.getCurrentUser().getRole();
     }
 
     protected User getCurrentUser() {
-        return appContext.getSessionManager().getCurrentUser();
+        return sessionManager.getCurrentUser();
     }
 
     protected void setCurrentUser(User user) {
-        appContext.getSessionManager().setCurrentUser(user);
+        sessionManager.setCurrentUser(user);
     }
 
-    // Public because it needs to be called from graphic controllers to trigger the logout.
     public void logout() {
-        appContext.getSessionManager().clearSession();
+        sessionManager.clearSession();
     }
 }

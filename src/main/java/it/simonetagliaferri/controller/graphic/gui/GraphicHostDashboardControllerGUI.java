@@ -1,6 +1,6 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.HostDashboardLogicController;
@@ -14,9 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class GraphicHostDashboardControllerGUI extends GraphicController {
+public class GraphicHostDashboardControllerGUI extends GraphicController implements GUIController {
     private HostDashboardLogicController controller;
-    private HostBean user;
+    private HostBean hostBean;
 
 
     @FXML private Text logo;
@@ -29,15 +29,16 @@ public class GraphicHostDashboardControllerGUI extends GraphicController {
 
 
     @Override
-    public void setAppContext(AppContext appContext) {
-        this.appContext = appContext;
-        this.controller = new HostDashboardLogicController(appContext);
+    public void initializeController(AppContext appContext) {
+        this.navigationManager = appContext.getNavigationManager();
+        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+                appContext.getDAOFactory().getHostDAO());
         postInit();
     }
 
     public void postInit() {
-        user = this.controller.getHostBean();
-        account.setText(user.getUsername());
+        hostBean = this.controller.getHostBean();
+        account.setText(hostBean.getUsername());
     }
 
     @FXML
@@ -77,13 +78,14 @@ public class GraphicHostDashboardControllerGUI extends GraphicController {
     @FXML
     private void logout() {
         this.controller.logout();
-        appContext.getNavigationManager().login();
+        navigationManager.login();
     }
 
     @FXML
     private void changeScreen() {
         if (newTournaments.isSelected()) {
             addTournamentWrapper.setVisible(true);
+            navigationManager.goToAddTournament();
         }
         else if (searchScreen.isSelected()) {
             addTournamentWrapper.setVisible(false);

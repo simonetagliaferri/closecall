@@ -1,27 +1,23 @@
-package it.simonetagliaferri.controller.graphic.navigation;
+package it.simonetagliaferri.infrastructure.navigation;
 
-import it.simonetagliaferri.AppContext;
-import it.simonetagliaferri.controller.graphic.cli.SceneManagerCLI;
+import it.simonetagliaferri.infrastructure.AppContext;
+import it.simonetagliaferri.infrastructure.SceneManagerCLI;
 import it.simonetagliaferri.model.domain.Role;
 
 public class NavigationManagerCLI extends NavigationManager {
 
-    /* SceneManagerCLI implemented more than anything to be coherent with NavigationManagerGUI, in which SceneManager is needed.
-        Here it just declutters NavigationManager from GraphicControllers' instantiation.
-     */
     private final SceneManagerCLI sceneManager = new SceneManagerCLI();
 
     protected NavigationManagerCLI(AppContext appContext) {
         super(appContext);
     }
 
-    // Added a login operation for readability on logout calls.
     public void login() {
         sceneManager.login(this.appContext);
     }
 
     public void start() {
-        sceneManager.login(this.appContext);
+        login();
     }
 
     public void goToDashboard(Role role) {
@@ -36,4 +32,9 @@ public class NavigationManagerCLI extends NavigationManager {
     public void goToAddTournament() {
         sceneManager.addTournament(this.appContext);
     }
+
+    public void goToAddClub() {
+        sceneManager.addTournament(this.appContext);
+    }
+
 }

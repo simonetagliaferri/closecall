@@ -1,8 +1,9 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
+import it.simonetagliaferri.infrastructure.SessionManager;
+import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Tournament;
@@ -15,10 +16,12 @@ import java.util.List;
 
 public class HostDashboardLogicController extends LogicController {
     TournamentDAO tournamentDAO;
+    HostDAO hostDAO;
 
-    public HostDashboardLogicController(AppContext appContext) {
-        super(appContext);
-        tournamentDAO = this.appContext.getDAOFactory().getTournamentDAO();
+    public HostDashboardLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO) {
+        super(sessionManager);
+        this.tournamentDAO = tournamentDAO;
+        this.hostDAO = hostDAO;
     }
 
     /*
@@ -27,15 +30,20 @@ public class HostDashboardLogicController extends LogicController {
     just the first time, the other times the flag I suppose will be set to 1 in persistence and so nothing will be asked
      */
 
+    public boolean additionalInfoNeeded() {
+        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        return !host.hasClubs();
+    }
+
     public HostBean getHostBean() {
         User user = getCurrentUser();
-        Host host = Host.fromUser(user);
+        Host host = hostDAO.getHostByUsername(user.getUsername());
         return HostMapper.toBean(host);
     }
 
     public List<TournamentBean> getTournaments() {
         User user = getCurrentUser();
-        Host host = Host.fromUser(user);
+        Host host = hostDAO.getHostByUsername(user.getUsername());
         List<Tournament> tournaments = tournamentDAO.getTournaments(host);
         List<TournamentBean> tournamentBeans = new ArrayList<>();
         if (tournaments != null && !tournaments.isEmpty()) {

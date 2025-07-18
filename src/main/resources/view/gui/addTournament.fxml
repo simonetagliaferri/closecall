@@ -12,15 +12,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <HBox fx:id="addTournaments" alignment="TOP_RIGHT" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.AddTournamentFormController">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" HBox.hgrow="NEVER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportWidth="450.0" HBox.hgrow="ALWAYS">
          <HBox.margin>
             <Insets />
          </HBox.margin>
          <content>
-            <VBox alignment="TOP_RIGHT" styleClass="box">
+            <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" styleClass="box">
                <children>
                   <VBox fx:id="tournamentDataPanel" styleClass="box">
                      <children>
@@ -113,9 +112,6 @@
                </children>
             </VBox>
          </content>
-         <padding>
-            <Insets right="20.0" />
-         </padding>
       </ScrollPane>
       <VBox alignment="BOTTOM_RIGHT" styleClass="box" HBox.hgrow="ALWAYS">
          <children>

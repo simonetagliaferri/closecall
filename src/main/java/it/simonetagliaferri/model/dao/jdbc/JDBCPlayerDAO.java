@@ -14,4 +14,9 @@ public class JDBCPlayerDAO implements PlayerDAO {
         return null;
     }
 
+    @Override
+    public void addPlayer(Player player) {
+
+    }
+
 }

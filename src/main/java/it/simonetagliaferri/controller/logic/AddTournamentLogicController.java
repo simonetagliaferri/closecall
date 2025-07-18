@@ -1,11 +1,10 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
-import it.simonetagliaferri.model.dao.DAOFactory;
+import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
@@ -22,21 +21,22 @@ public class AddTournamentLogicController extends LogicController {
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
     PlayerDAO playerDAO;
-    public AddTournamentLogicController(AppContext appContext) {
-        super(appContext);
-        tournamentDAO = DAOFactory.getDAOFactory().getTournamentDAO();
-        hostDAO = DAOFactory.getDAOFactory().getHostDAO();
-        playerDAO = DAOFactory.getDAOFactory().getPlayerDAO();
+    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
+        super(sessionManager);
+        this.tournamentDAO = tournamentDAO;
+        this.hostDAO = hostDAO;
+        this.playerDAO = playerDAO;
     }
 
     public void addTournament(TournamentBean tournamentBean) {
         User user = getCurrentUser();
-        Host host = Host.fromUser(user);
+        Host host = hostDAO.getHostByUsername(user.getUsername());
         host.setTournaments(tournamentDAO.getTournaments(host));
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
         tournamentDAO.addTournament(host, tournament);
+        host.addTournament(tournament);
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {
@@ -76,16 +76,9 @@ public class AddTournamentLogicController extends LogicController {
 
     public HostBean getHostBean() {
         User user = getCurrentUser();
-        Host host = Host.fromUser(user);
+        Host host = hostDAO.getHostByUsername(user.getUsername());
         return HostMapper.toBean(host);
     }
-
-    public boolean firstTime() {
-        User user = getCurrentUser();
-        Host host = Host.fromUser(user);
-        return hostDAO.additionalInfo(host);
-    }
-
 
     public boolean addPlayer(String player, TournamentBean tournamentBean) {
         Player p = isPlayerValid(player);
@@ -109,9 +102,8 @@ public class AddTournamentLogicController extends LogicController {
 
     public Player isPlayerValid(String player) {
         PlayerBean playerBean = new PlayerBean();
-        playerBean.setEmail(player);
         Player p;
-        if (playerBean.validEmail()) {
+        if (playerBean.setEmail(player)) {
             p = playerDAO.findByEmail(playerBean.getEmail());
         }
         else {

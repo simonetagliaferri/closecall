@@ -70,6 +70,10 @@
     -fx-background-radius: 10;
 }
 
+.scroll-pane {
+    -fx-background: white;
+}
+
 .check-box .box {
     -fx-background-color: white;
     -fx-border-color: #a7abb0;

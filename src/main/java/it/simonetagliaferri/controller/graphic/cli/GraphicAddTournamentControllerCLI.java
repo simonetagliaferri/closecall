@@ -1,6 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
@@ -16,15 +16,13 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     AddTournamentLogicController controller;
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
-        this.controller = new AddTournamentLogicController(this.appContext);
+        this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();
     }
     public void start() {
         view.welcome();
-        if (this.controller.firstTime()) {
-            askNeededInfo();
-        }
         boolean validDate = false;
         String strDate;
         LocalDate startDate;
@@ -70,10 +68,6 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         estimatedEndDate();
         addPlayersToTournament();
         this.controller.addTournament(tournamentBean);
-    }
-
-    public void askNeededInfo() {
-        //Todo
     }
 
     public void estimatedEndDate() {

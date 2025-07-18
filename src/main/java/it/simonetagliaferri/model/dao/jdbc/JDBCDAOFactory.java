@@ -17,4 +17,7 @@ public class JDBCDAOFactory extends DAOFactory {
 
     @Override
     public PlayerDAO getPlayerDAO() {return new JDBCPlayerDAO();}
+
+    @Override
+    public ClubDAO getClubDAO() {return new JDBCClubDAO();}
 }

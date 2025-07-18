@@ -1,6 +1,6 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddTournamentFormController extends GraphicController {
+public class AddTournamentFormController extends GraphicController implements GUIController {
 
 
     private AddTournamentLogicController controller;
@@ -60,9 +60,10 @@ public class AddTournamentFormController extends GraphicController {
     }
 
     @Override
-    public void setAppContext(AppContext appContext) {
-        this.appContext = appContext;
-        this.controller = new AddTournamentLogicController(appContext);
+    public void initializeController(AppContext appContext) {
+        this.navigationManager = appContext.getNavigationManager();
+        this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
         user = controller.getHostBean();
     }
 

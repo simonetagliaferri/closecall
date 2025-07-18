@@ -1,12 +1,11 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-import it.simonetagliaferri.AppContext;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.LoginResponseBean;
 import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.LoginLogicController;
-import it.simonetagliaferri.model.domain.Role;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -19,7 +18,7 @@ import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 
-public class GraphicLoginControllerGUI extends GraphicController {
+public class GraphicLoginControllerGUI extends GraphicController implements GUIController {
 
     private LoginLogicController controller;
     private UIState state = UIState.USERNAME_INPUT;
@@ -46,19 +45,22 @@ public class GraphicLoginControllerGUI extends GraphicController {
     @FXML
     private TextField emailField;
     @FXML
-    private TextField passwordField1;
+    private TextField passwordFieldSignup;
     @FXML
     private TextField confirmPassField;
     @FXML
     private Button signupButton;
     @FXML
-    private Spinner roleSpinner;
+    private Spinner<String> roleSpinner;
     private boolean showingTempMessage = false;
 
     @Override
-    public void setAppContext(AppContext appContext) {
-        this.appContext = appContext;
-        this.controller = new LoginLogicController(appContext);
+    public void initializeController(AppContext appContext) {
+        this.navigationManager = appContext.getNavigationManager();
+        this.controller = new LoginLogicController(appContext.getSessionManager(),
+                appContext.getDAOFactory().getLoginDAO(),
+                appContext.getDAOFactory().getHostDAO(),
+                appContext.getDAOFactory().getPlayerDAO());
     }
 
 
@@ -107,7 +109,7 @@ public class GraphicLoginControllerGUI extends GraphicController {
                 welcomeText.setText("Log in failed");
             }
             else {
-                appContext.getNavigationManager().goToDashboard(this.controller.getCurrentUserRole());
+                navigationManager.goToDashboard(this.controller.getCurrentUserRole());
             }
         }
     }
@@ -127,19 +129,18 @@ public class GraphicLoginControllerGUI extends GraphicController {
 
     @FXML
     private void handleSignupButton() {
-        UserBean user = new UserBean(usernameField.getText(), emailField.getText(),
-                passwordField1.getText(), Role.valueOf(roleSpinner.getValue().toString().toUpperCase()));
+        UserBean user = new UserBean();
         LoginResponseBean response;
         if (this.controller.userLookUp(user)) {
             usernameField.clear();
             roleSpinner.requestFocus();
             usernameField.setPromptText("Username already exists");
-        } else if (!user.confirmPassword(confirmPassField.getText())) {
-            confirmPassField.clear();
+        } else if (!user.setPassword(passwordFieldSignup.getText(), confirmPassField.getText())) {
             roleSpinner.requestFocus();
             passwordField.setPromptText("Passwords do not match");
             confirmPassField.setPromptText("Passwords do not match");
-        } else if (!user.validEmail()) {
+            confirmPassField.clear();
+        } else if (!user.setEmail(emailField.getText())) {
             emailField.clear();
             roleSpinner.requestFocus();
             emailField.setPromptText("Invalid email");
@@ -149,6 +150,8 @@ public class GraphicLoginControllerGUI extends GraphicController {
             emailField.setPromptText("Email already in use");
         }
         else {
+            user.setUsername(usernameField.getText());
+            user.setRole(roleSpinner.getValue().toUpperCase());
             response = this.controller.signup(user);
             if (response.getResult()==LoginResult.SUCCESS) {
                 clearSignup();
@@ -178,7 +181,7 @@ public class GraphicLoginControllerGUI extends GraphicController {
         googleLogin.setVisible(false);
         divider.setVisible(false);
         emailField.setVisible(true);
-        passwordField1.setVisible(true);
+        passwordFieldSignup.setVisible(true);
         confirmPassField.setVisible(true);
         signupButton.setVisible(true);
         signupButton.setDefaultButton(true);
@@ -188,11 +191,11 @@ public class GraphicLoginControllerGUI extends GraphicController {
 
     private void clearSignup() {
         emailField.clear();
-        passwordField1.clear();
+        passwordFieldSignup.clear();
         confirmPassField.clear();
         signupButton.setDefaultButton(false);
         emailField.setVisible(false);
-        passwordField1.setVisible(false);
+        passwordFieldSignup.setVisible(false);
         confirmPassField.setVisible(false);
         signupButton.setVisible(false);
         roleSpinner.setVisible(false);
@@ -249,13 +252,13 @@ public class GraphicLoginControllerGUI extends GraphicController {
     private void bindSignupButtonToFieldStates() {
         signupButton.disableProperty().bind(Bindings.createBooleanBinding(() ->
                         (emailField.isVisible() && emailField.getText().trim().isEmpty()) ||
-                                (passwordField1.isVisible() && passwordField1.getText().trim().isEmpty()) ||
+                                (passwordFieldSignup.isVisible() && passwordFieldSignup.getText().trim().isEmpty()) ||
                                 (confirmPassField.isVisible() && confirmPassField.getText().trim().isEmpty()),
                 emailField.textProperty(),
-                passwordField1.textProperty(),
+                passwordFieldSignup.textProperty(),
                 confirmPassField.textProperty(),
                 emailField.visibleProperty(),
-                passwordField1.visibleProperty(),
+                passwordFieldSignup.visibleProperty(),
                 confirmPassField.visibleProperty()
         ));
     }

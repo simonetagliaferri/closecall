@@ -13,4 +13,9 @@ public class FSPlayerDAO implements PlayerDAO {
     public Player findByEmail(String email) {
         return null;
     }
+
+    @Override
+    public void addPlayer(Player player) {
+
+    }
 }

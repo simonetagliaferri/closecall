@@ -20,7 +20,7 @@ public class Tournament {
     private LocalDate signupDeadline;
     private String hostUsername;
     private TournamentFormatStrategy tournamentFormatStrategy;
-    private List<Team> teams;
+    private final List<Team> teams;
     private double joinFee;
     private double courtPrice;
 

@@ -1,33 +1,36 @@
 package it.simonetagliaferri.model.dao.demo;
 
-import it.simonetagliaferri.model.dao.DAOFactory;
-import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.domain.Player;
-import it.simonetagliaferri.model.domain.Role;
-import it.simonetagliaferri.model.domain.User;
+
+import java.util.Map;
 
 
 public class InMemoryPlayerDAO implements PlayerDAO {
+
+    Map<String, Player> players;
+
+    InMemoryPlayerDAO(Map<String, Player> players) {
+        this.players = players;
+    }
+
     @Override
     public Player findByUsername(String username) {
-        LoginDAO loginDAO;
-        loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
-        User user = loginDAO.findByUsername(username);
-        if (user.getRole() == Role.PLAYER) {
-            return new Player(user.getUsername(), user.getEmail());
+        return players.get(username);
+    }
+
+    @Override
+    public Player findByEmail(String email) {
+        for (Player player : players.values()) {
+            if (player.getEmail().equals(email)) {
+                return player;
+            }
         }
         return null;
     }
 
     @Override
-    public Player findByEmail(String email) {
-        LoginDAO loginDAO;
-        loginDAO = DAOFactory.getDAOFactory().getLoginDAO();
-        User user = loginDAO.findByEmail(email);
-        if (user.getRole() == Role.PLAYER) {
-            return new Player(user.getUsername(), user.getEmail());
-        }
-        return null;
+    public void addPlayer(Player player) {
+        players.put(player.getUsername(), player);
     }
 }
