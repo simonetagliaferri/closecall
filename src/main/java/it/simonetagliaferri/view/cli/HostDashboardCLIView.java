@@ -1,9 +1,6 @@
 package it.simonetagliaferri.view.cli;
 
-import it.simonetagliaferri.beans.PlayerBean;
-import it.simonetagliaferri.beans.TeamBean;
-import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.beans.UserBean;
+import it.simonetagliaferri.beans.*;
 import it.simonetagliaferri.utils.CliUtils;
 
 import java.util.List;
@@ -18,10 +15,11 @@ public class HostDashboardCLIView {
         while (true) {
             CliUtils.println("1. Add tournament");
             CliUtils.println("2. List tournaments");
-            CliUtils.println("3. Logout");
-            CliUtils.println("4. Settings");
+            CliUtils.println("3. List clubs");
+            CliUtils.println("4. Logout");
+            CliUtils.println("5. Settings");
             int choice = CliUtils.promptInt("Enter your choice: ");
-            if (choice >= 1 && choice <= 3) {
+            if (choice >= 1 && choice <= 5) {
                 return choice;
             }
             CliUtils.println("Invalid choice. Try again.");
@@ -43,7 +41,18 @@ public class HostDashboardCLIView {
         }
     }
 
+    public void listClubs(List<ClubBean> clubs) {
+        for (ClubBean clubBean : clubs) {
+            CliUtils.println("Club: " + clubBean.getName());
+            CliUtils.println("Address: " + clubBean.getStreet() + ", " + clubBean.getCity() + ", " + clubBean.getZip());
+            CliUtils.println("State: " + clubBean.getState() + ", " + clubBean.getCountry());
+            CliUtils.println("");
+        }
+    }
+
     public void noTournaments() {
         CliUtils.println("No tournaments found.");
     }
+
+    public void noClubs() { CliUtils.println("No clubs found."); }
 }

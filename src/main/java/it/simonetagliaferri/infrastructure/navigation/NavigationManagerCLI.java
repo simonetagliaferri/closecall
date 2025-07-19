@@ -34,7 +34,7 @@ public class NavigationManagerCLI extends NavigationManager {
     }
 
     public void goToAddClub() {
-        sceneManager.addTournament(this.appContext);
+        sceneManager.addClub(this.appContext);
     }
 
 }

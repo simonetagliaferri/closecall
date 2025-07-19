@@ -32,7 +32,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
         this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getHostDAO());
+                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
         postInit();
     }
 

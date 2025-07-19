@@ -1,17 +1,18 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.beans.HostBean;
+import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
+import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.*;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategyFactory;
-import it.simonetagliaferri.utils.converters.HostMapper;
+import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.TeamMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -21,9 +22,11 @@ public class AddTournamentLogicController extends LogicController {
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
     PlayerDAO playerDAO;
-    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
+    ClubDAO clubDAO;
+    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
         super(sessionManager);
         this.tournamentDAO = tournamentDAO;
+        this.clubDAO = clubDAO;
         this.hostDAO = hostDAO;
         this.playerDAO = playerDAO;
     }
@@ -36,7 +39,6 @@ public class AddTournamentLogicController extends LogicController {
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
         tournamentDAO.addTournament(host, tournament);
-        host.addTournament(tournament);
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {
@@ -74,10 +76,11 @@ public class AddTournamentLogicController extends LogicController {
         return endDate;
     }
 
-    public HostBean getHostBean() {
+    public ClubBean getClubBean() {
         User user = getCurrentUser();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        return HostMapper.toBean(host);
+        Club club =clubDAO.getClubs(host).get(0);
+        return ClubMapper.toBean(club);
     }
 
     public boolean addPlayer(String player, TournamentBean tournamentBean) {

@@ -63,8 +63,8 @@ public class AddTournamentFormController extends GraphicController implements GU
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+                appContext.getDAOFactory().getClubDAO(),
                 appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
-        user = controller.getHostBean();
     }
 
     @FXML private void initialize() {

@@ -18,21 +18,23 @@ public class Tournament {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate signupDeadline;
-    private String hostUsername;
+    private Club club;
     private TournamentFormatStrategy tournamentFormatStrategy;
     private final List<Team> teams;
+    private final List<Match> matches;
     private double joinFee;
     private double courtPrice;
 
     private String id = "";
 
     public Tournament() {
+        this.matches = new ArrayList<>();
         this.teams = new ArrayList<>();
     }
 
     public Tournament(String tournamentName, String tournamentType, String tournamentFormat, String matchFormat,
                       String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
-                      LocalDate endDate, LocalDate signupDeadline, String hostUsername, List<Team> teams, double joinFee, double courtPrice) {
+                      LocalDate endDate, LocalDate signupDeadline, Club club, List<Team> teams, List<Match> matches, double joinFee, double courtPrice) {
         this.name = tournamentName;
         this.tournamentType = tournamentType;
         this.tournamentFormat = tournamentFormat;
@@ -44,13 +46,14 @@ public class Tournament {
         this.startDate = startDate;
         this.endDate = endDate;
         this.signupDeadline = signupDeadline;
-        this.hostUsername = hostUsername;
+        this.club = club;
         this.teams = teams;
+        this.matches = matches;
         this.joinFee = joinFee;
         this.courtPrice = courtPrice;
     }
 
-    public String getHostUsername() { return hostUsername; }
+    public Club getClub() { return club; }
     public String getTournamentName() { return name; }
 
     public void setTournamentFormatStrategy(TournamentFormatStrategy strategy) {

@@ -11,4 +11,15 @@ public class JDBCClubDAO implements ClubDAO {
     public List<Club> getClubs(Host host) {
         return List.of();
     }
+
+    @Override
+    public void saveClub(Club club) {
+
+    }
+
+    @Override
+    public List<Club> getClubsByCity(String city) {
+        return List.of();
+    }
+
 }

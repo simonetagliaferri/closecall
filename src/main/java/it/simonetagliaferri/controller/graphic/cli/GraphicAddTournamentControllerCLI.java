@@ -17,7 +17,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
+                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();
     }
@@ -27,7 +27,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         String strDate;
         LocalDate startDate;
         LocalDate deadline;
-        tournamentBean.setHostUsername(this.controller.getHostBean().getUsername());
+        tournamentBean.setClub(this.controller.getClubBean());
         tournamentBean.setTournamentName(view.tournamentName());
         tournamentBean.setTournamentType(view.tournamentType());
         tournamentBean.setTournamentFormat(view.tournamentFormat());

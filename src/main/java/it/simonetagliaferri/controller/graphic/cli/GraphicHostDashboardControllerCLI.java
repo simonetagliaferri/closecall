@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
+import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
@@ -19,15 +20,17 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
         super(appContext);
         this.view = new HostDashboardCLIView();
         this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getHostDAO());
+                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
         this.currentUser = this.controller.getHostBean();
     }
 
     public void showHome() {
-        if (this.controller.additionalInfoNeeded())
-            additionalInfo();
         view.hello(currentUser);
         boolean home = true;
+        if (!additionalInfo()) {
+            home = false;
+            logout();
+        }
         while (home) {
             int choice = view.showMenu();
             switch (choice) {
@@ -38,10 +41,13 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
                     listTournaments();
                     break;
                 case 3:
+                    listClubs();
+                    break;
+                case 4:
                     home=false;
                     logout();
                     break;
-                case 4:
+                case 5:
                     settings();
                     break;
                 default:
@@ -49,8 +55,11 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
         }
     }
 
-    private void additionalInfo() {
-
+    private boolean additionalInfo() {
+        if (this.controller.additionalInfoNeeded()) {
+            navigationManager.goToAddClub();
+        }
+        return !this.controller.additionalInfoNeeded();
     }
 
     private void logout() {
@@ -76,4 +85,15 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
             view.noTournaments();
         }
     }
+
+    private void listClubs() {
+        List<ClubBean> clubs = this.controller.getClubs();
+        if (!clubs.isEmpty()) {
+            view.listClubs(clubs);
+        }
+        else {
+            view.noClubs();
+        }
+    }
+
 }

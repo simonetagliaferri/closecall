@@ -1,13 +1,17 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
+import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.domain.User;
+import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.HostMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -17,11 +21,13 @@ import java.util.List;
 public class HostDashboardLogicController extends LogicController {
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
+    ClubDAO clubDAO;
 
-    public HostDashboardLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO) {
+    public HostDashboardLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO, ClubDAO clubDAO) {
         super(sessionManager);
         this.tournamentDAO = tournamentDAO;
         this.hostDAO = hostDAO;
+        this.clubDAO = clubDAO;
     }
 
     /*
@@ -32,6 +38,7 @@ public class HostDashboardLogicController extends LogicController {
 
     public boolean additionalInfoNeeded() {
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        host.setClubs(clubDAO.getClubs(host));
         return !host.hasClubs();
     }
 
@@ -52,5 +59,18 @@ public class HostDashboardLogicController extends LogicController {
             }
         }
         return tournamentBeans;
+    }
+
+    public List<ClubBean> getClubs() {
+        User user = getCurrentUser();
+        Host host = hostDAO.getHostByUsername(user.getUsername());
+        List<Club> clubs = clubDAO.getClubs(host);
+        List<ClubBean> clubBeans = new ArrayList<>();
+        if (clubs != null && !clubs.isEmpty()) {
+            for (Club club : clubs) {
+                clubBeans.add(ClubMapper.toBean(club));
+            }
+        }
+        return clubBeans;
     }
 }

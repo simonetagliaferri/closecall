@@ -52,4 +52,13 @@ public class InMemoryTournamentDAO implements TournamentDAO {
         }
         return null;
     }
+
+    public List<Tournament> getTournamentsByCity(String city) {
+        List<Tournament> tournamentList = new ArrayList<>();
+        for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
+            for (Tournament tournament : entry.getValue()) {
+            }
+        }
+        return tournamentList;
+    }
 }

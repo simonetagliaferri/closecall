@@ -21,7 +21,7 @@ public class TournamentBean {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate signupDeadline;
-    private String hostUsername;
+    private ClubBean club;
     private List<TeamBean> teams;
     private double joinFee;
     private double courtPrice;
@@ -31,7 +31,7 @@ public class TournamentBean {
     }
 
 
-    public void setHostUsername(String hostUsername) { this.hostUsername = hostUsername; }
+    public void setClub(ClubBean club) { this.club = club; }
     public void setTournamentName(String tournamentName) {
         this.name=tournamentName;
     }
@@ -64,7 +64,7 @@ public class TournamentBean {
     public void setTeams(List<TeamBean> teams) { this.teams = teams; }
     public void setJoinFee(double joinFee) { this.joinFee = joinFee; }
     public void setCourtPrice(double courtPrice) { this.courtPrice = courtPrice; }
-    public String getHostUsername() { return hostUsername; }
+    public ClubBean getClub() { return club; }
     public String getTournamentName() { return name; }
     public String getTournamentType() { return tournamentType; }
     public String getTournamentFormat() { return tournamentFormat; }

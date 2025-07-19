@@ -2,6 +2,7 @@ package it.simonetagliaferri.utils.converters;
 
 import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.beans.TournamentBean;
+import it.simonetagliaferri.model.domain.Match;
 import it.simonetagliaferri.model.domain.Team;
 import it.simonetagliaferri.model.domain.Tournament;
 
@@ -26,7 +27,7 @@ public class TournamentMapper {
         tournamentBean.setStartDate(tournament.getStartDate());
         tournamentBean.setEndDate(tournament.getEndDate());
         tournamentBean.setSignupDeadline(tournament.getSignupDeadline());
-        tournamentBean.setHostUsername(tournament.getHostUsername());
+        tournamentBean.setClub(ClubMapper.toBean(tournament.getClub()));
         if (tournament.getTeams() != null) {
             for (Team team : tournament.getTeams()) {
                 teamsBean.add(TeamMapper.toBean(team));
@@ -45,9 +46,10 @@ public class TournamentMapper {
                 teams.add(TeamMapper.fromBean(teamBean));
             }
         }
+        List<Match> matches = new ArrayList<>();
         return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
                 tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
                 tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
-                tournamentBean.getHostUsername(), teams, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+                ClubMapper.fromBean(tournamentBean.getClub()), teams, matches, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
     }
 }

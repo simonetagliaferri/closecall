@@ -1,8 +1,10 @@
 package it.simonetagliaferri.beans;
 
+import java.util.List;
 
 public class HostBean extends UserBean {
-    private String clubName = "Carlo";
+    private List<TournamentBean> tournaments;
+    private List<ClubBean> clubs;
 
     public HostBean(String username, String email) {
         super();
@@ -15,11 +17,17 @@ public class HostBean extends UserBean {
         this.username=username;
     }
 
-    public String getClubName() {
-        return clubName;
+    public List<TournamentBean> getTournaments() {
+        return tournaments;
     }
-    public void setClubName(String clubName) {
-        this.clubName = clubName;
+    public void setTournaments(List<TournamentBean> tournaments) {
+        this.tournaments = tournaments;
+    }
+    public List<ClubBean> getClubs() {
+        return clubs;
+    }
+    public void setClubs(List<ClubBean> clubs) {
+        this.clubs = clubs;
     }
 
 }
