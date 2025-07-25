@@ -54,4 +54,8 @@ public class NavigationManagerGUI extends NavigationManager {
 
     }
 
+    @Override
+    public void goToHandleNotification(Role role) {
+
+    }
 }

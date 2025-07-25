@@ -31,6 +31,10 @@ public class Club {
         this.email = email;
     }
 
+    public String getAddress() {
+        return street + " " + number + " " + city + " " + state + " " + zip + " " + country;
+    }
+
     public String getName() {
         return name;
     }

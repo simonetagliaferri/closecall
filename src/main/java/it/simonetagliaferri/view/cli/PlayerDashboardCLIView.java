@@ -16,7 +16,7 @@ public class PlayerDashboardCLIView {
             CliUtils.println("2. Search tournaments");
             CliUtils.println("3. Search clubs");
             CliUtils.println("4. Logout");
-            CliUtils.println("5. Settings");
+            CliUtils.println("5. Notifications");
             int choice = CliUtils.promptInt("Enter your choice: ");
             if (choice >= 1 && choice <= 5) {
                 return choice;

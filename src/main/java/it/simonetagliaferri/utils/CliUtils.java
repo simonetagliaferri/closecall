@@ -71,7 +71,10 @@ public class CliUtils {
                 i++;
             }
             result = CliUtils.promptInt("Enter choice: ");
-            if (result >= 1 && result <= choices.length) {
+            if (result == 0) {
+                return "";
+            }
+            else if (result >= 1 && result <= choices.length) {
                 return choices[result-1];
             }
             else {
@@ -84,6 +87,7 @@ public class CliUtils {
     public static int multipleChoiceInt(String label, String... choices) {
         String choice = multipleChoice(label, choices);
         int i;
+        if (choice.isEmpty()) { return 0; }
         for (i = 0; i <= choices.length; i++) {
             if (choices[i].equals(choice)) {
                 break;
@@ -102,7 +106,10 @@ public class CliUtils {
                 i++;
             }
             result = CliUtils.promptInt("Enter choice: ");
-            if (result >= 1 && result <= choices.size()) {
+            if (result==0) {
+                return "";
+            }
+            else if (result >= 1 && result <= choices.size()) {
                 return choices.get(result-1);
             }
             else {
@@ -115,6 +122,7 @@ public class CliUtils {
     public static int multipleChoiceInt(String label, List<String> choices) {
         String choice = multipleChoice(label, choices);
         int i;
+        if (choice.isEmpty()) { return 0; }
         for (i = 0; i < choices.size(); i++) {
             if (choices.get(i).equals(choice)) {
                 break;

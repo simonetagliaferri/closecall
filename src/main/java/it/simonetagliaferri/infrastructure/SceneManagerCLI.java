@@ -31,4 +31,14 @@ public class SceneManagerCLI {
         GraphicAddClubControllerCLI addClubControllerCLI = new GraphicAddClubControllerCLI(appContext);
         addClubControllerCLI.start();
     }
+
+    public void HandlePlayerNotification(AppContext appContext) {
+        GraphicHandlePlayerNotificationControllerCLI graphicHandlePlayerNotificationControllerCLI = new GraphicHandlePlayerNotificationControllerCLI(appContext);
+        graphicHandlePlayerNotificationControllerCLI.start();
+    }
+
+    public void HandleHostNotification(AppContext appContext) {
+        GraphicHandleHostNotificationControllerCLI graphicHandleHostNotificationControllerCLI = new GraphicHandleHostNotificationControllerCLI(appContext);
+        graphicHandleHostNotificationControllerCLI.start();
+    }
 }

@@ -1,5 +1,7 @@
 package it.simonetagliaferri.model.domain;
 
+import it.simonetagliaferri.model.invite.Invite;
+import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 
 import java.time.LocalDate;
@@ -98,6 +100,11 @@ public class Tournament {
 
     public boolean isSingles() {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
+    }
+
+    public void processInvite(Invite invite) {
+        if (invite.getStatus().equals(InviteStatus.ACCEPTED)) {
+        }
     }
 
     public String getTournamentType() { return tournamentType; }

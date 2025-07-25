@@ -22,6 +22,10 @@ public class Invite {
         this.message = message;
     }
 
+    public void updateStatus(InviteStatus inviteStatus){
+        this.status = inviteStatus;
+    }
+
     public Tournament getTournament() {
         return tournament;
     }

@@ -21,4 +21,6 @@ public abstract class NavigationManager {
 
     public abstract void goToAddClub();
 
+    public abstract void goToHandleNotification(Role role);
+
 }

@@ -1,11 +1,11 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.logic.PlayerDashboardLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.PlayerDashboardCLIView;
 
 import java.util.List;
@@ -69,9 +69,6 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
     }
 
     private void notifications() {
-        List<InviteBean> invites = this.controller.getInvites();
-        if (!invites.isEmpty()) {
-            view.listInvites(invites);
-        }
+        navigationManager.goToHandleNotification(Role.PLAYER);
     }
 }

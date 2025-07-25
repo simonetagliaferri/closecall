@@ -37,4 +37,13 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.addClub(this.appContext);
     }
 
+    public void goToHandleNotification(Role role) {
+        if (role == Role.HOST) {
+            sceneManager.HandleHostNotification(this.appContext);
+        }
+        else {
+            sceneManager.HandlePlayerNotification(this.appContext);
+        }
+    }
+
 }
