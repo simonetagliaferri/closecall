@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
+import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -8,6 +9,8 @@ import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GraphicAddTournamentControllerCLI extends GraphicController {
 
@@ -17,7 +20,8 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
+                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO(),
+                appContext.getDAOFactory().getInviteDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();
     }
@@ -27,7 +31,11 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         String strDate;
         LocalDate startDate;
         LocalDate deadline;
-        tournamentBean.setClub(this.controller.getClubBean());
+        List<ClubBean> clubs = this.controller.getClubBeans();
+        List<String> clubNames = clubs.stream().map(ClubBean::getName).collect(Collectors.toList());
+        int clubNumber = view.getClub(clubNames);
+        ClubBean club = clubs.get(clubNumber);
+        tournamentBean.setClub(club);
         tournamentBean.setTournamentName(view.tournamentName());
         tournamentBean.setTournamentType(view.tournamentType());
         tournamentBean.setTournamentFormat(view.tournamentFormat());
@@ -90,29 +98,57 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     }
 
     public void addPlayersToTournament() {
-        int choice = view.askToAddPlayer();
-        if (choice == 1) {
-            if (tournamentBean.isSingles()) addSoloTeam();
-            else addDuoTeam();
-        }
-    }
-
-    public void addSoloTeam() {
-        String player;
-        boolean added = false;
-        while (!added) {
-            player = view.getPlayer();
-            if (this.controller.addPlayer(player, tournamentBean)) {
-                added = true;
-            } else {
-                view.invalidPlayer();
+        int choice;
+        boolean expireDateSet = false;
+        LocalDate inviteExpireDate = null;
+        while (true) {
+            choice = view.askToAddPlayer();
+            if (choice == 1) {
+                if (!expireDateSet) {
+                    inviteExpireDate = tournamentBean.formatDate(view.inviteExpireDate());
+                    expireDateSet = true;
+                }
+                if (tournamentBean.isSingles()) inviteSoloTeam(inviteExpireDate);
+                else inviteDuoTeam(inviteExpireDate);
+            }
+            else {
+                break;
             }
         }
     }
 
-    public void addDuoTeam() {
+    public void inviteSoloTeam(LocalDate inviteExpireDate) {
+        String player;
+        String message = null;
+        boolean email = false;
+        boolean added = false;
+        while (!added) {
+            player = view.getPlayer();
+            if (this.controller.isPlayerValid(player)!=null) {
+                if (view.addMessage()==1) {
+                    message = view.getMessage();
+                }
+                if (view.askToSendEmail()==1) {
+                    email = true;
+                }
+                this.controller.invitePlayer(player, tournamentBean, inviteExpireDate, message, email);
+                added = true;
+            }
+            else {
+                view.invalidPlayer();
+                if (view.askToSendEmail()==1) {
+                    email = true;
+                }
+                if (view.addMessage()==1) {
+                    message = view.getMessage();
+                }
+            }
+        }
+    }
+
+    public void inviteDuoTeam(LocalDate inviteExpireDate) {
         String player1 = view.getPlayer();
         String player2 = view.getPlayer();
-        this.controller.addTeam(player1, player2, tournamentBean);
+        this.controller.inviteTeam(player1, player2, tournamentBean, false, false);
     }
 }

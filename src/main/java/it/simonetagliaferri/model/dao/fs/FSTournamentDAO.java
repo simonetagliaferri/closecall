@@ -92,4 +92,9 @@ public class FSTournamentDAO implements TournamentDAO {
     public Tournament getTournament(Host host, String id) {
         return null;
     }
+
+    @Override
+    public List<Tournament> getTournamentsByCity(String city) {
+        return List.of();
+    }
 }

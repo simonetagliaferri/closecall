@@ -10,4 +10,5 @@ public interface TournamentDAO {
     List<Tournament> getTournaments(Host host);
     void updateTournament(Host host, Tournament tournament);
     Tournament getTournament(Host host, String id);
+    List<Tournament> getTournamentsByCity(String city);
 }

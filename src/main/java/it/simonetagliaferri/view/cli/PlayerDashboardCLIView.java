@@ -1,6 +1,8 @@
 package it.simonetagliaferri.view.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.InviteBean;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.utils.CliUtils;
 
 import java.util.List;
@@ -24,8 +26,10 @@ public class PlayerDashboardCLIView {
     }
 
     public String clubByCity() {
-        return CliUtils.prompt("Please enter the city you would like to club: ");
+        return CliUtils.prompt("Please enter the city you would like to search clubs in: ");
     }
+
+    public String tournamentByCity() { return CliUtils.prompt("Please enter the city you would like to enter a tournament in: "); }
 
     public void listClubs(List<ClubBean> clubs) {
         for (ClubBean club : clubs) {
@@ -33,6 +37,21 @@ public class PlayerDashboardCLIView {
             CliUtils.println(club.getStreet());
             CliUtils.println(club.getNumber());
             CliUtils.println(club.getCity());
+            CliUtils.println("");
+        }
+    }
+
+    public void listTournaments(List<TournamentBean> tournaments) {
+        for (TournamentBean tournament : tournaments) {
+            CliUtils.println(tournament.getTournamentName());
+            CliUtils.println(tournament.getClub().getName());
+            CliUtils.println("");
+        }
+    }
+
+    public void listInvites(List<InviteBean> invites) {
+        for (InviteBean invite : invites) {
+            CliUtils.println(invite.getTournament().getTournamentName());
             CliUtils.println("");
         }
     }

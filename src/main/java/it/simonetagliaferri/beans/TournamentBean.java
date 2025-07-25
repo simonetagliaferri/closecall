@@ -22,12 +22,14 @@ public class TournamentBean {
     private LocalDate endDate;
     private LocalDate signupDeadline;
     private ClubBean club;
-    private List<TeamBean> teams;
+    private List<TeamBean> confirmedTeams;
+    private List<TeamBean> reservedTeams;
+    private List<MatchBean> matches;
     private double joinFee;
     private double courtPrice;
 
     public TournamentBean() {
-        teams = new ArrayList<>();
+        confirmedTeams = new ArrayList<>();
     }
 
 
@@ -61,7 +63,9 @@ public class TournamentBean {
         this.signupDeadline = signupDeadline;
     }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
-    public void setTeams(List<TeamBean> teams) { this.teams = teams; }
+    public void setConfirmedTeams(List<TeamBean> confirmedTeams) { this.confirmedTeams = confirmedTeams; }
+    public void setReservedTeams(List<TeamBean> reservedTeams) { this.reservedTeams = reservedTeams; }
+    public void setMatches(List<MatchBean> matches) { this.matches = matches; }
     public void setJoinFee(double joinFee) { this.joinFee = joinFee; }
     public void setCourtPrice(double courtPrice) { this.courtPrice = courtPrice; }
     public ClubBean getClub() { return club; }
@@ -124,9 +128,11 @@ public class TournamentBean {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
     }
 
-    public List<TeamBean> getTeams() { return teams; }
+    public List<TeamBean> getConfirmedTeams() { return confirmedTeams; }
+    public List<TeamBean> getReservedTeams() { return reservedTeams; }
+    public List<MatchBean> getMatches() { return matches; }
 
     public void addTeam(TeamBean team) {
-        teams.add(team);
+        confirmedTeams.add(team);
     }
 }

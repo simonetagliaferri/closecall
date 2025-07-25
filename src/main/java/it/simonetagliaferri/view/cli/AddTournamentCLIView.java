@@ -89,11 +89,17 @@ public class AddTournamentCLIView {
         return CliUtils.prompt("Enter an estimated end date(MM/dd/yyyy): ");
     }
 
+    public String inviteExpireDate() { return CliUtils.prompt("Enter invite expire date(MM/dd/yyyy): "); }
+
     public int askToAddPlayer() {
         String label = "Do you want to add a player/team to the tournament?";
         String choice1 = "Yes";
         String choice2 = "No";
         return CliUtils.multipleChoiceInt(label, choice1, choice2);
+    }
+
+    public int getClub(List<String> clubs) {
+        return CliUtils.multipleChoiceInt("Choose a club: ", clubs);
     }
 
     public String getPlayer() {
@@ -115,5 +121,17 @@ public class AddTournamentCLIView {
 
     public void invalidPlayer() {
         CliUtils.println("Player not found. Try again.");
+    }
+
+    public int addMessage() {
+        return CliUtils.multipleChoiceInt("Do you want to add a message to the invite?", "Yes", "No");
+    }
+
+    public String getMessage() {
+        return CliUtils.prompt("Enter message: ");
+    }
+
+    public int askToSendEmail() {
+        return CliUtils.multipleChoiceInt("Do you want to send an email?", "Yes", "No");
     }
 }

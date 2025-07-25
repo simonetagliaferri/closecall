@@ -20,6 +20,7 @@ module it.simonetagliaferri {
     exports it.simonetagliaferri.controller.graphic;
     exports it.simonetagliaferri.infrastructure.navigation;
     exports it.simonetagliaferri.model.domain;
+    exports it.simonetagliaferri.model.invite;
     exports it.simonetagliaferri.controller.graphic.gui;
     opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
     exports it.simonetagliaferri.model.strategy to com.google.gson;

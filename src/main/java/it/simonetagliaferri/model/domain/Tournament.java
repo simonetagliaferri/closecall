@@ -20,7 +20,8 @@ public class Tournament {
     private LocalDate signupDeadline;
     private Club club;
     private TournamentFormatStrategy tournamentFormatStrategy;
-    private final List<Team> teams;
+    private final List<Team> confirmedTeams;
+    private final List<Team> reservedTeams;
     private final List<Match> matches;
     private double joinFee;
     private double courtPrice;
@@ -29,12 +30,13 @@ public class Tournament {
 
     public Tournament() {
         this.matches = new ArrayList<>();
-        this.teams = new ArrayList<>();
+        this.confirmedTeams = new ArrayList<>();
+        this.reservedTeams = new ArrayList<>();
     }
 
     public Tournament(String tournamentName, String tournamentType, String tournamentFormat, String matchFormat,
                       String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
-                      LocalDate endDate, LocalDate signupDeadline, Club club, List<Team> teams, List<Match> matches, double joinFee, double courtPrice) {
+                      LocalDate endDate, LocalDate signupDeadline, Club club, List<Team> confirmedTeams, List<Team> reservedTeams, List<Match> matches, double joinFee, double courtPrice) {
         this.name = tournamentName;
         this.tournamentType = tournamentType;
         this.tournamentFormat = tournamentFormat;
@@ -47,7 +49,8 @@ public class Tournament {
         this.endDate = endDate;
         this.signupDeadline = signupDeadline;
         this.club = club;
-        this.teams = teams;
+        this.confirmedTeams = confirmedTeams;
+        this.reservedTeams = reservedTeams;
         this.matches = matches;
         this.joinFee = joinFee;
         this.courtPrice = courtPrice;
@@ -65,18 +68,18 @@ public class Tournament {
     }
 
     public int availableSpots() {
-        return this.teamsNumber - this.teams.size();
+        return this.teamsNumber - (this.confirmedTeams.size()+this.reservedTeams.size());
     }
 
     public Team addTeam(Player... players) {
         Team team;
         if (players.length == 1 && isSingles()) {
             team = new Team(players[0]);
-            this.teams.add(team);
+            this.confirmedTeams.add(team);
         }
         else if (players.length == 2 && !isSingles()) {
             team = new Team(players[0], players[1]);
-            this.teams.add(team);
+            this.confirmedTeams.add(team);
         }
         else {
             throw new IllegalArgumentException("A team must have either 1 or 2 players.");
@@ -84,9 +87,14 @@ public class Tournament {
         return team;
     }
 
-    public List<Team> getTeams() {
-        return this.teams;
+    public void reserveSpot(Team team) {
+        this.reservedTeams.add(team);
     }
+
+    public List<Team> getConfirmedTeams() {
+        return this.confirmedTeams;
+    }
+    public List<Team> getReservedTeams() { return this.reservedTeams; }
 
     public boolean isSingles() {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
@@ -106,4 +114,5 @@ public class Tournament {
     public double getCourtPrice() { return courtPrice; }
     public void setId(String id) { this.id = id; }
     public String getId() { return id; }
+    public List<Match> getMatches() { return matches; }
 }

@@ -3,6 +3,7 @@ package it.simonetagliaferri.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class CliUtils {
 
@@ -89,6 +90,37 @@ public class CliUtils {
             }
         }
         return i+1;
+    }
+
+    public static String multipleChoice(String label, List<String> choices) {
+        int i = 1;
+        int result;
+        CliUtils.println(label);
+        while (true) {
+            for (String choice : choices) {
+                CliUtils.println(i + ". " + choice);
+                i++;
+            }
+            result = CliUtils.promptInt("Enter choice: ");
+            if (result >= 1 && result <= choices.size()) {
+                return choices.get(result-1);
+            }
+            else {
+                CliUtils.println("Please enter a valid choice.");
+                i=1;
+            }
+        }
+    }
+
+    public static int multipleChoiceInt(String label, List<String> choices) {
+        String choice = multipleChoice(label, choices);
+        int i;
+        for (i = 0; i < choices.size(); i++) {
+            if (choices.get(i).equals(choice)) {
+                break;
+            }
+        }
+        return i;
     }
 
     public static void println(String label) {

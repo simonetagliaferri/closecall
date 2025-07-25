@@ -29,10 +29,11 @@ public class HostDashboardCLIView {
     public void listTournaments(List<TournamentBean> tournaments) {
         for (TournamentBean tournamentBean : tournaments) {
             CliUtils.println("Tournament " + tournamentBean.getTournamentName());
+            CliUtils.println("Club " + tournamentBean.getClub().getName());
             CliUtils.println("Join fee " + tournamentBean.getJoinFee());
             CliUtils.println("Court price " + tournamentBean.getCourtPrice());
             CliUtils.println("Teams: ");
-            for (TeamBean teamBean : tournamentBean.getTeams()) {
+            for (TeamBean teamBean : tournamentBean.getConfirmedTeams()) {
                 for (PlayerBean playerBean : teamBean.getPlayers()) {
                     CliUtils.println("\t" + playerBean.getUsername());
                 }

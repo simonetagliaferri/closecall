@@ -5,30 +5,33 @@ import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
-import it.simonetagliaferri.model.dao.ClubDAO;
-import it.simonetagliaferri.model.dao.HostDAO;
-import it.simonetagliaferri.model.dao.PlayerDAO;
-import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.dao.*;
 import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.invite.Invite;
+import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategyFactory;
+import it.simonetagliaferri.service.InviteService;
 import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.TeamMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AddTournamentLogicController extends LogicController {
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
     PlayerDAO playerDAO;
     ClubDAO clubDAO;
-    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
+    InviteDAO inviteDAO;
+    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO, PlayerDAO playerDAO, InviteDAO inviteDAO) {
         super(sessionManager);
         this.tournamentDAO = tournamentDAO;
         this.clubDAO = clubDAO;
         this.hostDAO = hostDAO;
         this.playerDAO = playerDAO;
+        this.inviteDAO = inviteDAO;
     }
 
     public void addTournament(TournamentBean tournamentBean) {
@@ -76,11 +79,11 @@ public class AddTournamentLogicController extends LogicController {
         return endDate;
     }
 
-    public ClubBean getClubBean() {
+    public List<ClubBean> getClubBeans() {
         User user = getCurrentUser();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        Club club =clubDAO.getClubs(host).get(0);
-        return ClubMapper.toBean(club);
+        List<Club> clubs = clubDAO.getClubs(host);
+        return ClubMapper.toBean(clubs);
     }
 
     public boolean addPlayer(String player, TournamentBean tournamentBean) {
@@ -92,6 +95,35 @@ public class AddTournamentLogicController extends LogicController {
             tournamentBean.addTeam(TeamMapper.toBean(team));
         }
         return true;
+    }
+
+    public boolean invitePlayer(String player, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message, boolean email) {
+        Player p = isPlayerValid(player);
+        if (p == null && !email) return false;
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
+        Invite invite = new Invite(tournament, p, LocalDate.now(), inviteExpireDate, InviteStatus.PENDING, message);
+        InviteService inviteService = new InviteService(inviteDAO);
+        inviteService.sendInvite(invite, email);
+        Team team = new Team(p);
+        tournament.reserveSpot(team);
+        return true;
+    }
+
+    public boolean inviteTeam(String player1, String player2, TournamentBean tournamentBean, boolean email1, boolean email2) {
+        Player p1 = isPlayerValid(player1);
+        Player p2 = isPlayerValid(player2);
+        if (p1 == null && !email1) return false;
+        if (p2 == null && !email2) return false;
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
+        Invite invite1 = new Invite(tournament, p1, LocalDate.now(), LocalDate.now(), InviteStatus.PENDING, "");
+        Invite invite2 = new Invite(tournament, p2, LocalDate.now(), LocalDate.now(), InviteStatus.PENDING, "");
+        InviteService inviteService = new InviteService(inviteDAO);
+        inviteService.sendInvite(invite1, email1);
+        inviteService.sendInvite(invite2, email2);
+        Team team = new Team(p1, p2);
+        tournament.reserveSpot(team);
+        return true;
+
     }
 
     public void addTeam(String player1, String player2, TournamentBean tournamentBean) {

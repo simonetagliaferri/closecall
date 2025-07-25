@@ -55,8 +55,13 @@ public class InMemoryTournamentDAO implements TournamentDAO {
 
     public List<Tournament> getTournamentsByCity(String city) {
         List<Tournament> tournamentList = new ArrayList<>();
+        String location;
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
             for (Tournament tournament : entry.getValue()) {
+                location = tournament.getClub().getCity();
+                if (location.equals(city)) {
+                    tournamentList.add(tournament);
+                }
             }
         }
         return tournamentList;

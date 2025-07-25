@@ -3,6 +3,9 @@ package it.simonetagliaferri.utils.converters;
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.model.domain.Club;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClubMapper {
 
     private ClubMapper() {}
@@ -29,5 +32,13 @@ public class ClubMapper {
         return clubBean;
     }
 
+    public static List<ClubBean> toBean(List<Club> clubs) {
+        List<ClubBean> clubBeans = new ArrayList<>();
+        for (Club club : clubs) {
+            ClubBean clubBean = toBean(club);
+            clubBeans.add(clubBean);
+        }
+        return clubBeans;
+    }
 
 }

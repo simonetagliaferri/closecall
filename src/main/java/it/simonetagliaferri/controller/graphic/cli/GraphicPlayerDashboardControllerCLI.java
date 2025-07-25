@@ -1,6 +1,8 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.InviteBean;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.logic.PlayerDashboardLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -17,7 +19,8 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
         super(appContext);
         this.view = new PlayerDashboardCLIView();
         this.controller = new PlayerDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getClubDAO());
+                appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getClubDAO(),
+                appContext.getDAOFactory().getInviteDAO());
     }
 
     public void showHome() {
@@ -39,7 +42,7 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
                     logout();
                     break;
                 case 5:
-                    settings();
+                    notifications();
                     break;
                 default:
             }
@@ -51,7 +54,8 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
     }
 
     private void searchTournament() {
-
+        List<TournamentBean> tournaments = this.controller.searchTournament(view.tournamentByCity());
+        view.listTournaments(tournaments);
     }
 
     private void searchClub() {
@@ -64,7 +68,10 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
         navigationManager.login();
     }
 
-    private void settings() {
-
+    private void notifications() {
+        List<InviteBean> invites = this.controller.getInvites();
+        if (!invites.isEmpty()) {
+            view.listInvites(invites);
+        }
     }
 }
