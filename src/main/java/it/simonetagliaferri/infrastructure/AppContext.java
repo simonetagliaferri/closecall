@@ -7,7 +7,7 @@ import it.simonetagliaferri.model.dao.DAOFactory;
 /**
  * The context needed for the application consists of the navigation manager, the session manager and the dao factory.
  * They will be instantiated by the AppContext constructor, then the context will be passed around for other classes to retrieve
- * what they need from it through its getter methods.
+ * what they need through its getter methods.
  */
 public class AppContext {
 

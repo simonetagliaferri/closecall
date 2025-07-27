@@ -7,7 +7,7 @@ import it.simonetagliaferri.utils.CliUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HandlePlayerNotificationView {
+public class InvitePlayersPlayerView {
 
     public int listNotifications(List<InviteBean> invites) {
         List<String> inv = new ArrayList<>();
@@ -44,5 +44,9 @@ public class HandlePlayerNotificationView {
         else {
             return InviteStatus.PENDING;
         }
+    }
+
+    public void teamInvite(String teammateName) {
+        CliUtils.println("You got invited in a team, your team mate is: " + teammateName);
     }
 }

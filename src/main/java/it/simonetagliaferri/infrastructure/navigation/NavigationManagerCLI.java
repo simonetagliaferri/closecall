@@ -1,5 +1,6 @@
 package it.simonetagliaferri.infrastructure.navigation;
 
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.SceneManagerCLI;
 import it.simonetagliaferri.model.domain.Role;
@@ -16,6 +17,10 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.login(this.appContext);
     }
 
+    /**
+     * For CLI navigation the start method just calls the login method, it's here just for symmetry with the GUI navigation, in which
+     * the start method calls the needed Application.launch() for JavaFX.
+     */
     public void start() {
         login();
     }
@@ -37,13 +42,8 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.addClub(this.appContext);
     }
 
-    public void goToHandleNotification(Role role) {
-        if (role == Role.HOST) {
-            sceneManager.HandleHostNotification(this.appContext);
-        }
-        else {
-            sceneManager.HandlePlayerNotification(this.appContext);
-        }
+    public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
+        sceneManager.InvitePlayer(this.appContext, role, tournamentBean);
     }
 
 }

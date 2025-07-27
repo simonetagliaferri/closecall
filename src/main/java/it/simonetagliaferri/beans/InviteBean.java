@@ -20,6 +20,13 @@ public class InviteBean {
         this.message = message;
     }
 
+    public InviteBean(TournamentBean tournament, PlayerBean player, LocalDate expiryDate, String message) {
+        this.tournament = tournament;
+        this.player = player;
+        this.expiryDate = expiryDate;
+        this.message = message;
+    }
+
     public void setTournament(TournamentBean tournament) {
         this.tournament = tournament;
     }

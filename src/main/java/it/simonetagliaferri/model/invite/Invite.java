@@ -31,7 +31,7 @@ public class Invite {
     }
 
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
 
     public LocalDate getSendDate() {

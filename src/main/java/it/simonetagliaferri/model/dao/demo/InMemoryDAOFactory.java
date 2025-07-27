@@ -25,6 +25,10 @@ public class InMemoryDAOFactory extends DAOFactory {
     private ClubDAO clubDAO;
     private InviteDAO inviteDAO;
 
+    public InMemoryDAOFactory() {
+        populate();
+    }
+
     // Just for tests
     public void populate() {
         User marco = new User("marco", "marco@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.HOST); //a
@@ -47,7 +51,6 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     @Override
     public LoginDAO getLoginDAO() {
-        populate();
         if (loginDAO == null) { loginDAO = new InMemoryLoginDAO(users);}
         return loginDAO;
     }

@@ -36,7 +36,7 @@ public class SceneManagerGUI extends Application {
      * the app context to the graphic controller. After that we return root to the caller, which will use it to set the scene's root.
      */
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(SceneManagerGUI.class.getResource("/view/gui/" + fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(SceneManagerGUI.class.getResource("/hostView/gui/" + fxml + ".fxml"));
         Parent root = fxmlLoader.load();
         GUIController controller = fxmlLoader.getController();
         controller.initializeController(appContext);
@@ -44,7 +44,7 @@ public class SceneManagerGUI extends Application {
     }
 
     public static FXMLLoader getLoader(String fxml) {
-        return new FXMLLoader(SceneManagerGUI.class.getResource("/view/gui/" + fxml + ".fxml"));
+        return new FXMLLoader(SceneManagerGUI.class.getResource("/hostView/gui/" + fxml + ".fxml"));
     }
 
     public static <T extends GUIController> T getController(FXMLLoader fxmlLoader) {
@@ -76,7 +76,7 @@ public class SceneManagerGUI extends Application {
         stage.setMinWidth(baseWidth / 2);
         stage.setMinHeight(baseHeight / 2);
         scene = new Scene(loadFXML("login"), baseWidth, baseHeight);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/css/start.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/hostView/css/start.css")).toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.setTitle("CloseCall");

@@ -69,6 +69,6 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
     }
 
     private void notifications() {
-        navigationManager.goToHandleNotification(Role.PLAYER);
+        navigationManager.goToInvitePlayer(Role.PLAYER, null);
     }
 }

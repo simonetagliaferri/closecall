@@ -1,5 +1,6 @@
 package it.simonetagliaferri.infrastructure.navigation;
 
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.SceneManagerGUI;
 import it.simonetagliaferri.model.domain.Role;
@@ -33,10 +34,6 @@ public class NavigationManagerGUI extends NavigationManager {
         }
     }
 
-    /**
-     * Navigates to the correct dashboard based on the role.
-     * @param role it can be either HOST or PLAYER.
-     */
     public void goToDashboard(Role role) {
         try {
             if (role == Role.HOST) {
@@ -55,7 +52,7 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     @Override
-    public void goToHandleNotification(Role role) {
+    public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
 
     }
 }

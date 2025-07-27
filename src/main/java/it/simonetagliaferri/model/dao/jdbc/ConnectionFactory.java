@@ -9,14 +9,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
+
     private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
     private static Connection connection;
 
     private ConnectionFactory() {
     }
 
-    // Lazy initialization, no need to establish a connection if JDBC is not the chosen persistence provider.
+    /**
+     * Used to get establish a connection with the database.
+     * The returned Connection is a Singleton, there is no need to open/close multiple connections
+     * towards the database in one instance of the application.
+     */
     public static Connection getConnection() {
+        // Lazy initialization, no need to establish a connection if JDBC is not the chosen persistence provider.
         if (connection == null) {
             try {
                 String connectionUrl = PropertiesUtils.readProperty(DB_PROPERTIES, "CONNECTION_URL");

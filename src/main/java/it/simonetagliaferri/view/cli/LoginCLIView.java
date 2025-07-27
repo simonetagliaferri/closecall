@@ -3,15 +3,30 @@ package it.simonetagliaferri.view.cli;
 import it.simonetagliaferri.utils.CliUtils;
 
 public class LoginCLIView {
-    public int showMenu() {
+
+    public enum LoginCommand {
+        LOGIN,
+        SIGNUP,
+        QUIT
+    }
+
+    public LoginCommand showMenu() {
         CliUtils.println("Welcome to the court.");
         while (true) {
             CliUtils.println("1. Login");
             CliUtils.println("2. Sign up");
-            CliUtils.println("3. Exit");
+            CliUtils.println("3. Quit");
             int choice = CliUtils.promptInt("Enter your choice: ");
             if (choice >= 1 && choice <= 3) {
-                return choice;
+                if (choice == 1) {
+                    return LoginCommand.LOGIN;
+                }
+                else if (choice == 2) {
+                    return LoginCommand.SIGNUP;
+                }
+                else {
+                    return LoginCommand.QUIT;
+                }
             }
             CliUtils.println("Invalid choice. Try again.");
         }
@@ -50,6 +65,10 @@ public class LoginCLIView {
 
     public void invalidRole() {
         CliUtils.println("Invalid role. Try again.");
+    }
+
+    public void invalidEmail() {
+        CliUtils.println("Invalid email. Try again.");
     }
 
     public void passwordsDoNotMatch() {

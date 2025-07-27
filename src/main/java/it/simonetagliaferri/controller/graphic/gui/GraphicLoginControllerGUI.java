@@ -1,8 +1,6 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.infrastructure.AppContext;
-import it.simonetagliaferri.beans.LoginResponseBean;
-import it.simonetagliaferri.beans.LoginResult;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.LoginLogicController;
@@ -105,11 +103,11 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
             }
         } else if (state == UIState.PASSWORD_INPUT) {
             String password = passwordField.getText().trim();
-            if (login(usernameField.getText(), password)==LoginResult.FAIL) {
-                welcomeText.setText("Log in failed");
+            if (login(usernameField.getText(), password)) {
+                navigationManager.goToDashboard(this.controller.getCurrentUserRole());
             }
             else {
-                navigationManager.goToDashboard(this.controller.getCurrentUserRole());
+                welcomeText.setText("Log in failed");
             }
         }
     }
@@ -130,7 +128,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
     @FXML
     private void handleSignupButton() {
         UserBean user = new UserBean();
-        LoginResponseBean response;
+        boolean response;
         if (this.controller.userLookUp(user)) {
             usernameField.clear();
             roleSpinner.requestFocus();
@@ -153,7 +151,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
             user.setUsername(usernameField.getText());
             user.setRole(roleSpinner.getValue().toUpperCase());
             response = this.controller.signup(user);
-            if (response.getResult()==LoginResult.SUCCESS) {
+            if (response) {
                 clearSignup();
                 switchToLogin();
                 welcomeText.setText("Signed up successfully");
@@ -263,9 +261,8 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
         ));
     }
 
-    private LoginResult login(String username, String password) {
-        LoginResponseBean loginResponse = this.controller.login(new UserBean(username, password));
-        return loginResponse.getResult();
+    private boolean login(String username, String password) {
+        return this.controller.login(new UserBean(username, password));
     }
 
     private enum UIState {

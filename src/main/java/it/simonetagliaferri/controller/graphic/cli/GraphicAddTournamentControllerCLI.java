@@ -99,56 +99,14 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
 
     public void addPlayersToTournament() {
         int choice;
-        boolean expireDateSet = false;
-        LocalDate inviteExpireDate = null;
         while (true) {
             choice = view.askToAddPlayer();
             if (choice == 1) {
-                if (!expireDateSet) {
-                    inviteExpireDate = tournamentBean.formatDate(view.inviteExpireDate());
-                    expireDateSet = true;
-                }
-                if (tournamentBean.isSingles()) inviteSoloTeam(inviteExpireDate);
-                else inviteDuoTeam(inviteExpireDate);
+                navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
             }
             else {
                 break;
             }
         }
-    }
-
-    public void inviteSoloTeam(LocalDate inviteExpireDate) {
-        String player;
-        String message = null;
-        boolean email = false;
-        boolean added = false;
-        while (!added) {
-            player = view.getPlayer();
-            if (this.controller.isPlayerValid(player)!=null) {
-                if (view.addMessage()==1) {
-                    message = view.getMessage();
-                }
-                if (view.askToSendEmail()==1) {
-                    email = true;
-                }
-                this.controller.invitePlayer(player, tournamentBean, inviteExpireDate, message, email);
-                added = true;
-            }
-            else {
-                view.invalidPlayer();
-                if (view.askToSendEmail()==1) {
-                    email = true;
-                }
-                if (view.addMessage()==1) {
-                    message = view.getMessage();
-                }
-            }
-        }
-    }
-
-    public void inviteDuoTeam(LocalDate inviteExpireDate) {
-        String player1 = view.getPlayer();
-        String player2 = view.getPlayer();
-        this.controller.inviteTeam(player1, player2, tournamentBean, false, false);
     }
 }

@@ -12,6 +12,9 @@ public abstract class DAOFactory {
     protected DAOFactory() {
     }
 
+    /**
+     * Returns the correct DAOFactory based on current persistence.properties configuration.
+     */
     public static DAOFactory getDAOFactory() {
         PersistenceProvider provider = loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
         switch (provider) {

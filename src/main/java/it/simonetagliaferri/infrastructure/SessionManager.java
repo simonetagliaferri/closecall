@@ -5,7 +5,7 @@ import it.simonetagliaferri.model.domain.User;
 /**
  * SessionManager is a stateful component that tracks the currently logged-in user.
  * It is created once by the AppContext at application startup and used throughout the lifecycle.
- * It should not be instantiated or used outside of that context.
+ * It should not be instantiated or used outside AppContext.
  */
 public class SessionManager {
 

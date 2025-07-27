@@ -1,6 +1,8 @@
 package it.simonetagliaferri.infrastructure;
 
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.cli.*;
+import it.simonetagliaferri.model.domain.Role;
 
 /**
  * SceneManagerCLI implemented more than anything to be coherent with NavigationManagerGUI, in which SceneManager is needed to load FXMLs.
@@ -32,13 +34,8 @@ public class SceneManagerCLI {
         addClubControllerCLI.start();
     }
 
-    public void HandlePlayerNotification(AppContext appContext) {
-        GraphicHandlePlayerNotificationControllerCLI graphicHandlePlayerNotificationControllerCLI = new GraphicHandlePlayerNotificationControllerCLI(appContext);
-        graphicHandlePlayerNotificationControllerCLI.start();
-    }
-
-    public void HandleHostNotification(AppContext appContext) {
-        GraphicHandleHostNotificationControllerCLI graphicHandleHostNotificationControllerCLI = new GraphicHandleHostNotificationControllerCLI(appContext);
-        graphicHandleHostNotificationControllerCLI.start();
+    public void InvitePlayer(AppContext appContext, Role role, TournamentBean tournamentBean) {
+        GraphicInvitePlayerControllerCLI graphicInvitePlayerControllerCLI = new GraphicInvitePlayerControllerCLI(appContext, tournamentBean);
+        graphicInvitePlayerControllerCLI.start(role);
     }
 }

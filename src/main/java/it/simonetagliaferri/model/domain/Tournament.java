@@ -75,11 +75,11 @@ public class Tournament {
 
     public Team addTeam(Player... players) {
         Team team;
-        if (players.length == 1 && isSingles()) {
-            team = new Team(players[0]);
+        if (players.length == 1) {
+            team = new Team(players[0], getTeamType());
             this.confirmedTeams.add(team);
         }
-        else if (players.length == 2 && !isSingles()) {
+        else if (players.length == 2) {
             team = new Team(players[0], players[1]);
             this.confirmedTeams.add(team);
         }
@@ -89,8 +89,20 @@ public class Tournament {
         return team;
     }
 
-    public void reserveSpot(Team team) {
-        this.reservedTeams.add(team);
+    public Team reserveSpot(Player... players) {
+        Team team;
+        if (players.length == 1) {
+            team = new Team(players[0], getTeamType());
+            this.reservedTeams.add(team);
+        }
+        else if (players.length == 2) {
+            team = new Team(players[0], players[1]);
+            this.reservedTeams.add(team);
+        }
+        else {
+            throw new IllegalArgumentException("A team must have either 1 or 2 players.");
+        }
+        return team;
     }
 
     public List<Team> getConfirmedTeams() {
@@ -102,9 +114,41 @@ public class Tournament {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
     }
 
-    public void processInvite(Invite invite) {
-        if (invite.getStatus().equals(InviteStatus.ACCEPTED)) {
+    public Team getReservedTeam(String player) {
+        for (Team team : this.reservedTeams) {
+            if (team.getPlayers().contains(player)) {
+                return team;
+            }
         }
+        return null;
+    }
+
+    public TeamType getTeamType() {
+        if (isSingles()) {
+            return TeamType.SINGLE;
+        }
+        else return TeamType.DOUBLE;
+    }
+
+    public void processInvite(Invite invite) {
+        for (Team team : this.reservedTeams) {
+            if (team.getPlayers().contains(invite.getPlayer())) {
+                if (isSingles()) processSingleInvite(invite, team);
+                else processDoubleInvite(invite, team);
+            }
+        }
+    }
+    private void processSingleInvite(Invite invite, Team team) {
+        if (invite.getStatus().equals(InviteStatus.ACCEPTED)) {
+            this.reservedTeams.remove(team);
+            this.confirmedTeams.add(team);
+        }
+        else if (invite.getStatus().equals(InviteStatus.DECLINED) || invite.getStatus().equals(InviteStatus.REVOKED)) {
+            this.reservedTeams.remove(team);
+        }
+    }
+    private void processDoubleInvite(Invite invite, Team team) {
+
     }
 
     public String getTournamentType() { return tournamentType; }
