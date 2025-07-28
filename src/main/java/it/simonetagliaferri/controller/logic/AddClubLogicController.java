@@ -31,4 +31,10 @@ public class AddClubLogicController extends LogicController {
         Club club = ClubMapper.fromBean(clubBean);
         clubDAO.saveClub(club);
     }
+
+    public boolean firstClub() {
+        User currentUser = sessionManager.getCurrentUser();
+        Host host = hostDAO.getHostByUsername(currentUser.getUsername());
+        return clubDAO.getClubs(host).isEmpty();
+    }
 }

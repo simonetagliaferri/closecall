@@ -23,7 +23,8 @@ public class Tournament {
     private Club club;
     private TournamentFormatStrategy tournamentFormatStrategy;
     private final List<Team> confirmedTeams;
-    private final List<Team> reservedTeams;
+    private final List<Team> pendingTeams;
+    private final List<Team> partialTeams;
     private final List<Match> matches;
     private double joinFee;
     private double courtPrice;
@@ -33,12 +34,13 @@ public class Tournament {
     public Tournament() {
         this.matches = new ArrayList<>();
         this.confirmedTeams = new ArrayList<>();
-        this.reservedTeams = new ArrayList<>();
+        this.pendingTeams = new ArrayList<>();
+        this.partialTeams = new ArrayList<>();
     }
 
     public Tournament(String tournamentName, String tournamentType, String tournamentFormat, String matchFormat,
                       String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
-                      LocalDate endDate, LocalDate signupDeadline, Club club, List<Team> confirmedTeams, List<Team> reservedTeams, List<Match> matches, double joinFee, double courtPrice) {
+                      LocalDate endDate, LocalDate signupDeadline, Club club, List<Team> confirmedTeams, List<Team> pendingTeams, List<Team> partialTeams, List<Match> matches, double joinFee, double courtPrice) {
         this.name = tournamentName;
         this.tournamentType = tournamentType;
         this.tournamentFormat = tournamentFormat;
@@ -52,7 +54,8 @@ public class Tournament {
         this.signupDeadline = signupDeadline;
         this.club = club;
         this.confirmedTeams = confirmedTeams;
-        this.reservedTeams = reservedTeams;
+        this.pendingTeams = pendingTeams;
+        this.partialTeams = partialTeams;
         this.matches = matches;
         this.joinFee = joinFee;
         this.courtPrice = courtPrice;
@@ -70,54 +73,43 @@ public class Tournament {
     }
 
     public int availableSpots() {
-        return this.teamsNumber - (this.confirmedTeams.size()+this.reservedTeams.size());
+        return this.teamsNumber - (this.confirmedTeams.size()+this.pendingTeams.size()+this.partialTeams.size()/2);
     }
 
-    public Team addTeam(Player... players) {
+    public void reserveSpot(Player... players) {
         Team team;
         if (players.length == 1) {
             team = new Team(players[0], getTeamType());
-            this.confirmedTeams.add(team);
+            this.pendingTeams.add(team);
+            if (!isSingles())
+                this.partialTeams.add(team);
         }
         else if (players.length == 2) {
             team = new Team(players[0], players[1]);
-            this.confirmedTeams.add(team);
+            this.pendingTeams.add(team);
         }
         else {
             throw new IllegalArgumentException("A team must have either 1 or 2 players.");
         }
-        return team;
-    }
-
-    public Team reserveSpot(Player... players) {
-        Team team;
-        if (players.length == 1) {
-            team = new Team(players[0], getTeamType());
-            this.reservedTeams.add(team);
-        }
-        else if (players.length == 2) {
-            team = new Team(players[0], players[1]);
-            this.reservedTeams.add(team);
-        }
-        else {
-            throw new IllegalArgumentException("A team must have either 1 or 2 players.");
-        }
-        return team;
     }
 
     public List<Team> getConfirmedTeams() {
         return this.confirmedTeams;
     }
-    public List<Team> getReservedTeams() { return this.reservedTeams; }
+    public List<Team> getPendingTeams() { return this.pendingTeams; }
+
+    public List<Team> getPartialTeams() { return this.partialTeams; }
 
     public boolean isSingles() {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
     }
 
-    public Team getReservedTeam(String player) {
-        for (Team team : this.reservedTeams) {
-            if (team.getPlayers().contains(player)) {
-                return team;
+    public Team getReservedTeam(Player player) {
+        for (Team team : this.pendingTeams) {
+            for (Player p : team.getPlayers()) {
+                if (p.getUsername().equals(player.getUsername())) {
+                    return team;
+                }
             }
         }
         return null;
@@ -130,26 +122,52 @@ public class Tournament {
         else return TeamType.DOUBLE;
     }
 
-    public void processInvite(Invite invite) {
-        for (Team team : this.reservedTeams) {
-            if (team.getPlayers().contains(invite.getPlayer())) {
-                if (isSingles()) processSingleInvite(invite, team);
-                else processDoubleInvite(invite, team);
+    public void processInviteForSingles(Invite invite, Team team) {
+        if (!pendingTeams.contains(team)) return;
+        switch (invite.getStatus()) {
+            case ACCEPTED:
+                pendingTeams.remove(team);
+                confirmedTeams.add(team);
+                break;
+            case DECLINED:
+            case REVOKED:
+            case EXPIRED:
+                pendingTeams.remove(team);
+                break;
+        }
+    }
+
+    public void processInviteForDoubles(Invite invite, Team team, Invite teammateInvite) {
+        if (!pendingTeams.contains(team)) return;
+        InviteStatus s1 = invite.getStatus();
+        InviteStatus s2 = teammateInvite != null ? teammateInvite.getStatus() : null;
+        if (s2 == null && s1 == InviteStatus.ACCEPTED) {
+            pendingTeams.remove(team);
+            if (team.isFull()) {
+                confirmedTeams.add(team);
+            }
+            else {
+                partialTeams.add(team);
             }
         }
-    }
-    private void processSingleInvite(Invite invite, Team team) {
-        if (invite.getStatus().equals(InviteStatus.ACCEPTED)) {
-            this.reservedTeams.remove(team);
-            this.confirmedTeams.add(team);
+        else if (s2 == null && (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED)) {
+            pendingTeams.remove(team);
+            if (team.isFull()) {
+                team.removePlayer(invite.getPlayer());
+                partialTeams.add(team);
+            }
         }
-        else if (invite.getStatus().equals(InviteStatus.DECLINED) || invite.getStatus().equals(InviteStatus.REVOKED)) {
-            this.reservedTeams.remove(team);
+        else if (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED ||
+                s2 == InviteStatus.DECLINED || s2 == InviteStatus.REVOKED || s2 == InviteStatus.EXPIRED) {
+            pendingTeams.remove(team);
+        }
+        else if (s1 == InviteStatus.ACCEPTED && s2 == InviteStatus.ACCEPTED) {
+            pendingTeams.remove(team);
+            confirmedTeams.add(team);
         }
     }
-    private void processDoubleInvite(Invite invite, Team team) {
 
-    }
+
 
     public String getTournamentType() { return tournamentType; }
     public String getMatchFormat() { return matchFormat; }

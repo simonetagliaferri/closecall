@@ -18,15 +18,7 @@ public class LoginCLIView {
             CliUtils.println("3. Quit");
             int choice = CliUtils.promptInt("Enter your choice: ");
             if (choice >= 1 && choice <= 3) {
-                if (choice == 1) {
-                    return LoginCommand.LOGIN;
-                }
-                else if (choice == 2) {
-                    return LoginCommand.SIGNUP;
-                }
-                else {
-                    return LoginCommand.QUIT;
-                }
+                return LoginCommand.values()[choice-1];
             }
             CliUtils.println("Invalid choice. Try again.");
         }

@@ -10,6 +10,7 @@ import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.PasswordUtils;
+import it.simonetagliaferri.utils.converters.UserMapper;
 
 public class LoginLogicController extends LogicController {
 
@@ -35,22 +36,23 @@ public class LoginLogicController extends LogicController {
         String hashedPass = PasswordUtils.sha256Hex(bean.getPassword());
         User currentUser;
         if (user != null && user.getPassword().equals(hashedPass)) {
-            if (user.getRole() == Role.PLAYER) {
-                currentUser = new Player(user.getUsername(), user.getEmail(), user.getRole());
-            } else {
+            if (user.getRole() == Role.HOST) {
                 currentUser = new Host(user.getUsername(), user.getEmail(), user.getRole());
+
+            } else {
+                currentUser = new Player(user.getUsername(), user.getEmail(), user.getRole());
             }
             setCurrentUser(currentUser);
             return true;
         }
-        else return false;
+        return false;
     }
 
-    /*
-        It creates a user from the bean and then passes it to loginDAO to sign the user up.
+    /**
+     * It creates a user from the bean and then passes it to loginDAO to sign the user up.
     */
     public boolean signup(UserBean bean) {
-        User user = new User(bean.getUsername(), bean.getEmail(), PasswordUtils.sha256Hex(bean.getPassword()), bean.getRole());
+        User user = UserMapper.fromBeanAndHashPassword(bean);
         if (loginDAO.signup(user) != null) {
             if (user.getRole() == Role.HOST) {
                 hostDAO.addHost(new Host(user.getUsername(), user.getEmail()));
@@ -64,16 +66,19 @@ public class LoginLogicController extends LogicController {
         }
     }
 
-    /*
-        Used before signup to check if the provided username is already in use.
+    /**
+     * Used before signup to check if the provided username is already in use.
      */
     public boolean userLookUp(UserBean bean) {
-        User user = loginDAO.findByUsername(bean.getUsername());
-        return user != null;
+        return loginDAO.findByUsername(bean.getUsername()) != null;
     }
 
     public boolean emailLookUp(UserBean bean) {
-        User user = loginDAO.findByEmail(bean.getEmail());
-        return user != null;
+        return loginDAO.findByEmail(bean.getEmail()) != null;
     }
+
+    protected void setCurrentUser(User user) {
+        sessionManager.setCurrentUser(user);
+    }
+
 }

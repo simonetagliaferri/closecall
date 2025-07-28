@@ -6,21 +6,32 @@ import it.simonetagliaferri.utils.CliUtils;
 import java.util.List;
 
 public class HostDashboardCLIView {
+
+    public enum HostDashboardCommand {
+        ADD_TOURNAMENT,
+        LIST_TOURNAMENTS,
+        ADD_CLUB,
+        LIST_CLUBS,
+        LOGOUT,
+        SETTINGS
+    }
+
     public void hello(UserBean user) {
         CliUtils.println("Hello " + user.getUsername());
     }
 
-    public int showMenu() {
+    public HostDashboardCommand showMenu() {
         CliUtils.println("Welcome to your dashboard.");
         while (true) {
             CliUtils.println("1. Add tournament");
             CliUtils.println("2. List tournaments");
-            CliUtils.println("3. List clubs");
-            CliUtils.println("4. Logout");
-            CliUtils.println("5. Settings");
+            CliUtils.println("3. Add club");
+            CliUtils.println("4. List clubs");
+            CliUtils.println("5. Logout");
+            CliUtils.println("6. Settings");
             int choice = CliUtils.promptInt("Enter your choice: ");
-            if (choice >= 1 && choice <= 5) {
-                return choice;
+            if (choice >= 1 && choice <= 6) {
+                return HostDashboardCommand.values()[choice-1];
             }
             CliUtils.println("Invalid choice. Try again.");
         }

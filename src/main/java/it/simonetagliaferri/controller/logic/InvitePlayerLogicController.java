@@ -17,6 +17,7 @@ import it.simonetagliaferri.model.invite.decorator.InviteNotification;
 import it.simonetagliaferri.utils.converters.InviteMapper;
 import it.simonetagliaferri.utils.converters.PlayerMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,42 +48,46 @@ public class InvitePlayerLogicController extends LogicController{
     public void updateInvite(InviteBean inviteBean, InviteStatus status){
         Invite invite = InviteMapper.fromBean(inviteBean);
         invite.updateStatus(status);
-        inviteDAO.save(invite);
+        Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
+        inviteDAO.delete(invite);
         Tournament tournament = invite.getTournament();
-        if (!tournament.isSingles()) {
-            Team team = tournament.getReservedTeam(getCurrentUser().getUsername());
-        }
-        //tournament.confirmSpot();
+        Team team = tournament.getReservedTeam(player);
+        Player player2 = team.getOtherPlayer(player.getUsername());
+        Invite otherInvite = inviteDAO.getInvite(player2, tournament);
+        if (tournament.isSingles())
+            tournament.processInviteForSingles(invite, team);
+        else
+            tournament.processInviteForDoubles(invite, team, otherInvite);
+    }
 
+    public boolean isPlayerRegistered(PlayerBean player) {
+        return !player.getUsername().equals(player.getEmail());
     }
 
     public PlayerBean teammate(InviteBean inviteBean) {
         Invite invite = InviteMapper.fromBean(inviteBean);
         Tournament tournament = invite.getTournament();
-        Player player = null;
+        Player player2 = null;
+        Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
         if (!tournament.isSingles()) {
-            Team team = tournament.getReservedTeam(getCurrentUser().getUsername());
-            player = team.getOtherPlayer(getCurrentUser().getUsername());
+            Team team = tournament.getReservedTeam(player);
+            player2 = team.getOtherPlayer(getCurrentUser().getUsername());
         }
-        if (player == null) {
+        if (player2 == null) {
             return null;
         }
-        return PlayerMapper.toBean(player);
+        return PlayerMapper.toBean(player2);
     }
 
-    public boolean invitePlayer(PlayerBean player, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message, boolean email) {
-        if (player == null && !email) return false;
-        Player p = PlayerMapper.fromBean(player);
+    public void invitePlayer(PlayerBean playerBean, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message, boolean email) {
+        Player player = PlayerMapper.fromBean(playerBean);
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
-        Invite invite = new Invite(tournament, p, LocalDate.now(), inviteExpireDate, InviteStatus.PENDING, message);
+        Invite invite = new Invite(tournament, player, LocalDate.now(), inviteExpireDate, InviteStatus.PENDING, message);
         sendInvite(invite, email);
-        tournament.reserveSpot(p);
-        return true;
+        tournament.reserveSpot(player);
     }
 
-    public boolean inviteTeam(PlayerBean player1, PlayerBean player2, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message1, String message2, boolean email1, boolean email2) {
-        if (player1 == null && !email1) return false;
-        if (player2 == null && !email2) return false;
+    public void inviteTeam(PlayerBean player1, PlayerBean player2, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message1, String message2, boolean email1, boolean email2) {
         Player p1 = PlayerMapper.fromBean(player1);
         Player p2 = PlayerMapper.fromBean(player2);
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
@@ -91,8 +96,6 @@ public class InvitePlayerLogicController extends LogicController{
         sendInvite(invite1, email1);
         sendInvite(invite2, email2);
         tournament.reserveSpot(p1,p2);
-        return true;
-
     }
 
     public PlayerBean isPlayerValid(String player) {
@@ -107,6 +110,10 @@ public class InvitePlayerLogicController extends LogicController{
             p = playerDAO.findByUsername(player);
         }
         return PlayerMapper.toBean(p);
+    }
+
+    public boolean isEmail(String email) {
+        return EmailValidator.getInstance().isValid(email);
     }
 
     public void sendInvite(Invite invite, boolean email) {

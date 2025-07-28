@@ -17,3 +17,8 @@ Thinking about having different maps for each in memory dao to have multiple ind
 
 Thinking about having repositories to make DAOs interact, that means calling one DAO and use the result to call another. I don't  know if it's better to do that
 in a repository or inside the application controller.
+
+I need to add checks on clubs info(street, number, city, state, country, phone, email) and on invite info(email address, expire date<=signup deadline)
+
+Made it so when sending an email to an unregistered player, username and email are set to the email address so that the key in the users map(Username) is not null.
+To make this always work, I need to make it so that during sign up the username and the email can't match.

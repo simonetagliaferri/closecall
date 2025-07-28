@@ -35,18 +35,14 @@ public class InvitePlayersPlayerView {
 
     public InviteStatus handleInvite() {
         int choice = CliUtils.multipleChoiceInt("What do you want to do?", "Accept", "Decline", "Ignore");
-        if (choice == 1) {
-            return InviteStatus.ACCEPTED;
-        }
-        else if (choice == 2) {
-            return InviteStatus.DECLINED;
-        }
-        else {
-            return InviteStatus.PENDING;
-        }
+        return InviteStatus.values()[choice-1];
     }
 
     public void teamInvite(String teammateName) {
         CliUtils.println("You got invited in a team, your team mate is: " + teammateName);
+    }
+
+    public void noNotificatons() {
+        CliUtils.println("There are no notifications for you.");
     }
 }

@@ -26,22 +26,22 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
     public void showHome() {
         boolean home = true;
         while (home) {
-            int choice = view.showMenu();
+            PlayerDashboardCLIView.PlayerDashboardCommand choice = view.showMenu();
             switch (choice) {
-                case 1:
+                case LIST_TOURNAMENTS:
                     myTournaments();
                     break;
-                case 2:
+                case SEARCH_TOURNAMENTS:
                     searchTournament();
                     break;
-                case 3:
+                case SEARCH_CLUBS:
                     searchClub();
                     break;
-                case 4:
+                case LOGOUT:
                     home=false;
                     logout();
                     break;
-                case 5:
+                case INVITES:
                     notifications();
                     break;
                 default:

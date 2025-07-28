@@ -98,15 +98,6 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     }
 
     public void addPlayersToTournament() {
-        int choice;
-        while (true) {
-            choice = view.askToAddPlayer();
-            if (choice == 1) {
-                navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
-            }
-            else {
-                break;
-            }
-        }
+        navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Team {
-    private final Player player1;
+    private Player player1;
     private Player player2;
     private final TeamType type;
 
@@ -45,6 +45,19 @@ public class Team {
             return player1;
         }
         return null;
+    }
+
+    public void removePlayer(Player player) {
+        if (player2.getUsername().equals(player.getUsername())) {
+            this.player2=null;
+        }
+        else if (player1.getUsername().equals(player.getUsername())) {
+            this.player1=null;
+        }
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 
     public TeamType getType() {

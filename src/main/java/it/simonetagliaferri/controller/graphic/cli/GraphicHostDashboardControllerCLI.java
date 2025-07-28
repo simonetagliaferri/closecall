@@ -32,22 +32,25 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
             logout();
         }
         while (home) {
-            int choice = view.showMenu();
+            HostDashboardCLIView.HostDashboardCommand choice = view.showMenu();
             switch (choice) {
-                case 1:
+                case ADD_TOURNAMENT:
                     addTournament();
                     break;
-                case 2:
+                case LIST_TOURNAMENTS:
                     listTournaments();
                     break;
-                case 3:
+                case ADD_CLUB:
+                    addClub();
+                    break;
+                case LIST_CLUBS:
                     listClubs();
                     break;
-                case 4:
+                case LOGOUT:
                     home=false;
                     logout();
                     break;
-                case 5:
+                case SETTINGS:
                     settings();
                     break;
                 default:
@@ -73,8 +76,10 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
 
 
     private void settings() {
-
+        //TODO
     }
+
+    private void addClub() { navigationManager.goToAddClub(); }
 
     private void listTournaments() {
         List<TournamentBean> tournaments = this.controller.getTournaments();

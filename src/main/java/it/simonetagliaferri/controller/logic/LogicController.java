@@ -20,10 +20,6 @@ public class LogicController {
         return sessionManager.getCurrentUser();
     }
 
-    protected void setCurrentUser(User user) {
-        sessionManager.setCurrentUser(user);
-    }
-
     public void logout() {
         sessionManager.clearSession();
     }

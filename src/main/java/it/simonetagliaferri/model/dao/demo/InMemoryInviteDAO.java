@@ -1,6 +1,8 @@
 package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.InviteDAO;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.invite.Invite;
 
 import java.util.ArrayList;
@@ -28,5 +30,27 @@ public class InMemoryInviteDAO implements InviteDAO {
     @Override
     public List<Invite> getInvites(String playerUsername) {
         return this.invites.get(playerUsername);
+    }
+
+    @Override
+    public void delete(Invite invite) {
+        List<Invite> invites = this.invites.get(invite.getPlayer().getUsername());
+        if (invites != null) {
+            invites.remove(invite);
+        }
+    }
+
+    @Override
+    public Invite getInvite(Player player, Tournament tournament) {
+        List<Invite> invites = this.invites.get(player.getUsername());
+        if (invites != null) {
+            for (Invite invite : invites) {
+                String tournamentId = invite.getTournament().getId();
+                if (tournamentId.equals(tournament.getId())) {
+                    return invite;
+                }
+            }
+        }
+        return null;
     }
 }

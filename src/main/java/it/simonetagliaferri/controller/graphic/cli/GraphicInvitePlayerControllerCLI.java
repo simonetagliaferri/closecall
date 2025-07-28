@@ -35,9 +35,13 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
     public void startPlayer() {
         List<InviteBean> invites = this.controller.getInvites();
+        if (invites.isEmpty()) {
+            playerView.noNotificatons();
+            return;
+        }
         int choice = playerView.listNotifications(invites);
-        if (choice == 0 ) return;
-        InviteBean invite = invites.get(choice-1);
+        if (choice == -1 ) return;
+        InviteBean invite = invites.get(choice);
         PlayerBean teammate = this.controller.teammate(invite);
         String teammateName;
         if (teammate != null) {
@@ -53,20 +57,21 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     public void addPlayersToTournament(TournamentBean tournamentBean) {
-        int choice;
+        InvitePlayersHostView.InviteChoices choice;
         boolean expireDateSet = false;
         LocalDate inviteExpireDate = null;
         while (true) {
             choice = hostView.askToAddPlayer();
-            if (choice == 1) {
+            if (choice == InvitePlayersHostView.InviteChoices.YES) {
                 if (!expireDateSet) {
                     inviteExpireDate = tournamentBean.formatDate(hostView.inviteExpireDate());
                     expireDateSet = true;
                 }
                 if (tournamentBean.isSingles())
-                    invitePlayer(inviteExpireDate);
-                else
+                    invite(inviteExpireDate);
+                else {
                     inviteTeam(inviteExpireDate);
+                }
             }
             else {
                 break;
@@ -74,44 +79,38 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         }
     }
 
-    public void invitePlayer(LocalDate inviteExpireDate) {
-        String playerUsername;
-        PlayerBean player = null;
+    private PlayerBean getPlayer() {
+        String playerName = hostView.getPlayer();
+        PlayerBean playerBean = this.controller.isPlayerValid(playerName);
+        if (playerBean != null) return playerBean;
+        hostView.invalidPlayerUsername();
+        if (sendEmail()) {
+            if (!this.controller.isEmail(playerName))
+                playerName = getEmail();
+            return new PlayerBean(playerName, playerName);
+        }
+        else return null;
+    }
+
+    public void invite(LocalDate inviteExpireDate) {
+        PlayerBean player = getPlayer();
+        boolean email = true;
+        if (player == null) return;
         String message = null;
-        boolean email = false;
-        boolean added = false;
-        String emailAddress;
-        while (!added) {
-            playerUsername = hostView.getPlayer();
-            player = this.controller.isPlayerValid(playerUsername);
-            if (player!=null) {
-                if (hostView.addMessage()==1) {
-                    message = hostView.getMessage();
-                }
-                if (sendEmail()) {
-                    email = true;
-                }
-                added = true;
-            }
-            else {
-                hostView.invalidPlayer();
-                if (sendEmail()) {
-                    email = true;
-                    emailAddress = hostView.getEmail();
-                    player = new PlayerBean();
-                    player.setEmail(emailAddress);
-                    if (hostView.addMessage()==1) {
-                        message = hostView.getMessage();
-                    }
-                }
-                added = true;
+        if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+            message = hostView.getMessage();
+        }
+        if (this.controller.isPlayerRegistered(player)) {
+            if (!sendEmail()) {
+                email = false;
             }
         }
         this.controller.invitePlayer(player, tournamentBean, inviteExpireDate, message, email);
     }
 
+
     public boolean sendEmail() {
-        return hostView.askToSendEmail()==1;
+        return hostView.askToSendEmail() == InvitePlayersHostView.InviteChoices.YES;
     }
 
     public String getEmail() {
@@ -120,72 +119,35 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
 
     public void inviteTeam(LocalDate inviteExpireDate) {
-        String playerUsername1;
-        PlayerBean player1 = null;
+        PlayerBean player1 = getPlayer();
+        boolean email1 = true;
+        if (player1 == null) return;
         String message1 = null;
-        boolean email1 = false;
-        boolean added1 = false;
-        String emailAddress1;
-        String playerUsername2;
-        PlayerBean player2 = null;
-        String message2 = null;
-        boolean email2 = false;
-        boolean added2 = false;
-        String emailAddress2;
-        while (!added1) {
-            playerUsername1 = hostView.getPlayer();
-            player1 = this.controller.isPlayerValid(playerUsername1);
-            if (player1!=null) {
-                if (hostView.addMessage()==1) {
-                    message1 = hostView.getMessage();
-                }
-                if (sendEmail()) {
-                    email1 = true;
-                }
-                added1 = true;
-            }
-            else {
-                hostView.invalidPlayer();
-                if (sendEmail()) {
-                    email1 = true;
-                    emailAddress1 = hostView.getEmail();
-                    player1 = new PlayerBean();
-                    player1.setEmail(emailAddress1);
-                    if (hostView.addMessage()==1) {
-                        message1 = hostView.getMessage();
-                    }
-                }
-                added1 = true;
+        if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+            message1 = hostView.getMessage();
+        }
+        if (this.controller.isPlayerRegistered(player1)) {
+            if (!sendEmail()) {
+                email1 = false;
             }
         }
-        if (hostView.askToAddTeammate()==1) {
-            while (!added2) {
-                playerUsername2 = hostView.getPlayer();
-                player2 = this.controller.isPlayerValid(playerUsername2);
-                if (player2!=null) {
-                    if (hostView.addMessage()==1) {
-                        message1 = hostView.getMessage();
-                    }
-                    if (sendEmail()) {
-                        email2 = true;
-                    }
-                    added2 = true;
-                }
-                else {
-                    hostView.invalidPlayer();
-                    if (sendEmail()) {
-                        email2 = true;
-                        emailAddress2 = hostView.getEmail();
-                        player2 = new PlayerBean();
-                        player2.setEmail(emailAddress2);
-                        if (hostView.addMessage()==1) {
-                            message2 = hostView.getMessage();
-                        }
-                    }
-                    added2 = true;
+        if (hostView.askToAddTeammate() == InvitePlayersHostView.InviteChoices.YES) {
+            PlayerBean player2 = getPlayer();
+            boolean email2 = true;
+            if (player2 == null) return;
+            String message2 = null;
+            if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+                message2 = hostView.getMessage();
+            }
+            if (this.controller.isPlayerRegistered(player2)) {
+                if (!sendEmail()) {
+                    email2 = false;
                 }
             }
+            this.controller.inviteTeam(player1, player2, tournamentBean, inviteExpireDate,message1, message2, email1, email2);
         }
-        this.controller.inviteTeam(player1, player2, tournamentBean, inviteExpireDate,message1, message2, email1, email2);
+        else {
+            this.controller.invitePlayer(player1, tournamentBean, inviteExpireDate,message1, email1);
+        }
     }
 }

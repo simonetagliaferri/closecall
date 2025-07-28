@@ -17,7 +17,8 @@ public class TournamentMapper {
     public static TournamentBean toBean(Tournament tournament) {
         TournamentBean tournamentBean = new TournamentBean();
         List<TeamBean> confirmedTeamsBean = new ArrayList<>();
-        List<TeamBean> reservedTeamsBean = new ArrayList<>();
+        List<TeamBean> pendingTeamsBean = new ArrayList<>();
+        List<TeamBean> partialTeamsBean = new ArrayList<>();
         tournamentBean.setTournamentName(tournament.getTournamentName());
         tournamentBean.setTournamentType(tournament.getTournamentType());
         tournamentBean.setTournamentFormat(tournament.getTournamentFormat());
@@ -35,13 +36,19 @@ public class TournamentMapper {
                 confirmedTeamsBean.add(TeamMapper.toBean(team));
             }
         }
-        if (tournament.getReservedTeams() != null) {
-            for (Team team : tournament.getReservedTeams()) {
-                reservedTeamsBean.add(TeamMapper.toBean(team));
+        if (tournament.getPendingTeams() != null) {
+            for (Team team : tournament.getPendingTeams()) {
+                pendingTeamsBean.add(TeamMapper.toBean(team));
+            }
+        }
+        if (tournament.getPartialTeams() != null) {
+            for (Team team : tournament.getPartialTeams()) {
+                partialTeamsBean.add(TeamMapper.toBean(team));
             }
         }
         tournamentBean.setConfirmedTeams(confirmedTeamsBean);
-        tournamentBean.setReservedTeams(reservedTeamsBean);
+        tournamentBean.setPendingTeams(pendingTeamsBean);
+        tournamentBean.setPartialTeams(partialTeamsBean);
         List<MatchBean> matchBeans = new ArrayList<>();
         if (tournament.getMatches() != null) {
             for (Match match : tournament.getMatches()) {
@@ -56,16 +63,17 @@ public class TournamentMapper {
 
     public static Tournament fromBean(TournamentBean tournamentBean) {
         List<Team> confirmedTeams = new ArrayList<>();
-        List<Team> reservedTeams = new ArrayList<>();
+        List<Team> pendingTeams = new ArrayList<>();
+        List<Team> partialTeams = new ArrayList<>();
         if (tournamentBean.getConfirmedTeams() != null) {
             for (TeamBean teamBean : tournamentBean.getConfirmedTeams()) {
                 confirmedTeams.add(TeamMapper.fromBean(teamBean));
             }
         }
 
-        if (tournamentBean.getReservedTeams() != null) {
-            for (TeamBean teamBean : tournamentBean.getReservedTeams()) {
-                reservedTeams.add(TeamMapper.fromBean(teamBean));
+        if (tournamentBean.getPendingTeams() != null) {
+            for (TeamBean teamBean : tournamentBean.getPendingTeams()) {
+                pendingTeams.add(TeamMapper.fromBean(teamBean));
             }
         }
         List<Match> matches = new ArrayList<>();
@@ -77,6 +85,6 @@ public class TournamentMapper {
         return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
                 tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
                 tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
-                ClubMapper.fromBean(tournamentBean.getClub()), confirmedTeams, reservedTeams, matches, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+                ClubMapper.fromBean(tournamentBean.getClub()), confirmedTeams, pendingTeams, partialTeams, matches, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
     }
 }

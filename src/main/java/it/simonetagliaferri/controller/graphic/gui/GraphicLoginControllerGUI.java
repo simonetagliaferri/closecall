@@ -20,36 +20,23 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
 
     private LoginLogicController controller;
     private UIState state = UIState.USERNAME_INPUT;
-    @FXML
-    private Text welcomeText;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private Button mainButton;
-    @FXML
-    private Button googleLogin;
-    @FXML
-    private TextFlow subtitle;
-    @FXML
-    private Text subText;
-    @FXML
-    private Hyperlink subHyper;
-    @FXML
-    private HBox divider;
-    @FXML
-    private Hyperlink passResetHyper;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private TextField passwordFieldSignup;
-    @FXML
-    private TextField confirmPassField;
-    @FXML
-    private Button signupButton;
-    @FXML
-    private Spinner<String> roleSpinner;
+
+    @FXML private Text welcomeText;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button mainButton;
+    @FXML private Button googleLogin;
+    @FXML private TextFlow subtitle;
+    @FXML private Text subText;
+    @FXML private Hyperlink subHyper;
+    @FXML private HBox divider;
+    @FXML private Hyperlink passResetHyper;
+    @FXML private TextField emailField;
+    @FXML private TextField passwordFieldSignup;
+    @FXML private TextField confirmPassField;
+    @FXML private Button signupButton;
+    @FXML private Spinner<String> roleSpinner;
+
     private boolean showingTempMessage = false;
 
     @Override
@@ -61,21 +48,20 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
                 appContext.getDAOFactory().getPlayerDAO());
     }
 
-
     @FXML
     private void initialize() {
-            state = UIState.USERNAME_INPUT;
-            roleSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(
-                    FXCollections.observableArrayList("Host", "Player")
-            ));
-            roleSpinner.getValueFactory().setWrapAround(true);
-            roleSpinner.setVisible(false);
-            usernameField.setVisible(true);
-            passwordField.setVisible(false);
-            passResetHyper.setVisible(false);
-            bindMainButtonToFieldStates();
-            bindSignupButtonToFieldStates();
-            Platform.runLater( () -> subHyper.requestFocus());
+        state = UIState.USERNAME_INPUT;
+        roleSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(
+                FXCollections.observableArrayList("Host", "Player")
+        ));
+        roleSpinner.getValueFactory().setWrapAround(true);
+        roleSpinner.setVisible(false);
+        usernameField.setVisible(true);
+        passwordField.setVisible(false);
+        passResetHyper.setVisible(false);
+        bindMainButtonToFieldStates();
+        bindSignupButtonToFieldStates();
+        Platform.runLater( () -> subHyper.requestFocus());
     }
 
     @FXML

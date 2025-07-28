@@ -22,10 +22,13 @@ public class GraphicAddClubControllerCLI extends GraphicController {
     }
 
     public void start() {
-        PreambleChoice choice = view.preamble();
-        if (choice.equals(ADD_CLUB)) {
-            this.controller.addClub(addClub());
+        if (this.controller.firstClub()) {
+            PreambleChoice choice = view.preamble();
+            if (choice.equals(ADD_CLUB)) {
+                this.controller.addClub(addClub());
+            }
         }
+        else this.controller.addClub(addClub());
     }
 
     private ClubBean addClub() {

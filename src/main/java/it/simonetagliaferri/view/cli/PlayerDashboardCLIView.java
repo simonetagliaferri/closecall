@@ -9,7 +9,15 @@ import java.util.List;
 
 public class PlayerDashboardCLIView {
 
-    public int showMenu() {
+    public enum PlayerDashboardCommand {
+        LIST_TOURNAMENTS,
+        SEARCH_TOURNAMENTS,
+        SEARCH_CLUBS,
+        LOGOUT,
+        INVITES
+    }
+
+    public PlayerDashboardCommand showMenu() {
         CliUtils.println("Welcome to your dashboard.");
         while (true) {
             CliUtils.println("1. My tournaments");
@@ -19,7 +27,7 @@ public class PlayerDashboardCLIView {
             CliUtils.println("5. Notifications");
             int choice = CliUtils.promptInt("Enter your choice: ");
             if (choice >= 1 && choice <= 5) {
-                return choice;
+                return PlayerDashboardCommand.values()[choice-1];
             }
             CliUtils.println("Invalid choice. Try again.");
         }
