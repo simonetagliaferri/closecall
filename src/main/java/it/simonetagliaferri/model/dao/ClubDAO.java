@@ -10,4 +10,5 @@ public interface ClubDAO {
     List<Club> getClubs(Host host);
     void saveClub(Club club);
     List<Club> getClubsByCity(String city);
+    Club getClubByName(Host host, String name);
 }

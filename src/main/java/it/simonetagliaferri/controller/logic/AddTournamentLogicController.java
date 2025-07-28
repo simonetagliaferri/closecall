@@ -30,17 +30,17 @@ public class AddTournamentLogicController extends LogicController {
     }
 
     public void addTournament(TournamentBean tournamentBean) {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        host.setTournaments(tournamentDAO.getTournaments(host));
-        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
+        ClubBean clubBean = tournamentBean.getClub();
+        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        Club club = clubDAO.getClubByName(host, clubBean.getName());
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Need to check for duplicates.
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
-        tournamentDAO.addTournament(host, tournament);
+        tournamentDAO.addTournament(club, tournament);
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {
-        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Okay to use since it's before saving it.
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
         return tournament.estimateEndDate();

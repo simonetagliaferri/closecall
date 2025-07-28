@@ -50,11 +50,15 @@ public class HostDashboardLogicController extends LogicController {
     public List<TournamentBean> getTournaments() {
         User user = getCurrentUser();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        List<Tournament> tournaments = tournamentDAO.getTournaments(host);
+        List<Club> clubs = clubDAO.getClubs(host);
+        List<Tournament> tournaments;
         List<TournamentBean> tournamentBeans = new ArrayList<>();
-        if (tournaments != null && !tournaments.isEmpty()) {
-            for (Tournament tournament : tournaments) {
-                tournamentBeans.add(TournamentMapper.toBean(tournament));
+        for (Club club : clubs) {
+            tournaments = tournamentDAO.getTournaments(club);
+            if (tournaments != null && !tournaments.isEmpty()) {
+                for (Tournament tournament : tournaments) {
+                    tournamentBeans.add(TournamentMapper.toBean(tournament));
+                }
             }
         }
         return tournamentBeans;

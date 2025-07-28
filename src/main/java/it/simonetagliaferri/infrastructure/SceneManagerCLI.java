@@ -34,8 +34,13 @@ public class SceneManagerCLI {
         addClubControllerCLI.start();
     }
 
-    public void InvitePlayer(AppContext appContext, Role role, TournamentBean tournamentBean) {
+    public void invitePlayer(AppContext appContext, Role role, TournamentBean tournamentBean) {
         GraphicInvitePlayerControllerCLI graphicInvitePlayerControllerCLI = new GraphicInvitePlayerControllerCLI(appContext, tournamentBean);
         graphicInvitePlayerControllerCLI.start(role);
+    }
+
+    public void joinTournament(AppContext appContext) {
+        GraphicJoinTournamentController graphicJoinTournamentController = new GraphicJoinTournamentController(appContext);
+        graphicJoinTournamentController.start();
     }
 }

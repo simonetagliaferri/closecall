@@ -1,16 +1,13 @@
 package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.InviteDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
-import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.utils.converters.ClubMapper;
-import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +25,6 @@ public class PlayerDashboardLogicController extends LogicController {
         this.tournamentDAO = tournamentDAO;
         this.clubDAO = clubDAO;
         this.inviteDAO = inviteDAO;
-    }
-
-    public List<TournamentBean> searchTournament(String search) {
-        List<TournamentBean> tournamentBeanList = new ArrayList<>();
-        List<Tournament> tournaments = tournamentDAO.getTournamentsByCity(search);
-        for (Tournament tournament : tournaments) {
-            tournamentBeanList.add(TournamentMapper.toBean(tournament));
-        }
-        return tournamentBeanList;
     }
 
     public List<ClubBean> searchClub(String search) {

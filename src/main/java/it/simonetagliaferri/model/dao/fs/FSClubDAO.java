@@ -21,4 +21,9 @@ public class FSClubDAO implements ClubDAO {
     public List<Club> getClubsByCity(String city) {
         return List.of();
     }
+
+    @Override
+    public Club getClubByName(Host host, String name) {
+        return null;
+    }
 }

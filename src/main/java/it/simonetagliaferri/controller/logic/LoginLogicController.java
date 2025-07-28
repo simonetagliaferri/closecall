@@ -52,7 +52,7 @@ public class LoginLogicController extends LogicController {
      * It creates a user from the bean and then passes it to loginDAO to sign the user up.
     */
     public boolean signup(UserBean bean) {
-        User user = UserMapper.fromBeanAndHashPassword(bean);
+        User user = UserMapper.fromBeanAndHashPassword(bean); // It's okay its before saving.
         if (loginDAO.signup(user) != null) {
             if (user.getRole() == Role.HOST) {
                 hostDAO.addHost(new Host(user.getUsername(), user.getEmail()));

@@ -32,4 +32,6 @@ public abstract class NavigationManager {
 
     public abstract void goToInvitePlayer(Role role, TournamentBean tournamentBean);
 
+    public abstract void goToJoinTournament();
+
 }

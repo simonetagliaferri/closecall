@@ -43,4 +43,15 @@ public class InMemoryClubDAO implements ClubDAO {
         return result;
     }
 
+    @Override
+    public Club getClubByName(Host host, String name) {
+        List<Club> clubs = getClubs(host);
+        for (Club club : clubs) {
+            if (club.getName().equals(name)) {
+                return club;
+            }
+        }
+        return null;
+    }
+
 }

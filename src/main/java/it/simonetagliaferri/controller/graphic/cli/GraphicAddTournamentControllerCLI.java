@@ -74,8 +74,8 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             }
         }
         estimatedEndDate();
-        addPlayersToTournament();
         this.controller.addTournament(tournamentBean);
+        addPlayersToTournament();
     }
 
     public void estimatedEndDate() {

@@ -43,7 +43,11 @@ public class NavigationManagerCLI extends NavigationManager {
     }
 
     public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
-        sceneManager.InvitePlayer(this.appContext, role, tournamentBean);
+        sceneManager.invitePlayer(this.appContext, role, tournamentBean);
+    }
+
+    public void goToJoinTournament() {
+        sceneManager.joinTournament(this.appContext);
     }
 
 }

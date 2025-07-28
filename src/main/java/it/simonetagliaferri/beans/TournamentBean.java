@@ -28,6 +28,7 @@ public class TournamentBean {
     private List<MatchBean> matches;
     private double joinFee;
     private double courtPrice;
+    private String id;
 
     public TournamentBean() {
         confirmedTeams = new ArrayList<>();
@@ -136,6 +137,9 @@ public class TournamentBean {
     public List<TeamBean> getPendingTeams() { return pendingTeams; }
     public List<TeamBean> getPartialTeams() { return partialTeams; }
     public List<MatchBean> getMatches() { return matches; }
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public void addTeam(TeamBean team) {
         confirmedTeams.add(team);

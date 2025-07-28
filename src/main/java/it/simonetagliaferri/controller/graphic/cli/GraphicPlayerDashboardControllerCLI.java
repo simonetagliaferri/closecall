@@ -1,7 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.logic.PlayerDashboardLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -54,8 +53,7 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
     }
 
     private void searchTournament() {
-        List<TournamentBean> tournaments = this.controller.searchTournament(view.tournamentByCity());
-        view.listTournaments(tournaments);
+        navigationManager.goToJoinTournament();
     }
 
     private void searchClub() {

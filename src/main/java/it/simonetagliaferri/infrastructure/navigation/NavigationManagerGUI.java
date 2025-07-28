@@ -55,4 +55,8 @@ public class NavigationManagerGUI extends NavigationManager {
     public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
 
     }
+
+    public void goToJoinTournament() {
+
+    }
 }

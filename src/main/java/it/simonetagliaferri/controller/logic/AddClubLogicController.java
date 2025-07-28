@@ -28,7 +28,7 @@ public class AddClubLogicController extends LogicController {
         Host host = hostDAO.getHostByUsername(currentUser.getUsername());
         HostBean hostBean = HostMapper.toBean(host);
         clubBean.setOwner(hostBean);
-        Club club = ClubMapper.fromBean(clubBean);
+        Club club = ClubMapper.fromBean(clubBean); // Need to add a check for duplicates
         clubDAO.saveClub(club);
     }
 

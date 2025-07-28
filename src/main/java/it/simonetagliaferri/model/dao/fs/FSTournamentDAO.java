@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import it.simonetagliaferri.model.dao.TournamentDAO;
-import it.simonetagliaferri.model.domain.Host;
+import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.strategy.DoubleEliminationStrategy;
 import it.simonetagliaferri.model.strategy.RoundRobinStrategy;
@@ -53,9 +53,8 @@ public class FSTournamentDAO implements TournamentDAO {
 
 
     @Override
-    public void addTournament(Host host, Tournament tournament) {
-        tournament.setId(UUID.randomUUID().toString());
-        tournaments.computeIfAbsent(host.getUsername(), k -> new ArrayList<>()).add(tournament);
+    public void addTournament(Club club, Tournament tournament) {
+        tournaments.computeIfAbsent(club.getName(), k -> new ArrayList<>()).add(tournament);
         saveTournaments();
     }
 
@@ -68,15 +67,15 @@ public class FSTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public List<Tournament> getTournaments(Host host) {
+    public List<Tournament> getTournaments(Club club) {
         loadTournaments();
-        return tournaments.get(host.getUsername());
+        return tournaments.get(club.getName());
     }
 
     @Override
-    public void updateTournament(Host host, Tournament tournament) {
-        String hostUsername = host.getUsername();
-        List<Tournament> tournamentList = tournaments.get(hostUsername);
+    public void updateTournament(Club club, Tournament tournament) {
+        String clubName = club.getName();
+        List<Tournament> tournamentList = tournaments.get(clubName);
         if (tournamentList != null) {
             for (int i = 0; i < tournamentList.size(); i++) {
                 if (tournamentList.get(i).getId().equals(tournament.getId())) {
@@ -89,7 +88,7 @@ public class FSTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public Tournament getTournament(Host host, String id) {
+    public Tournament getTournament(Club club, String name, String tournamentFormat, String tournamentType, LocalDate startDate) {
         return null;
     }
 

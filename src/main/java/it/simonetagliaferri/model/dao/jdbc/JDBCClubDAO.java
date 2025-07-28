@@ -22,4 +22,9 @@ public class JDBCClubDAO implements ClubDAO {
         return List.of();
     }
 
+    @Override
+    public Club getClubByName(Host host, String name) {
+        return null;
+    }
+
 }

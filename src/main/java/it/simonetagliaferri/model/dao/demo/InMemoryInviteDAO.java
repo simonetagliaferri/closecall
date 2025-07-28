@@ -45,8 +45,7 @@ public class InMemoryInviteDAO implements InviteDAO {
         List<Invite> invites = this.invites.get(player.getUsername());
         if (invites != null) {
             for (Invite invite : invites) {
-                String tournamentId = invite.getTournament().getId();
-                if (tournamentId.equals(tournament.getId())) {
+                if (invite.getTournament() == tournament) {
                     return invite;
                 }
             }
