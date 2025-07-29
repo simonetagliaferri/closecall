@@ -26,4 +26,9 @@ public class FSClubDAO implements ClubDAO {
     public Club getClubByName(Host host, String name) {
         return null;
     }
+
+    @Override
+    public boolean clubAlreadyExists(Club club) {
+        return false;
+    }
 }

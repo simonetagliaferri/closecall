@@ -34,4 +34,9 @@ public class JDBCTournamentDAO implements TournamentDAO {
     public List<Tournament> getTournamentsByCity(String city) {
         return List.of();
     }
+
+    @Override
+    public boolean tournamentAlreadyExists(Club club, Tournament tournament) {
+        return false;
+    }
 }

@@ -1,14 +1,11 @@
 package it.simonetagliaferri.beans;
 
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentBean {
-    private static final String DATE_FORMAT = "MM/dd/yyyy";
 
     private String name;
     private String tournamentType;
@@ -88,23 +85,8 @@ public class TournamentBean {
     public double getJoinFee() { return joinFee; }
     public double getCourtPrice() { return courtPrice; }
 
-    public LocalDate formatDate(String date) {
-        try {
-            DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_FORMAT);
-            LocalDate d = LocalDate.parse(date, df);
-            return d;
-        } catch (DateTimeException e) {
-            return null;
-        }
-    }
-
-    public String dateToString(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-    }
-
-
     public LocalDate isDateValid(LocalDate date) {
-        if (date.isBefore(LocalDate.now()) || date == null) {
+        if (date.isBefore(LocalDate.now())) {
             return null;
         }
         return date;

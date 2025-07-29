@@ -1,7 +1,6 @@
 package it.simonetagliaferri.view.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.utils.CliUtils;
 
 import java.util.List;
@@ -42,13 +41,6 @@ public class PlayerDashboardCLIView {
             CliUtils.println(club.getStreet());
             CliUtils.println(club.getNumber());
             CliUtils.println(club.getCity());
-            CliUtils.println("");
-        }
-    }
-
-    public void listInvites(List<InviteBean> invites) {
-        for (InviteBean invite : invites) {
-            CliUtils.println(invite.getTournament().getTournamentName());
             CliUtils.println("");
         }
     }

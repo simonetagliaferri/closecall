@@ -15,17 +15,21 @@ public class CliUtils {
     }
 
     public static String prompt(String label) {
-        print(label);
-        try {
-            String input = reader.readLine();
-            if (input == null) {
-                println(EOF);
-                System.exit(-1);
+        while (true) {
+            print(label);
+            try {
+                String input = reader.readLine();
+                if (input == null) {
+                    println(EOF);
+                    System.exit(-1);
+                } else if (input.isEmpty()) {
+                    println("Empty input not allowed. Try again.");
+                }
+                else return input;
+            } catch (IOException e) {
+                println("Input error. Try again.");
+                return "";
             }
-            return input;
-        } catch (IOException e) {
-            println("Input error. Try again.");
-            return "";
         }
     }
 
@@ -43,6 +47,14 @@ public class CliUtils {
                 println("Please enter a valid number.");
             }
         }
+    }
+
+    public static int multipleChoiceInt(int max, String label) {
+        int choice = promptInt(label);
+        if (choice >= max) {
+            println("Invalid choice. Try again.");
+        }
+        return choice-1;
     }
 
     public static double promptDouble(String label) {

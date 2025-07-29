@@ -1,13 +1,15 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
-import it.simonetagliaferri.exception.InvalidDateException;
+import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,10 +57,10 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         while (!validDate) {
             strDate=view.startDate();
             try {
-                startDate = tournamentBean.formatDate(strDate);
+                startDate = DateConverter.formatDate(strDate);
                 tournamentBean.setStartDate(this.controller.getStartDate(tournamentBean, startDate));
                 validDate = true;
-            } catch (InvalidDateException e) {
+            } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
             }
         }
@@ -66,16 +68,19 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         while (!validDate) {
             strDate=view.signupDeadline();
             try {
-                deadline = tournamentBean.formatDate(strDate);
+                deadline = DateConverter.formatDate(strDate);
                 tournamentBean.setSignupDeadline(this.controller.getSignupDeadline(tournamentBean, deadline));
                 validDate = true;
-            } catch (InvalidDateException e) {
+            } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
             }
         }
         estimatedEndDate();
-        this.controller.addTournament(tournamentBean);
-        addPlayersToTournament();
+        if (this.controller.addTournament(tournamentBean)) {
+            addPlayersToTournament();
+        } else {
+            view.tournamentAlreadyExists();
+        }
     }
 
     public void estimatedEndDate() {
@@ -87,10 +92,10 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             while (!validDate) {
                 strEndDate=view.editEndDate();
                 try {
-                    LocalDate newEndDate = tournamentBean.formatDate(strEndDate);
+                    LocalDate newEndDate = DateConverter.formatDate(strEndDate);
                     tournamentBean.setEndDate(this.controller.getEndDate(tournamentBean, newEndDate));
                     validDate = true;
-                } catch (InvalidDateException e) {
+                } catch (DateTimeException | InvalidDateException e) {
                     view.invalidDate();
                 }
             }

@@ -66,4 +66,9 @@ public class InMemoryTournamentDAO implements TournamentDAO {
         }
         return tournamentList;
     }
+
+    @Override
+    public boolean tournamentAlreadyExists(Club club, Tournament tournament) {
+        return getTournament(club, tournament.getTournamentName(), tournament.getTournamentFormat(), tournament.getTournamentType(), tournament.getStartDate()) != null;
+    }
 }

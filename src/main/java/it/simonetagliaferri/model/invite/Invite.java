@@ -40,6 +40,14 @@ public class Invite {
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
+    public boolean hasExpired() {
+        if (expiryDate.isBefore(LocalDate.now())) {
+            if (status != InviteStatus.EXPIRED)
+                updateStatus(InviteStatus.EXPIRED);
+            return true;
+        }
+        return false;
+    }
     public InviteStatus getStatus() {
         return status;
     }

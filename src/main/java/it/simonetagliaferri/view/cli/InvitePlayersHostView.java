@@ -26,8 +26,20 @@ public class InvitePlayersHostView {
     }
 
 
+    public void invalidExpireDate() {
+        CliUtils.println("Invalid expire date entered. The expire date must be the same day or earlier than the signup deadline.");
+    }
+
     public void invalidDate() {
-        CliUtils.println("Invalid date entered. Try again.");
+        CliUtils.println("Invalid format date. Try again.");
+    }
+
+    public void fullTournament() {
+        CliUtils.println("There are no more available spots in the tournament.");
+    }
+
+    public void noSpaceForTeam() {
+        CliUtils.println("You do not have any space to add a full team.");
     }
 
     public void invalidPlayer() {

@@ -38,6 +38,7 @@ public class InvitePlayerLogicController extends LogicController{
         List<Invite> invites = inviteDAO.getInvites(sessionManager.getCurrentUser().getUsername());
         if (invites != null && !invites.isEmpty()) {
             for (Invite invite : invites) {
+                invite.hasExpired();
                 InviteBean inviteBean = InviteMapper.toBean(invite);
                 inviteBeanList.add(inviteBean);
             }
@@ -46,19 +47,48 @@ public class InvitePlayerLogicController extends LogicController{
     }
 
     public void updateInvite(InviteBean inviteBean, InviteStatus status){
-        Invite invite = getInviteFromBean(inviteBean);
-        Tournament tournament = invite.getTournament();
-        Player player = invite.getPlayer();
-        invite.updateStatus(status);
-        inviteDAO.delete(invite);
-        Team team = tournament.getReservedTeam(player);
-        if (tournament.isSingles())
-            tournament.processInviteForSingles(invite, team);
-        else {
-            Player player2 = team.getOtherPlayer(player.getUsername());
-            Invite otherInvite = inviteDAO.getInvite(player2, tournament);
-            tournament.processInviteForDoubles(invite, team, otherInvite);
+        if (status != InviteStatus.PENDING) {
+            Invite invite = getInviteFromBean(inviteBean);
+            Tournament tournament = invite.getTournament();
+            Player player = invite.getPlayer();
+            invite.updateStatus(status);
+            inviteDAO.delete(invite);
+            Team team = tournament.getReservedTeam(player);
+            if (tournament.isSingles())
+                tournament.processInviteForSingles(invite, team);
+            else {
+                Invite otherInvite = null;
+                Player player2 = team.getOtherPlayer(player.getUsername());
+                if (player2 != null) {
+                    otherInvite = inviteDAO.getInvite(player2, tournament);
+                }
+                tournament.processInviteForDoubles(invite, team, otherInvite);
+            }
+            tournamentDAO.updateTournament(tournament.getClub(), tournament);
         }
+    }
+
+    public boolean isExpireDateValid(TournamentBean tournamentBean, LocalDate date) {
+        return !date.isAfter(tournamentBean.getSignupDeadline());
+    }
+
+    public boolean expiredInvite(InviteBean inviteBean){
+        Invite invite = getInviteFromBean(inviteBean);
+        if (invite.hasExpired()) {
+            inviteDAO.delete(invite);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean spotAvailable(TournamentBean tournamentBean){
+        Tournament tournament = getTournamentFromBean(tournamentBean);
+        return tournament.availableSpot();
+    }
+
+    public boolean teamAvailable(TournamentBean tournamentBean){
+        Tournament tournament = getTournamentFromBean(tournamentBean);
+        return tournament.availableTeamSpot();
     }
 
     public boolean isPlayerRegistered(PlayerBean player) {

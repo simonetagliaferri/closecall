@@ -29,14 +29,19 @@ public class AddTournamentLogicController extends LogicController {
         this.inviteDAO = inviteDAO;
     }
 
-    public void addTournament(TournamentBean tournamentBean) {
+    public boolean addTournament(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
         Club club = clubDAO.getClubByName(host, clubBean.getName());
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Need to check for duplicates.
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
-        tournamentDAO.addTournament(club, tournament);
+        if (tournamentDAO.tournamentAlreadyExists(club, tournament))
+            return false;
+        else {
+            tournamentDAO.addTournament(club, tournament);
+            return true;
+        }
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {

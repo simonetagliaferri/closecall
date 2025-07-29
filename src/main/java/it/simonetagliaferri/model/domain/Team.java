@@ -27,14 +27,19 @@ public class Team {
     }
 
     public boolean isFull() {
-        return (player2 != null && this.type == TeamType.DOUBLE) || (player1 != null && this.type == TeamType.SINGLE);
+        return (player1 != null && player2 != null && this.type == TeamType.DOUBLE) || (player1 != null && this.type == TeamType.SINGLE);
     }
 
-    public void addSecondPlayer(Player player) {
-        if (player2 != null || (player1 != null && this.type == TeamType.SINGLE)) {
+    public void addPlayer(Player player) {
+        if (isFull()) {
             throw new IllegalStateException("Team already full.");
         }
-        this.player2=player;
+        else if (this.player1 == null) {
+            this.player1 = player;
+        }
+        else if (this.player2 == null) {
+            this.player2 = player;
+        }
     }
 
     public Player getOtherPlayer(String player) {
@@ -54,10 +59,6 @@ public class Team {
         else if (player1.getUsername().equals(player.getUsername())) {
             this.player1=null;
         }
-    }
-
-    public Player getPlayer2() {
-        return player2;
     }
 
     public TeamType getType() {

@@ -85,17 +85,12 @@ public class AddTournamentCLIView {
         return CliUtils.multipleChoiceInt(label, choice1, choice2);
     }
 
-    public String editEndDate() {
-        return CliUtils.prompt("Enter an estimated end date(MM/dd/yyyy): ");
+    public void tournamentAlreadyExists() {
+        CliUtils.println("This tournament already exists! Try again.");
     }
 
-    public String inviteExpireDate() { return CliUtils.prompt("Enter invite expire date(MM/dd/yyyy): "); }
-
-    public int askToAddPlayer() {
-        String label = "Do you want to add a player/team to the tournament?";
-        String choice1 = "Yes";
-        String choice2 = "No";
-        return CliUtils.multipleChoiceInt(label, choice1, choice2);
+    public String editEndDate() {
+        return CliUtils.prompt("Enter an estimated end date(MM/dd/yyyy): ");
     }
 
     public int getClub(List<String> clubs) {
@@ -119,19 +114,7 @@ public class AddTournamentCLIView {
         CliUtils.println("Invalid date entered. Try again.");
     }
 
-    public void invalidPlayer() {
-        CliUtils.println("Player not found. Try again.");
-    }
-
-    public int addMessage() {
-        return CliUtils.multipleChoiceInt("Do you want to add a message to the invite?", "Yes", "No");
-    }
-
     public String getMessage() {
         return CliUtils.prompt("Enter message: ");
-    }
-
-    public int askToSendEmail() {
-        return CliUtils.multipleChoiceInt("Do you want to send an email?", "Yes", "No");
     }
 }

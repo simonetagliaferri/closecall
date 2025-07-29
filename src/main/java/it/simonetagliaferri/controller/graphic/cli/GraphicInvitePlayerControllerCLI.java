@@ -7,9 +7,11 @@ import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.InvitePlayerLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
+import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.InvitePlayersHostView;
 import it.simonetagliaferri.view.cli.InvitePlayersPlayerView;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -51,6 +53,10 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
             teammateName = teammate.getUsername();
             playerView.teamInvite(teammateName);
         }
+        if (this.controller.expiredInvite(invite)) {
+            playerView.expiredInvite(invite.getExpiryDate());
+            return;
+        }
         playerView.expandedInvite(invite);
         this.controller.updateInvite(invite, playerView.handleInvite());
     }
@@ -67,8 +73,21 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
             choice = hostView.askToAddPlayer();
             if (choice == InvitePlayersHostView.InviteChoices.YES) {
                 if (!expireDateSet) {
-                    inviteExpireDate = tournamentBean.formatDate(hostView.inviteExpireDate());
-                    expireDateSet = true;
+                    while (inviteExpireDate == null) {
+                        try {
+                            inviteExpireDate = DateConverter.formatDate(hostView.inviteExpireDate());
+                        } catch (DateTimeException e) {
+                            hostView.invalidDate();
+                            continue;
+                        }
+                        if (!this.controller.isExpireDateValid(tournamentBean, inviteExpireDate)) {
+                            inviteExpireDate = null;
+                            hostView.invalidExpireDate();
+                        }
+                        else {
+                            expireDateSet = true;
+                        }
+                    }
                 }
                 if (tournamentBean.isSingles())
                     invite(inviteExpireDate);
@@ -96,6 +115,10 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     public void invite(LocalDate inviteExpireDate) {
+        if (!this.controller.spotAvailable(tournamentBean)) {
+            hostView.fullTournament();
+            return;
+        }
         PlayerBean player = getPlayer();
         boolean email = true;
         if (player == null) return;
@@ -122,6 +145,10 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
 
     public void inviteTeam(LocalDate inviteExpireDate) {
+        if (!this.controller.teamAvailable(tournamentBean)) {
+            hostView.noSpaceForTeam();
+            return;
+        }
         PlayerBean player1 = getPlayer();
         boolean email1 = true;
         if (player1 == null) return;

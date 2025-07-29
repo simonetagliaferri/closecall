@@ -27,6 +27,7 @@ public class InviteBean {
         this.message = message;
     }
 
+
     public void setTournament(TournamentBean tournament) {
         this.tournament = tournament;
     }
@@ -63,4 +64,5 @@ public class InviteBean {
     public String getMessage() {
         return message;
     }
+
 }

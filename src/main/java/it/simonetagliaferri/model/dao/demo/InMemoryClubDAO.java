@@ -54,4 +54,19 @@ public class InMemoryClubDAO implements ClubDAO {
         return null;
     }
 
+    @Override
+    public boolean clubAlreadyExists(Club club) {
+        Host host = club.getHost();
+        List<Club> clubs = getClubs(host);
+        if (clubs != null) {
+            for (Club club1 : clubs) {
+                if (club1.getName().equals(club.getName()) && club1.getCity().equals(club.getCity()) && club1.getStreet().equals(club.getStreet()) &&
+                        club1.getNumber().equals(club.getNumber())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

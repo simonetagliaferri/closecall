@@ -27,4 +27,9 @@ public class JDBCClubDAO implements ClubDAO {
         return null;
     }
 
+    @Override
+    public boolean clubAlreadyExists(Club club) {
+        return false;
+    }
+
 }

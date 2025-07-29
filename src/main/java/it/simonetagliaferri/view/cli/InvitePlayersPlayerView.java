@@ -4,6 +4,7 @@ import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.utils.CliUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,10 @@ public class InvitePlayersPlayerView {
         CliUtils.println("Tournament type: " + invite.getTournament().getTournamentType());
         CliUtils.println("Tournament join fee: " + invite.getTournament().getJoinFee());
         CliUtils.println("Court costs: " + invite.getTournament().getCourtPrice());
+    }
+
+    public void expiredInvite(LocalDate expiryDate) {
+        CliUtils.println("This invite expired on " + expiryDate);
     }
 
     public InviteStatus handleInvite() {

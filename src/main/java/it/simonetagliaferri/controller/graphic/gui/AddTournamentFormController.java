@@ -1,11 +1,12 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
-import it.simonetagliaferri.exception.InvalidDateException;
+import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -14,6 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -205,7 +208,7 @@ public class AddTournamentFormController extends GraphicController implements GU
                 }
             });
             estimateEndDate();
-        } catch (InvalidDateException e) {
+        } catch (DateTimeException | InvalidDateException e) {
             startDateLabel.setText("The chosen start date is not a valid date.");
             startDateLabel.setTextFill(Color.RED);
         }
@@ -224,7 +227,7 @@ public class AddTournamentFormController extends GraphicController implements GU
                     setDisable(empty || date.isBefore(controller.MinimumStartDate(tournamentBean)));
                 }
             });
-        } catch (InvalidDateException e) {
+        } catch (DateTimeException | InvalidDateException e) {
             deadlineLabel.setText("The chosen signup deadline is not valid.");
             deadlineLabel.setTextFill(Color.RED);
         }
@@ -233,7 +236,7 @@ public class AddTournamentFormController extends GraphicController implements GU
     @FXML
     private void updateEndDate() {
         tournamentBean.setEndDate(endDatePicker.getValue());
-        endDateLabel2.setText(tournamentBean.dateToString(endDatePicker.getValue()));
+        endDateLabel2.setText(DateConverter.dateToString(endDatePicker.getValue()));
     }
 
     @FXML
@@ -260,7 +263,7 @@ public class AddTournamentFormController extends GraphicController implements GU
         if (!numOfTeamsField.getText().isEmpty() && !numOfCourtsField.getText().isEmpty() && startDatePicker.getValue() != null) {
             endDateLabel1.setVisible(true);
             LocalDate endDate = this.controller.estimatedEndDate(tournamentBean);
-            endDateLabel2.setText(tournamentBean.dateToString(endDate));
+            endDateLabel2.setText(DateConverter.dateToString(endDate));
             endDateLabel2.setVisible(true);
             tournamentBean.setEndDate(endDate);
             endDateHyper.setVisible(true);

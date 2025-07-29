@@ -12,17 +12,43 @@ public class GraphicJoinTournamentController extends GraphicController {
 
     JoinTournamentLogicController controller;
     JoinTournamentView view;
-    TournamentBean tournamentBean;
 
     public GraphicJoinTournamentController(AppContext appContext) {
         super(appContext);
-        this.controller = new JoinTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO());
+        this.controller = new JoinTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+                appContext.getDAOFactory().getClubDAO(), appContext.getDAOFactory().getHostDAO(),
+                appContext.getDAOFactory().getPlayerDAO());
         this.view = new JoinTournamentView();
     }
 
     public void start() {
         List<TournamentBean> tournaments = this.controller.searchTournament(view.tournamentByCity());
-        view.listTournaments(tournaments);
+        boolean tournamentList = true;
+        while (tournamentList) {
+            int choice = view.listTournaments(tournaments);
+            if (choice == -1) {
+                break;
+            }
+            TournamentBean tournamentBean = tournaments.get(choice);
+            JoinTournamentView.JoinStatus status = view.expandedTournament(tournamentBean);
+            JoinTournamentView.JoinError result = JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS;
+            switch (status) {
+                case BACK:
+                    break;
+                case JOIN:
+                    result = this.controller.joinTournament(tournamentBean);
+                    break;
+            }
+            if (result == JoinTournamentView.JoinError.SUCCESS) {
+                view.success();
+                tournamentList = false;
+            }
+            else if (result == JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS) {
+                view.noAvailableSpots();
+            }
+            else if (result == JoinTournamentView.JoinError.ALREADY_IN_A_TEAM) {
+                view.alreadyJoined();
+            }
+        }
     }
-
 }

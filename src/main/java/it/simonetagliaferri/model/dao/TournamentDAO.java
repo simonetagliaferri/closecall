@@ -12,4 +12,5 @@ public interface TournamentDAO {
     void updateTournament(Club club, Tournament tournament);
     Tournament getTournament(Club club, String name, String tournamentFormat, String tournamentType, LocalDate startDate);
     List<Tournament> getTournamentsByCity(String city);
+    boolean tournamentAlreadyExists(Club club, Tournament tournament);
 }

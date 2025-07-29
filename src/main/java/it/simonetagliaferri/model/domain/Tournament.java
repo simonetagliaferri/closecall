@@ -3,6 +3,7 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
+import it.simonetagliaferri.view.cli.JoinTournamentView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -93,6 +94,15 @@ public class Tournament {
         }
     }
 
+    public boolean availableSpot() {
+        return availableSpots()>0;
+    }
+
+    public boolean availableTeamSpot() {
+        int spot = this.teamsNumber - (this.confirmedTeams.size()+this.pendingTeams.size()+this.partialTeams.size());
+        return spot>0;
+    }
+
     public List<Team> getConfirmedTeams() {
         return this.confirmedTeams;
     }
@@ -167,7 +177,48 @@ public class Tournament {
         }
     }
 
+    private boolean playerAlreadyInATeam(Player player) {
+        for (Team team : this.confirmedTeams) {
+            if (team.getPlayers().contains(player)) {
+                return true;
+            }
+        }
+        for (Team team : this.pendingTeams) {
+            if (team.getPlayers().contains(player)) {
+                return true;
+            }
+        }
+        for (Team team : this.partialTeams) {
+            if (team.getPlayers().contains(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public JoinTournamentView.JoinError addPlayer(Player player) {
+        if (!availableSpot()) return JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS;
+        if (playerAlreadyInATeam(player)) return JoinTournamentView.JoinError.ALREADY_IN_A_TEAM;
+        if (isSingles()) {
+            Team team = new Team(player, getTeamType());
+            this.confirmedTeams.add(team);
+        }
+        else {
+            for (Team team : this.partialTeams) {
+                if (!team.isFull()) {
+                    team.addPlayer(player);
+                    if (this.pendingTeams.contains(team)) {
+                        this.partialTeams.remove(team);
+                    }
+                    else {
+                        this.confirmedTeams.add(team);
+                    }
+                    break;
+                }
+            }
+        }
+        return JoinTournamentView.JoinError.SUCCESS;
+    }
 
     public String getTournamentType() { return tournamentType; }
     public String getMatchFormat() { return matchFormat; }
