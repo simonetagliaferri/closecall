@@ -8,6 +8,7 @@ import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
+import it.simonetagliaferri.view.cli.InvitePlayersHostView;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -76,10 +77,10 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             }
         }
         estimatedEndDate();
-        if (this.controller.addTournament(tournamentBean)) {
-            addPlayersToTournament();
-        } else {
+        if (this.controller.tournamentAlreadyExists(tournamentBean)) {
             view.tournamentAlreadyExists();
+        } else {
+            addPlayersToTournament();
         }
     }
 
@@ -103,6 +104,8 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     }
 
     public void addPlayersToTournament() {
-        navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
+        if (view.askToAddPlayer() == InvitePlayersHostView.InviteChoices.YES)
+            navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
+        this.controller.addTournament(tournamentBean);
     }
 }

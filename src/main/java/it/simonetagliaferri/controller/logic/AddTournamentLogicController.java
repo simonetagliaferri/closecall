@@ -1,6 +1,7 @@
 package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
@@ -29,19 +30,27 @@ public class AddTournamentLogicController extends LogicController {
         this.inviteDAO = inviteDAO;
     }
 
-    public boolean addTournament(TournamentBean tournamentBean) {
+    public void addTournament(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
         Club club = clubDAO.getClubByName(host, clubBean.getName());
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Need to check for duplicates.
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
-        if (tournamentDAO.tournamentAlreadyExists(club, tournament))
-            return false;
-        else {
-            tournamentDAO.addTournament(club, tournament);
-            return true;
-        }
+        tournamentDAO.addTournament(club, tournament);
+        club.notifySubscribers(tournament);
+    }
+
+    public boolean tournamentAlreadyExists(TournamentBean tournamentBean) {
+        ClubBean clubBean = tournamentBean.getClub();
+        HostBean hostBean = clubBean.getOwner();
+        Host host = hostDAO.getHostByUsername(hostBean.getUsername());
+        Club club = clubDAO.getClubByName(host, clubBean.getName());
+        String tournamentName = tournamentBean.getTournamentName();
+        String tournamentFormat = tournamentBean.getTournamentFormat();
+        String tournamentType = tournamentBean.getTournamentType();
+        LocalDate startDate = tournamentBean.getStartDate();
+        return tournamentDAO.getTournament(club, tournamentName, tournamentFormat, tournamentType, startDate)!=null;
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {

@@ -117,4 +117,12 @@ public class AddTournamentCLIView {
     public String getMessage() {
         return CliUtils.prompt("Enter message: ");
     }
+
+    public InvitePlayersHostView.InviteChoices askToAddPlayer() {
+        String label = "Do you want to add a player/team to the tournament?";
+        String choice1 = "Yes";
+        String choice2 = "No";
+        int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
+        return InvitePlayersHostView.InviteChoices.values()[choice - 1];
+    }
 }

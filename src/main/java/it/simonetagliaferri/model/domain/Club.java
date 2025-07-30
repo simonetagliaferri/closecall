@@ -1,6 +1,12 @@
 package it.simonetagliaferri.model.domain;
 
-public class Club {
+import it.simonetagliaferri.model.observer.Publisher;
+import it.simonetagliaferri.model.observer.Subscriber;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Club implements Publisher {
     private String name;
     private String street;
     private String number;
@@ -11,6 +17,7 @@ public class Club {
     private String phone;
     private String email;
     private Host owner;
+    private List<Subscriber> subscribers;
 
     public Club(String name, Host owner) {
         this.name = name;
@@ -66,4 +73,35 @@ public class Club {
         return this.owner;
     }
 
+
+    @Override
+    public void subscribe(Player player) {
+        if (subscribers == null) {
+            subscribers = new ArrayList<>();
+        }
+        subscribers.add(player);
+    }
+
+    @Override
+    public void unsubscribe(Player player) {
+        if (subscribers != null) {
+            subscribers.remove(player);
+        }
+    }
+
+    @Override
+    public void notifySubscribers(Tournament tournament) {
+        if (subscribers != null) {
+            for (Subscriber subscriber : subscribers) {
+                subscriber.update(this, tournament);
+            }
+        }
+    }
+
+    public boolean isSubscribed(Player player) {
+        if (subscribers != null) {
+            return subscribers.contains(player);
+        }
+        return false;
+    }
 }

@@ -50,4 +50,9 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.joinTournament(this.appContext);
     }
 
+    @Override
+    public void goToNotifications(Role role) {
+        sceneManager.goToNotifications(this.appContext, role);
+    }
+
 }

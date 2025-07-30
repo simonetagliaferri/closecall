@@ -4,12 +4,16 @@ import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.HostDashboardLogicController;
+import it.simonetagliaferri.infrastructure.SceneManagerGUI;
+import it.simonetagliaferri.utils.CliUtils;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,8 +28,11 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     @FXML private ToggleButton home;
     @FXML private ToggleButton newTournaments;
     @FXML private ToggleButton searchScreen;
-    @FXML private VBox addTournamentWrapper;
-    @FXML private AddTournamentFormController addTournamentsGUI;
+    @FXML private VBox contentWrapper;
+    private Node addClubView;
+    private Node addTournamentView;
+    List<ToggleButton> buttons;
+
 
 
     @Override
@@ -39,6 +46,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     public void postInit() {
         hostBean = this.controller.getHostBean();
         account.setText(hostBean.getUsername());
+        additionalInfo();
     }
 
     @FXML
@@ -50,29 +58,49 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         FontIcon icon3 = new FontIcon("oct-search-16");
         icon3.setIconSize(24);
         List<FontIcon> icons = Arrays.asList(icon1, icon2, icon3);
-        List<ToggleButton> buttons = Arrays.asList(home, newTournaments, searchScreen);
+        buttons = Arrays.asList(home, newTournaments, searchScreen);
         setButtons(buttons, icons);
     }
 
-    private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
-        ToggleGroup tabs = new ToggleGroup();
-        for (int i=0; i<buttons.size(); i++) {
-            ToggleButton button = buttons.get(i);
-            button.setToggleGroup(tabs);
-            button.setText("");
-            button.setGraphic(icons.get(i));
-            button.setMinHeight(40);
-            button.setMaxHeight(40);
-            button.setMinWidth(40);
-            button.setMaxWidth(40);
-        }
-        tabs.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == null) {
-                oldToggle.setSelected(true); // Re-select the old one
+    private void additionalInfo() {
+        if (this.controller.additionalInfoNeeded()) {
+            disableButtons(buttons);
+            try {
+                showAddClub();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        });
-        buttons.get(0).setSelected(true);
-        addTournamentWrapper.setVisible(false);
+        }
+    }
+
+    private void disableButtons(List<ToggleButton> buttons) {
+        for (ToggleButton button : buttons) {
+            button.setDisable(true);
+        }
+    }
+
+    private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
+        if (buttons == null ) {
+            CliUtils.println("No buttons selected");
+        } else {
+            ToggleGroup tabs = new ToggleGroup();
+            for (int i = 0; i < buttons.size(); i++) {
+                ToggleButton button = buttons.get(i);
+                button.setToggleGroup(tabs);
+                button.setText("");
+                button.setGraphic(icons.get(i));
+                button.setMinHeight(40);
+                button.setMaxHeight(40);
+                button.setMinWidth(40);
+                button.setMaxWidth(40);
+            }
+            tabs.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+                if (newToggle == null) {
+                    oldToggle.setSelected(true); // Re-select the old one
+                }
+            });
+            buttons.get(0).setSelected(true);
+        }
     }
 
     @FXML
@@ -84,14 +112,26 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     @FXML
     private void changeScreen() {
         if (newTournaments.isSelected()) {
-            addTournamentWrapper.setVisible(true);
-            navigationManager.goToAddTournament();
+            showAddTournament();
         }
         else if (searchScreen.isSelected()) {
-            addTournamentWrapper.setVisible(false);
         }
         else if (home.isSelected()) {
-            addTournamentWrapper.setVisible(false);
+
+        }
+    }
+
+    @FXML
+    public void showAddClub() throws IOException {
+        SceneManagerGUI.loadWrapperWithContext("addClub", contentWrapper);
+    }
+
+    @FXML
+    public void showAddTournament() {
+        try {
+            SceneManagerGUI.loadWrapperWithContext("addTournament", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

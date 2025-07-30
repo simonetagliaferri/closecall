@@ -55,12 +55,6 @@ public class AddTournamentFormController extends GraphicController implements GU
     private List<TextField> prizesFields = new ArrayList<>();
 
     private TournamentBean tournamentBean = new TournamentBean();
-    private GraphicAddTournamentControllerGUI parentController;
-
-
-    public void setParentController(GraphicAddTournamentControllerGUI parentController) {
-        this.parentController = parentController;
-    }
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -99,10 +93,6 @@ public class AddTournamentFormController extends GraphicController implements GU
             }
         });
         updateConfirmButtonBinding();
-    }
-
-    public void loadAddPlayersForm() {
-        parentController.loadAddPlayersForm();
     }
 
     @FXML
@@ -303,7 +293,8 @@ public class AddTournamentFormController extends GraphicController implements GU
         // Listen to user's choice
         alert.resultProperty().addListener((obs, oldResult, newResult) -> {
             if (newResult == yesButton) {
-                loadAddPlayersForm();
+
+
             } else if (newResult == noButton) {
                 // Directly create the tournament
                 //createTournament();

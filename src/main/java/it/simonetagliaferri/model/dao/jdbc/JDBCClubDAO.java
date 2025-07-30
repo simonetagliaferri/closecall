@@ -32,4 +32,9 @@ public class JDBCClubDAO implements ClubDAO {
         return false;
     }
 
+    @Override
+    public void updateClub(Club club) {
+
+    }
+
 }

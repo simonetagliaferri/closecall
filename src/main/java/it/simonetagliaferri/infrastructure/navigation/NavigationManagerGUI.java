@@ -48,7 +48,6 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     public void goToAddClub() {
-
     }
 
     @Override
@@ -57,6 +56,11 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     public void goToJoinTournament() {
+
+    }
+
+    @Override
+    public void goToNotifications(Role role) {
 
     }
 }

@@ -40,7 +40,13 @@ public class SceneManagerCLI {
     }
 
     public void joinTournament(AppContext appContext) {
-        GraphicJoinTournamentController graphicJoinTournamentController = new GraphicJoinTournamentController(appContext);
-        graphicJoinTournamentController.start();
+        GraphicJoinTournamentControllerCLI graphicJoinTournamentControllerCLI = new GraphicJoinTournamentControllerCLI(appContext);
+        graphicJoinTournamentControllerCLI.start();
+    }
+
+    public void goToNotifications(AppContext appContext, Role role) {
+        GraphicHandleNotificationsControllerCLI graphicHandleNotificationsControllerCLI = new GraphicHandleNotificationsControllerCLI(appContext);
+        graphicHandleNotificationsControllerCLI.start(role);
+
     }
 }

@@ -34,4 +34,6 @@ public abstract class NavigationManager {
 
     public abstract void goToJoinTournament();
 
+    public abstract void goToNotifications(Role role);
+
 }

@@ -31,4 +31,9 @@ public class FSClubDAO implements ClubDAO {
     public boolean clubAlreadyExists(Club club) {
         return false;
     }
+
+    @Override
+    public void updateClub(Club club) {
+
+    }
 }

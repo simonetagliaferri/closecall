@@ -69,4 +69,9 @@ public class InMemoryClubDAO implements ClubDAO {
         return false;
     }
 
+    @Override
+    public void updateClub(Club club) {
+        saveClub(club);
+    }
+
 }

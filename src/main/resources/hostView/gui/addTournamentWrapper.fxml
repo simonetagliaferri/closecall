@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicAddTournamentControllerGUI">
-
-    <VBox fx:id="addTournamentContent" styleClass="box"/>
-</VBox>

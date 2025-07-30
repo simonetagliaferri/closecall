@@ -8,12 +8,12 @@ import it.simonetagliaferri.view.cli.JoinTournamentView;
 
 import java.util.List;
 
-public class GraphicJoinTournamentController extends GraphicController {
+public class GraphicJoinTournamentControllerCLI extends GraphicController {
 
     JoinTournamentLogicController controller;
     JoinTournamentView view;
 
-    public GraphicJoinTournamentController(AppContext appContext) {
+    public GraphicJoinTournamentControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new JoinTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(), appContext.getDAOFactory().getHostDAO(),
@@ -42,6 +42,9 @@ public class GraphicJoinTournamentController extends GraphicController {
             if (result == JoinTournamentView.JoinError.SUCCESS) {
                 view.success();
                 tournamentList = false;
+                if (!this.controller.isSubscribed(tournamentBean)) {
+                    addClubToFavourites(tournamentBean);
+                }
             }
             else if (result == JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS) {
                 view.noAvailableSpots();
@@ -49,6 +52,12 @@ public class GraphicJoinTournamentController extends GraphicController {
             else if (result == JoinTournamentView.JoinError.ALREADY_IN_A_TEAM) {
                 view.alreadyJoined();
             }
+        }
+    }
+
+    public void addClubToFavourites(TournamentBean tournamentBean) {
+        if (view.addClubToFavourites()) {
+            this.controller.addClubToFavourites(tournamentBean);
         }
     }
 }

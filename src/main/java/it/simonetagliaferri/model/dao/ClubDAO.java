@@ -12,4 +12,5 @@ public interface ClubDAO {
     List<Club> getClubsByCity(String city);
     Club getClubByName(Host host, String name);
     boolean clubAlreadyExists(Club club);
+    void updateClub(Club club);
 }

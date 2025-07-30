@@ -39,26 +39,30 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     public void startPlayer() {
-        List<InviteBean> invites = this.controller.getInvites();
-        if (invites.isEmpty()) {
-            playerView.noNotificatons();
-            return;
+        if (playerView.chooseNotification() == InvitePlayersPlayerView.NotificationType.NOTIFICATIONS)
+            navigationManager.goToNotifications(Role.PLAYER);
+        else {
+            List<InviteBean> invites = this.controller.getInvites();
+            if (invites.isEmpty()) {
+                playerView.noNotificatons();
+                return;
+            }
+            int choice = playerView.listNotifications(invites);
+            if (choice == -1) return;
+            InviteBean invite = invites.get(choice);
+            PlayerBean teammate = this.controller.teammate(invite);
+            String teammateName;
+            if (teammate != null) {
+                teammateName = teammate.getUsername();
+                playerView.teamInvite(teammateName);
+            }
+            if (this.controller.expiredInvite(invite)) {
+                playerView.expiredInvite(invite.getExpiryDate());
+                return;
+            }
+            playerView.expandedInvite(invite);
+            this.controller.updateInvite(invite, playerView.handleInvite());
         }
-        int choice = playerView.listNotifications(invites);
-        if (choice == -1 ) return;
-        InviteBean invite = invites.get(choice);
-        PlayerBean teammate = this.controller.teammate(invite);
-        String teammateName;
-        if (teammate != null) {
-            teammateName = teammate.getUsername();
-            playerView.teamInvite(teammateName);
-        }
-        if (this.controller.expiredInvite(invite)) {
-            playerView.expiredInvite(invite.getExpiryDate());
-            return;
-        }
-        playerView.expandedInvite(invite);
-        this.controller.updateInvite(invite, playerView.handleInvite());
     }
 
     public void startHost() {
@@ -66,38 +70,32 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     public void addPlayersToTournament(TournamentBean tournamentBean) {
-        InvitePlayersHostView.InviteChoices choice;
+        InvitePlayersHostView.InviteChoices choice = InvitePlayersHostView.InviteChoices.YES;
         boolean expireDateSet = false;
         LocalDate inviteExpireDate = null;
-        while (true) {
-            choice = hostView.askToAddPlayer();
-            if (choice == InvitePlayersHostView.InviteChoices.YES) {
-                if (!expireDateSet) {
-                    while (inviteExpireDate == null) {
-                        try {
-                            inviteExpireDate = DateConverter.formatDate(hostView.inviteExpireDate());
-                        } catch (DateTimeException e) {
-                            hostView.invalidDate();
-                            continue;
-                        }
-                        if (!this.controller.isExpireDateValid(tournamentBean, inviteExpireDate)) {
-                            inviteExpireDate = null;
-                            hostView.invalidExpireDate();
-                        }
-                        else {
-                            expireDateSet = true;
-                        }
+        while (choice == InvitePlayersHostView.InviteChoices.YES) {
+            if (!expireDateSet) {
+                while (inviteExpireDate == null) {
+                    try {
+                        inviteExpireDate = DateConverter.formatDate(hostView.inviteExpireDate());
+                    } catch (DateTimeException e) {
+                        hostView.invalidDate();
+                        continue;
+                    }
+                    if (!this.controller.isExpireDateValid(tournamentBean, inviteExpireDate)) {
+                        inviteExpireDate = null;
+                        hostView.invalidExpireDate();
+                    } else {
+                        expireDateSet = true;
                     }
                 }
-                if (tournamentBean.isSingles())
-                    invite(inviteExpireDate);
-                else {
-                    inviteTeam(inviteExpireDate);
-                }
             }
+            if (tournamentBean.isSingles())
+                invite(inviteExpireDate);
             else {
-                break;
+                inviteTeam(inviteExpireDate);
             }
+            choice = hostView.askToAddPlayer();
         }
     }
 

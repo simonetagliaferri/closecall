@@ -42,11 +42,11 @@ public class InMemoryDAOFactory extends DAOFactory {
         Host host = hostDAO1.getHostByUsername(marco.getUsername());
         players.put(p1.getUsername(), new Player(p1.getUsername(), p1.getEmail()));
         players.put(p2.getUsername(), new Player(p2.getUsername(), p2.getEmail()));
-        Club sanP = new Club("SanP", host);
-        sanP.updateAddress("a", "a", "a", "a", "a", "a");
-        sanP.updateContacts("a", "a");
-        ClubDAO clubDAO1 = getClubDAO();
-        clubDAO1.saveClub(sanP);
+//        Club sanP = new Club("SanP", host);
+//        sanP.updateAddress("a", "a", "a", "a", "a", "a");
+//        sanP.updateContacts("a", "a");
+//        ClubDAO clubDAO1 = getClubDAO();
+//        clubDAO1.saveClub(sanP);
     }
 
     @Override

@@ -11,6 +11,8 @@ import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.HostMapper;
 
+import java.util.List;
+
 public class AddClubLogicController extends LogicController {
 
     ClubDAO clubDAO;
@@ -35,6 +37,7 @@ public class AddClubLogicController extends LogicController {
     public boolean firstClub() {
         User currentUser = sessionManager.getCurrentUser();
         Host host = hostDAO.getHostByUsername(currentUser.getUsername());
-        return clubDAO.getClubs(host).isEmpty();
+        List<Club> clubs = clubDAO.getClubs(host);
+        return (clubs == null || clubs.isEmpty());
     }
 }

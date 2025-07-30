@@ -49,4 +49,9 @@ public class JoinTournamentView {
     public void noAvailableSpots() {
         CliUtils.println("There are no available spots in this tournament.");
     }
+
+    public boolean addClubToFavourites() {
+        int choice = CliUtils.multipleChoiceInt("Do you want to add the hosting club to your favourites?", "Yes", "No");
+        return choice == 1;
+    }
 }

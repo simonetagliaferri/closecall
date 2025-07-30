@@ -38,7 +38,8 @@ public class HostDashboardLogicController extends LogicController {
 
     public boolean additionalInfoNeeded() {
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
-        return clubDAO.getClubs(host).isEmpty();
+        List<Club> clubs = clubDAO.getClubs(host);
+        return (clubs == null || clubs.isEmpty()) ;
     }
 
     public HostBean getHostBean() {

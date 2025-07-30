@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -81,6 +82,14 @@ public class SceneManagerGUI extends Application {
         stage.centerOnScreen();
         stage.setTitle("CloseCall");
         stage.show();
+    }
+
+    public static void loadWrapperWithContext(String fxml, VBox contentWrapper) throws IOException {
+        FXMLLoader loader = SceneManagerGUI.getLoader(fxml);
+        Node root = SceneManagerGUI.getRoot(loader);
+        GUIController controller = SceneManagerGUI.getController(loader);
+        controller.initializeController(appContext); // optional
+        contentWrapper.getChildren().setAll(root);
     }
 
 }
