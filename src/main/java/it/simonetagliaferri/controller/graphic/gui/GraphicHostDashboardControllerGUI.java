@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -31,6 +32,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     @FXML private VBox contentWrapper;
     private Node addClubView;
     private Node addTournamentView;
+    private Node homeView;
     List<ToggleButton> buttons;
 
 
@@ -47,6 +49,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         hostBean = this.controller.getHostBean();
         account.setText(hostBean.getUsername());
         additionalInfo();
+        showHome();
     }
 
     @FXML
@@ -65,11 +68,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     private void additionalInfo() {
         if (this.controller.additionalInfoNeeded()) {
             disableButtons(buttons);
-            try {
-                showAddClub();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            showAddClub();
         }
     }
 
@@ -117,13 +116,17 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         else if (searchScreen.isSelected()) {
         }
         else if (home.isSelected()) {
-
+            showHome();
         }
     }
 
     @FXML
-    public void showAddClub() throws IOException {
-        SceneManagerGUI.loadWrapperWithContext("addClub", contentWrapper);
+    public void showAddClub() {
+        try {
+            SceneManagerGUI.loadWrapperWithContext("addClub", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -134,4 +137,35 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
             throw new RuntimeException(e);
         }
     }
+
+    @FXML
+    public void showInvitePlayers(TournamentBean tournamentBean) {
+        GraphicInvitePlayersHostControllerGUI addPlayersFormController;
+        try {
+            addPlayersFormController = SceneManagerGUI.loadWrapperWithContext("addPlayers", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        addPlayersFormController.setTournamentBean(tournamentBean);
+    }
+
+    @FXML public void showHome() {
+        GraphicHostHomeControllerGUI homeController;
+        try {
+            homeController = SceneManagerGUI.loadWrapperWithContext("hostHome", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    TournamentBean tournamentBean;
+
+    public void setTournamentBean(TournamentBean tournamentBean) {
+        this.tournamentBean = tournamentBean;
+    }
+
+    public TournamentBean getTournamentBean(TournamentBean tournamentBean) {
+        return this.tournamentBean;
+    }
+
 }

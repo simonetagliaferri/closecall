@@ -19,6 +19,14 @@ public class AddClubCLIView {
         return PreambleChoice.NOT_ADD_CLUB;
     }
 
+    public void newClubAdded() {
+        CliUtils.println("New club successfully added.");
+    }
+
+    public void clubAlreadyExists() {
+        CliUtils.println("You are trying to add a club that already exists.");
+    }
+
     public String getClubName() {
         return CliUtils.prompt("Please enter your club name: ");
     }

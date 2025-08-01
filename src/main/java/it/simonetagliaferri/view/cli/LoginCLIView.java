@@ -16,12 +16,16 @@ public class LoginCLIView {
             CliUtils.println("1. Login");
             CliUtils.println("2. Sign up");
             CliUtils.println("3. Quit");
-            int choice = CliUtils.promptInt("Enter your choice: ");
+            int choice = CliUtils.promptPositiveInt("Enter your choice: ");
             if (choice >= 1 && choice <= 3) {
                 return LoginCommand.values()[choice-1];
             }
             CliUtils.println("Invalid choice. Try again.");
         }
+    }
+
+    public void emailAsUsername() {
+        CliUtils.println("You can't use an email address as a username.2");
     }
 
     public String getUsername() {

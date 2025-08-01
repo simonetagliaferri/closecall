@@ -45,10 +45,9 @@ public class FSLoginDAO implements LoginDAO {
     }
 
     @Override
-    public User signup(User user) {
+    public void signup(User user) {
         users.put(user.getUsername(), user);
         saveUsers();
-        return user;
     }
 
     // Loading the users at every look up so that the user's map is always up to date.

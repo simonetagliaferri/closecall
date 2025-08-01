@@ -1,15 +1,18 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddClubLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
+import it.simonetagliaferri.model.domain.Role;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class GraphicAddClubControllerGUI extends GraphicController implements GUIController{
 
-    @FXML private VBox addClub;
+    @FXML private HBox addClub;
     AddClubLogicController controller;
 
     @FXML private VBox firstClubWarning;
@@ -53,6 +56,21 @@ public class GraphicAddClubControllerGUI extends GraphicController implements GU
         clubDetails.setVisible(true);
         firstClubWarning.setVisible(false);
         addClub.getChildren().setAll(clubDetails);
+    }
+
+    @FXML
+    public void confirmClubDetails() {
+        ClubBean clubBean = new ClubBean();
+        clubBean.setName(clubName.getText());
+        clubBean.setStreet(clubStreet.getText());
+        clubBean.setNumber(clubNumber.getText());
+        clubBean.setCity(clubCity.getText());
+        clubBean.setState(clubState.getText());
+        clubBean.setCountry(clubCountry.getText());
+        clubBean.setPhone(clubPhone.getText());
+        clubBean.setEmail(clubEmail.getText());
+        controller.addClub(clubBean);
+        navigationManager.goToDashboard(Role.HOST);
     }
 
 }

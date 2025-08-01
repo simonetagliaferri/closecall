@@ -22,3 +22,5 @@ I need to add checks on clubs info(street, number, city, state, country, phone, 
 
 Made it so when sending an email to an unregistered player, username and email are set to the email address so that the key in the users map(Username) is not null.
 To make this always work, I need to make it so that during sign up the username and the email can't match.
+
+Edit DAO calls to only pass the needed attributes, not the full domain models, so that there is higher coesion and lower coupling.

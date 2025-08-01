@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FSClubDAO implements ClubDAO {
     @Override
-    public List<Club> getClubs(Host host) {
+    public List<Club> getClubs(String hostName) {
         return List.of();
     }
 
@@ -23,7 +23,7 @@ public class FSClubDAO implements ClubDAO {
     }
 
     @Override
-    public Club getClubByName(Host host, String name) {
+    public Club getClubByName(String hostName, String clubName) {
         return null;
     }
 

@@ -2,6 +2,7 @@ package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
+import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
@@ -17,10 +18,12 @@ public class HandleNotificationsLogicController extends LogicController {
 
     PlayerDAO playerDAO;
     TournamentDAO tournamentDAO;
+    HostDAO hostDAO;
 
-    public HandleNotificationsLogicController(SessionManager sessionManager, PlayerDAO playerDAO, TournamentDAO tournamentDAO) {
+    public HandleNotificationsLogicController(SessionManager sessionManager, PlayerDAO playerDAO, HostDAO hostDAO, TournamentDAO tournamentDAO) {
         super(sessionManager);
         this.playerDAO = playerDAO;
+        this.hostDAO = hostDAO;
         this.tournamentDAO = tournamentDAO;
     }
 
@@ -36,5 +39,7 @@ public class HandleNotificationsLogicController extends LogicController {
         }
         return tournamentBeans;
     }
+
+
 
 }

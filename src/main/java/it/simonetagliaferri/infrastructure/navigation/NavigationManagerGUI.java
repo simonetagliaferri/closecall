@@ -1,6 +1,8 @@
 package it.simonetagliaferri.infrastructure.navigation;
 
 import it.simonetagliaferri.beans.TournamentBean;
+import it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI;
+import it.simonetagliaferri.controller.graphic.gui.GraphicPlayerDashboardControllerGUI;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.SceneManagerGUI;
 import it.simonetagliaferri.model.domain.Role;
@@ -14,6 +16,9 @@ public class NavigationManagerGUI extends NavigationManager {
     protected NavigationManagerGUI(AppContext context) {
         super(context);
     }
+
+    private GraphicHostDashboardControllerGUI graphicHostDashboardControllerGUI;
+    private GraphicPlayerDashboardControllerGUI graphicPlayerDashboardControllerGUI;
 
     /**
      * The start method calls the SceneManagerGUI's setAppContext method so that the app context can be passed to the graphic controller.
@@ -35,16 +40,15 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     public void goToDashboard(Role role) {
-        try {
-            if (role == Role.HOST) {
-                SceneManagerGUI.setRoot("hostDashboard");
-            } else SceneManagerGUI.setRoot("playerDashboard");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (role == Role.HOST) {
+            graphicHostDashboardControllerGUI = SceneManagerGUI.hostDashboard();
+        } else {
+            graphicPlayerDashboardControllerGUI = SceneManagerGUI.playerDashboard();
         }
     }
 
     public void goToAddTournament() {
+        this.graphicHostDashboardControllerGUI.showAddTournament();
     }
 
     public void goToAddClub() {
@@ -52,7 +56,12 @@ public class NavigationManagerGUI extends NavigationManager {
 
     @Override
     public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
+        if (role == Role.HOST) {
+            this.graphicHostDashboardControllerGUI.showInvitePlayers(tournamentBean);
+        }
+        else {
 
+        }
     }
 
     public void goToJoinTournament() {

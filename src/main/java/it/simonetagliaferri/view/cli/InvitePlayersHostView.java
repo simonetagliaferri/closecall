@@ -1,5 +1,7 @@
 package it.simonetagliaferri.view.cli;
 
+import it.simonetagliaferri.beans.TournamentBean;
+import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.utils.CliUtils;
 
 public class InvitePlayersHostView {
@@ -19,6 +21,14 @@ public class InvitePlayersHostView {
         String choice2 = "No";
         int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
         return InviteChoices.values()[choice - 1];
+    }
+
+    public void playerAlreadyInvited() {
+        CliUtils.println("The player has already been invited to the tournament.");
+    }
+
+    public void teamDeleted() {
+        CliUtils.println("The whole team has been discarded. Please start again.");
     }
 
     public String getPlayer() {

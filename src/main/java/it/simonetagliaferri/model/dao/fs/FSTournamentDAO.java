@@ -74,17 +74,6 @@ public class FSTournamentDAO implements TournamentDAO {
 
     @Override
     public void updateTournament(Club club, Tournament tournament) {
-        String clubName = club.getName();
-        List<Tournament> tournamentList = tournaments.get(clubName);
-        if (tournamentList != null) {
-            for (int i = 0; i < tournamentList.size(); i++) {
-                if (tournamentList.get(i).getId().equals(tournament.getId())) {
-                    tournamentList.set(i, tournament);
-                    saveTournaments();
-                    return;
-                }
-            }
-        }
     }
 
     @Override

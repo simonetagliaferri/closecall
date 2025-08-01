@@ -47,7 +47,7 @@ public class JoinTournamentLogicController extends LogicController {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = clubDAO.getClubByName(host, clubBean.getName());
+        Club club = clubDAO.getClubByName(host.getUsername(), clubBean.getName());
         String tournamentName = tournamentBean.getTournamentName();
         String tournamentFormat = tournamentBean.getTournamentFormat();
         String tournamentType = tournamentBean.getTournamentType();
@@ -59,7 +59,7 @@ public class JoinTournamentLogicController extends LogicController {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        return clubDAO.getClubByName(host, clubBean.getName());
+        return clubDAO.getClubByName(host.getUsername(), clubBean.getName());
     }
 
     public JoinTournamentView.JoinError joinTournament(TournamentBean tournamentBean) {

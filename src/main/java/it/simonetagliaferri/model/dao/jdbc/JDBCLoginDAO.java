@@ -35,7 +35,7 @@ public class JDBCLoginDAO implements LoginDAO {
     }
 
     @Override
-    public User signup(User user) throws DAOException {
+    public void signup(User user) throws DAOException {
         String username = user.getUsername();
         String email = user.getEmail();
         String password = user.getPassword();
@@ -51,7 +51,6 @@ public class JDBCLoginDAO implements LoginDAO {
         } catch (SQLException e) {
             throw new DAOException("Error in signup procedure: " + e.getMessage());
         }
-        return user;
     }
 
     @Override

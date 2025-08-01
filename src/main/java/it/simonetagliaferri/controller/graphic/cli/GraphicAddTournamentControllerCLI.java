@@ -23,8 +23,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getInviteDAO());
+                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();
     }
@@ -77,7 +76,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             }
         }
         estimatedEndDate();
-        if (this.controller.tournamentAlreadyExists(tournamentBean)) {
+        if (!this.controller.addTournament(tournamentBean)) {
             view.tournamentAlreadyExists();
         } else {
             addPlayersToTournament();
@@ -106,6 +105,5 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public void addPlayersToTournament() {
         if (view.askToAddPlayer() == InvitePlayersHostView.InviteChoices.YES)
             navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
-        this.controller.addTournament(tournamentBean);
     }
 }

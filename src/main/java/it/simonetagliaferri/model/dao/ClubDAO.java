@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface ClubDAO {
 
-    List<Club> getClubs(Host host);
+    List<Club> getClubs(String hostName);
     void saveClub(Club club);
     List<Club> getClubsByCity(String city);
-    Club getClubByName(Host host, String name);
+    Club getClubByName(String hostName, String clubName);
     boolean clubAlreadyExists(Club club);
     void updateClub(Club club);
 }

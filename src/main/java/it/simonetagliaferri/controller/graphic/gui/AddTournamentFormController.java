@@ -1,14 +1,18 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
+import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -21,6 +25,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddTournamentFormController extends GraphicController implements GUIController {
 
@@ -50,6 +55,8 @@ public class AddTournamentFormController extends GraphicController implements GU
     @FXML private CheckBox courtCostCheckBox;
     @FXML private TextField courtCostField;
     @FXML private Button confirmButton;
+    @FXML private ComboBox clubs;
+
     private VBox prizesBox = new VBox();
     private List<Label> prizesLabels = new ArrayList<>();
     private List<TextField> prizesFields = new ArrayList<>();
@@ -61,8 +68,29 @@ public class AddTournamentFormController extends GraphicController implements GU
         this.navigationManager = appContext.getNavigationManager();
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(),
-                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getInviteDAO());
+                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
+        postInit();
+    }
+
+    public void postInit() {
+        List<ClubBean> clubBeans = this.controller.getClubBeans();
+        List<String> clubNames = clubBeans.stream().map(ClubBean::getName).collect(Collectors.toList());
+        clubs.setItems(FXCollections.observableList(clubNames));
+        clubs.getSelectionModel().selectFirst();
+        setClub();
+    }
+
+    @FXML
+    public void setClub() {
+        List<ClubBean> clubBeans = this.controller.getClubBeans();
+        String clubName = clubs.getValue().toString();
+        ClubBean clubBean = null;
+        for (ClubBean club : clubBeans) {
+            if (club.getName().equals(clubName)) {
+                clubBean = club;
+            }
+        }
+        tournamentBean.setClub(clubBean);
     }
 
     @FXML private void initialize() {
@@ -236,6 +264,28 @@ public class AddTournamentFormController extends GraphicController implements GU
     }
 
     @FXML
+    private void setTournamentType() {
+        tournamentBean.setTournamentType(tournamentTypeChoice.getValue());
+        estimateEndDate();
+    }
+
+    @FXML
+    private void setTournamentName() {
+        tournamentBean.setTournamentName(tournamentNameField.getText());
+    }
+
+    @FXML
+    private void setMatchFormatChoice() {
+        tournamentBean.setMatchFormat(matchFormatChoice.getValue());
+    }
+
+    @FXML
+    private void setCourtTypeChoice() {
+        tournamentBean.setCourtType(courtTypeChoice.getValue());
+    }
+
+
+    @FXML
     private void setTeamsNumber() {
         int n = checkNumber(numOfTeamsField);
         tournamentBean.setTeamsNumber(n);
@@ -278,6 +328,18 @@ public class AddTournamentFormController extends GraphicController implements GU
     private void confirmTournamentData() {
         // Check if data is valid here if needed (optional, since button disabled when invalid)
 
+        tournamentBean.setTournamentName(tournamentNameField.getText());
+        tournamentBean.setCourtNumber(Integer.parseInt(numOfCourtsField.getText()));
+        tournamentBean.setTeamsNumber(Integer.parseInt(numOfTeamsField.getText()));
+        tournamentBean.setJoinFee(Double.valueOf(joinFeeField.getText()));
+        tournamentBean.setCourtPrice(Double.valueOf(courtCostField.getText()));
+        int numOfPrizes = Integer.parseInt(numOfPrizesField.getText());
+        List<Double> prizes = new ArrayList<>();
+        for (int i = 0; i < numOfPrizes; i++) {
+            prizes.add(Double.valueOf(prizesFields.get(i).getText()));
+        }
+        tournamentBean.setPrizes(prizes);
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Tournament Creation");
         alert.setHeaderText(null);
@@ -292,12 +354,10 @@ public class AddTournamentFormController extends GraphicController implements GU
 
         // Listen to user's choice
         alert.resultProperty().addListener((obs, oldResult, newResult) -> {
+            this.controller.addTournament(tournamentBean);
             if (newResult == yesButton) {
-
-
+                navigationManager.goToInvitePlayer(Role.HOST, tournamentBean);
             } else if (newResult == noButton) {
-                // Directly create the tournament
-                //createTournament();
             }
             // If Cancel (window closed or cancel pressed), do nothing
         });

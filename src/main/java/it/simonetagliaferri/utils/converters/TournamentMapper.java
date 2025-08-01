@@ -31,7 +31,6 @@ public class TournamentMapper {
         tournamentBean.setEndDate(tournament.getEndDate());
         tournamentBean.setSignupDeadline(tournament.getSignupDeadline());
         tournamentBean.setClub(ClubMapper.toBean(tournament.getClub()));
-        tournamentBean.setId(tournament.getId());
         if (tournament.getConfirmedTeams() != null) {
             for (Team team : tournament.getConfirmedTeams()) {
                 confirmedTeamsBean.add(TeamMapper.toBean(team));

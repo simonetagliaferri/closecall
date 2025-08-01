@@ -18,9 +18,8 @@ public class InMemoryLoginDAO implements LoginDAO {
     }
 
     @Override
-    public User signup(User user) {
+    public void signup(User user) {
         users.put(user.getUsername(), user);
-        return user;
     }
 
     @Override

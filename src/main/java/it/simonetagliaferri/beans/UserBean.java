@@ -51,10 +51,7 @@ public class UserBean {
             this.username = username;
             return true;
         }
-        else {
-            this.username = null;
-            return false;
-        }
+        return false;
     }
 
     public String getPassword() {

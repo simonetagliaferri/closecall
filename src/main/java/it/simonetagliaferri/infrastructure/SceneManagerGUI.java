@@ -1,6 +1,8 @@
 package it.simonetagliaferri.infrastructure;
 
 import it.simonetagliaferri.controller.graphic.gui.GUIController;
+import it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI;
+import it.simonetagliaferri.controller.graphic.gui.GraphicPlayerDashboardControllerGUI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -29,15 +31,35 @@ public class SceneManagerGUI extends Application {
      * Used by graphic controllers to swap root nodes in the scene.
      */
     public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        FXMLLoader fxmlLoader = getLoader(fxml);
+        scene.setRoot(loadFXML(fxmlLoader));
+    }
+
+    public static GraphicHostDashboardControllerGUI hostDashboard() {
+        FXMLLoader fxmlLoader = getLoader("hostDashboard");
+        try {
+            scene.setRoot(loadFXML(fxmlLoader));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fxmlLoader.getController();
+    }
+
+    public static GraphicPlayerDashboardControllerGUI playerDashboard() {
+        FXMLLoader fxmlLoader = getLoader("playerDashboard");
+        try {
+            scene.setRoot(loadFXML(fxmlLoader));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fxmlLoader.getController();
     }
 
     /**
      * It gets the correct fxml file from the parameter, it then loads it so that we can get the controller of that fxml, so that we can use setAppContext to pass
      * the app context to the graphic controller. After that we return root to the caller, which will use it to set the scene's root.
      */
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(SceneManagerGUI.class.getResource("/hostView/gui/" + fxml + ".fxml"));
+    private static Parent loadFXML(FXMLLoader fxmlLoader) throws IOException {
         Parent root = fxmlLoader.load();
         GUIController controller = fxmlLoader.getController();
         controller.initializeController(appContext);
@@ -50,7 +72,6 @@ public class SceneManagerGUI extends Application {
 
     public static <T extends GUIController> T getController(FXMLLoader fxmlLoader) {
         T controller = fxmlLoader.getController();
-        controller.initializeController(appContext);
         return controller;
     }
 
@@ -76,7 +97,8 @@ public class SceneManagerGUI extends Application {
         double baseHeight = 720;
         stage.setMinWidth(baseWidth / 2);
         stage.setMinHeight(baseHeight / 2);
-        scene = new Scene(loadFXML("login"), baseWidth, baseHeight);
+        FXMLLoader loader = getLoader("login");
+        scene = new Scene(loadFXML(loader), baseWidth, baseHeight);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/hostView/css/start.css")).toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
@@ -84,12 +106,13 @@ public class SceneManagerGUI extends Application {
         stage.show();
     }
 
-    public static void loadWrapperWithContext(String fxml, VBox contentWrapper) throws IOException {
+    public static <T extends GUIController> T loadWrapperWithContext(String fxml, VBox contentWrapper) throws IOException {
         FXMLLoader loader = SceneManagerGUI.getLoader(fxml);
         Node root = SceneManagerGUI.getRoot(loader);
-        GUIController controller = SceneManagerGUI.getController(loader);
+        T controller = SceneManagerGUI.getController(loader);
         controller.initializeController(appContext); // optional
         contentWrapper.getChildren().setAll(root);
+        return controller;
     }
 
 }

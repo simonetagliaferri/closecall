@@ -46,6 +46,15 @@ public class InvitePlayerLogicController extends LogicController{
         return inviteBeanList;
     }
 
+    public LocalDate maxExpireDate(TournamentBean tournamentBean) {
+        return tournamentBean.getSignupDeadline();
+    }
+
+    public LocalDate minExpireDate() {
+        return LocalDate.now();
+    }
+
+
     public void updateInvite(InviteBean inviteBean, InviteStatus status){
         if (status != InviteStatus.PENDING) {
             Invite invite = getInviteFromBean(inviteBean);
@@ -106,7 +115,7 @@ public class InvitePlayerLogicController extends LogicController{
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = clubDAO.getClubByName(host, clubBean.getName());
+        Club club = clubDAO.getClubByName(host.getUsername(), clubBean.getName());
         String tournamentName = tournamentBean.getTournamentName();
         String tournamentFormat = tournamentBean.getTournamentFormat();
         String tournamentType = tournamentBean.getTournamentType();
@@ -149,6 +158,12 @@ public class InvitePlayerLogicController extends LogicController{
         tournament.reserveSpot(p1,p2);
     }
 
+    public boolean playerAlreadyInvited(PlayerBean playerBean, TournamentBean tournamentBean) {
+        Tournament tournament = getTournamentFromBean(tournamentBean);
+        Player player = playerDAO.findByUsername(playerBean.getUsername());
+        return tournament.playerAlreadyInATeam(player);
+    }
+
     public PlayerBean isPlayerValid(String player) {
         PlayerBean playerBean = new PlayerBean();
         Player p;
@@ -179,4 +194,5 @@ public class InvitePlayerLogicController extends LogicController{
         }
         return base;
     }
+
 }

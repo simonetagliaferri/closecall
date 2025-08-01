@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -12,19 +13,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="addTournaments" alignment="TOP_RIGHT" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.AddTournamentFormController">
+<HBox fx:id="addTournaments" alignment="CENTER" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.AddTournamentFormController">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportWidth="450.0" HBox.hgrow="ALWAYS">
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportWidth="450.0" HBox.hgrow="NEVER">
          <HBox.margin>
             <Insets />
          </HBox.margin>
          <content>
             <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" styleClass="box">
                <children>
+                  <VBox>
+                     <children>
+                        <Label styleClass="text" text="Club name" />
+                        <ComboBox fx:id="clubs" onAction="#setClub" prefWidth="150.0" />
+                     </children>
+                  </VBox>
                   <VBox fx:id="tournamentDataPanel" styleClass="box">
                      <children>
                         <Label styleClass="text" text="Tournament name" />
-                        <TextField fx:id="tournamentNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+                        <TextField fx:id="tournamentNameField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setTournamentName" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                      </children>
                      <VBox.margin>
                         <Insets />
@@ -33,7 +40,7 @@
                   <VBox styleClass="box">
                      <children>
                         <Label text="Tournament type" />
-                        <ChoiceBox fx:id="tournamentTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                        <ChoiceBox fx:id="tournamentTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setTournamentType" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <VBox styleClass="box">
@@ -45,13 +52,13 @@
                   <VBox styleClass="box">
                      <children>
                         <Label text="Match format" />
-                        <ChoiceBox fx:id="matchFormatChoice" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                        <ChoiceBox fx:id="matchFormatChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setMatchFormatChoice" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <VBox styleClass="box">
                      <children>
                         <Label text="Court type" />
-                        <ChoiceBox fx:id="courtTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
+                        <ChoiceBox fx:id="courtTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setCourtTypeChoice" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <VBox fx:id="tournamentDataPanel1" styleClass="box">
@@ -113,7 +120,7 @@
             </VBox>
          </content>
       </ScrollPane>
-      <VBox alignment="BOTTOM_RIGHT" styleClass="box" HBox.hgrow="ALWAYS">
+      <VBox alignment="BOTTOM_RIGHT" styleClass="box" HBox.hgrow="NEVER">
          <children>
             <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#confirmTournamentData" prefHeight="30.0" prefWidth="125.0" styleClass="blue-button" text="Confirm" />
          </children>

@@ -20,13 +20,6 @@ public class HostMapper {
 
     public static Host fromBean(HostBean hostBean) {
         Host host = new Host(hostBean.getUsername(), hostBean.getEmail());
-        List<Tournament> tournaments = new ArrayList<>();
-        if (hostBean.getTournaments() != null) {
-            for (TournamentBean torunamentBean : hostBean.getTournaments()) {
-                tournaments.add(TournamentMapper.fromBean(torunamentBean));
-            }
-        }
-        host.setTournaments(tournaments);
         List<Club> clubs = new ArrayList<>();
         if (hostBean.getClubs() != null) {
             for (ClubBean clubBean : hostBean.getClubs()) {

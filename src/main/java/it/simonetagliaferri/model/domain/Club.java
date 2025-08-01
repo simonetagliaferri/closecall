@@ -3,6 +3,7 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Club implements Publisher {
     private String phone;
     private String email;
     private Host owner;
+    private List<Tournament> tournaments;
     private List<Subscriber> subscribers;
 
     public Club(String name, Host owner) {
@@ -36,6 +38,10 @@ public class Club implements Publisher {
     public void updateContacts(String phone, String email) {
         this.phone = phone;
         this.email = email;
+    }
+
+    public void setOwner(Host owner) {
+        this.owner = owner;
     }
 
     public String getAddress() {
@@ -75,7 +81,7 @@ public class Club implements Publisher {
 
 
     @Override
-    public void subscribe(Player player) {
+    public void subscribe(Subscriber player) {
         if (subscribers == null) {
             subscribers = new ArrayList<>();
         }
@@ -83,7 +89,7 @@ public class Club implements Publisher {
     }
 
     @Override
-    public void unsubscribe(Player player) {
+    public void unsubscribe(Subscriber player) {
         if (subscribers != null) {
             subscribers.remove(player);
         }
@@ -101,6 +107,15 @@ public class Club implements Publisher {
     public boolean isSubscribed(Player player) {
         if (subscribers != null) {
             return subscribers.contains(player);
+        }
+        return false;
+    }
+
+    public boolean tournamentAlreadyExists(Tournament tournament) {
+        for (Tournament to : tournaments) {
+            if (to.equals(tournament)) {
+                return true;
+            }
         }
         return false;
     }

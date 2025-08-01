@@ -121,15 +121,20 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         boolean email = true;
         if (player == null) return;
         String message = null;
-        if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+        if (this.controller.playerAlreadyInvited(player, tournamentBean)) {
+            hostView.playerAlreadyInvited();
+        }
+        else {
+            if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
             message = hostView.getMessage();
-        }
-        if (this.controller.isPlayerRegistered(player)) {
-            if (!sendEmail()) {
-                email = false;
             }
+            if (this.controller.isPlayerRegistered(player)) {
+                if (!sendEmail()) {
+                    email = false;
+                }
+            }
+            this.controller.invitePlayer(player, tournamentBean, inviteExpireDate, message, email);
         }
-        this.controller.invitePlayer(player, tournamentBean, inviteExpireDate, message, email);
     }
 
 
@@ -151,31 +156,43 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         boolean email1 = true;
         if (player1 == null) return;
         String message1 = null;
-        if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
-            message1 = hostView.getMessage();
-        }
-        if (this.controller.isPlayerRegistered(player1)) {
-            if (!sendEmail()) {
-                email1 = false;
-            }
-        }
-        if (hostView.askToAddTeammate() == InvitePlayersHostView.InviteChoices.YES) {
-            PlayerBean player2 = getPlayer();
-            boolean email2 = true;
-            if (player2 == null) return;
-            String message2 = null;
-            if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
-                message2 = hostView.getMessage();
-            }
-            if (this.controller.isPlayerRegistered(player2)) {
-                if (!sendEmail()) {
-                    email2 = false;
-                }
-            }
-            this.controller.inviteTeam(player1, player2, tournamentBean, inviteExpireDate,message1, message2, email1, email2);
+        if (this.controller.playerAlreadyInvited(player1, tournamentBean)) {
+            hostView.playerAlreadyInvited();
+            hostView.teamDeleted();
         }
         else {
-            this.controller.invitePlayer(player1, tournamentBean, inviteExpireDate,message1, email1);
+            if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+                message1 = hostView.getMessage();
+            }
+            if (this.controller.isPlayerRegistered(player1)) {
+                if (!sendEmail()) {
+                    email1 = false;
+                }
+            }
+            if (hostView.askToAddTeammate() == InvitePlayersHostView.InviteChoices.YES) {
+                PlayerBean player2 = getPlayer();
+                boolean email2 = true;
+                if (player2 == null) return;
+                String message2 = null;
+                if (this.controller.playerAlreadyInvited(player2, tournamentBean)) {
+                    hostView.playerAlreadyInvited();
+                    hostView.teamDeleted();
+                }
+                else {
+                    if (hostView.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+                        message2 = hostView.getMessage();
+                    }
+                    if (this.controller.isPlayerRegistered(player2)) {
+                        if (!sendEmail()) {
+                            email2 = false;
+                        }
+                    }
+                    this.controller.inviteTeam(player1, player2, tournamentBean, inviteExpireDate, message1, message2, email1, email2);
+                }
+            }
+            else {
+                this.controller.invitePlayer(player1, tournamentBean, inviteExpireDate, message1, email1);
+            }
         }
     }
 }

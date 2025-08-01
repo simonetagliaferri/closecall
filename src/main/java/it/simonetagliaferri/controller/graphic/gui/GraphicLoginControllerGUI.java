@@ -113,8 +113,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
 
     @FXML
     private void handleSignupButton() {
-        UserBean user = new UserBean();
-        boolean response;
+        UserBean user = new UserBean(usernameField.getText().trim());
         if (this.controller.userLookUp(user)) {
             usernameField.clear();
             roleSpinner.requestFocus();
@@ -136,15 +135,10 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
         else {
             user.setUsername(usernameField.getText());
             user.setRole(roleSpinner.getValue().toUpperCase());
-            response = this.controller.signup(user);
-            if (response) {
-                clearSignup();
-                switchToLogin();
-                welcomeText.setText("Signed up successfully");
-            }
-            else {
-                welcomeText.setText("Signup failed");
-            }
+            this.controller.signup(user);
+            clearSignup();
+            switchToLogin();
+            welcomeText.setText("Signed up successfully");
         }
     }
 

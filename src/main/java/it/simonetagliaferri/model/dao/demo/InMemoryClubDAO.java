@@ -17,18 +17,19 @@ public class InMemoryClubDAO implements ClubDAO {
     }
 
     @Override
-    public List<Club> getClubs(Host host) {
-        return clubs.get(host.getUsername());
+    public List<Club> getClubs(String hostName) {
+        return clubs.get(hostName);
     }
 
     @Override
     public void saveClub(Club club) {
-        List<Club> clubs = getClubs(club.getHost());
+        String hostName = club.getHost().getUsername();
+        List<Club> clubs = getClubs(hostName);
         if (clubs == null) {
             clubs = new ArrayList<>();
         }
         clubs.add(club);
-        this.clubs.put(club.getHost().getUsername(), clubs);
+        this.clubs.put(hostName, clubs);
     }
 
     public List<Club> getClubsByCity(String city) {
@@ -44,10 +45,10 @@ public class InMemoryClubDAO implements ClubDAO {
     }
 
     @Override
-    public Club getClubByName(Host host, String name) {
-        List<Club> clubs = getClubs(host);
+    public Club getClubByName(String hostName, String clubName) {
+        List<Club> clubs = getClubs(hostName);
         for (Club club : clubs) {
-            if (club.getName().equals(name)) {
+            if (club.getName().equals(clubName)) {
                 return club;
             }
         }
@@ -56,8 +57,8 @@ public class InMemoryClubDAO implements ClubDAO {
 
     @Override
     public boolean clubAlreadyExists(Club club) {
-        Host host = club.getHost();
-        List<Club> clubs = getClubs(host);
+        String hostName = club.getHost().getUsername();
+        List<Club> clubs = getClubs(hostName);
         if (clubs != null) {
             for (Club club1 : clubs) {
                 if (club1.getName().equals(club.getName()) && club1.getCity().equals(club.getCity()) && club1.getStreet().equals(club.getStreet()) &&

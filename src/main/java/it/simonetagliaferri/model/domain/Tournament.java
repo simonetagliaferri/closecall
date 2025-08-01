@@ -2,6 +2,8 @@ package it.simonetagliaferri.model.domain;
 
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
+import it.simonetagliaferri.model.observer.Publisher;
+import it.simonetagliaferri.model.observer.Subscriber;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
 
@@ -9,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tournament {
+public class Tournament implements Publisher {
     private String name;
     private String tournamentType;
     private String tournamentFormat;
@@ -30,7 +32,8 @@ public class Tournament {
     private double joinFee;
     private double courtPrice;
 
-    private String id = "";
+    private List<Player> participants;
+    private List<Subscriber> subscribers;
 
     public Tournament() {
         this.matches = new ArrayList<>();
@@ -177,7 +180,7 @@ public class Tournament {
         }
     }
 
-    private boolean playerAlreadyInATeam(Player player) {
+    public boolean playerAlreadyInATeam(Player player) {
         for (Team team : this.confirmedTeams) {
             if (team.getPlayers().contains(player)) {
                 return true;
@@ -202,11 +205,13 @@ public class Tournament {
         if (isSingles()) {
             Team team = new Team(player, getTeamType());
             this.confirmedTeams.add(team);
+            addParticipant(player);
         }
         else {
             for (Team team : this.partialTeams) {
                 if (!team.isFull()) {
                     team.addPlayer(player);
+                    addParticipant(player);
                     if (this.pendingTeams.contains(team)) {
                         this.partialTeams.remove(team);
                     }
@@ -218,6 +223,28 @@ public class Tournament {
             }
         }
         return JoinTournamentView.JoinError.SUCCESS;
+    }
+
+    public void addParticipant(Player player) {
+        participants.add(player);
+        notifySubscribers(this); // Notify host(s)
+    }
+
+    @Override
+    public void subscribe(Subscriber host) {
+        subscribers.add(host);
+    }
+
+    @Override
+    public void unsubscribe(Subscriber host) {
+        subscribers.remove(host);
+    }
+
+    @Override
+    public void notifySubscribers(Tournament tournament) {
+        for (Subscriber s : subscribers) {
+            s.update(this.club, this); // Notify the host
+        }
     }
 
     public String getTournamentType() { return tournamentType; }
@@ -232,7 +259,6 @@ public class Tournament {
     public LocalDate getSignupDeadline() { return signupDeadline; }
     public double getJoinFee() { return joinFee; }
     public double getCourtPrice() { return courtPrice; }
-    public void setId(String id) { this.id = id; }
-    public String getId() { return id; }
     public List<Match> getMatches() { return matches; }
+    public List<Player> getParticipants() { return participants; }
 }

@@ -33,7 +33,8 @@ public class CliUtils {
         }
     }
 
-    public static int promptInt(String label) {
+    public static int promptPositiveInt(String label) {
+        int result;
         while (true) {
             print(label);
             try {
@@ -42,7 +43,11 @@ public class CliUtils {
                     println(EOF);
                     System.exit(-1);
                 }
-                return Integer.parseInt(input);
+                result = Integer.parseInt(input);
+                if (result < 0) {
+                    println("Invalid input. Try again.");
+                }
+                else return result;
             } catch (NumberFormatException | IOException e) {
                 println("Please enter a valid number.");
             }
@@ -50,14 +55,15 @@ public class CliUtils {
     }
 
     public static int multipleChoiceInt(int max, String label) {
-        int choice = promptInt(label);
+        int choice = promptPositiveInt(label);
         if (choice >= max) {
             println("Invalid choice. Try again.");
         }
         return choice-1;
     }
 
-    public static double promptDouble(String label) {
+    public static double promptPositiveDouble(String label) {
+        double result;
         while (true) {
             print(label);
             try {
@@ -66,7 +72,11 @@ public class CliUtils {
                     println(EOF);
                     System.exit(-1);
                 }
-                return Double.parseDouble(input);
+                result = Double.parseDouble(input);
+                if (result < 0) {
+                    println("Invalid input. Try again.");
+                }
+                else return result;
             } catch (NumberFormatException | IOException e) {
                 println("Please enter a valid number.");
             }
@@ -82,7 +92,7 @@ public class CliUtils {
                 CliUtils.println(i + ". " + choice);
                 i++;
             }
-            result = CliUtils.promptInt("Enter choice: ");
+            result = CliUtils.promptPositiveInt("Enter choice: ");
             if (result == 0) {
                 return "";
             }
@@ -117,7 +127,7 @@ public class CliUtils {
                 CliUtils.println(i + ". " + choice);
                 i++;
             }
-            result = CliUtils.promptInt("Enter choice: ");
+            result = CliUtils.promptPositiveInt("Enter choice: ");
             if (result==0) {
                 return "";
             }

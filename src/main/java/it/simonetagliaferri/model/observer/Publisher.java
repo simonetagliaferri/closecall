@@ -1,10 +1,9 @@
 package it.simonetagliaferri.model.observer;
 
-import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
 
 public interface Publisher {
-    void subscribe(Player player);
-    void unsubscribe(Player player);
+    void subscribe(Subscriber subscriber);
+    void unsubscribe(Subscriber subscriber);
     void notifySubscribers(Tournament tournament);
 }

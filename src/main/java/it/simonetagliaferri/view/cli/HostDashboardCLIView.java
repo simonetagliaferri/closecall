@@ -29,7 +29,7 @@ public class HostDashboardCLIView {
             CliUtils.println("4. List clubs");
             CliUtils.println("5. Logout");
             CliUtils.println("6. Settings");
-            int choice = CliUtils.promptInt("Enter your choice: ");
+            int choice = CliUtils.promptPositiveInt("Enter your choice: ");
             if (choice >= 1 && choice <= 6) {
                 return HostDashboardCommand.values()[choice-1];
             }

@@ -48,7 +48,7 @@ public class AddTournamentCLIView {
         return CliUtils.multipleChoice(label, choice1, choice2, choice3);
     }
     public double joinFee() {
-        return CliUtils.promptDouble("Enter join fee: ");
+        return CliUtils.promptPositiveDouble("Enter join fee: ");
     }
     public int includedCourt() {
         String label = "Is the court cost included in the join fee?";
@@ -57,22 +57,22 @@ public class AddTournamentCLIView {
         return CliUtils.multipleChoiceInt(label, choice1, choice2);
     }
     public double courtCost() {
-        return CliUtils.promptDouble("Enter court cost: ");
+        return CliUtils.promptPositiveDouble("Enter court cost: ");
     }
 
     public int courtNumber() {
-        return CliUtils.promptInt("Enter number of courts available for the tournament: ");
+        return CliUtils.promptPositiveInt("Enter number of courts available for the tournament: ");
     }
 
     public int numberOfTeams() {
-        return CliUtils.promptInt("Enter number of teams: ");
+        return CliUtils.promptPositiveInt("Enter number of teams: ");
     }
 
     public List<Double> prizes() {
-        int numOfPrizes = CliUtils.promptInt("Enter number of prizes: ");
+        int numOfPrizes = CliUtils.promptPositiveInt("Enter number of prizes: ");
         ArrayList<Double> prizes = new ArrayList<>(numOfPrizes);
         for (int i = 0; i < numOfPrizes; i++) {
-            CliUtils.promptDouble("Enter prize " + (i + 1) + ": ");
+            CliUtils.promptPositiveDouble("Enter prize " + (i + 1) + ": ");
         }
         return prizes;
     }

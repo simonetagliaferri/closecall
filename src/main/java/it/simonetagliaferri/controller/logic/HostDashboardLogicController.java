@@ -38,7 +38,7 @@ public class HostDashboardLogicController extends LogicController {
 
     public boolean additionalInfoNeeded() {
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
-        List<Club> clubs = clubDAO.getClubs(host);
+        List<Club> clubs = clubDAO.getClubs(host.getUsername());
         return (clubs == null || clubs.isEmpty()) ;
     }
 
@@ -48,33 +48,4 @@ public class HostDashboardLogicController extends LogicController {
         return HostMapper.toBean(host);
     }
 
-    public List<TournamentBean> getTournaments() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        List<Club> clubs = clubDAO.getClubs(host);
-        List<Tournament> tournaments;
-        List<TournamentBean> tournamentBeans = new ArrayList<>();
-        for (Club club : clubs) {
-            tournaments = tournamentDAO.getTournaments(club);
-            if (tournaments != null && !tournaments.isEmpty()) {
-                for (Tournament tournament : tournaments) {
-                    tournamentBeans.add(TournamentMapper.toBean(tournament));
-                }
-            }
-        }
-        return tournamentBeans;
-    }
-
-    public List<ClubBean> getClubs() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        List<Club> clubs = clubDAO.getClubs(host);
-        List<ClubBean> clubBeans = new ArrayList<>();
-        if (clubs != null && !clubs.isEmpty()) {
-            for (Club club : clubs) {
-                clubBeans.add(ClubMapper.toBean(club));
-            }
-        }
-        return clubBeans;
-    }
 }

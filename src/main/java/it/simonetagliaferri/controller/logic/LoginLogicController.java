@@ -7,9 +7,7 @@ import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
-import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.model.domain.User;
-import it.simonetagliaferri.utils.PasswordUtils;
 import it.simonetagliaferri.utils.converters.UserMapper;
 
 public class LoginLogicController extends LogicController {
@@ -32,11 +30,12 @@ public class LoginLogicController extends LogicController {
         A login response bean is used to communicate the outcome of the login process to the graphic controller.
      */
     public boolean login(UserBean bean) {
-        User user = loginDAO.findByUsername(bean.getUsername());
-        String hashedPass = PasswordUtils.sha256Hex(bean.getPassword());
+        String username = bean.getUsername();
+        String password = bean.getPassword();
+        User user = loginDAO.findByUsername(username);
         User currentUser;
-        if (user != null && user.getPassword().equals(hashedPass)) {
-            if (user.getRole() == Role.HOST) {
+        if (user != null && user.isPasswordCorrect(password)) {
+            if (user.isHost()) {
                 currentUser = new Host(user.getUsername(), user.getEmail(), user.getRole());
 
             } else {
@@ -51,18 +50,16 @@ public class LoginLogicController extends LogicController {
     /**
      * It creates a user from the bean and then passes it to loginDAO to sign the user up.
     */
-    public boolean signup(UserBean bean) {
-        User user = UserMapper.fromBeanAndHashPassword(bean); // It's okay its before saving.
-        if (loginDAO.signup(user) != null) {
-            if (user.getRole() == Role.HOST) {
-                hostDAO.addHost(new Host(user.getUsername(), user.getEmail()));
-            }
-            else {
-                playerDAO.addPlayer(new Player(user.getUsername(), user.getEmail()));
-            }
-            return true;
-        } else {
-            return false;
+    public void signup(UserBean bean) {
+        User user = UserMapper.fromBean(bean); // It's okay to go from bean to model because this user doesn't exist yet.
+        loginDAO.signup(user);
+        if (user.isHost()) {
+            Host host = new Host(user.getUsername(), user.getEmail());
+            hostDAO.addHost(host);
+        }
+        else {
+            Player player = new Player(user.getUsername(), user.getEmail());
+            playerDAO.addPlayer(player);
         }
     }
 
@@ -70,11 +67,18 @@ public class LoginLogicController extends LogicController {
      * Used before signup to check if the provided username is already in use.
      */
     public boolean userLookUp(UserBean bean) {
-        return loginDAO.findByUsername(bean.getUsername()) != null;
+        String username = bean.getUsername();
+        return loginDAO.findByUsername(username) != null;
+    }
+
+    public boolean isUsernamenValid(UserBean bean) {
+        User user = UserMapper.fromBean(bean);
+        return user.isUsernameValid();
     }
 
     public boolean emailLookUp(UserBean bean) {
-        return loginDAO.findByEmail(bean.getEmail()) != null;
+        String email = bean.getEmail();
+        return loginDAO.findByEmail(email) != null;
     }
 
     protected void setCurrentUser(User user) {

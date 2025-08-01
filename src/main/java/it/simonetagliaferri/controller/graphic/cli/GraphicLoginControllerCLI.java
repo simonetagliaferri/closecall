@@ -3,6 +3,7 @@ package it.simonetagliaferri.controller.graphic.cli;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.LoginCLIView;
 import it.simonetagliaferri.controller.logic.LoginLogicController;
 
@@ -32,20 +33,18 @@ public class GraphicLoginControllerCLI extends GraphicController {
                 case SIGNUP:
                     signup();
                     break;
-                case QUIT: // Exit case.
+                case QUIT:
                     loginScreen=false;
                     break;
-                default:
             }
         }
     }
 
     public boolean login() {
-        boolean result;
         UserBean user = new UserBean(view.getUsername(), view.getPassword());
-        result = this.controller.login(user);
-        if (result) {
-            navigationManager.goToDashboard(this.controller.getCurrentUserRole());
+        if (this.controller.login(user)) {
+            Role role = this.controller.getCurrentUserRole();
+            navigationManager.goToDashboard(role);
             return false;
         }
         else {
@@ -56,7 +55,6 @@ public class GraphicLoginControllerCLI extends GraphicController {
 
     // Signup done in steps so that if an already existing username or email are chosen, it fails before asking the other fields.
     public void signup() {
-        boolean result;
         UserBean user = new UserBean();
         user.setUsername(getUsername());
         user.setEmail(getEmail());
@@ -64,6 +62,10 @@ public class GraphicLoginControllerCLI extends GraphicController {
         while (true) {
             password = view.getPassword();
             String confirmPassword = view.getPasswordConfirm();
+            /*
+             * Check done in bean since it's not really a business rule that pass and confPass should match/
+             * It's more of a syntax problem to ensure the user doesn't mistype the password.
+             */
             if (user.setPassword(password, confirmPassword)) {
                 break;
             }
@@ -78,12 +80,8 @@ public class GraphicLoginControllerCLI extends GraphicController {
             view.invalidRole();
         }
         if (confirm()) {
-            result = this.controller.signup(user);
-            if (result) {
-                view.successfulSignup();
-            } else {
-                view.failedSignup();
-            }
+            this.controller.signup(user);
+            view.successfulSignup();
         }
     }
 
@@ -93,7 +91,11 @@ public class GraphicLoginControllerCLI extends GraphicController {
         while (!validUsername) {
             validUsername = true;
             if (user.setUsername(view.getUsername())) {
-                if (this.controller.userLookUp(user)) {
+                if (!this.controller.isUsernamenValid(user)) {
+                    validUsername = false;
+                    view.emailAsUsername();
+                }
+                else if (this.controller.userLookUp(user)) {
                     validUsername = false;
                     view.userAlreadyExists();
                 }

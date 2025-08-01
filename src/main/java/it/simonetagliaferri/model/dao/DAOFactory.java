@@ -7,6 +7,9 @@ import it.simonetagliaferri.model.dao.jdbc.JDBCDAOFactory;
 
 import static it.simonetagliaferri.utils.PropertiesUtils.*;
 
+/**
+ * Abstract factory to get the right DAO factory based on config files.
+ */
 public abstract class DAOFactory {
 
     protected DAOFactory() {
