@@ -4,6 +4,7 @@ import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.observer.Subscriber;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class Player extends User implements Subscriber {
     @Override
     public void update(Club club, Tournament newTournament) {
         if (favouriteClubs == null) { favouriteClubs = new ArrayList<>(); }
+        if (notifications == null) { notifications = new HashMap<>(); }
         notifications.computeIfAbsent(club, k -> new ArrayList<>()).add(newTournament);
     }
 
@@ -38,10 +40,16 @@ public class Player extends User implements Subscriber {
         return notifications;
     }
 
+    public void clearNotifications() {
+        for (Club club : notifications.keySet()) {
+            clearNotificationsForClub(club);
+        }
+    }
+
     public void clearNotificationsForClub(Club club) {
         List<Tournament> list = notifications.get(club);
         if (list != null) {
-            list.clear(); // Keep the key, just empty the list
+            list.clear(); // Keep the key, just empty the list, so that the club is still a favourite
         }
     }
 

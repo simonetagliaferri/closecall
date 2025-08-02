@@ -11,7 +11,6 @@ public class ClubBean {
     private String phone;
     private String email;
     private HostBean owner;
-    public ClubBean() {}
 
     public void setName(String clubName) {
         this.name = clubName;

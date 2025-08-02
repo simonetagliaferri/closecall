@@ -18,10 +18,13 @@ public class JoinTournamentView {
     }
 
     public int listTournaments(List<TournamentBean> tournaments) {
+        int tournamentsCount = 1;
         for (TournamentBean tournament : tournaments) {
+            CliUtils.print(tournamentsCount + ": ");
             CliUtils.println(tournament.getTournamentName());
             CliUtils.println(tournament.getClub().getName());
             CliUtils.println("");
+            tournamentsCount++;
         }
         return CliUtils.multipleChoiceInt(tournaments.size(), "Select the tournament you are interested in to expand it(0 to go back): ");
     }

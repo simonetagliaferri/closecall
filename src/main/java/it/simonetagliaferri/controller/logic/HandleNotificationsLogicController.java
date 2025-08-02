@@ -1,16 +1,20 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
+import it.simonetagliaferri.utils.converters.PlayerMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +44,31 @@ public class HandleNotificationsLogicController extends LogicController {
         return tournamentBeans;
     }
 
+    public void clearPlayerNotifications() {
+        Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
+        player.clearNotifications();
+    }
 
+    public Map<TournamentBean, List<PlayerBean>> getHostNotifications() {
+        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        Map<Tournament, List<Player>> notifications = host.getNewPlayers();
+        Map<TournamentBean, List<PlayerBean>> hostNotifications = new HashMap<>();
+        List<PlayerBean> playerBeans = new ArrayList<>();
+        TournamentBean tournamentBean;
+        for (Map.Entry<Tournament, List<Player>> entry : notifications.entrySet()) {
+            List<Player> players = entry.getValue();
+            for (Player player : players) {
+                playerBeans.add(PlayerMapper.toBean(player));
+            }
+            tournamentBean = TournamentMapper.toBean(entry.getKey());
+            hostNotifications.put(tournamentBean, playerBeans);
+        }
+        return hostNotifications;
+    }
+
+    public void clearHostNotifications() {
+        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        host.clearNotifications();
+    }
 
 }

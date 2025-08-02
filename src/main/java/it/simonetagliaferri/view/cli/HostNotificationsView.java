@@ -1,14 +1,17 @@
 package it.simonetagliaferri.view.cli;
 
-import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
-
-import java.util.List;
+import it.simonetagliaferri.utils.CliUtils;
 
 public class HostNotificationsView {
 
-    public void listNotifications(List<ClubBean> clubs) {
-        for (ClubBean club : clubs) {
-        }
+    public void tournament(TournamentBean tournamentBean) {
+        CliUtils.println("Tournament: " + tournamentBean.getTournamentName());
+        CliUtils.println("Players that joined since last time: ");
+    }
+
+    public void newPlayer(PlayerBean playerBean) {
+        CliUtils.println(playerBean.getUsername());
     }
 }

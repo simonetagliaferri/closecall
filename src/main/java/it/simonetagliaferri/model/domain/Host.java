@@ -18,12 +18,12 @@ public class Host extends User implements Subscriber {
         newPlayers.computeIfAbsent(tournament, t -> new ArrayList<>()).add(last);
     }
 
-    public List<Player> getNewPlayers(Tournament t) {
-        return newPlayers.getOrDefault(t, List.of());
+    public void clearNotifications() {
+        newPlayers.clear();
     }
 
-    public void clearNotifications(Tournament t) {
-        newPlayers.getOrDefault(t, new ArrayList<>()).clear();
+    public Map<Tournament, List<Player>> getNewPlayers() {
+        return newPlayers;
     }
 
     public Host(String username, String email, Role role) {

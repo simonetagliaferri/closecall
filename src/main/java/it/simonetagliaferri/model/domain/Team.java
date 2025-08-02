@@ -27,6 +27,10 @@ public class Team {
         return players;
     }
 
+    public Player getPlayer() {
+        return player1 != null ? player1 : player2;
+    }
+
     public boolean isFull() {
         return (player1 != null && player2 != null && this.type == TeamType.DOUBLE) || (player1 != null && this.type == TeamType.SINGLE);
     }

@@ -8,6 +8,7 @@ import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.HostDashboardLogicController;
+import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
                     logout();
                     break;
                 case SETTINGS:
-                    settings();
+                    notifications();
                     break;
                 default:
             }
@@ -85,8 +86,8 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
     }
 
 
-    private void settings() {
-        //TODO
+    private void notifications() {
+        navigationManager.goToNotifications(Role.HOST);
     }
 
     private void addClub() { navigationManager.goToAddClub(); }

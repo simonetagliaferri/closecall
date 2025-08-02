@@ -159,6 +159,7 @@ public class Tournament implements Publisher {
             case ACCEPTED:
                 pendingTeams.remove(team);
                 confirmedTeams.add(team);
+                addParticipants(team);
                 break;
             case DECLINED:
             case REVOKED:
@@ -166,6 +167,21 @@ public class Tournament implements Publisher {
                 pendingTeams.remove(team);
                 break;
         }
+    }
+
+    public void addParticipants(Team team) {
+        List<Player> players = team.getPlayers();
+        for (Player player : players) {
+            if (player != null) {
+                addParticipant(player);
+            }
+        }
+    }
+
+    private void addParticipant(Player player) {
+        if (participants == null) { participants = new ArrayList<>();}
+        participants.add(player);
+        notifySubscribers(this);
     }
 
     public void processInviteForDoubles(Invite invite, Team team, Invite teammateInvite) {
@@ -179,6 +195,7 @@ public class Tournament implements Publisher {
             } else {
                 partialTeams.add(team);
             }
+            addParticipants(team);
         } else if (s2 == null && (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED)) {
             pendingTeams.remove(team);
             if (team.isFull()) {
@@ -191,6 +208,7 @@ public class Tournament implements Publisher {
         } else if (s1 == InviteStatus.ACCEPTED && s2 == InviteStatus.ACCEPTED) {
             pendingTeams.remove(team);
             confirmedTeams.add(team);
+            addParticipants(team);
         }
     }
 
@@ -235,11 +253,6 @@ public class Tournament implements Publisher {
             }
         }
         return JoinTournamentView.JoinError.SUCCESS;
-    }
-
-    public void addParticipant(Player player) {
-        participants.add(player);
-        notifySubscribers(this); // Notify host(s)
     }
 
     @Override
