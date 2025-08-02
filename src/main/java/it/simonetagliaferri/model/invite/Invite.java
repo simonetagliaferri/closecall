@@ -4,6 +4,7 @@ import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Invite {
     Tournament tournament;
@@ -20,6 +21,11 @@ public class Invite {
         this.expiryDate = expiryDate;
         this.status = status;
         this.message = message;
+    }
+
+    public Invite(Tournament tournament, Player player) {
+        this.tournament = tournament;
+        this.player = player;
     }
 
     public void updateStatus(InviteStatus inviteStatus){
@@ -53,5 +59,18 @@ public class Invite {
     }
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Invite)) return false;
+        Invite invite = (Invite) o;
+        if (this == invite) return true;
+        return Objects.equals(getTournament(), invite.getTournament()) && Objects.equals(getPlayer(), invite.getPlayer());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTournament(), getPlayer());
     }
 }

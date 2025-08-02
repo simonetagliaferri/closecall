@@ -21,8 +21,4 @@ public class FSDAOFactory extends DAOFactory {
     @Override
     public ClubDAO getClubDAO() { return new FSClubDAO();}
 
-    @Override
-    public InviteDAO getInviteDAO() {
-        return new FSInviteDAO();
-    }
 }

@@ -15,12 +15,8 @@ public class FSPlayerDAO implements PlayerDAO {
     }
 
     @Override
-    public void addPlayer(Player player) {
+    public void savePlayer(Player player) {
 
     }
 
-    @Override
-    public void updatePlayer(Player player) {
-
-    }
 }

@@ -53,7 +53,7 @@ public class FSTournamentDAO implements TournamentDAO {
 
 
     @Override
-    public void addTournament(Club club, Tournament tournament) {
+    public void saveTournament(Club club, Tournament tournament) {
         tournaments.computeIfAbsent(club.getName(), k -> new ArrayList<>()).add(tournament);
         saveTournaments();
     }
@@ -70,10 +70,6 @@ public class FSTournamentDAO implements TournamentDAO {
     public List<Tournament> getTournaments(Club club) {
         loadTournaments();
         return tournaments.get(club.getName());
-    }
-
-    @Override
-    public void updateTournament(Club club, Tournament tournament) {
     }
 
     @Override

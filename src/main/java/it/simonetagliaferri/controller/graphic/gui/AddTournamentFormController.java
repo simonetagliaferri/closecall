@@ -12,7 +12,6 @@ import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -68,7 +67,7 @@ public class AddTournamentFormController extends GraphicController implements GU
         this.navigationManager = appContext.getNavigationManager();
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(),
-                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
+                appContext.getDAOFactory().getHostDAO());
         postInit();
     }
 

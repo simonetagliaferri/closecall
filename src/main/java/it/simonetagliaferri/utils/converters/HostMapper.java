@@ -1,14 +1,7 @@
 package it.simonetagliaferri.utils.converters;
 
-import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.beans.HostBean;
-import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
-import it.simonetagliaferri.model.domain.Tournament;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HostMapper {
 
@@ -19,14 +12,6 @@ public class HostMapper {
     }
 
     public static Host fromBean(HostBean hostBean) {
-        Host host = new Host(hostBean.getUsername(), hostBean.getEmail());
-        List<Club> clubs = new ArrayList<>();
-        if (hostBean.getClubs() != null) {
-            for (ClubBean clubBean : hostBean.getClubs()) {
-                clubs.add(ClubMapper.fromBean(clubBean));
-            }
-        }
-        host.setClubs(clubs);
-        return host;
+        return new Host(hostBean.getUsername());
     }
 }

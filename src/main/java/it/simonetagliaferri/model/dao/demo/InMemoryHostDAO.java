@@ -19,7 +19,7 @@ public class InMemoryHostDAO implements HostDAO {
     }
 
     @Override
-    public void addHost(Host host) {
+    public void saveHost(Host host) {
         hosts.put(host.getUsername(), host);
     }
 

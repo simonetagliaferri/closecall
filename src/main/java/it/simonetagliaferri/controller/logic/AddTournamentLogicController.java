@@ -1,7 +1,6 @@
 package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
@@ -18,34 +17,29 @@ import java.util.List;
 public class AddTournamentLogicController extends LogicController {
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
-    PlayerDAO playerDAO;
     ClubDAO clubDAO;
-    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
+    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO) {
         super(sessionManager);
         this.tournamentDAO = tournamentDAO;
         this.clubDAO = clubDAO;
         this.hostDAO = hostDAO;
-        this.playerDAO = playerDAO;
     }
 
     public boolean addTournament(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
         Club club = host.getClub(ClubMapper.fromBean(clubBean));
-        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Need to check for duplicates.
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
         TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
         tournament.setTournamentFormatStrategy(strategy);
-        if (tournamentAlreadyExists(tournament)) { return false; }
-        tournamentDAO.addTournament(club, tournament);
+        if (!club.addTournament(tournament)) return false;
         club.notifySubscribers(tournament);
         tournament.subscribe(host);
+        if (!host.updateClub(club)) return false;
+        hostDAO.saveHost(host);
+        clubDAO.saveClub(club);
+        tournamentDAO.saveTournament(club, tournament);
         return true;
-    }
-
-    private boolean tournamentAlreadyExists(Tournament tournament) {
-        Club club = tournament.getClub();
-        Host host = club.getHost();
-        return club.tournamentAlreadyExists(tournament);
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {

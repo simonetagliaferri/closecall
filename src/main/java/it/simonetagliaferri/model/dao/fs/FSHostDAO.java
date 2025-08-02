@@ -11,7 +11,7 @@ public class FSHostDAO implements HostDAO {
     }
 
     @Override
-    public void addHost(Host host) {
+    public void saveHost(Host host) {
 
     }
 }

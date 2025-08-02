@@ -7,9 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TournamentDAO {
-    void addTournament(Club club, Tournament tournament);
+    void saveTournament(Club club, Tournament tournament);
     List<Tournament> getTournaments(Club club);
-    void updateTournament(Club club, Tournament tournament);
     Tournament getTournament(Club club, String name, String tournamentFormat, String tournamentType, LocalDate startDate);
     List<Tournament> getTournamentsByCity(String city);
     boolean tournamentAlreadyExists(Club club, Tournament tournament);

@@ -3,6 +3,8 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.utils.PasswordUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.util.Objects;
+
 public class User {
     private String username;
     private String password;
@@ -80,4 +82,16 @@ public class User {
         return role;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        if (this == user) return true;
+        return Objects.equals(getUsername(), user.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getUsername());
+    }
 }

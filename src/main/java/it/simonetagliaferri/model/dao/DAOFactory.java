@@ -37,5 +37,4 @@ public abstract class DAOFactory {
     public abstract HostDAO getHostDAO();
     public abstract PlayerDAO getPlayerDAO();
     public abstract ClubDAO getClubDAO();
-    public abstract InviteDAO getInviteDAO();
 }

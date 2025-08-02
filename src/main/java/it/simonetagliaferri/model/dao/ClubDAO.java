@@ -1,7 +1,6 @@
 package it.simonetagliaferri.model.dao;
 
 import it.simonetagliaferri.model.domain.Club;
-import it.simonetagliaferri.model.domain.Host;
 
 import java.util.List;
 
@@ -12,5 +11,4 @@ public interface ClubDAO {
     List<Club> getClubsByCity(String city);
     Club getClubByName(String hostName, String clubName);
     boolean clubAlreadyExists(Club club);
-    void updateClub(Club club);
 }

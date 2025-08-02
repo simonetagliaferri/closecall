@@ -18,8 +18,7 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
         super(appContext);
         this.view = new PlayerDashboardCLIView();
         this.controller = new PlayerDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getClubDAO(),
-                appContext.getDAOFactory().getInviteDAO());
+                appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getClubDAO());
     }
 
     public void showHome() {

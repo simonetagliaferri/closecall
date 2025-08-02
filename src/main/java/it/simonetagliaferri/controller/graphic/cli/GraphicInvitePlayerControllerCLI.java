@@ -24,7 +24,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
     public GraphicInvitePlayerControllerCLI(AppContext appContext, TournamentBean tournamentBean) {
         super(appContext);
-        this.controller = new InvitePlayerLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getInviteDAO(), appContext.getDAOFactory().getPlayerDAO(),
+        this.controller = new InvitePlayerLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
                 appContext.getDAOFactory().getHostDAO(),
                 appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO());

@@ -15,12 +15,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
     }
 
     @Override
-    public void addPlayer(Player player) {
-
-    }
-
-    @Override
-    public void updatePlayer(Player player) {
+    public void savePlayer(Player player) {
 
     }
 

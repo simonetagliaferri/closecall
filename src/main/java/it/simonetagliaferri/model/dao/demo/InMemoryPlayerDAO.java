@@ -30,12 +30,8 @@ public class InMemoryPlayerDAO implements PlayerDAO {
     }
 
     @Override
-    public void addPlayer(Player player) {
+    public void savePlayer(Player player) {
         players.put(player.getUsername(), player);
     }
 
-    @Override
-    public void updatePlayer(Player player) {
-        players.put(player.getUsername(), player);
-    }
 }

@@ -2,7 +2,6 @@ package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
-import it.simonetagliaferri.model.domain.Host;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +23,15 @@ public class InMemoryClubDAO implements ClubDAO {
     @Override
     public void saveClub(Club club) {
         String hostName = club.getHost().getUsername();
-        List<Club> clubs = getClubs(hostName);
-        if (clubs == null) {
-            clubs = new ArrayList<>();
+        List<Club> clubs = this.clubs.computeIfAbsent(hostName, k -> new ArrayList<>());
+        int index = clubs.indexOf(club);
+        if (index >= 0) {
+            clubs.set(index, club);
+        } else {
+            clubs.add(club);
         }
-        clubs.add(club);
-        this.clubs.put(hostName, clubs);
     }
+
 
     public List<Club> getClubsByCity(String city) {
         List<Club> result = new ArrayList<>();
@@ -68,11 +69,6 @@ public class InMemoryClubDAO implements ClubDAO {
             }
         }
         return false;
-    }
-
-    @Override
-    public void updateClub(Club club) {
-        saveClub(club);
     }
 
 }

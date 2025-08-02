@@ -11,18 +11,13 @@ import java.util.List;
 public class JDBCTournamentDAO implements TournamentDAO {
 
     @Override
-    public void addTournament(Club club, Tournament tournament) {
+    public void saveTournament(Club club, Tournament tournament) {
 
     }
 
     @Override
     public List<Tournament> getTournaments(Club club) {
         return new ArrayList<>();
-    }
-
-    @Override
-    public void updateTournament(Club club, Tournament tournament) {
-
     }
 
     @Override

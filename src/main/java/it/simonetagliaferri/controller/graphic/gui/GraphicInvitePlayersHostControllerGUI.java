@@ -7,7 +7,6 @@ import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.InvitePlayerLogicController;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
-import it.simonetagliaferri.utils.CliUtils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -45,7 +44,7 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new InvitePlayerLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getInviteDAO(),
+        this.controller = new InvitePlayerLogicController(appContext.getSessionManager(),
                 appContext.getDAOFactory().getPlayerDAO(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO());
         postInit();

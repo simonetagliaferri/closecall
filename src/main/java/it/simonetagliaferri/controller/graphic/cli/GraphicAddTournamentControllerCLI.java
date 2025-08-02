@@ -23,7 +23,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getPlayerDAO());
+                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getHostDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();
     }

@@ -2,7 +2,6 @@ package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.*;
 import it.simonetagliaferri.model.domain.*;
-import it.simonetagliaferri.model.invite.Invite;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +15,12 @@ public class InMemoryDAOFactory extends DAOFactory {
     private final Map<String, List<Club>> clubs = new HashMap<>();
     private final Map<String, Host> hosts = new HashMap<>();
     private final Map<String, Player> players = new HashMap<>();
-    private final Map<String, List<Invite>> invites = new HashMap<>();
 
     private LoginDAO loginDAO;
     private TournamentDAO tournamentDAO;
     private HostDAO hostDAO;
     private PlayerDAO playerDAO;
     private ClubDAO clubDAO;
-    private InviteDAO inviteDAO;
 
     public InMemoryDAOFactory() {
         populate();
@@ -46,6 +43,8 @@ public class InMemoryDAOFactory extends DAOFactory {
         sanP.updateAddress("a", "a", "a", "a", "a", "a");
         sanP.updateContacts("a", "a");
         ClubDAO clubDAO1 = getClubDAO();
+        host.addClub(sanP);
+        hostDAO1.saveHost(host);
         clubDAO1.saveClub(sanP);
     }
 
@@ -79,9 +78,4 @@ public class InMemoryDAOFactory extends DAOFactory {
         return clubDAO;
     }
 
-    @Override
-    public InviteDAO getInviteDAO() {
-        if (inviteDAO == null) { inviteDAO = new InMemoryInviteDAO(invites);}
-        return inviteDAO;
-    }
 }

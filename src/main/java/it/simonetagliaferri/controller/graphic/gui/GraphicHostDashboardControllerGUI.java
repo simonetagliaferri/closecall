@@ -40,8 +40,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
+        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO());
         postInit();
     }
 

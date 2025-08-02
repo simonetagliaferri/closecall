@@ -9,8 +9,10 @@ import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.invite.decorator.EmailDecorator;
 import it.simonetagliaferri.model.invite.decorator.InAppInviteNotification;
 import it.simonetagliaferri.model.invite.decorator.InviteNotification;
+import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.InviteMapper;
 import it.simonetagliaferri.utils.converters.PlayerMapper;
+import it.simonetagliaferri.utils.converters.TournamentMapper;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
@@ -19,14 +21,12 @@ import java.util.List;
 
 public class InvitePlayerLogicController extends LogicController{
 
-    InviteDAO inviteDAO;
     PlayerDAO playerDAO;
     HostDAO hostDAO;
     TournamentDAO tournamentDAO;
     ClubDAO clubDAO;
-    public InvitePlayerLogicController(SessionManager sessionManager, InviteDAO inviteDAO, PlayerDAO playerDAO, HostDAO hostDao, TournamentDAO tournamentDAO, ClubDAO clubDAO) {
+    public InvitePlayerLogicController(SessionManager sessionManager, PlayerDAO playerDAO, HostDAO hostDao, TournamentDAO tournamentDAO, ClubDAO clubDAO) {
         super(sessionManager);
-        this.inviteDAO = inviteDAO;
         this.playerDAO = playerDAO;
         this.hostDAO = hostDao;
         this.tournamentDAO = tournamentDAO;
@@ -34,8 +34,9 @@ public class InvitePlayerLogicController extends LogicController{
     }
 
     public List<InviteBean> getInvites() {
+        Player player = playerDAO.findByUsername(sessionManager.getCurrentUser().getUsername());
         List<InviteBean> inviteBeanList = new ArrayList<>();
-        List<Invite> invites = inviteDAO.getInvites(sessionManager.getCurrentUser().getUsername());
+        List<Invite> invites = player.getInvites();
         if (invites != null && !invites.isEmpty()) {
             for (Invite invite : invites) {
                 invite.hasExpired();
@@ -57,11 +58,11 @@ public class InvitePlayerLogicController extends LogicController{
 
     public void updateInvite(InviteBean inviteBean, InviteStatus status){
         if (status != InviteStatus.PENDING) {
-            Invite invite = getInviteFromBean(inviteBean);
+            Player player = playerDAO.findByUsername(sessionManager.getCurrentUser().getUsername());
+            Invite invite = player.getInvite(InviteMapper.fromBean(inviteBean));
             Tournament tournament = invite.getTournament();
-            Player player = invite.getPlayer();
             invite.updateStatus(status);
-            inviteDAO.delete(invite);
+            player.clearInvite(invite);
             Team team = tournament.getReservedTeam(player);
             if (tournament.isSingles())
                 tournament.processInviteForSingles(invite, team);
@@ -69,11 +70,12 @@ public class InvitePlayerLogicController extends LogicController{
                 Invite otherInvite = null;
                 Player player2 = team.getOtherPlayer(player.getUsername());
                 if (player2 != null) {
-                    otherInvite = inviteDAO.getInvite(player2, tournament);
+                    otherInvite = player2.isInvitedToTournament(tournament);
                 }
                 tournament.processInviteForDoubles(invite, team, otherInvite);
             }
-            tournamentDAO.updateTournament(tournament.getClub(), tournament);
+            tournamentDAO.saveTournament(tournament.getClub(), tournament);
+            playerDAO.savePlayer(player);
         }
     }
 
@@ -83,8 +85,9 @@ public class InvitePlayerLogicController extends LogicController{
 
     public boolean expiredInvite(InviteBean inviteBean){
         Invite invite = getInviteFromBean(inviteBean);
+        Player player = invite.getPlayer();
         if (invite.hasExpired()) {
-            inviteDAO.delete(invite);
+            player.clearInvite(invite);
             return true;
         }
         return false;
@@ -105,22 +108,16 @@ public class InvitePlayerLogicController extends LogicController{
     }
 
     public Invite getInviteFromBean(InviteBean inviteBean) {
-        TournamentBean tournamentBean = inviteBean.getTournament();
-        Tournament tournament = getTournamentFromBean(tournamentBean);
-        Player player = playerDAO.findByUsername(inviteBean.getPlayer().getUsername());
-        return inviteDAO.getInvite(player, tournament);
+        Player player = playerDAO.findByUsername(sessionManager.getCurrentUser().getUsername());
+        return player.getInvite(InviteMapper.fromBean(inviteBean));
     }
 
     public Tournament getTournamentFromBean(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = clubDAO.getClubByName(host.getUsername(), clubBean.getName());
-        String tournamentName = tournamentBean.getTournamentName();
-        String tournamentFormat = tournamentBean.getTournamentFormat();
-        String tournamentType = tournamentBean.getTournamentType();
-        LocalDate startDate = tournamentBean.getStartDate();
-        return tournamentDAO.getTournament(club, tournamentName, tournamentFormat, tournamentType, startDate);
+        Club club = host.getClub(ClubMapper.fromBean(clubBean));
+        return club.getTournament(TournamentMapper.fromBean(tournamentBean));
     }
 
     public PlayerBean teammate(InviteBean inviteBean) {
@@ -144,7 +141,7 @@ public class InvitePlayerLogicController extends LogicController{
         Invite invite = new Invite(tournament, player, LocalDate.now(), inviteExpireDate, InviteStatus.PENDING, message);
         sendInvite(invite, email);
         tournament.reserveSpot(player);
-        tournamentDAO.updateTournament(tournament.getClub(), tournament);
+        tournamentDAO.saveTournament(tournament.getClub(), tournament);
     }
 
     public void inviteTeam(PlayerBean player1, PlayerBean player2, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message1, String message2, boolean email1, boolean email2) {
@@ -188,7 +185,7 @@ public class InvitePlayerLogicController extends LogicController{
     }
 
     private InviteNotification buildNotifier(boolean email) {
-        InviteNotification base = new InAppInviteNotification(inviteDAO);
+        InviteNotification base = new InAppInviteNotification(playerDAO);
         if (email) {
             base = new EmailDecorator(base);
         }

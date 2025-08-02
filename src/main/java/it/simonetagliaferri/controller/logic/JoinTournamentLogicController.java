@@ -78,8 +78,8 @@ public class JoinTournamentLogicController extends LogicController {
         Club club = getClubFromBean(tournamentBean);
         Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
         club.subscribe(player);
-        clubDAO.updateClub(club);
-        playerDAO.updatePlayer(player);
+        clubDAO.saveClub(club);
+        playerDAO.savePlayer(player);
     }
 
 }

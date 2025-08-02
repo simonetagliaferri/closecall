@@ -55,11 +55,11 @@ public class LoginLogicController extends LogicController {
         loginDAO.signup(user);
         if (user.isHost()) {
             Host host = new Host(user.getUsername(), user.getEmail());
-            hostDAO.addHost(host);
+            hostDAO.saveHost(host);
         }
         else {
             Player player = new Player(user.getUsername(), user.getEmail());
-            playerDAO.addPlayer(player);
+            playerDAO.savePlayer(player);
         }
     }
 

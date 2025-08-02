@@ -16,27 +16,20 @@ public class InMemoryTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public void addTournament(Club club, Tournament tournament) {
-        tournaments.computeIfAbsent(club.getName(), k -> new ArrayList<>()).add(tournament);
+    public void saveTournament(Club club, Tournament tournament) {
+        String clubName = club.getName();
+        List<Tournament> tournaments = this.tournaments.computeIfAbsent(clubName, k -> new ArrayList<>());
+        int index = tournaments.indexOf(tournament);
+        if (index >= 0) {
+            tournaments.set(index, tournament);
+        } else {
+            tournaments.add(tournament);
+        }
     }
 
     @Override
     public List<Tournament> getTournaments(Club club) {
         return tournaments.get(club.getName());
-    }
-
-    @Override
-    public void updateTournament(Club club, Tournament tournament) {
-        String clubName = club.getName();
-        List<Tournament> tournamentList = tournaments.get(clubName);
-        if (tournamentList != null) {
-            for (int i = 0; i < tournamentList.size(); i++) {
-                if (tournamentList.get(i).equals(tournament)) {
-                    tournamentList.set(i, tournament);
-                    return;
-                }
-            }
-        }
     }
 
     @Override

@@ -32,6 +32,9 @@ public class Host extends User implements Subscriber {
     public Host(String username, String email) {
         super(username, email);
     }
+    public Host(String username) {
+        super(username);
+    }
 
     public void setClubs(List<Club> clubs) {
         this.clubs = Objects.requireNonNullElseGet(clubs, ArrayList::new);
@@ -48,11 +51,16 @@ public class Host extends User implements Subscriber {
         return true;
     }
 
+    public boolean updateClub(Club club) {
+        if (clubs == null || !clubAlreadyExists(club)) { return false; }
+        int index = clubs.indexOf(club);
+        clubs.set(index, club);
+        return true;
+    }
+
     public Club getClub(Club club) {
-        for (Club cl : clubs) {
-            if (cl.equals(club)) { return cl; }
-        }
-        return null;
+        int index = clubs.indexOf(club);
+        return index >= 0 ? clubs.get(index) : null;
     }
 
     public List<Club> getClubs() {
@@ -62,4 +70,5 @@ public class Host extends User implements Subscriber {
     private boolean clubAlreadyExists(Club club) {
         return clubs.contains(club);
     }
+
 }

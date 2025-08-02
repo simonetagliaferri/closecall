@@ -12,7 +12,7 @@ public class InviteMapper {
     public static Invite fromBean(InviteBean inviteBean) {
         Tournament tournament = TournamentMapper.fromBean(inviteBean.getTournament());
         Player player = PlayerMapper.fromBean(inviteBean.getPlayer());
-        return new Invite(tournament, player, inviteBean.getSendDate(), inviteBean.getExpiryDate(), inviteBean.getStatus(), inviteBean.getMessage());
+        return new Invite(tournament, player);
     }
 
     public static InviteBean toBean(Invite invite) {

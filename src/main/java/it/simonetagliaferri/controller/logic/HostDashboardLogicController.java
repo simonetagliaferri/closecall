@@ -1,33 +1,20 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.beans.HostBean;
-import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
-import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
-import it.simonetagliaferri.model.dao.TournamentDAO;
-import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
-import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.domain.User;
-import it.simonetagliaferri.utils.converters.ClubMapper;
-import it.simonetagliaferri.utils.converters.HostMapper;
-import it.simonetagliaferri.utils.converters.TournamentMapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import it.simonetagliaferri.utils.converters.HostMapper;
 
 public class HostDashboardLogicController extends LogicController {
-    TournamentDAO tournamentDAO;
-    HostDAO hostDAO;
-    ClubDAO clubDAO;
 
-    public HostDashboardLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO, ClubDAO clubDAO) {
+    HostDAO hostDAO;
+
+    public HostDashboardLogicController(SessionManager sessionManager, HostDAO hostDAO) {
         super(sessionManager);
-        this.tournamentDAO = tournamentDAO;
         this.hostDAO = hostDAO;
-        this.clubDAO = clubDAO;
     }
 
     /*
@@ -38,8 +25,7 @@ public class HostDashboardLogicController extends LogicController {
 
     public boolean additionalInfoNeeded() {
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
-        List<Club> clubs = clubDAO.getClubs(host.getUsername());
-        return (clubs == null || clubs.isEmpty()) ;
+        return !host.hasClubs();
     }
 
     public HostBean getHostBean() {

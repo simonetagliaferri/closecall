@@ -14,6 +14,6 @@ public class PlayerMapper {
 
     public static Player fromBean(PlayerBean playerBean) {
         if (playerBean == null) return null;
-        return new Player(playerBean.getUsername(), playerBean.getEmail());
+        return new Player(playerBean.getUsername());
     }
 }

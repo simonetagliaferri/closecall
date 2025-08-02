@@ -3,12 +3,12 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Club implements Publisher {
-    private String name;
+    private final String name;
     private String street;
     private String number;
     private String city;
@@ -23,6 +23,14 @@ public class Club implements Publisher {
 
     public Club(String name, Host owner) {
         this.name = name;
+        this.owner = owner;
+    }
+
+    public Club(String name, String street, String number, String city, Host owner) {
+        this.name = name;
+        this.street = street;
+        this.number = number;
+        this.city = city;
         this.owner = owner;
     }
 
@@ -51,30 +59,39 @@ public class Club implements Publisher {
     public String getName() {
         return name;
     }
+
     public String getStreet() {
         return street;
     }
+
     public String getNumber() {
         return number;
     }
+
     public String getCity() {
         return city;
     }
+
     public String getState() {
         return state;
     }
+
     public String getZip() {
         return zip;
     }
+
     public String getCountry() {
         return country;
     }
+
     public String getPhone() {
         return phone;
     }
+
     public String getEmail() {
         return email;
     }
+
     public Host getHost() {
         return this.owner;
     }
@@ -111,12 +128,41 @@ public class Club implements Publisher {
         return false;
     }
 
-    public boolean tournamentAlreadyExists(Tournament tournament) {
-        for (Tournament to : tournaments) {
-            if (to.equals(tournament)) {
-                return true;
-            }
+    public boolean addTournament(Tournament tournament) {
+        if (tournaments == null) {
+            tournaments = new ArrayList<>();
         }
-        return false;
+        if (tournamentAlreadyExists(tournament)) {
+            return false;
+        }
+        tournaments.add(tournament);
+        return true;
+    }
+
+    public List<Tournament> getTournaments() {
+        return tournaments;
+    }
+
+    private boolean tournamentAlreadyExists(Tournament tournament) {
+        return tournaments.contains(tournament);
+    }
+
+    public Tournament getTournament(Tournament tournament) {
+        int index = tournaments.indexOf(tournament);
+        return index >= 0 ? tournaments.get(index) : null;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Club)) return false;
+        Club club = (Club) o;
+        if (this == club) return true;
+        return Objects.equals(getName(), club.getName()) && Objects.equals(getStreet(), club.getStreet()) && Objects.equals(getNumber(), club.getNumber()) && Objects.equals(getCity(), club.getCity()) && Objects.equals(owner, club.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getStreet(), getNumber(), getCity(), owner);
     }
 }

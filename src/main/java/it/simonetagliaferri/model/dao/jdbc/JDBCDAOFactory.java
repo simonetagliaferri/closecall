@@ -20,9 +20,4 @@ public class JDBCDAOFactory extends DAOFactory {
 
     @Override
     public ClubDAO getClubDAO() {return new JDBCClubDAO();}
-
-    @Override
-    public InviteDAO getInviteDAO() {
-        return new JDBCInviteDAO();
-    }
 }
