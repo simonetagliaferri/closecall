@@ -6,17 +6,19 @@ import it.simonetagliaferri.model.domain.Player;
 public class JDBCPlayerDAO implements PlayerDAO {
     @Override
     public Player findByUsername(String username) {
+        //TODO
         return null;
     }
 
     @Override
     public Player findByEmail(String email) {
+        //TODO
         return null;
     }
 
     @Override
     public void savePlayer(Player player) {
-
+        //TODO
     }
 
 }

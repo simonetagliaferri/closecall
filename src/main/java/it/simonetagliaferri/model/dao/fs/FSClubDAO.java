@@ -8,26 +8,30 @@ import java.util.List;
 public class FSClubDAO implements ClubDAO {
     @Override
     public List<Club> getClubs(String hostName) {
-        return List.of();
+        //TODO
+        return null;
     }
 
     @Override
     public void saveClub(Club club) {
-
+        //TODO
     }
 
     @Override
     public List<Club> getClubsByCity(String city) {
-        return List.of();
+        //TODO
+        return null;
     }
 
     @Override
     public Club getClubByName(String hostName, String clubName) {
+        //TODO
         return null;
     }
 
     @Override
     public boolean clubAlreadyExists(Club club) {
+        //TODO
         return false;
     }
 

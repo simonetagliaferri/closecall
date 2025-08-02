@@ -7,11 +7,12 @@ public class FSHostDAO implements HostDAO {
 
     @Override
     public Host getHostByUsername(String username) {
+        //TODO
         return null;
     }
 
     @Override
     public void saveHost(Host host) {
-
+        //TODO
     }
 }
