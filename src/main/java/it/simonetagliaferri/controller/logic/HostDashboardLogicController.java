@@ -17,12 +17,6 @@ public class HostDashboardLogicController extends LogicController {
         this.hostDAO = hostDAO;
     }
 
-    /*
-    Will have something like a getHostInfo method to get the host's proprietary attributes from a DAO.
-    Also, a method to check, from the DAO, if it's the first login, if it is the required extra infos will be asked,
-    just the first time, the other times the flag I suppose will be set to 1 in persistence and so nothing will be asked
-     */
-
     public boolean additionalInfoNeeded() {
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
         return !host.hasClubs();

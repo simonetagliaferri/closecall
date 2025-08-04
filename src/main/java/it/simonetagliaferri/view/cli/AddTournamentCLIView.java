@@ -71,8 +71,10 @@ public class AddTournamentCLIView {
     public List<Double> prizes() {
         int numOfPrizes = CliUtils.promptPositiveInt("Enter number of prizes: ");
         ArrayList<Double> prizes = new ArrayList<>(numOfPrizes);
+        double prize;
         for (int i = 0; i < numOfPrizes; i++) {
-            CliUtils.promptPositiveDouble("Enter prize " + (i + 1) + ": ");
+            prize = CliUtils.promptPositiveDouble("Enter prize " + (i + 1) + ": ");
+            prizes.add(prize);
         }
         return prizes;
     }

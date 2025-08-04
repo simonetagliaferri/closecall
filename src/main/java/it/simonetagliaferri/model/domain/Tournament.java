@@ -1,10 +1,18 @@
 package it.simonetagliaferri.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import it.simonetagliaferri.model.dao.fs.TournamentStrategyDeserializer;
+import it.simonetagliaferri.model.dao.fs.TournamentStrategySerializer;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
+import it.simonetagliaferri.model.strategy.TournamentFormatStrategyFactory;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
 
 import java.time.LocalDate;
@@ -12,103 +20,102 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Tournament implements Publisher {
-    private String name;
-    private String tournamentType;
-    private String tournamentFormat;
-    private String matchFormat;
-    private String courtType;
-    private int courtNumber;
-    private int teamsNumber;
+    private final String name;
+    private final TournamentRules tournamentRules;
     private List<Double> prizes;
-    private LocalDate startDate;
+    private final LocalDate startDate;
     private LocalDate endDate;
     private LocalDate signupDeadline;
-    private Club club;
+    @JsonIgnore
+    private final Club club;
+    @JsonSerialize(using = TournamentStrategySerializer.class)
+    @JsonDeserialize(using = TournamentStrategyDeserializer.class)
     private TournamentFormatStrategy tournamentFormatStrategy;
-    private final List<Team> confirmedTeams;
-    private final List<Team> pendingTeams;
-    private final List<Team> partialTeams;
-    private final List<Match> matches;
-    private double joinFee;
-    private double courtPrice;
-
+    private TeamRegistry teamRegistry;
+    @JsonIgnore
     private List<Player> participants;
+    @JsonIgnore
     private List<Subscriber> subscribers;
 
-    public Tournament() {
-        this.matches = new ArrayList<>();
-        this.confirmedTeams = new ArrayList<>();
-        this.pendingTeams = new ArrayList<>();
-        this.partialTeams = new ArrayList<>();
-    }
-
     public Tournament(String tournamentName, String tournamentFormat, String tournamentType, LocalDate startDate, Club club) {
-        this();
         this.name = tournamentName;
-        this.tournamentFormat = tournamentFormat;
-        this.tournamentType = tournamentType;
+        this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType);
         this.startDate = startDate;
         this.club = club;
     }
 
     public Tournament(String tournamentName, String tournamentType, String tournamentFormat, String matchFormat,
                       String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
-                      LocalDate endDate, LocalDate signupDeadline, Club club, List<Team> confirmedTeams, List<Team> pendingTeams, List<Team> partialTeams, List<Match> matches, double joinFee, double courtPrice) {
+                      LocalDate endDate, LocalDate signupDeadline, Club club, double joinFee, double courtPrice) {
         this.name = tournamentName;
-        this.tournamentType = tournamentType;
-        this.tournamentFormat = tournamentFormat;
-        this.matchFormat = matchFormat;
-        this.courtType = courtType;
-        this.courtNumber = courtNumber;
-        this.teamsNumber = teamsNumber;
+        this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType, matchFormat, courtType, courtNumber, teamsNumber);
+        this.tournamentRules.setTournamentCosts(joinFee, courtPrice);
         this.prizes = prizes;
         this.startDate = startDate;
         this.endDate = endDate;
         this.signupDeadline = signupDeadline;
         this.club = club;
-        this.confirmedTeams = confirmedTeams;
-        this.pendingTeams = pendingTeams;
-        this.partialTeams = partialTeams;
-        this.matches = matches;
-        this.joinFee = joinFee;
-        this.courtPrice = courtPrice;
+        this.teamRegistry = new TeamRegistry();
+    }
+
+    public void setTournamentFormatStrategy() {
+        this.tournamentFormatStrategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(getTournamentFormat());
     }
 
     public Club getClub() {
         return club;
     }
 
+    @JsonProperty("club")
+    public String getClubName() {
+        return club.getName();
+    }
+
+    @JsonProperty("participants")
+    public List<String> getParticipantUsernames() {
+        List<String> usernames = new ArrayList<>();
+        if (participants != null) {
+            for (Player p : participants) {
+                usernames.add(p.getUsername());
+            }
+        }
+        return usernames;
+    }
+
+    @JsonProperty("subscribers")
+    public List<String> getSubscriberUsernames() {
+        List<String> usernames = new ArrayList<>();
+        if (subscribers != null) {
+            for (Subscriber s : subscribers) {
+                if (s instanceof User) {
+                    usernames.add(((User) s).getUsername());
+                } else {
+                    usernames.add(s.toString()); // fallback for non-User subscribers
+                }
+            }
+        }
+        return usernames;
+    }
+
+
     public String getTournamentName() {
         return name;
     }
 
-    public void setTournamentFormatStrategy(TournamentFormatStrategy strategy) {
-        this.tournamentFormatStrategy = strategy;
-    }
-
     public LocalDate estimateEndDate() {
-        int days = this.tournamentFormatStrategy.estimateNeededDays(this.teamsNumber, this.courtNumber);
+        int days = this.tournamentFormatStrategy.estimateNeededDays(getTeamsNumber(), getCourtNumber());
         return this.startDate.plusDays(days);
     }
 
     public int availableSpots() {
-        return this.teamsNumber - (this.confirmedTeams.size() + this.pendingTeams.size() + this.partialTeams.size() / 2);
+        return getTeamsNumber() - getTeamRegistry().takenSpots();
     }
 
     public void reserveSpot(Player... players) {
-        Team team;
-        if (players.length == 1) {
-            team = new Team(players[0], getTeamType());
-            this.pendingTeams.add(team);
-            if (!isSingles())
-                this.partialTeams.add(team);
-        } else if (players.length == 2) {
-            team = new Team(players[0], players[1]);
-            this.pendingTeams.add(team);
-        } else {
-            throw new IllegalArgumentException("A team must have either 1 or 2 players.");
-        }
+        getTeamRegistry().reserveSpot(this, isSingles(), players);
     }
 
     public boolean availableSpot() {
@@ -116,57 +123,42 @@ public class Tournament implements Publisher {
     }
 
     public boolean availableTeamSpot() {
-        int spot = this.teamsNumber - (this.confirmedTeams.size() + this.pendingTeams.size() + this.partialTeams.size());
+        int spot = getTeamsNumber() - getTeamRegistry().getTotalTeams();
         return spot > 0;
     }
 
+    private TeamRegistry getTeamRegistry() {
+        return teamRegistry;
+    }
+
     public List<Team> getConfirmedTeams() {
-        return this.confirmedTeams;
+        return getTeamRegistry().getConfirmedTeams();
     }
 
     public List<Team> getPendingTeams() {
-        return this.pendingTeams;
+        return getTeamRegistry().getPendingTeams();
     }
 
     public List<Team> getPartialTeams() {
-        return this.partialTeams;
+        return getTeamRegistry().getPartialTeams();
     }
 
+    @JsonIgnore
     public boolean isSingles() {
-        return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
+        return getTournamentType().equals("Men's singles") || getTournamentType().equals("Women's singles");
     }
 
     public Team getReservedTeam(Player player) {
-        for (Team team : this.pendingTeams) {
-            for (Player p : team.getPlayers()) {
-                if (p.getUsername().equals(player.getUsername())) {
-                    return team;
-                }
-            }
-        }
-        return null;
-    }
-
-    public TeamType getTeamType() {
-        if (isSingles()) {
-            return TeamType.SINGLE;
-        } else return TeamType.DOUBLE;
+        return getTeamRegistry().getReservedTeam(player);
     }
 
     public void processInviteForSingles(Invite invite, Team team) {
-        if (!pendingTeams.contains(team)) return;
-        switch (invite.getStatus()) {
-            case ACCEPTED:
-                pendingTeams.remove(team);
-                confirmedTeams.add(team);
-                addParticipants(team);
-                break;
-            case DECLINED:
-            case REVOKED:
-            case EXPIRED:
-                pendingTeams.remove(team);
-                break;
-        }
+        getTeamRegistry().processInviteForSingles(invite, team);
+        if (inviteAccepted(invite)) addParticipants(team);
+    }
+
+    private boolean inviteAccepted(Invite invite) {
+        return invite.getStatus()==InviteStatus.ACCEPTED;
     }
 
     public void addParticipants(Team team) {
@@ -185,73 +177,19 @@ public class Tournament implements Publisher {
     }
 
     public void processInviteForDoubles(Invite invite, Team team, Invite teammateInvite) {
-        if (!pendingTeams.contains(team)) return;
-        InviteStatus s1 = invite.getStatus();
-        InviteStatus s2 = teammateInvite != null ? teammateInvite.getStatus() : null;
-        if (s2 == null && s1 == InviteStatus.ACCEPTED) {
-            pendingTeams.remove(team);
-            if (team.isFull()) {
-                confirmedTeams.add(team);
-            } else {
-                partialTeams.add(team);
-            }
-            addParticipants(team);
-        } else if (s2 == null && (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED)) {
-            pendingTeams.remove(team);
-            if (team.isFull()) {
-                team.removePlayer(invite.getPlayer());
-                partialTeams.add(team);
-            }
-        } else if (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED ||
-                s2 == InviteStatus.DECLINED || s2 == InviteStatus.REVOKED || s2 == InviteStatus.EXPIRED) {
-            pendingTeams.remove(team);
-        } else if (s1 == InviteStatus.ACCEPTED && s2 == InviteStatus.ACCEPTED) {
-            pendingTeams.remove(team);
-            confirmedTeams.add(team);
-            addParticipants(team);
-        }
+        getTeamRegistry().processInviteForDoubles(invite, team, teammateInvite);
+        if (inviteAccepted(invite) || inviteAccepted(teammateInvite)) addParticipants(team);
     }
 
     public boolean playerAlreadyInATeam(Player player) {
-        for (Team team : this.confirmedTeams) {
-            if (team.getPlayers().contains(player)) {
-                return true;
-            }
-        }
-        for (Team team : this.pendingTeams) {
-            if (team.getPlayers().contains(player)) {
-                return true;
-            }
-        }
-        for (Team team : this.partialTeams) {
-            if (team.getPlayers().contains(player)) {
-                return true;
-            }
-        }
-        return false;
+        return getTeamRegistry().playerAlreadyInATeam(player);
     }
 
     public JoinTournamentView.JoinError addPlayer(Player player) {
         if (!availableSpot()) return JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS;
         if (playerAlreadyInATeam(player)) return JoinTournamentView.JoinError.ALREADY_IN_A_TEAM;
-        if (isSingles()) {
-            Team team = new Team(player, getTeamType());
-            this.confirmedTeams.add(team);
-            addParticipant(player);
-        } else {
-            for (Team team : this.partialTeams) {
-                if (!team.isFull()) {
-                    team.addPlayer(player);
-                    addParticipant(player);
-                    if (this.pendingTeams.contains(team)) {
-                        this.partialTeams.remove(team);
-                    } else {
-                        this.confirmedTeams.add(team);
-                    }
-                    break;
-                }
-            }
-        }
+        Player p = getTeamRegistry().addPlayer(player, isSingles(), this);
+        if (p != null) addParticipant(p);
         return JoinTournamentView.JoinError.SUCCESS;
     }
 
@@ -276,27 +214,31 @@ public class Tournament implements Publisher {
     }
 
     public String getTournamentType() {
-        return tournamentType;
+        return getTournamentRules().getTournamentType();
     }
 
     public String getMatchFormat() {
-        return matchFormat;
+        return getTournamentRules().getMatchFormat();
     }
 
     public String getCourtType() {
-        return courtType;
+        return getTournamentRules().getCourtType();
     }
 
     public int getCourtNumber() {
-        return courtNumber;
+        return getTournamentRules().getCourtNumber();
     }
 
     public int getTeamsNumber() {
-        return teamsNumber;
+        return getTournamentRules().getTeamsNumber();
     }
 
     public String getTournamentFormat() {
-        return tournamentFormat;
+        return getTournamentRules().getTournamentFormat();
+    }
+
+    public TournamentRules getTournamentRules() {
+        return tournamentRules;
     }
 
     public List<Double> getPrizes() {
@@ -316,15 +258,11 @@ public class Tournament implements Publisher {
     }
 
     public double getJoinFee() {
-        return joinFee;
+        return getTournamentRules().getJoinFee();
     }
 
     public double getCourtPrice() {
-        return courtPrice;
-    }
-
-    public List<Match> getMatches() {
-        return matches;
+        return getTournamentRules().getCourtPrice();
     }
 
     public List<Player> getParticipants() {
@@ -336,11 +274,12 @@ public class Tournament implements Publisher {
         if (!(o instanceof Tournament)) return false;
         Tournament to = (Tournament) o;
         if (this == to) return true;
-        return Objects.equals(name, to.name) && Objects.equals(getTournamentType(), to.getTournamentType()) && Objects.equals(getTournamentFormat(), to.getTournamentFormat()) && Objects.equals(getStartDate(), to.getStartDate()) && Objects.equals(getClub(), to.getClub());
+        return Objects.equals(name, to.name) && Objects.equals(getTournamentFormat(), to.getTournamentFormat()) && Objects.equals(getTournamentType(), to.getTournamentType()) && Objects.equals(getStartDate(), to.getStartDate()) && Objects.equals(getClub(), to.getClub());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, getTournamentType(), getTournamentFormat(), getStartDate(), getClub());
+        return Objects.hash(name, getTournamentRules().getTournamentFormat(), getTournamentRules().getTournamentType(), getStartDate(), getClub());
     }
+
 }

@@ -28,7 +28,7 @@ public class ClubMapper {
         clubBean.setCountry(club.getCountry());
         clubBean.setPhone(club.getPhone());
         clubBean.setEmail(club.getEmail());
-        clubBean.setOwner(HostMapper.toBean(club.getHost()));
+        clubBean.setOwner(HostMapper.toBean(club.getOwner()));
         return clubBean;
     }
 

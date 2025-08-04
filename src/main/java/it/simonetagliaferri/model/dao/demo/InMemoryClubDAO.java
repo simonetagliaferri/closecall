@@ -22,7 +22,7 @@ public class InMemoryClubDAO implements ClubDAO {
 
     @Override
     public void saveClub(Club club) {
-        String hostName = club.getHost().getUsername();
+        String hostName = club.getOwner().getUsername();
         List<Club> clubs = this.clubs.computeIfAbsent(hostName, k -> new ArrayList<>());
         int index = clubs.indexOf(club);
         if (index >= 0) {
@@ -58,7 +58,7 @@ public class InMemoryClubDAO implements ClubDAO {
 
     @Override
     public boolean clubAlreadyExists(Club club) {
-        String hostName = club.getHost().getUsername();
+        String hostName = club.getOwner().getUsername();
         List<Club> clubs = getClubs(hostName);
         if (clubs != null) {
             for (Club club1 : clubs) {

@@ -1,12 +1,12 @@
 package it.simonetagliaferri.utils.converters;
 
-import it.simonetagliaferri.beans.MatchBean;
 import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.model.domain.Match;
+import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Team;
 import it.simonetagliaferri.model.domain.Tournament;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,15 +49,27 @@ public class TournamentMapper {
         tournamentBean.setConfirmedTeams(confirmedTeamsBean);
         tournamentBean.setPendingTeams(pendingTeamsBean);
         tournamentBean.setPartialTeams(partialTeamsBean);
-        List<MatchBean> matchBeans = new ArrayList<>();
-        if (tournament.getMatches() != null) {
-            for (Match match : tournament.getMatches()) {
-                matchBeans.add(MatchMapper.toBean(match));
-            }
-        }
-        tournamentBean.setMatches(matchBeans);
         tournamentBean.setJoinFee(tournament.getJoinFee());
         tournamentBean.setCourtPrice(tournament.getCourtPrice());
+        return tournamentBean;
+    }
+
+    public static Tournament lightFromBean(TournamentBean tournamentBean) {
+        String tournamentName = tournamentBean.getTournamentName();
+        String tournamentFormat = tournamentBean.getTournamentFormat();
+        String tournamentType = tournamentBean.getTournamentType();
+        LocalDate startDate = tournamentBean.getStartDate();
+        Club club = ClubMapper.fromBean(tournamentBean.getClub());
+        return new Tournament(tournamentName, tournamentFormat, tournamentType, startDate, club);
+    }
+
+    public static TournamentBean lightToBean(Tournament tournament) {
+        TournamentBean tournamentBean = new TournamentBean();
+        tournamentBean.setTournamentName(tournament.getTournamentName());
+        tournamentBean.setTournamentFormat(tournament.getTournamentFormat());
+        tournamentBean.setTournamentType(tournament.getTournamentType());
+        tournamentBean.setStartDate(tournament.getStartDate());
+        tournamentBean.setClub(ClubMapper.toBean(tournament.getClub()));
         return tournamentBean;
     }
 
@@ -76,15 +88,9 @@ public class TournamentMapper {
                 pendingTeams.add(TeamMapper.fromBean(teamBean));
             }
         }
-        List<Match> matches = new ArrayList<>();
-        if (tournamentBean.getMatches() != null) {
-            for (MatchBean matchBean : tournamentBean.getMatches()) {
-                matches.add(MatchMapper.fromBean(matchBean));
-            }
-        }
         return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
                 tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
                 tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
-                ClubMapper.fromBean(tournamentBean.getClub()), confirmedTeams, pendingTeams, partialTeams, matches, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+                ClubMapper.fromBean(tournamentBean.getClub()), confirmedTeams, pendingTeams, partialTeams, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
     }
 }

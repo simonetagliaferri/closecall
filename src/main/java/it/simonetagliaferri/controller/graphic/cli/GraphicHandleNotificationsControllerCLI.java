@@ -21,8 +21,7 @@ public class GraphicHandleNotificationsControllerCLI extends GraphicController {
     public GraphicHandleNotificationsControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new HandleNotificationsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getHostDAO(),
-                appContext.getDAOFactory().getTournamentDAO());
+                appContext.getDAOFactory().getHostDAO());
         this.playerView = new PlayerNotificationsView();
         this.hostView = new HostNotificationsView();
     }

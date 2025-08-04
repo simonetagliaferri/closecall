@@ -22,7 +22,6 @@ public class TournamentBean {
     private List<TeamBean> confirmedTeams;
     private List<TeamBean> pendingTeams;
     private List<TeamBean> partialTeams;
-    private List<MatchBean> matches;
     private double joinFee;
     private double courtPrice;
 
@@ -66,7 +65,6 @@ public class TournamentBean {
     public void setConfirmedTeams(List<TeamBean> confirmedTeams) { this.confirmedTeams = confirmedTeams; }
     public void setPendingTeams(List<TeamBean> pendingTeams) { this.pendingTeams = pendingTeams; }
     public void setPartialTeams(List<TeamBean> partialTeams) { this.partialTeams = partialTeams; }
-    public void setMatches(List<MatchBean> matches) { this.matches = matches; }
     public void setJoinFee(double joinFee) { this.joinFee = joinFee; }
     public void setCourtPrice(double courtPrice) { this.courtPrice = courtPrice; }
     public ClubBean getClub() { return club; }
@@ -126,8 +124,6 @@ public class TournamentBean {
     public List<TeamBean> getConfirmedTeams() { return confirmedTeams; }
     public List<TeamBean> getPendingTeams() { return pendingTeams; }
     public List<TeamBean> getPartialTeams() { return partialTeams; }
-    public List<MatchBean> getMatches() { return matches; }
-
     public void addTeam(TeamBean team) {
         confirmedTeams.add(team);
     }

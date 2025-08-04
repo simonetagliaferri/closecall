@@ -12,10 +12,10 @@ import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
+import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,25 +47,29 @@ public class JoinTournamentLogicController extends LogicController {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = clubDAO.getClubByName(host.getUsername(), clubBean.getName());
-        String tournamentName = tournamentBean.getTournamentName();
-        String tournamentFormat = tournamentBean.getTournamentFormat();
-        String tournamentType = tournamentBean.getTournamentType();
-        LocalDate startDate = tournamentBean.getStartDate();
-        return tournamentDAO.getTournament(club, tournamentName, tournamentFormat, tournamentType, startDate);
+        Club club = host.getClub(ClubMapper.fromBean(clubBean));
+        return club.getTournament(TournamentMapper.fromBean(tournamentBean));
     }
 
     public Club getClubFromBean(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        return clubDAO.getClubByName(host.getUsername(), clubBean.getName());
+        return host.getClub(ClubMapper.fromBean(clubBean));
     }
 
     public JoinTournamentView.JoinError joinTournament(TournamentBean tournamentBean) {
         Tournament tournament = getTournamentFromBean(tournamentBean);
         Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
-        return tournament.addPlayer(player);
+        Host host = hostDAO.getHostByUsername(tournament.getClub().getOwner().getUsername());
+        JoinTournamentView.JoinError res = tournament.addPlayer(player);
+        if (res == JoinTournamentView.JoinError.SUCCESS) {
+            tournamentDAO.saveTournament(tournament.getClub(), tournament);
+            clubDAO.saveClub(tournament.getClub());
+            hostDAO.saveHost(host);
+            playerDAO.savePlayer(player);
+        }
+        return res;
     }
 
     public boolean isSubscribed(TournamentBean tournamentBean) {

@@ -100,6 +100,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 }
             }
         }
+        else {
+            tournamentBean.setEndDate(this.controller.getEndDate(tournamentBean, endDate));
+        }
     }
 
     public void addPlayersToTournament() {

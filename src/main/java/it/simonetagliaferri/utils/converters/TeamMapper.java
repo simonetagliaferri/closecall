@@ -14,18 +14,18 @@ public class TeamMapper {
     public static TeamBean toBean(Team team) {
         List<Player> players = team.getPlayers();
         if (players.size() == 1) {
-            return new TeamBean(PlayerMapper.toBean(players.get(0)), team.getType());
+            return new TeamBean(PlayerMapper.toBean(players.get(0)), team.getType(), TournamentMapper.lightToBean(team.getTournament()));
         }
         else
-            return new TeamBean(PlayerMapper.toBean(players.get(0)), PlayerMapper.toBean(players.get(1)));
+            return new TeamBean(PlayerMapper.toBean(players.get(0)), PlayerMapper.toBean(players.get(1)), TournamentMapper.lightToBean(team.getTournament()));
     }
 
     public static Team fromBean(TeamBean teamBean) {
         List<PlayerBean> players = teamBean.getPlayers();
         if (players.size() == 1) {
-            return new Team(PlayerMapper.fromBean(players.get(0)), teamBean.getType());
+            return new Team(PlayerMapper.fromBean(players.get(0)), teamBean.getType(), TournamentMapper.lightFromBean(teamBean.getTournament()));
         }
         else
-            return new Team(PlayerMapper.fromBean(players.get(0)), PlayerMapper.fromBean(players.get(1)));
+            return new Team(PlayerMapper.fromBean(players.get(0)), PlayerMapper.fromBean(players.get(1)), TournamentMapper.lightFromBean(teamBean.getTournament()));
     }
 }

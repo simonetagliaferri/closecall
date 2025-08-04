@@ -1,5 +1,9 @@
 package it.simonetagliaferri.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
@@ -7,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Club implements Publisher {
-    private final String name;
+    private String name;
     private String street;
     private String number;
     private String city;
@@ -17,9 +23,12 @@ public class Club implements Publisher {
     private String country;
     private String phone;
     private String email;
+    @JsonDeserialize(as = Host.class)
     private Host owner;
-    private List<Tournament> tournaments;
-    private List<Subscriber> subscribers;
+    private List<Tournament> tournaments = new ArrayList<>();
+    private List<Subscriber> subscribers = new ArrayList<>();
+
+    public Club() {}
 
     public Club(String name, Host owner) {
         this.name = name;
@@ -46,14 +55,6 @@ public class Club implements Publisher {
     public void updateContacts(String phone, String email) {
         this.phone = phone;
         this.email = email;
-    }
-
-    public void setOwner(Host owner) {
-        this.owner = owner;
-    }
-
-    public String getAddress() {
-        return street + " " + number + " " + city + " " + state + " " + zip + " " + country;
     }
 
     public String getName() {
@@ -92,8 +93,14 @@ public class Club implements Publisher {
         return email;
     }
 
-    public Host getHost() {
+    @JsonIgnore
+    public Host getOwner() {
         return this.owner;
+    }
+
+    @JsonProperty("owner")
+    public String getOwnerUsername() {
+        return owner != null ? owner.getUsername() : null;
     }
 
 
@@ -136,6 +143,8 @@ public class Club implements Publisher {
             return false;
         }
         tournaments.add(tournament);
+        tournament.subscribe(owner);
+        notifySubscribers(tournament);
         return true;
     }
 

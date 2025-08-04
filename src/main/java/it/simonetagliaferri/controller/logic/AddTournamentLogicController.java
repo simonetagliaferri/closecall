@@ -6,8 +6,6 @@ import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.*;
 import it.simonetagliaferri.model.domain.*;
-import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
-import it.simonetagliaferri.model.strategy.TournamentFormatStrategyFactory;
 import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -30,12 +28,8 @@ public class AddTournamentLogicController extends LogicController {
         Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
         Club club = host.getClub(ClubMapper.fromBean(clubBean));
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
-        TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
-        tournament.setTournamentFormatStrategy(strategy);
-        if (!club.addTournament(tournament)) return false;
-        club.notifySubscribers(tournament);
-        tournament.subscribe(host);
-        if (!host.updateClub(club)) return false;
+        tournament.setTournamentFormatStrategy();
+        if (!host.addTournamentToClub(tournament, club)) {return false;}
         hostDAO.saveHost(host);
         clubDAO.saveClub(club);
         tournamentDAO.saveTournament(club, tournament);
@@ -44,8 +38,7 @@ public class AddTournamentLogicController extends LogicController {
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Okay to use since it's before saving it.
-        TournamentFormatStrategy strategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(tournament.getTournamentFormat());
-        tournament.setTournamentFormatStrategy(strategy);
+        tournament.setTournamentFormatStrategy();
         return tournament.estimateEndDate();
     }
 

@@ -26,7 +26,7 @@ public class ManageClubsLogicController extends LogicController {
     public List<ClubBean> getClubs() {
         User user = getCurrentUser();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        List<Club> clubs = clubDAO.getClubs(host.getUsername());
+        List<Club> clubs = host.getClubs();
         List<ClubBean> clubBeans = new ArrayList<>();
         if (clubs != null && !clubs.isEmpty()) {
             for (Club club : clubs) {

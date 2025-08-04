@@ -7,17 +7,26 @@ import java.util.Objects;
 public class Team {
     private Player player1;
     private Player player2;
-    private final TeamType type;
+    private Tournament tournament;
+    private TeamType type;
 
-    public Team(Player player, TeamType type) {
+    public Team() {
+
+    }
+    public Team(Player player, TeamType type, Tournament tournament) {
         this.player1 = player;
         this.player2 = null;
+        this.tournament = tournament;
         this.type = type;
+        player1.addTeam(this);
     }
-    public Team(Player player1, Player player2) {
+    public Team(Player player1, Player player2, Tournament tournament) {
         this.player1 = player1;
         this.player2 = player2;
+        this.tournament = tournament;
         this.type = TeamType.DOUBLE;
+        player1.addTeam(this);
+        player2.addTeam(this);
     }
 
     public List<Player> getPlayers() {
@@ -25,6 +34,10 @@ public class Team {
         players.add(player1);
         if (type == TeamType.DOUBLE) players.add(player2);
         return players;
+    }
+
+    public Tournament getTournament() {
+        return tournament;
     }
 
     public Player getPlayer() {
@@ -41,9 +54,11 @@ public class Team {
         }
         else if (this.player1 == null) {
             this.player1 = player;
+            player.addTeam(this);
         }
         else if (this.player2 == null) {
             this.player2 = player;
+            player.addTeam(this);
         }
     }
 
@@ -60,9 +75,11 @@ public class Team {
     public void removePlayer(Player player) {
         if (player2.getUsername().equals(player.getUsername())) {
             this.player2=null;
+            player.removeTeam(this);
         }
         else if (player1.getUsername().equals(player.getUsername())) {
             this.player1=null;
+            player.removeTeam(this);
         }
     }
 
@@ -74,12 +91,11 @@ public class Team {
     public boolean equals(Object o) {
         if (!(o instanceof Team)) return false;
         Team team = (Team) o;
-        if (this == team) return true;
-        return Objects.equals(player1, team.player1) && Objects.equals(player2, team.player2);
+        return Objects.equals(player1, team.player1) && Objects.equals(player2, team.player2) && Objects.equals(tournament, team.tournament);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(player1, player2);
+        return Objects.hash(player1, player2, tournament);
     }
 }

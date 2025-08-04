@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.simonetagliaferri.utils.PasswordUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -10,6 +11,10 @@ public class User {
     private String password;
     private String email;
     private Role role;
+
+    public User() {
+
+    }
 
     public User(String username, String email, String password, Role role) {
         this.username = username;
@@ -45,6 +50,7 @@ public class User {
         this.email = email;
     }
 
+    @JsonIgnore
     public boolean isUsernameValid() {
         return !EmailValidator.getInstance().isValid(this.username); // The username can't be a email address.
     }
@@ -62,6 +68,7 @@ public class User {
         return this.password.equals(hashedPassword);
     }
 
+    @JsonIgnore
     public boolean isHost() {
         return this.role == Role.HOST;
     }
