@@ -24,15 +24,16 @@ public class AddTournamentLogicController extends LogicController {
     }
 
     public boolean addTournament(TournamentBean tournamentBean) {
+        User user = getCurrentUser();
         ClubBean clubBean = tournamentBean.getClub();
-        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        Host host = hostDAO.getHostByUsername(user.getUsername());
         Club club = host.getClub(ClubMapper.fromBean(clubBean));
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
         tournament.setTournamentFormatStrategy();
-        if (!host.addTournamentToClub(tournament, club)) {return false;}
+        if (!club.addTournament(tournament)) {return false;}
         hostDAO.saveHost(host);
         clubDAO.saveClub(club);
-        //tournamentDAO.saveTournament(club, tournament);
+        tournamentDAO.saveTournament(club, tournament);
         return true;
     }
 

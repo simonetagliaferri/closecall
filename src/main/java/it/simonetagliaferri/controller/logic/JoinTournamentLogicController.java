@@ -36,11 +36,7 @@ public class JoinTournamentLogicController extends LogicController {
 
     public List<TournamentBean> searchTournament(String search) {
         List<TournamentBean> tournamentBeanList = new ArrayList<>();
-        List<Club> clubs = clubDAO.getClubsByCity(search);
-        List<Tournament> tournaments = new ArrayList<>();
-        for (Club club : clubs) {
-            tournaments.addAll(club.getClubTournaments());
-        }
+        List<Tournament> tournaments = tournamentDAO.getTournamentsByCity(search);
         for (Tournament tournament : tournaments) {
             tournamentBeanList.add(TournamentMapper.toBean(tournament));
         }
@@ -68,7 +64,7 @@ public class JoinTournamentLogicController extends LogicController {
         Host host = hostDAO.getHostByUsername(tournament.getClub().getOwner().getUsername());
         JoinTournamentView.JoinError res = tournament.addPlayer(player);
         if (res == JoinTournamentView.JoinError.SUCCESS) {
-            //tournamentDAO.saveTournament(tournament.getClub(), tournament);
+            tournamentDAO.saveTournament(tournament.getClub(), tournament);
             clubDAO.saveClub(tournament.getClub());
             hostDAO.saveHost(host);
             playerDAO.savePlayer(player);

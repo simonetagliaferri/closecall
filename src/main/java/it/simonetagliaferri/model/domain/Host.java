@@ -1,8 +1,6 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.simonetagliaferri.model.dao.fs.TournamentKeyDeserializer;
 import it.simonetagliaferri.model.observer.Subscriber;
@@ -12,9 +10,11 @@ import java.util.*;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties({ "password", "role" })
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "username")
 public class Host extends User implements Subscriber {
 
-    @JsonManagedReference
     private List<Club> clubs = new ArrayList<>();
 
     @JsonDeserialize(keyUsing = TournamentKeyDeserializer.class)
@@ -60,18 +60,6 @@ public class Host extends User implements Subscriber {
         if (clubs == null) { clubs = new ArrayList<>(); }
         if (clubAlreadyExists(club)) { return false; }
         clubs.add(club);
-        return true;
-    }
-
-    public boolean addTournamentToClub(Tournament tournament, Club club) {
-        if (!club.addTournament(tournament)) return false;
-        return updateClub(club);
-    }
-
-    public boolean updateClub(Club club) {
-        if (clubs == null || !clubAlreadyExists(club)) { return false; }
-        int index = clubs.indexOf(club);
-        clubs.set(index, club);
         return true;
     }
 

@@ -21,9 +21,10 @@ public class Club implements Publisher {
     private String country;
     private String phone;
     private String email;
-    @JsonBackReference
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "username")
     private Host owner;
-    @JsonManagedReference
     private List<Tournament> clubTournaments = new ArrayList<>();
     private List<Subscriber> subscribedPlayers = new ArrayList<>();
 
@@ -92,16 +93,9 @@ public class Club implements Publisher {
         return email;
     }
 
-    @JsonIgnore
     public Host getOwner() {
         return this.owner;
     }
-
-    @JsonProperty("owner")
-    public String getOwnerUsername() {
-        return owner != null ? owner.getUsername() : null;
-    }
-
 
     @Override
     public void subscribe(Subscriber player) {

@@ -91,7 +91,7 @@ public class GraphicLoginControllerCLI extends GraphicController {
         while (!validUsername) {
             validUsername = true;
             if (user.setUsername(view.getUsername())) {
-                if (!this.controller.isUsernamenValid(user)) {
+                if (!this.controller.isUsernameValid(user)) {
                     validUsername = false;
                     view.emailAsUsername();
                 }

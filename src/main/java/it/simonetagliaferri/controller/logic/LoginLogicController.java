@@ -71,7 +71,7 @@ public class LoginLogicController extends LogicController {
         return loginDAO.findByUsername(username) != null;
     }
 
-    public boolean isUsernamenValid(UserBean bean) {
+    public boolean isUsernameValid(UserBean bean) {
         User user = UserMapper.fromBean(bean);
         return user.isUsernameValid();
     }

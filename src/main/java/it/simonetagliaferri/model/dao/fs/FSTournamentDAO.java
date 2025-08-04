@@ -1,5 +1,7 @@
 package it.simonetagliaferri.model.dao.fs;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Tournament;
@@ -12,11 +14,10 @@ import java.util.stream.Collectors;
 
 public class FSTournamentDAO extends FSDAO implements TournamentDAO {
 
-    private final List<Tournament> tournaments;
+    private final Map<Club, List<Tournament>> tournaments = new HashMap<>();
 
     public FSTournamentDAO() {
         super("tournaments.json");
-        tournaments = new ArrayList<>();
         loadFromFile();
     }
 
@@ -25,58 +26,56 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
         if (!file.exists()) return;
 
         try {
-            List<Tournament> loaded = mapper.readValue(
-                    file,
-                    mapper.getTypeFactory().constructCollectionType(List.class, Tournament.class)
-            );
+            // Deserialize the map of hosts from JSON
+            TypeFactory typeFactory = mapper.getTypeFactory();
+
+            JavaType listType = typeFactory.constructCollectionType(List.class, Tournament.class);
+            JavaType mapType = typeFactory.constructMapLikeType(HashMap.class, typeFactory.constructType(Club.class), listType);
+
+            Map<Club, List<Tournament>> loaded = mapper.readValue(file, mapType);
 
             if (loaded != null) {
                 tournaments.clear();
-                tournaments.addAll(loaded);
+                tournaments.putAll(loaded);
             }
 
             updateLastModified();
         } catch (IOException e) {
-            CliUtils.println("Error loading tournaments: " + e.getMessage());
+            CliUtils.println("Error loading hosts: " + e.getMessage());
         }
+
     }
 
     @Override
     public void saveTournament(Club club, Tournament tournament) {
         reloadIfChanged();
-        tournaments.add(tournament);
+        tournaments.computeIfAbsent(club, k -> new ArrayList<>()).add(tournament);
         saveTournaments();
     }
 
     private void saveTournaments() {
         try {
+            // Serialize the map of hosts back to JSON
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, tournaments);
             updateLastModified();
         } catch (IOException e) {
-            CliUtils.println("Error saving tournaments: " + e.getMessage());
+            CliUtils.println("Error saving hosts: " + e.getMessage());
         }
     }
 
     @Override
     public List<Tournament> getTournaments(Club club) {
         reloadIfChanged();
-        return getTournamentsByClub().get(club);
-    }
-
-    public Map<Club, List<Tournament>> getTournamentsByClub() {
-        Map<Club, List<Tournament>> map = new HashMap<>();
-        for (Tournament t : tournaments) {
-            map.computeIfAbsent(t.getClub(), c -> new ArrayList<>()).add(t);
-        }
-        return map;
+        return tournaments.get(club);
     }
 
     @Override
     public Tournament getTournament(Club club, String name, String tournamentFormat, String tournamentType, LocalDate startDate) {
         reloadIfChanged();
-        if (tournaments != null) {
-            for (Tournament tournament : tournaments) {
-                if (tournament.getClub().equals(club) && tournament.getName().equals(name) && tournament.getTournamentType().equals(tournamentType)
+        List<Tournament> tournamentList = tournaments.get(club);
+        if (tournamentList != null) {
+            for (Tournament tournament : tournamentList) {
+                if (tournament.getName().equals(name) && tournament.getTournamentType().equals(tournamentType)
                         && tournament.getStartDate().equals(startDate) && tournament.getTournamentFormat().equals(tournamentFormat)) {
                     return tournament;
                 }
@@ -87,17 +86,18 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
 
     @Override
     public List<Tournament> getTournamentsByCity(String city) {
-        return tournaments.stream()
-                .filter(t -> t.getClub() != null && city.equalsIgnoreCase(t.getClub().getCity()))
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, List<Tournament>> getTournamentsByCity() {
-        Map<String , List<Tournament>> map = new HashMap<>();
-        for (Tournament t : tournaments) {
-            map.computeIfAbsent(t.getClub().getCity(), c -> new ArrayList<>()).add(t);
+        reloadIfChanged();
+        List<Tournament> tournamentList = new ArrayList<>();
+        String location;
+        for (Map.Entry<Club, List<Tournament>> entry : tournaments.entrySet()) {
+            for (Tournament tournament : entry.getValue()) {
+                location = tournament.getClub().getCity();
+                if (location.equals(city)) {
+                    tournamentList.add(tournament);
+                }
+            }
         }
-        return map;
+        return tournamentList;
     }
 
     @Override

@@ -23,13 +23,10 @@ public class Tournament implements Publisher {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate signupDeadline;
-    @JsonBackReference
     private Club club;
     private TournamentFormatStrategy tournamentFormatStrategy;
     private TeamRegistry teamRegistry;
-    @JsonIgnore
     private List<Player> participants;
-    @JsonIgnore
     private Subscriber host;
 
     public Tournament() {}
