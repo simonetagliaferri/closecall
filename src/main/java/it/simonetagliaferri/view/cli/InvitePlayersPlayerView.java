@@ -52,7 +52,7 @@ public class InvitePlayersPlayerView {
         CliUtils.println("You got invited in a team, your team mate is: " + teammateName);
     }
 
-    public void noNotificatons() {
+    public void noNotifications() {
         CliUtils.println("There are no notifications for you.");
     }
 

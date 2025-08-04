@@ -1,7 +1,5 @@
 package it.simonetagliaferri.view.cli;
 
-import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.utils.CliUtils;
 
 public class InvitePlayersHostView {

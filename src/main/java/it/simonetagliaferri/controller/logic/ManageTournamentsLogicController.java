@@ -34,7 +34,7 @@ public class ManageTournamentsLogicController extends LogicController {
         List<Tournament> tournaments;
         List<TournamentBean> tournamentBeans = new ArrayList<>();
         for (Club club : clubs) {
-            tournaments = club.getTournaments();
+            tournaments = club.getClubTournaments();
             if (tournaments != null && !tournaments.isEmpty()) {
                 for (Tournament tournament : tournaments) {
                     tournamentBeans.add(TournamentMapper.toBean(tournament));

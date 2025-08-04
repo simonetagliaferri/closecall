@@ -24,8 +24,8 @@ public class ClubKey {
         return new ClubKey(club);
     }
 
-    protected Club toClub(Host owner) {
-        return new Club(this.name, this.street, this.number, this.city, owner);
+    protected Club toClub() {
+        return new Club(this.name, this.street, this.number, this.city, new Host(this.hostUsername));
     }
 
     @Override

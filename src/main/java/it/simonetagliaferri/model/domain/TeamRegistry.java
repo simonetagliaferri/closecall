@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 
@@ -28,6 +29,7 @@ public class TeamRegistry {
         return partialTeams;
     }
 
+    @JsonIgnore
     public int getTotalTeams() {
         return confirmedTeams.size() + pendingTeams.size() + partialTeams.size();
     }
@@ -52,6 +54,7 @@ public class TeamRegistry {
         }
     }
 
+    @JsonIgnore
     private TeamType getTeamType(boolean isSingles) {
         if (isSingles) {
             return TeamType.SINGLE;

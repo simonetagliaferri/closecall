@@ -1,8 +1,6 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
@@ -23,10 +21,11 @@ public class Club implements Publisher {
     private String country;
     private String phone;
     private String email;
-    @JsonDeserialize(as = Host.class)
+    @JsonBackReference
     private Host owner;
-    private List<Tournament> tournaments = new ArrayList<>();
-    private List<Subscriber> subscribers = new ArrayList<>();
+    @JsonManagedReference
+    private List<Tournament> clubTournaments = new ArrayList<>();
+    private List<Subscriber> subscribedPlayers = new ArrayList<>();
 
     public Club() {}
 
@@ -106,59 +105,59 @@ public class Club implements Publisher {
 
     @Override
     public void subscribe(Subscriber player) {
-        if (subscribers == null) {
-            subscribers = new ArrayList<>();
+        if (subscribedPlayers == null) {
+            subscribedPlayers = new ArrayList<>();
         }
-        subscribers.add(player);
+        subscribedPlayers.add(player);
     }
 
     @Override
     public void unsubscribe(Subscriber player) {
-        if (subscribers != null) {
-            subscribers.remove(player);
+        if (subscribedPlayers != null) {
+            subscribedPlayers.remove(player);
         }
     }
 
     @Override
     public void notifySubscribers(Tournament tournament) {
-        if (subscribers != null) {
-            for (Subscriber subscriber : subscribers) {
+        if (subscribedPlayers != null) {
+            for (Subscriber subscriber : subscribedPlayers) {
                 subscriber.update(this, tournament);
             }
         }
     }
 
     public boolean isSubscribed(Player player) {
-        if (subscribers != null) {
-            return subscribers.contains(player);
+        if (subscribedPlayers != null) {
+            return subscribedPlayers.contains(player);
         }
         return false;
     }
 
     public boolean addTournament(Tournament tournament) {
-        if (tournaments == null) {
-            tournaments = new ArrayList<>();
+        if (clubTournaments == null) {
+            clubTournaments = new ArrayList<>();
         }
         if (tournamentAlreadyExists(tournament)) {
             return false;
         }
-        tournaments.add(tournament);
+        clubTournaments.add(tournament);
         tournament.subscribe(owner);
         notifySubscribers(tournament);
         return true;
     }
 
-    public List<Tournament> getTournaments() {
-        return tournaments;
+    public List<Tournament> getClubTournaments() {
+        return clubTournaments;
     }
 
     private boolean tournamentAlreadyExists(Tournament tournament) {
-        return tournaments.contains(tournament);
+        return clubTournaments.contains(tournament);
     }
 
     public Tournament getTournament(Tournament tournament) {
-        int index = tournaments.indexOf(tournament);
-        return index >= 0 ? tournaments.get(index) : null;
+        int index = clubTournaments.indexOf(tournament);
+        return index >= 0 ? clubTournaments.get(index) : null;
     }
 
 
@@ -174,4 +173,5 @@ public class Club implements Publisher {
     public int hashCode() {
         return Objects.hash(getName(), getStreet(), getNumber(), getCity(), owner);
     }
+
 }

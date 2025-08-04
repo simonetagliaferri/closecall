@@ -15,7 +15,7 @@ public class TournamentKey {
     TournamentKey() {} // Jackson needs default constructor
 
     TournamentKey(Tournament t) {
-        this.name = t.getTournamentName();
+        this.name = t.getName();
         this.format = t.getTournamentFormat();
         this.type = t.getTournamentType();
         this.startDate = t.getStartDate();
@@ -26,8 +26,8 @@ public class TournamentKey {
         return new TournamentKey(t);
     }
 
-    protected Tournament toTournament(Host owner) {
-        return new Tournament(this.name, this.format, this.type, this.startDate, this.clubKey.toClub(owner));
+    protected Tournament toTournament() {
+        return new Tournament(this.name, this.format, this.type, this.startDate, this.clubKey.toClub());
     }
 
     @Override

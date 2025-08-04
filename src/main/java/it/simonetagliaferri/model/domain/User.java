@@ -52,7 +52,7 @@ public class User {
 
     @JsonIgnore
     public boolean isUsernameValid() {
-        return !EmailValidator.getInstance().isValid(this.username); // The username can't be a email address.
+        return !EmailValidator.getInstance().isValid(this.username); // The username can't be an email address.
     }
 
     private String hashPassword(String password) {

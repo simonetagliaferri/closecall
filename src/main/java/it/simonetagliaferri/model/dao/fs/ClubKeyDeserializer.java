@@ -2,15 +2,19 @@ package it.simonetagliaferri.model.dao.fs;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
-import it.simonetagliaferri.model.domain.Club;
-import it.simonetagliaferri.model.domain.Host;
 
 public class ClubKeyDeserializer extends KeyDeserializer {
     @Override
-    public Club deserializeKey(String key, DeserializationContext ctxt) {
+    public Object deserializeKey(String key, DeserializationContext context) {
+        // Split by your delimiter
         String[] parts = key.split("\\|");
-        if (parts.length != 5) return null;
-        return new Club(parts[0], parts[1], parts[2], parts[3], new Host(parts[4]));
+        ClubKey ck = new ClubKey();
+        ck.setName(parts[0]);
+        ck.setStreet(parts[1]);
+        ck.setNumber(parts[2]);
+        ck.setCity(parts[3]);
+        ck.setHostUsername(parts[4]);
+        return ck.toClub();
     }
 }
 

@@ -32,7 +32,7 @@ public class AddTournamentLogicController extends LogicController {
         if (!host.addTournamentToClub(tournament, club)) {return false;}
         hostDAO.saveHost(host);
         clubDAO.saveClub(club);
-        tournamentDAO.saveTournament(club, tournament);
+        //tournamentDAO.saveTournament(club, tournament);
         return true;
     }
 

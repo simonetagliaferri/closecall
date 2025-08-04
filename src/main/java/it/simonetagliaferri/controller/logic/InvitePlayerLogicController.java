@@ -74,7 +74,7 @@ public class InvitePlayerLogicController extends LogicController{
                 }
                 tournament.processInviteForDoubles(invite, team, otherInvite);
             }
-            tournamentDAO.saveTournament(tournament.getClub(), tournament);
+            //tournamentDAO.saveTournament(tournament.getClub(), tournament);
             playerDAO.savePlayer(player);
         }
     }
@@ -141,7 +141,7 @@ public class InvitePlayerLogicController extends LogicController{
         Invite invite = new Invite(tournament, player, LocalDate.now(), inviteExpireDate, InviteStatus.PENDING, message);
         sendInvite(invite, email);
         tournament.reserveSpot(player);
-        tournamentDAO.saveTournament(tournament.getClub(), tournament);
+        //tournamentDAO.saveTournament(tournament.getClub(), tournament);
     }
 
     public void inviteTeam(PlayerBean player1, PlayerBean player2, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message1, String message2, boolean email1, boolean email2) {

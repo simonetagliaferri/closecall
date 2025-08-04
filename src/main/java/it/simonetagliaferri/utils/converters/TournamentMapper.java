@@ -19,7 +19,7 @@ public class TournamentMapper {
         List<TeamBean> confirmedTeamsBean = new ArrayList<>();
         List<TeamBean> pendingTeamsBean = new ArrayList<>();
         List<TeamBean> partialTeamsBean = new ArrayList<>();
-        tournamentBean.setTournamentName(tournament.getTournamentName());
+        tournamentBean.setTournamentName(tournament.getName());
         tournamentBean.setTournamentType(tournament.getTournamentType());
         tournamentBean.setTournamentFormat(tournament.getTournamentFormat());
         tournamentBean.setMatchFormat(tournament.getMatchFormat());
@@ -65,7 +65,7 @@ public class TournamentMapper {
 
     public static TournamentBean lightToBean(Tournament tournament) {
         TournamentBean tournamentBean = new TournamentBean();
-        tournamentBean.setTournamentName(tournament.getTournamentName());
+        tournamentBean.setTournamentName(tournament.getName());
         tournamentBean.setTournamentFormat(tournament.getTournamentFormat());
         tournamentBean.setTournamentType(tournament.getTournamentType());
         tournamentBean.setStartDate(tournament.getStartDate());
@@ -74,23 +74,9 @@ public class TournamentMapper {
     }
 
     public static Tournament fromBean(TournamentBean tournamentBean) {
-        List<Team> confirmedTeams = new ArrayList<>();
-        List<Team> pendingTeams = new ArrayList<>();
-        List<Team> partialTeams = new ArrayList<>();
-        if (tournamentBean.getConfirmedTeams() != null) {
-            for (TeamBean teamBean : tournamentBean.getConfirmedTeams()) {
-                confirmedTeams.add(TeamMapper.fromBean(teamBean));
-            }
-        }
-
-        if (tournamentBean.getPendingTeams() != null) {
-            for (TeamBean teamBean : tournamentBean.getPendingTeams()) {
-                pendingTeams.add(TeamMapper.fromBean(teamBean));
-            }
-        }
         return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
                 tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
                 tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
-                ClubMapper.fromBean(tournamentBean.getClub()), confirmedTeams, pendingTeams, partialTeams, tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+                ClubMapper.fromBean(tournamentBean.getClub()), tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
     }
 }

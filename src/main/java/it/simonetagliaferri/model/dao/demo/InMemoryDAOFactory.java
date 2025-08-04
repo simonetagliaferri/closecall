@@ -11,7 +11,7 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     // Storing here the hashmaps, that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
     private final Map<String, User> users = new HashMap<>();
-    private final Map<String, List<Tournament>> tournaments = new HashMap<>();
+    private final Map<Club, List<Tournament>> tournaments = new HashMap<>();
     private final Map<String, List<Club>> clubs = new HashMap<>();
     private final Map<String, Host> hosts = new HashMap<>();
     private final Map<String, Player> players = new HashMap<>();

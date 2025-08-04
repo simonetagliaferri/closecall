@@ -2,10 +2,11 @@ package it.simonetagliaferri.model.dao.fs;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
+import it.simonetagliaferri.model.domain.Tournament;
 
 public class TournamentKeyDeserializer extends KeyDeserializer {
     @Override
-    public TournamentKey deserializeKey(String key, DeserializationContext ctxt) {
+    public Tournament deserializeKey(String key, DeserializationContext context) {
         // your key string is like: name|format|type|date|clubKey
         String[] parts = key.split("\\|", 6);
 
@@ -25,6 +26,6 @@ public class TournamentKeyDeserializer extends KeyDeserializer {
         ck.setHostUsername(clubParts[4]);
 
         tk.setClubKey(ck);
-        return tk;
+        return tk.toTournament();
     }
 }

@@ -2,14 +2,18 @@ package it.simonetagliaferri.model.domain;
 
 public class TournamentRules {
 
-    private final String tournamentFormat;
-    private final String tournamentType;
+    private String tournamentFormat;
+    private String tournamentType;
     private String matchFormat;
     private String courtType;
     private int courtNumber;
     private int teamsNumber;
     private double joinFee;
     private double courtPrice;
+
+    public TournamentRules() {
+
+    }
 
     public TournamentRules(String tournamentFormat, String tournamentType, String matchFormat, String courtType, int courtNumber, int teamsNumber) {
         this.tournamentFormat = tournamentFormat;

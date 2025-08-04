@@ -44,7 +44,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         else {
             List<InviteBean> invites = this.controller.getInvites();
             if (invites.isEmpty()) {
-                playerView.noNotificatons();
+                playerView.noNotifications();
                 return;
             }
             int choice = playerView.listNotifications(invites);

@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.simonetagliaferri.model.dao.fs.TournamentKeyDeserializer;
 import it.simonetagliaferri.model.observer.Subscriber;
@@ -13,6 +14,7 @@ import java.util.*;
 @JsonIgnoreProperties({ "password", "role" })
 public class Host extends User implements Subscriber {
 
+    @JsonManagedReference
     private List<Club> clubs = new ArrayList<>();
 
     @JsonDeserialize(keyUsing = TournamentKeyDeserializer.class)
