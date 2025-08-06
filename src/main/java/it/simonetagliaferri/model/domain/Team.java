@@ -2,7 +2,6 @@ package it.simonetagliaferri.model.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Team {
     private Player player1;
@@ -35,6 +34,7 @@ public class Team {
         if (type == TeamType.DOUBLE) players.add(player2);
         return players;
     }
+
 
     public Tournament getTournament() {
         return tournament;
@@ -87,15 +87,4 @@ public class Team {
         return type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Team)) return false;
-        Team team = (Team) o;
-        return Objects.equals(player1, team.player1) && Objects.equals(player2, team.player2) && Objects.equals(tournament, team.tournament);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(player1, player2, tournament);
-    }
 }

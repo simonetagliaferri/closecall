@@ -1,12 +1,11 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.simonetagliaferri.utils.PasswordUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
     private String username;
     private String password;
     private String email;
@@ -50,7 +49,6 @@ public class User {
         this.email = email;
     }
 
-    @JsonIgnore
     public boolean isUsernameValid() {
         return !EmailValidator.getInstance().isValid(this.username); // The username can't be an email address.
     }
@@ -68,7 +66,6 @@ public class User {
         return this.password.equals(hashedPassword);
     }
 
-    @JsonIgnore
     public boolean isHost() {
         return this.role == Role.HOST;
     }
@@ -89,16 +86,4 @@ public class User {
         return role;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        if (this == user) return true;
-        return Objects.equals(getUsername(), user.getUsername());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getUsername());
-    }
 }

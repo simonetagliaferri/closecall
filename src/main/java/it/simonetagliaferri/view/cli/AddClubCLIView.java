@@ -24,7 +24,7 @@ public class AddClubCLIView {
     }
 
     public void clubAlreadyExists() {
-        CliUtils.println("You are trying to add a club that already exists.");
+        CliUtils.println("You are trying to add a club that already exists. You can't have clubs with the same name.");
     }
 
     public String getClubName() {

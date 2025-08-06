@@ -28,6 +28,10 @@ public class Invite {
         this.player = player;
     }
 
+    public Invite() {
+
+    }
+
     public void updateStatus(InviteStatus inviteStatus){
         this.status = inviteStatus;
     }

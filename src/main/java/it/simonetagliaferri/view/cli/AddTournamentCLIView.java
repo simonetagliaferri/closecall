@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddTournamentCLIView {
+
+    public enum Choice {
+        YES,
+        NO
+    }
+
     public void welcome() {
         CliUtils.println("Welcome to the tournament generation.");
     }
@@ -47,14 +53,17 @@ public class AddTournamentCLIView {
         String choice3 = "Grass";
         return CliUtils.multipleChoice(label, choice1, choice2, choice3);
     }
+
     public double joinFee() {
         return CliUtils.promptPositiveDouble("Enter join fee: ");
     }
-    public int includedCourt() {
+
+    public Choice includedCourt() {
         String label = "Is the court cost included in the join fee?";
         String choice1 = "Yes";
         String choice2 = "No";
-        return CliUtils.multipleChoiceInt(label, choice1, choice2);
+        int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
+        return Choice.values()[choice - 1];
     }
     public double courtCost() {
         return CliUtils.promptPositiveDouble("Enter court cost: ");
@@ -79,12 +88,13 @@ public class AddTournamentCLIView {
         return prizes;
     }
 
-    public int showEstimatedEndDate(LocalDate endDate) {
+    public Choice showEstimatedEndDate(LocalDate endDate) {
         CliUtils.println("The estimated end date is: " + endDate);
         String label = "Would you like to edit the estimated end date?";
         String choice1 = "Yes";
         String choice2 = "No";
-        return CliUtils.multipleChoiceInt(label, choice1, choice2);
+        int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
+        return Choice.values()[choice - 1];
     }
 
     public void tournamentAlreadyExists() {
@@ -116,15 +126,12 @@ public class AddTournamentCLIView {
         CliUtils.println("Invalid date entered. Try again.");
     }
 
-    public String getMessage() {
-        return CliUtils.prompt("Enter message: ");
-    }
 
-    public InvitePlayersHostView.InviteChoices askToAddPlayer() {
+    public Choice askToAddPlayer() {
         String label = "Do you want to add a player/team to the tournament?";
         String choice1 = "Yes";
         String choice2 = "No";
         int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
-        return InvitePlayersHostView.InviteChoices.values()[choice - 1];
+        return Choice.values()[choice - 1];
     }
 }

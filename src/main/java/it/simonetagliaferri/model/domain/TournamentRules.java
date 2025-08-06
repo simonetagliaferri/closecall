@@ -1,5 +1,7 @@
 package it.simonetagliaferri.model.domain;
 
+import java.time.LocalDate;
+
 public class TournamentRules {
 
     private String tournamentFormat;
@@ -7,31 +9,51 @@ public class TournamentRules {
     private String matchFormat;
     private String courtType;
     private int courtNumber;
-    private int teamsNumber;
     private double joinFee;
     private double courtPrice;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalDate signupDeadline;
 
     public TournamentRules() {
 
     }
 
-    public TournamentRules(String tournamentFormat, String tournamentType, String matchFormat, String courtType, int courtNumber, int teamsNumber) {
+    public TournamentRules(String tournamentFormat, String tournamentType, String matchFormat, String courtType, int courtNumber) {
         this.tournamentFormat = tournamentFormat;
         this.tournamentType = tournamentType;
         this.matchFormat = matchFormat;
         this.courtType = courtType;
         this.courtNumber = courtNumber;
-        this.teamsNumber = teamsNumber;
     }
 
-    public TournamentRules(String tournamentFormat, String tournamentType) {
+    public TournamentRules(String tournamentFormat, String tournamentType, LocalDate startDate) {
         this.tournamentFormat = tournamentFormat;
         this.tournamentType = tournamentType;
+        this.startDate = startDate;
     }
 
     public void setTournamentCosts(double joinFee, double courtPrice) {
         this.joinFee = joinFee;
         this.courtPrice = courtPrice;
+    }
+
+    public void setTournamentDates(LocalDate startDate, LocalDate signupDeadline, LocalDate endDate) {
+        this.startDate = startDate;
+        this.signupDeadline = signupDeadline;
+        this.endDate = endDate;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getSignupDeadline() {
+        return signupDeadline;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
     public String getTournamentFormat() {
@@ -49,13 +71,31 @@ public class TournamentRules {
     public int getCourtNumber() {
         return courtNumber;
     }
-    public int getTeamsNumber() {
-        return teamsNumber;
-    }
     public double getJoinFee() {
         return joinFee;
     }
     public double getCourtPrice() {
         return courtPrice;
     }
+
+    public static LocalDate minimumStartDate() {
+        return LocalDate.now().plusDays(2);
+    }
+
+    public static LocalDate minimumStartDate(LocalDate signupDeadline) {
+        return signupDeadline.plusDays(1);
+    }
+
+    public static LocalDate minimumDeadline() {
+        return LocalDate.now().plusDays(1);
+    }
+
+    public static LocalDate minimumDeadline(LocalDate startDate) {
+        return startDate.minusDays(1);
+    }
+
+    public static LocalDate minimumEndDate(LocalDate startDate) {
+        return startDate;
+    }
+
 }

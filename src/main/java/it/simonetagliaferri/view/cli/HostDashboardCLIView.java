@@ -10,10 +10,9 @@ public class HostDashboardCLIView {
     public enum HostDashboardCommand {
         ADD_TOURNAMENT,
         LIST_TOURNAMENTS,
-        ADD_CLUB,
-        LIST_CLUBS,
+        CLUB_INFO,
         LOGOUT,
-        SETTINGS
+        NOTIFICATIONS
     }
 
     public void hello(UserBean user) {
@@ -25,12 +24,11 @@ public class HostDashboardCLIView {
         while (true) {
             CliUtils.println("1. Add tournament");
             CliUtils.println("2. List tournaments");
-            CliUtils.println("3. Add club");
-            CliUtils.println("4. List clubs");
-            CliUtils.println("5. Logout");
-            CliUtils.println("6. Notifications");
+            CliUtils.println("3. Club info");
+            CliUtils.println("4. Logout");
+            CliUtils.println("5. Notifications");
             int choice = CliUtils.promptPositiveInt("Enter your choice: ");
-            if (choice >= 1 && choice <= 6) {
+            if (choice >= 1 && choice <= 5) {
                 return HostDashboardCommand.values()[choice-1];
             }
             CliUtils.println("Invalid choice. Try again.");
@@ -53,18 +51,15 @@ public class HostDashboardCLIView {
         }
     }
 
-    public void listClubs(List<ClubBean> clubs) {
-        for (ClubBean clubBean : clubs) {
-            CliUtils.println("Club: " + clubBean.getName());
-            CliUtils.println("Address: " + clubBean.getStreet() + ", " + clubBean.getCity() + ", " + clubBean.getZip());
-            CliUtils.println("State: " + clubBean.getState() + ", " + clubBean.getCountry());
-            CliUtils.println("");
-        }
+    public void clubInfo(ClubBean clubBean) {
+        CliUtils.println("Club name: " + clubBean.getName());
+        CliUtils.println("Address: " + clubBean.getStreet() + ", " + clubBean.getCity() + ", " + clubBean.getZip());
+        CliUtils.println("State: " + clubBean.getState() + ", " + clubBean.getCountry());
+        CliUtils.println("");
     }
 
     public void noTournaments() {
         CliUtils.println("No tournaments found.");
     }
 
-    public void noClubs() { CliUtils.println("No clubs found."); }
 }

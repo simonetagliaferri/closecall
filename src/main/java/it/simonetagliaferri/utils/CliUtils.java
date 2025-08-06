@@ -93,10 +93,7 @@ public class CliUtils {
                 i++;
             }
             result = CliUtils.promptPositiveInt("Enter choice: ");
-            if (result == 0) {
-                return "";
-            }
-            else if (result >= 1 && result <= choices.length) {
+            if (result >= 1 && result <= choices.length) {
                 return choices[result-1];
             }
             else {

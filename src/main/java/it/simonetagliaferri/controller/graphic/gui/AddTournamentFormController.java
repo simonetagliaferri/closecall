@@ -72,24 +72,24 @@ public class AddTournamentFormController extends GraphicController implements GU
     }
 
     public void postInit() {
-        List<ClubBean> clubBeans = this.controller.getClubBeans();
-        List<String> clubNames = clubBeans.stream().map(ClubBean::getName).collect(Collectors.toList());
-        clubs.setItems(FXCollections.observableList(clubNames));
-        clubs.getSelectionModel().selectFirst();
-        setClub();
+//        List<ClubBean> clubBeans = this.controller.getClubBeans();
+//        List<String> clubNames = clubBeans.stream().map(ClubBean::getName).collect(Collectors.toList());
+//        clubs.setItems(FXCollections.observableList(clubNames));
+//        clubs.getSelectionModel().selectFirst();
+//        setClub();
     }
 
     @FXML
     public void setClub() {
-        List<ClubBean> clubBeans = this.controller.getClubBeans();
-        String clubName = clubs.getValue().toString();
-        ClubBean clubBean = null;
-        for (ClubBean club : clubBeans) {
-            if (club.getName().equals(clubName)) {
-                clubBean = club;
-            }
-        }
-        tournamentBean.setClub(clubBean);
+//        List<ClubBean> clubBeans = this.controller.getClubBeans();
+//        String clubName = clubs.getValue().toString();
+//        ClubBean clubBean = null;
+//        for (ClubBean club : clubBeans) {
+//            if (club.getName().equals(clubName)) {
+//                clubBean = club;
+//            }
+//        }
+//        tournamentBean.setClub(clubBean);
     }
 
     @FXML private void initialize() {

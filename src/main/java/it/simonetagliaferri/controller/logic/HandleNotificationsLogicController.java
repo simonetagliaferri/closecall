@@ -57,7 +57,7 @@ public class HandleNotificationsLogicController extends LogicController {
             for (Player player : players) {
                 playerBeans.add(PlayerMapper.toBean(player));
             }
-            tournamentBean = TournamentMapper.toBean(entry.getKey());
+            tournamentBean = TournamentMapper.lightToBean(entry.getKey());
             hostNotifications.put(tournamentBean, playerBeans);
         }
         return hostNotifications;

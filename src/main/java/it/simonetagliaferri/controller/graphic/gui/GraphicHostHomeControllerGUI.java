@@ -2,7 +2,6 @@ package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.ManageClubsLogicController;
 import it.simonetagliaferri.controller.logic.ManageTournamentsLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import javafx.fxml.FXML;
@@ -14,7 +13,6 @@ import java.util.List;
 public class GraphicHostHomeControllerGUI extends GraphicController implements GUIController {
 
     ManageTournamentsLogicController tournamentController;
-    ManageClubsLogicController clubController;
 
     @FXML private VBox clubs;
     @Override
@@ -22,8 +20,6 @@ public class GraphicHostHomeControllerGUI extends GraphicController implements G
         this.navigationManager = appContext.getNavigationManager();
         this.tournamentController = new ManageTournamentsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
-        this.clubController = new ManageClubsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO(),
-                appContext.getDAOFactory().getClubDAO());
         postInit();
     }
 
@@ -33,11 +29,7 @@ public class GraphicHostHomeControllerGUI extends GraphicController implements G
     }
 
     private void postInit() {
-        List<ClubBean> clubBeans = clubController.getClubs();
-        for (ClubBean clubBean : clubBeans) {
-            Label label = new Label(clubBean.getName());
-            clubs.getChildren().add(label);
-        }
+
     }
 
 

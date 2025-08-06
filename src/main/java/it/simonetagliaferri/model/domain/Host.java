@@ -1,23 +1,13 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import it.simonetagliaferri.model.dao.fs.TournamentKeyDeserializer;
 import it.simonetagliaferri.model.observer.Subscriber;
 
 import java.util.*;
 
-
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-@JsonIgnoreProperties({ "password", "role" })
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "username")
 public class Host extends User implements Subscriber {
 
-    private List<Club> clubs = new ArrayList<>();
+    private Club club;
 
-    @JsonDeserialize(keyUsing = TournamentKeyDeserializer.class)
     private Map<Tournament, List<Player>> newPlayers = new HashMap<>();
 
     @Override
@@ -52,28 +42,21 @@ public class Host extends User implements Subscriber {
         super(username, password, email, role);
     }
 
-    public boolean hasClubs() {
-        return clubs != null && !clubs.isEmpty();
+    public boolean hasClub() {
+        return club != null;
     }
 
     public boolean addClub(Club club) {
-        if (clubs == null) { clubs = new ArrayList<>(); }
-        if (clubAlreadyExists(club)) { return false; }
-        clubs.add(club);
+        if (hasClub()) { return false; }
+        club.setOwner(this);
+        this.club = club;
         return true;
     }
 
-    public Club getClub(Club club) {
-        int index = clubs.indexOf(club);
-        return index >= 0 ? clubs.get(index) : null;
+
+    public Club getClub() {
+        return club;
     }
 
-    public List<Club> getClubs() {
-        return clubs;
-    }
-
-    private boolean clubAlreadyExists(Club club) {
-        return clubs.contains(club);
-    }
 
 }

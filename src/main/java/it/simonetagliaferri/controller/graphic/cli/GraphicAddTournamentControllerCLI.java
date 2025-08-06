@@ -1,6 +1,5 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
-import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
@@ -8,12 +7,8 @@ import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
-import it.simonetagliaferri.view.cli.InvitePlayersHostView;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GraphicAddTournamentControllerCLI extends GraphicController {
 
@@ -29,15 +24,6 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     }
     public void start() {
         view.welcome();
-        boolean validDate = false;
-        String strDate;
-        LocalDate startDate;
-        LocalDate deadline;
-        List<ClubBean> clubs = this.controller.getClubBeans();
-        List<String> clubNames = clubs.stream().map(ClubBean::getName).collect(Collectors.toList());
-        int clubNumber = view.getClub(clubNames);
-        ClubBean club = clubs.get(clubNumber);
-        tournamentBean.setClub(club);
         tournamentBean.setTournamentName(view.tournamentName());
         tournamentBean.setTournamentType(view.tournamentType());
         tournamentBean.setTournamentFormat(view.tournamentFormat());
@@ -47,13 +33,27 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         tournamentBean.setTeamsNumber(view.numberOfTeams());
         tournamentBean.setPrizes(view.prizes());
         tournamentBean.setJoinFee(view.joinFee());
-        int courtCost = view.includedCourt();
-        if (courtCost == 2) {
+        AddTournamentCLIView.Choice courtCost = view.includedCourt();
+        if (courtCost == AddTournamentCLIView.Choice.NO) {
             tournamentBean.setCourtPrice(view.courtCost());
         }
         else {
             tournamentBean.setCourtPrice(0);
         }
+        setStartDate();
+        setSignupDeadline();
+        estimatedEndDate();
+        if (!this.controller.addTournament(tournamentBean)) {
+            view.tournamentAlreadyExists();
+        } else {
+            addPlayersToTournament();
+        }
+    }
+
+    public void setStartDate() {
+        boolean validDate = false;
+        String strDate;
+        LocalDate startDate;
         while (!validDate) {
             strDate=view.startDate();
             try {
@@ -64,7 +64,12 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 view.invalidDate();
             }
         }
-        validDate = false;
+    }
+
+    public void setSignupDeadline() {
+        boolean validDate = false;
+        String strDate;
+        LocalDate deadline;
         while (!validDate) {
             strDate=view.signupDeadline();
             try {
@@ -75,18 +80,12 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 view.invalidDate();
             }
         }
-        estimatedEndDate();
-        if (!this.controller.addTournament(tournamentBean)) {
-            view.tournamentAlreadyExists();
-        } else {
-            addPlayersToTournament();
-        }
     }
 
     public void estimatedEndDate() {
         LocalDate endDate = this.controller.estimatedEndDate(tournamentBean);
-        int choice = view.showEstimatedEndDate(endDate);
-        if (choice == 1) {
+        AddTournamentCLIView.Choice choice = view.showEstimatedEndDate(endDate);
+        if (choice == AddTournamentCLIView.Choice.YES) {
             String strEndDate;
             boolean validDate = false;
             while (!validDate) {
@@ -106,7 +105,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     }
 
     public void addPlayersToTournament() {
-        if (view.askToAddPlayer() == InvitePlayersHostView.InviteChoices.YES)
+        if (view.askToAddPlayer() == AddTournamentCLIView.Choice.YES)
             navigationManager.goToInvitePlayer(this.controller.getCurrentUserRole(), tournamentBean);
     }
 }

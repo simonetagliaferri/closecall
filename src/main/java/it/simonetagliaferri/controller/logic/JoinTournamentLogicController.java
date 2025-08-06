@@ -47,7 +47,7 @@ public class JoinTournamentLogicController extends LogicController {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = host.getClub(ClubMapper.fromBean(clubBean));
+        Club club = host.getClub();
         return club.getTournament(TournamentMapper.fromBean(tournamentBean));
     }
 
@@ -55,18 +55,16 @@ public class JoinTournamentLogicController extends LogicController {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        return host.getClub(ClubMapper.fromBean(clubBean));
+        return host.getClub();
     }
 
     public JoinTournamentView.JoinError joinTournament(TournamentBean tournamentBean) {
         Tournament tournament = getTournamentFromBean(tournamentBean);
         Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
-        Host host = hostDAO.getHostByUsername(tournament.getClub().getOwner().getUsername());
         JoinTournamentView.JoinError res = tournament.addPlayer(player);
         if (res == JoinTournamentView.JoinError.SUCCESS) {
             tournamentDAO.saveTournament(tournament.getClub(), tournament);
             clubDAO.saveClub(tournament.getClub());
-            hostDAO.saveHost(host);
             playerDAO.savePlayer(player);
         }
         return res;

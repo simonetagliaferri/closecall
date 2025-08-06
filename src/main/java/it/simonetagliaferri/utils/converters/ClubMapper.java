@@ -11,7 +11,7 @@ public class ClubMapper {
     private ClubMapper() {}
 
     public static Club fromBean(ClubBean clubBean) {
-        Club club = new Club(clubBean.getName(), HostMapper.fromBean(clubBean.getOwner()));
+        Club club = new Club(clubBean.getName());
         club.updateAddress(clubBean.getStreet(), clubBean.getNumber(), clubBean.getCity(), clubBean.getState(), clubBean.getZip(), clubBean.getCountry());
         club.updateContacts(clubBean.getPhone(), clubBean.getEmail());
         return club;

@@ -9,13 +9,9 @@ module it.simonetagliaferri {
     requires org.kordamp.ikonli.javafx;
     // add icon pack modules
     requires org.kordamp.ikonli.octicons;
-    requires com.fasterxml.jackson.datatype.jsr310;
-    requires com.fasterxml.jackson.databind;
+
     requires java.sql;
 
-    opens it.simonetagliaferri.model.invite to com.fasterxml.jackson.databind;
-    opens it.simonetagliaferri.model.domain to com.fasterxml.jackson.databind;
-    exports it.simonetagliaferri.model.dao.fs to com.fasterxml.jackson.databind;
     opens it.simonetagliaferri to javafx.fxml;
     exports it.simonetagliaferri;
     exports it.simonetagliaferri.model.dao;

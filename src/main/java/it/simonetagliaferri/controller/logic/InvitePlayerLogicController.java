@@ -9,10 +9,8 @@ import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.invite.decorator.EmailDecorator;
 import it.simonetagliaferri.model.invite.decorator.InAppInviteNotification;
 import it.simonetagliaferri.model.invite.decorator.InviteNotification;
-import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.InviteMapper;
 import it.simonetagliaferri.utils.converters.PlayerMapper;
-import it.simonetagliaferri.utils.converters.TournamentMapper;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
@@ -59,7 +57,7 @@ public class InvitePlayerLogicController extends LogicController{
     public void updateInvite(InviteBean inviteBean, InviteStatus status){
         if (status != InviteStatus.PENDING) {
             Player player = playerDAO.findByUsername(sessionManager.getCurrentUser().getUsername());
-            Invite invite = player.getInvite(InviteMapper.fromBean(inviteBean));
+            Invite invite = getInviteFromBean(inviteBean);
             Tournament tournament = invite.getTournament();
             invite.updateStatus(status);
             player.clearInvite(invite);
@@ -109,15 +107,20 @@ public class InvitePlayerLogicController extends LogicController{
 
     public Invite getInviteFromBean(InviteBean inviteBean) {
         Player player = playerDAO.findByUsername(sessionManager.getCurrentUser().getUsername());
-        return player.getInvite(InviteMapper.fromBean(inviteBean));
+        Tournament tournament = getTournamentFromBean(inviteBean.getTournament());
+        return player.getInviteForTournament(tournament);
     }
 
     public Tournament getTournamentFromBean(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = host.getClub(ClubMapper.fromBean(clubBean));
-        return club.getTournament(TournamentMapper.fromBean(tournamentBean));
+        Club club = host.getClub();
+        return tournamentDAO.getTournament(club,
+                tournamentBean.getTournamentName(),
+                tournamentBean.getTournamentFormat(),
+                tournamentBean.getTournamentType(),
+                tournamentBean.getStartDate());
     }
 
     public PlayerBean teammate(InviteBean inviteBean) {

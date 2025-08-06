@@ -1,6 +1,5 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.*;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.observer.Publisher;
@@ -12,63 +11,78 @@ import it.simonetagliaferri.view.cli.JoinTournamentView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Tournament implements Publisher {
     private String name;
     private TournamentRules tournamentRules;
     private List<Double> prizes;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalDate signupDeadline;
     private Club club;
     private TournamentFormatStrategy tournamentFormatStrategy;
     private TeamRegistry teamRegistry;
     private List<Player> participants;
     private Subscriber host;
 
-    public Tournament() {}
+    public Subscriber getHost() {
+        return host;
+    }
+
+    public void setHost(Subscriber host) {
+        this.host = host;
+    }
+
+    public Tournament() {
+    }
+
+    public Tournament(String name) {
+        this.name = name;
+    }
+
+    public Tournament(String name, String tournamentFormat, String tournamentType, LocalDate startDate) {
+        this.name = name;
+        this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType, startDate);
+        setTournamentFormatStrategy();
+    }
 
     public Tournament(String name, String tournamentFormat, String tournamentType, LocalDate startDate, Club club) {
         this.name = name;
-        this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType);
-        this.startDate = startDate;
+        this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType, startDate);
         this.club = club;
+        setTournamentFormatStrategy();
     }
 
-    public Tournament(String name, String tournamentType, String tournamentFormat, String matchFormat,
-                      String courtType, int courtNumber, int teamsNumber, List<Double> prizes, LocalDate startDate,
-                      LocalDate endDate, LocalDate signupDeadline, Club club, double joinFee, double courtPrice) {
-        this.name = name;
-        this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType, matchFormat, courtType, courtNumber, teamsNumber);
+    public void setTournamentRules(String tournamentFormat, String tournamentType, String matchFormat, String courtType, int courtNumber, int teamsNumber) {
+        if (this.tournamentRules == null) {
+            this.tournamentRules = new TournamentRules(tournamentFormat, tournamentType, matchFormat, courtType, courtNumber);
+        }
+        if (this.teamRegistry == null) {
+            this.teamRegistry = new TeamRegistry(teamsNumber);
+        }
+        setTournamentFormatStrategy();
+    }
+
+    public void setTournamentCosts(double joinFee, double courtPrice) {
         this.tournamentRules.setTournamentCosts(joinFee, courtPrice);
-        this.prizes = prizes;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.signupDeadline = signupDeadline;
-        this.club = club;
-        this.teamRegistry = new TeamRegistry();
     }
 
-    public void setTournamentFormatStrategy() {
+    public void setTournamentDates(LocalDate startDate, LocalDate signupDeadline, LocalDate endDate) {
+        this.tournamentRules.setTournamentDates(startDate, signupDeadline, endDate);
+    }
+
+    public void setPrizes(List<Double> prizes) {
+        this.prizes = prizes;
+    }
+
+
+    public void setClub(Club club) {
+        this.club = club;
+    }
+
+    private void setTournamentFormatStrategy() {
         this.tournamentFormatStrategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(getTournamentFormat());
     }
 
     public Club getClub() {
         return club;
-    }
-
-    @JsonProperty("participants")
-    public List<String> getParticipantUsernames() {
-        List<String> usernames = new ArrayList<>();
-        if (participants != null) {
-            for (Player p : participants) {
-                usernames.add(p.getUsername());
-            }
-        }
-        return usernames;
     }
 
     public String getName() {
@@ -77,7 +91,7 @@ public class Tournament implements Publisher {
 
     public LocalDate estimateEndDate() {
         int days = this.tournamentFormatStrategy.estimateNeededDays(getTeamsNumber(), getCourtNumber());
-        return this.startDate.plusDays(days);
+        return getStartDate().plusDays(days);
     }
 
     public int availableSpots() {
@@ -97,31 +111,31 @@ public class Tournament implements Publisher {
         return spot > 0;
     }
 
-    private TeamRegistry getTeamRegistry() {
-        return teamRegistry;
-    }
-
-    @JsonIgnore
     public List<Team> getConfirmedTeams() {
-        return getTeamRegistry().getConfirmedTeams();
+        if (getTeamRegistry() != null) {
+            return getTeamRegistry().getConfirmedTeams();
+        }
+        return null;
     }
 
-    @JsonIgnore
     public List<Team> getPendingTeams() {
-        return getTeamRegistry().getPendingTeams();
+        if (getTeamRegistry() != null) {
+            return getTeamRegistry().getPendingTeams();
+        }
+        return null;
     }
 
-    @JsonIgnore
     public List<Team> getPartialTeams() {
-        return getTeamRegistry().getPartialTeams();
+        if (getTeamRegistry() != null) {
+            return getTeamRegistry().getPartialTeams();
+        }
+        return null;
     }
 
-    @JsonIgnore
     public boolean isSingles() {
         return getTournamentType().equals("Men's singles") || getTournamentType().equals("Women's singles");
     }
 
-    @JsonIgnore
     public Team getReservedTeam(Player player) {
         return getTeamRegistry().getReservedTeam(player);
     }
@@ -186,37 +200,31 @@ public class Tournament implements Publisher {
         this.host.update(this.club, this);
     }
 
-    @JsonIgnore
     public String getTournamentType() {
         return getTournamentRules().getTournamentType();
     }
 
-    @JsonIgnore
     public String getMatchFormat() {
         return getTournamentRules().getMatchFormat();
     }
 
-    @JsonIgnore
     public String getCourtType() {
         return getTournamentRules().getCourtType();
     }
 
-    @JsonIgnore
     public int getCourtNumber() {
         return getTournamentRules().getCourtNumber();
     }
 
-    @JsonIgnore
     public int getTeamsNumber() {
-        return getTournamentRules().getTeamsNumber();
+        return getTeamRegistry().getTeamsNumber();
     }
 
-    @JsonIgnore
     public String getTournamentFormat() {
         return getTournamentRules().getTournamentFormat();
     }
 
-    public TournamentRules getTournamentRules() {
+    private TournamentRules getTournamentRules() {
         return tournamentRules;
     }
 
@@ -225,23 +233,21 @@ public class Tournament implements Publisher {
     }
 
     public LocalDate getStartDate() {
-        return startDate;
+        return getTournamentRules().getStartDate();
     }
 
     public LocalDate getEndDate() {
-        return endDate;
+        return getTournamentRules().getEndDate();
     }
 
     public LocalDate getSignupDeadline() {
-        return signupDeadline;
+        return getTournamentRules().getSignupDeadline();
     }
 
-    @JsonIgnore
     public double getJoinFee() {
         return getTournamentRules().getJoinFee();
     }
 
-    @JsonIgnore
     public double getCourtPrice() {
         return getTournamentRules().getCourtPrice();
     }
@@ -250,17 +256,13 @@ public class Tournament implements Publisher {
         return participants;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Tournament)) return false;
-        Tournament to = (Tournament) o;
-        if (this == to) return true;
-        return Objects.equals(name, to.name) && Objects.equals(getTournamentFormat(), to.getTournamentFormat()) && Objects.equals(getTournamentType(), to.getTournamentType()) && Objects.equals(getStartDate(), to.getStartDate()) && Objects.equals(getClub(), to.getClub());
+    public TeamRegistry getTeamRegistry() {
+        return teamRegistry;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, getTournamentRules().getTournamentFormat(), getTournamentRules().getTournamentType(), getStartDate(), getClub());
+    public void setTeamRegistry(TeamRegistry teamRegistry) {
+        this.teamRegistry = teamRegistry;
     }
+
 
 }

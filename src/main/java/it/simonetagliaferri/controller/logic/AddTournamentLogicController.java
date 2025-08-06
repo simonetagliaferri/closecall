@@ -1,21 +1,20 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.*;
 import it.simonetagliaferri.model.domain.*;
-import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class AddTournamentLogicController extends LogicController {
+
     TournamentDAO tournamentDAO;
     HostDAO hostDAO;
     ClubDAO clubDAO;
+
     public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO) {
         super(sessionManager);
         this.tournamentDAO = tournamentDAO;
@@ -24,22 +23,20 @@ public class AddTournamentLogicController extends LogicController {
     }
 
     public boolean addTournament(TournamentBean tournamentBean) {
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Creating the tournament model.
         User user = getCurrentUser();
-        ClubBean clubBean = tournamentBean.getClub();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        Club club = host.getClub(ClubMapper.fromBean(clubBean));
-        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
-        tournament.setTournamentFormatStrategy();
-        if (!club.addTournament(tournament)) {return false;}
-        hostDAO.saveHost(host);
+        Club club = host.getClub();
+        if (club == null) { return false; }
+        if (!club.addTournament(tournament)) {return false;} // If club returns false the tournament already exists.
         clubDAO.saveClub(club);
         tournamentDAO.saveTournament(club, tournament);
+        hostDAO.saveHost(host);
         return true;
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {
-        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Okay to use since it's before saving it.
-        tournament.setTournamentFormatStrategy();
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Temp model to estimate the end date.
         return tournament.estimateEndDate();
     }
 
@@ -68,17 +65,6 @@ public class AddTournamentLogicController extends LogicController {
             throw new InvalidDateException();
         }
         return endDate;
-    }
-
-    public List<ClubBean> getClubBeans() {
-        List<Club> clubs = getClubs();
-        return ClubMapper.toBean(clubs);
-    }
-
-    private List<Club> getClubs() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        return host.getClubs();
     }
 
     public LocalDate MinimumStartDate() {

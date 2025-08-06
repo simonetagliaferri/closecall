@@ -1,16 +1,10 @@
 package it.simonetagliaferri.model.domain;
-
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Club implements Publisher {
     private String name;
     private String street;
@@ -21,9 +15,6 @@ public class Club implements Publisher {
     private String country;
     private String phone;
     private String email;
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "username")
     private Host owner;
     private List<Tournament> clubTournaments = new ArrayList<>();
     private List<Subscriber> subscribedPlayers = new ArrayList<>();
@@ -32,6 +23,14 @@ public class Club implements Publisher {
 
     public Club(String name, Host owner) {
         this.name = name;
+        this.owner = owner;
+    }
+
+    public Club(String name) {
+        this.name = name;
+    }
+
+    public void setOwner(Host owner) {
         this.owner = owner;
     }
 
@@ -135,6 +134,7 @@ public class Club implements Publisher {
         if (tournamentAlreadyExists(tournament)) {
             return false;
         }
+        tournament.setClub(this);
         clubTournaments.add(tournament);
         tournament.subscribe(owner);
         notifySubscribers(tournament);
@@ -150,22 +150,10 @@ public class Club implements Publisher {
     }
 
     public Tournament getTournament(Tournament tournament) {
+        tournament.setClub(this);
         int index = clubTournaments.indexOf(tournament);
         return index >= 0 ? clubTournaments.get(index) : null;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Club)) return false;
-        Club club = (Club) o;
-        if (this == club) return true;
-        return Objects.equals(getName(), club.getName()) && Objects.equals(getStreet(), club.getStreet()) && Objects.equals(getNumber(), club.getNumber()) && Objects.equals(getCity(), club.getCity()) && Objects.equals(owner, club.owner);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getStreet(), getNumber(), getCity(), owner);
-    }
 
 }

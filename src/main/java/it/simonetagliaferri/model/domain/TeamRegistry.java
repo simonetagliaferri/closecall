@@ -1,6 +1,5 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 
@@ -9,9 +8,17 @@ import java.util.List;
 
 public class TeamRegistry {
 
-    private final List<Team> confirmedTeams;
-    private final List<Team> pendingTeams;
-    private final List<Team> partialTeams;
+    private int teamsNumber;
+    private List<Team> confirmedTeams;
+    private List<Team> pendingTeams;
+    private List<Team> partialTeams;
+
+    public TeamRegistry(int teamsNumber) {
+        this.confirmedTeams = new ArrayList<>();
+        this.pendingTeams = new ArrayList<>();
+        this.partialTeams = new ArrayList<>();
+        this.teamsNumber = teamsNumber;
+    }
 
     public TeamRegistry() {
         this.confirmedTeams = new ArrayList<>();
@@ -29,7 +36,6 @@ public class TeamRegistry {
         return partialTeams;
     }
 
-    @JsonIgnore
     public int getTotalTeams() {
         return confirmedTeams.size() + pendingTeams.size() + partialTeams.size();
     }
@@ -54,7 +60,6 @@ public class TeamRegistry {
         }
     }
 
-    @JsonIgnore
     private TeamType getTeamType(boolean isSingles) {
         if (isSingles) {
             return TeamType.SINGLE;
@@ -154,5 +159,27 @@ public class TeamRegistry {
         }
         return p;
     }
+
+    public int getTeamsNumber() {
+        return teamsNumber;
+    }
+
+    public void setTeamsNumber(int teamsNumber) {
+        this.teamsNumber = teamsNumber;
+    }
+
+    public void setConfirmedTeams(ArrayList<Team> confirmedTeams) {
+        this.confirmedTeams = confirmedTeams;
+    }
+
+    public void setPendingTeams(ArrayList<Team> pendingTeams) {
+        this.pendingTeams = pendingTeams;
+    }
+
+    public void setPartialTeams(ArrayList<Team> partialTeams) {
+        this.partialTeams = partialTeams;
+    }
+
+
 
 }

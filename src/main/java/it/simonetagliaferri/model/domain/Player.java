@@ -1,8 +1,5 @@
 package it.simonetagliaferri.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import it.simonetagliaferri.model.dao.fs.ClubKeyDeserializer;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.observer.Subscriber;
 
@@ -11,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@JsonIgnoreProperties({ "password", "role" })
 public class Player extends User implements Subscriber {
 
     public Player(String username, String email, Role role) {
@@ -28,10 +24,8 @@ public class Player extends User implements Subscriber {
     private List<Invite> invites;
 
     private List<Club> favouriteClubs;
-
     private List<Team> teams;
 
-    @JsonDeserialize(keyUsing = ClubKeyDeserializer.class)
     private Map<Club, List<Tournament>> notifications;
 
     @Override
@@ -85,10 +79,13 @@ public class Player extends User implements Subscriber {
         invites.add(invite);
     }
 
-    public Invite getInvite(Invite invite) {
-        int index = invites.indexOf(invite);
-        return index >= 0 ? invites.get(index) : null;
-
+    public Invite getInviteForTournament(Tournament tournament) {
+        for (Invite invite : invites) {
+            if (invite.getTournament().equals(tournament)) {
+                return invite;
+            }
+        }
+        return null;
     }
 
     public void clearInvite(Invite invite) {

@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface ClubDAO {
 
-    List<Club> getClubs(String hostName);
+    Club getClubByHostName(String hostName);
     void saveClub(Club club);
     List<Club> getClubsByCity(String city);
     Club getClubByName(String hostName, String clubName);
-    boolean clubAlreadyExists(Club club);
 }

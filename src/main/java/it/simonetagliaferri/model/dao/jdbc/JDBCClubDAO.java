@@ -7,7 +7,7 @@ import java.util.List;
 
 public class JDBCClubDAO implements ClubDAO {
     @Override
-    public List<Club> getClubs(String hostName) {
+    public Club getClubByHostName(String hostName) {
         //TODO
         return null;
     }
@@ -29,10 +29,5 @@ public class JDBCClubDAO implements ClubDAO {
         return null;
     }
 
-    @Override
-    public boolean clubAlreadyExists(Club club) {
-        //TODO
-        return false;
-    }
 
 }

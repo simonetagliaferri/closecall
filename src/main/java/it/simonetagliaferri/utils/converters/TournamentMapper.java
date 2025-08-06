@@ -59,8 +59,7 @@ public class TournamentMapper {
         String tournamentFormat = tournamentBean.getTournamentFormat();
         String tournamentType = tournamentBean.getTournamentType();
         LocalDate startDate = tournamentBean.getStartDate();
-        Club club = ClubMapper.fromBean(tournamentBean.getClub());
-        return new Tournament(tournamentName, tournamentFormat, tournamentType, startDate, club);
+        return new Tournament(tournamentName, tournamentFormat, tournamentType, startDate);
     }
 
     public static TournamentBean lightToBean(Tournament tournament) {
@@ -74,9 +73,16 @@ public class TournamentMapper {
     }
 
     public static Tournament fromBean(TournamentBean tournamentBean) {
-        return new Tournament(tournamentBean.getTournamentName(), tournamentBean.getTournamentType(), tournamentBean.getTournamentFormat(),
-                tournamentBean.getMatchFormat(), tournamentBean.getCourtType(), tournamentBean.getCourtNumber(), tournamentBean.getTeamsNumber(),
-                tournamentBean.getPrizes(), tournamentBean.getStartDate(), tournamentBean.getEndDate(), tournamentBean.getSignupDeadline(),
-                ClubMapper.fromBean(tournamentBean.getClub()), tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+        Tournament tournament = new Tournament(tournamentBean.getTournamentName());
+        tournament.setTournamentRules(tournamentBean.getTournamentFormat(),
+                tournamentBean.getTournamentType(),
+                tournamentBean.getMatchFormat(),
+                tournamentBean.getCourtType(),
+                tournamentBean.getCourtNumber(),
+                tournamentBean.getTeamsNumber());
+        tournament.setTournamentDates(tournamentBean.getStartDate(), tournamentBean.getSignupDeadline(), tournamentBean.getEndDate());
+        tournament.setTournamentCosts(tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+        tournament.setPrizes(tournamentBean.getPrizes());
+        return tournament;
     }
 }

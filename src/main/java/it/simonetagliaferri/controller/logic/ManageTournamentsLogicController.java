@@ -30,15 +30,13 @@ public class ManageTournamentsLogicController extends LogicController {
     public List<TournamentBean> getTournaments() {
         User user = getCurrentUser();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        List<Club> clubs = host.getClubs();
+        Club club = host.getClub();
         List<Tournament> tournaments;
         List<TournamentBean> tournamentBeans = new ArrayList<>();
-        for (Club club : clubs) {
-            tournaments = club.getClubTournaments();
-            if (tournaments != null && !tournaments.isEmpty()) {
-                for (Tournament tournament : tournaments) {
-                    tournamentBeans.add(TournamentMapper.toBean(tournament));
-                }
+        tournaments = club.getClubTournaments();
+        if (tournaments != null && !tournaments.isEmpty()) {
+            for (Tournament tournament : tournaments) {
+                tournamentBeans.add(TournamentMapper.toBean(tournament));
             }
         }
         return tournamentBeans;

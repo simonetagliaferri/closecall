@@ -2,66 +2,58 @@ package it.simonetagliaferri.model.dao.fs;
 
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.User;
-import it.simonetagliaferri.utils.CliUtils;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FSLoginDAO extends FSDAO implements LoginDAO {
+public class FSLoginDAO implements LoginDAO {
 
-    private final Map<String, User> users = new HashMap<>();
+    private final String outputFile = "users.db";
+    private Map<String, User> users;
 
     public FSLoginDAO() {
-        super("users.json");
-        loadFromFile();
+        users = new HashMap<>();
+        loadUsers();
     }
 
-    @Override
-    protected void loadFromFile() {
-        if (!file.exists()) return;
-        try {
-            Map<String, User> loaded = mapper.readValue(file,
-                    mapper.getTypeFactory().constructMapType(HashMap.class, String.class, User.class));
-            if (loaded != null) {
-                users.clear();
-                users.putAll(loaded);
-            }
-            updateLastModified();
-        } catch (IOException e) {
-            CliUtils.println("Error loading users: " + e.getMessage());
+    @SuppressWarnings("unchecked")
+    private void loadUsers() {
+        File file = new File(outputFile);
+        if (!file.exists()) return; // Start empty if no file
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            users = (Map<String, User>) ois.readObject();
+        } catch (EOFException e) {
+            // Empty file, ignore
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Error loading users", e);
         }
     }
 
     private void saveUsers() {
-        try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
-            updateLastModified();
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+            oos.writeObject(users);
         } catch (IOException e) {
-            CliUtils.println("Error saving users: " + e.getMessage());
+            throw new RuntimeException("Error saving users", e);
         }
-        loadFromFile();
-    }
-
-    @Override
-    public void signup(User user) {
-        reloadIfChanged();
-        users.put(user.getUsername(), user);
-        saveUsers();
     }
 
     @Override
     public User findByUsername(String username) {
-        reloadIfChanged();
         return users.get(username);
     }
 
     @Override
     public User findByEmail(String email) {
-        reloadIfChanged();
         for (User user : users.values()) {
             if (user.getEmail().equals(email)) return user;
         }
         return null;
+    }
+
+    @Override
+    public void signup(User user) {
+        users.put(user.getUsername(), user);
+        saveUsers();
     }
 }
