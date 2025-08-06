@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FSLoginDAO implements LoginDAO {
 
-    private final String outputFile = "users.db";
+    private static final String outputFile = "users.db";
     private Map<String, User> users;
 
     public FSLoginDAO() {

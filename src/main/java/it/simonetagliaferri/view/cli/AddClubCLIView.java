@@ -58,8 +58,4 @@ public class AddClubCLIView {
     public String getClubPhone() {
         return CliUtils.prompt("Please enter your club phone: ");
     }
-
-    public String getClubEmail() {
-        return CliUtils.prompt("Please enter your club email: ");
-    }
 }

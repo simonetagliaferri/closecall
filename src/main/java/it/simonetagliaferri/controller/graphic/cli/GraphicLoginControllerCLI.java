@@ -95,7 +95,7 @@ public class GraphicLoginControllerCLI extends GraphicController {
                     validUsername = false;
                     view.emailAsUsername();
                 }
-                else if (this.controller.userLookUp(user)) {
+                else if (this.controller.usernameLookUp(user)) {
                     validUsername = false;
                     view.userAlreadyExists();
                 }

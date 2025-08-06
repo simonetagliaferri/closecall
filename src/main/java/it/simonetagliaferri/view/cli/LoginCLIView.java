@@ -25,7 +25,7 @@ public class LoginCLIView {
     }
 
     public void emailAsUsername() {
-        CliUtils.println("You can't use an email address as a username.2");
+        CliUtils.println("You can't use an email address as a username.");
     }
 
     public String getUsername() {

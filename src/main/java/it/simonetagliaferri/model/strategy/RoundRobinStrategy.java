@@ -1,6 +1,8 @@
 package it.simonetagliaferri.model.strategy;
 
-public class RoundRobinStrategy implements TournamentFormatStrategy {
+import java.io.Serializable;
+
+public class RoundRobinStrategy implements TournamentFormatStrategy, Serializable {
     private static final int MATCHES_A_DAY_PER_COURT = 3;
 
     @Override

@@ -25,6 +25,10 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public void start() {
         view.welcome();
         tournamentBean.setTournamentName(view.tournamentName());
+        if (this.controller.invalidTournamentName(tournamentBean)) {
+            view.tournamentAlreadyExists();
+            return;
+        }
         tournamentBean.setTournamentType(view.tournamentType());
         tournamentBean.setTournamentFormat(view.tournamentFormat());
         tournamentBean.setMatchFormat(view.matchFormat());

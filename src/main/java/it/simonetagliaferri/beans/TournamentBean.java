@@ -82,49 +82,12 @@ public class TournamentBean {
     public double getJoinFee() { return joinFee; }
     public double getCourtPrice() { return courtPrice; }
 
-    public LocalDate isDateValid(LocalDate date) {
-        if (date.isBefore(LocalDate.now())) {
-            return null;
-        }
-        return date;
-    }
-
-    public boolean isStartDateValid(LocalDate startDate) {
-        if (this.signupDeadline != null) {
-            return startDate.isAfter(this.signupDeadline);
-        }
-        if (this.endDate != null) {
-            return startDate.isBefore(this.endDate);
-        }
-        return true;
-    }
-
-    public boolean isDeadlineValid(LocalDate deadline) {
-        if (this.startDate != null) {
-            return deadline.isBefore(this.startDate);
-        }
-        return true;
-    }
-
-    public boolean isEndDateValid(LocalDate endDate) { return endDate.isAfter(this.startDate); }
-
     public boolean isSingles() {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
-    }
-
-    public boolean isValidInt(String input) {
-        return Integer.parseInt(input) > 0;
-    }
-
-    public boolean isValidDouble(String input) {
-        return Double.parseDouble(input) > 0;
     }
 
 
     public List<TeamBean> getConfirmedTeams() { return confirmedTeams; }
     public List<TeamBean> getPendingTeams() { return pendingTeams; }
     public List<TeamBean> getPartialTeams() { return partialTeams; }
-    public void addTeam(TeamBean team) {
-        confirmedTeams.add(team);
-    }
 }

@@ -9,24 +9,36 @@ import java.sql.*;
 
 public class JDBCLoginDAO implements LoginDAO {
 
+    private static final String FIND_BY_USERNAME = "SELECT username, email, password, role " +
+            "FROM users " +
+            "WHERE username = ?";
+
+    private static final String FIND_BY_EMAIL = "SELECT username, email, password, role " +
+            "FROM users " +
+            "WHERE email = ?";
+
+    private static final String SIGNUP = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
+
     @Override
     public User findByUsername(String username) throws DAOException {
-        String password;
-        Role role;
-        String email;
-
         // Checking if the user exists, if so take the role and the password.
+        return getUser(username, FIND_BY_USERNAME);
+    }
+
+    private User getUser(String search, String findBy) {
         try {
             Connection conn = ConnectionFactory.getConnection();
-            CallableStatement cs = conn.prepareCall("{call findByUsername(?)}");
-            cs.setString(1, username);
-            ResultSet rs = cs.executeQuery();
-            if (rs.next()) {
-                password = rs.getString("password");
-                role = Role.valueOf(rs.getString("role"));
-                email = rs.getString("email");
-                return new User(username, email, password, role);
-            } else {
+            PreparedStatement ps = conn.prepareStatement(findBy);
+            ps.setString(1, search);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new User(
+                            rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            Role.valueOf(rs.getString("role"))
+                    );
+                }
                 return null;
             }
         } catch (SQLException e) {
@@ -42,12 +54,12 @@ public class JDBCLoginDAO implements LoginDAO {
         String role = user.getRole().toString();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            CallableStatement cs = conn.prepareCall("{call signup(?,?,?,?)}");
-            cs.setString(1, username);
-            cs.setString(2, email);
-            cs.setString(3, password);
-            cs.setString(4, role);
-            cs.executeQuery();
+            PreparedStatement ps = conn.prepareStatement(SIGNUP);
+            ps.setString(1, username);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            ps.setString(4, role);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Error in signup procedure: " + e.getMessage());
         }
@@ -55,27 +67,8 @@ public class JDBCLoginDAO implements LoginDAO {
 
     @Override
     public User findByEmail(String email) throws DAOException {
-        String password;
-        Role role;
-        String username;
-
         // Checking if the user exists, if so take the role and the password.
-        try {
-            Connection conn = ConnectionFactory.getConnection();
-            CallableStatement cs = conn.prepareCall("{call findByEmail(?)}");
-            cs.setString(1, email);
-            ResultSet rs = cs.executeQuery();
-            if (rs.next()) {
-                password = rs.getString("password");
-                role = Role.valueOf(rs.getString("role"));
-                username = rs.getString("email");
-                return new User(username, email, password, role);
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            throw new DAOException("Error in login procedure: " + e.getMessage());
-        }
+        return getUser(email, FIND_BY_EMAIL);
     }
 }
 

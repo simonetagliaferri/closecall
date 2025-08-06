@@ -2,11 +2,10 @@ package it.simonetagliaferri.model.invite;
 
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
-
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 
-public class Invite {
+public class Invite implements Serializable {
     Tournament tournament;
     Player player;
     LocalDate sendDate;
@@ -28,9 +27,6 @@ public class Invite {
         this.player = player;
     }
 
-    public Invite() {
-
-    }
 
     public void updateStatus(InviteStatus inviteStatus){
         this.status = inviteStatus;
@@ -65,16 +61,4 @@ public class Invite {
         return message;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Invite)) return false;
-        Invite invite = (Invite) o;
-        if (this == invite) return true;
-        return Objects.equals(getTournament(), invite.getTournament()) && Objects.equals(getPlayer(), invite.getPlayer());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getTournament(), getPlayer());
-    }
 }

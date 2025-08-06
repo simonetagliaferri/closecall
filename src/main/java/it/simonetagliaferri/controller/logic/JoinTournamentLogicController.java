@@ -12,10 +12,10 @@ import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
-import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +48,11 @@ public class JoinTournamentLogicController extends LogicController {
         HostBean hostBean = clubBean.getOwner();
         Host host = hostDAO.getHostByUsername(hostBean.getUsername());
         Club club = host.getClub();
-        return club.getTournament(TournamentMapper.fromBean(tournamentBean));
+        String tournamentName = tournamentBean.getTournamentName();
+        String tournamentFormat = tournamentBean.getTournamentFormat();
+        String tournamentType = tournamentBean.getTournamentType();
+        LocalDate tournamentStartDate = tournamentBean.getStartDate();
+        return club.getTournament(tournamentName, tournamentFormat, tournamentType, tournamentStartDate);
     }
 
     public Club getClubFromBean(TournamentBean tournamentBean) {
@@ -62,10 +66,13 @@ public class JoinTournamentLogicController extends LogicController {
         Tournament tournament = getTournamentFromBean(tournamentBean);
         Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
         JoinTournamentView.JoinError res = tournament.addPlayer(player);
+        Club club = tournament.getClub();
+        Host host = club.getOwner();
         if (res == JoinTournamentView.JoinError.SUCCESS) {
             tournamentDAO.saveTournament(tournament.getClub(), tournament);
-            clubDAO.saveClub(tournament.getClub());
+            clubDAO.saveClub(club);
             playerDAO.savePlayer(player);
+            hostDAO.saveHost(host);
         }
         return res;
     }

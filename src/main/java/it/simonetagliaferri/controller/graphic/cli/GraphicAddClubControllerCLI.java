@@ -23,16 +23,11 @@ public class GraphicAddClubControllerCLI extends GraphicController {
 
     public void start() {
         boolean result;
-        if (this.controller.firstClub()) {
-            PreambleChoice choice = view.preamble();
-            if (choice.equals(ADD_CLUB)) {
-                result = this.controller.addClub(addClub());
-            }
-            else return;
-        }
-        else {
+        PreambleChoice choice = view.preamble();
+        if (choice.equals(ADD_CLUB)) {
             result = this.controller.addClub(addClub());
         }
+        else return;
         if (result) {
             view.newClubAdded();
         }
@@ -51,7 +46,6 @@ public class GraphicAddClubControllerCLI extends GraphicController {
         club.setCountry(view.getClubCountry());
         club.setZip(view.getClubZip());
         club.setPhone(view.getClubPhone());
-        club.setEmail(view.getClubEmail());
         return club;
     }
 }

@@ -2,10 +2,12 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Club implements Publisher {
+public class Club implements Publisher, Serializable {
     private String name;
     private String street;
     private String number;
@@ -14,7 +16,6 @@ public class Club implements Publisher {
     private String zip;
     private String country;
     private String phone;
-    private String email;
     private Host owner;
     private List<Tournament> clubTournaments = new ArrayList<>();
     private List<Subscriber> subscribedPlayers = new ArrayList<>();
@@ -51,9 +52,8 @@ public class Club implements Publisher {
         this.country = country;
     }
 
-    public void updateContacts(String phone, String email) {
+    public void updateContacts(String phone) {
         this.phone = phone;
-        this.email = email;
     }
 
     public String getName() {
@@ -86,10 +86,6 @@ public class Club implements Publisher {
 
     public String getPhone() {
         return phone;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public Host getOwner() {
@@ -149,11 +145,16 @@ public class Club implements Publisher {
         return clubTournaments.contains(tournament);
     }
 
-    public Tournament getTournament(Tournament tournament) {
-        tournament.setClub(this);
-        int index = clubTournaments.indexOf(tournament);
-        return index >= 0 ? clubTournaments.get(index) : null;
+    public Tournament getTournament(String tournamentName, String tournamentFormat, String tournamentType, LocalDate tournamentStartDate) {
+        for (Tournament tournament : clubTournaments) {
+            if (tournament.getName().equals(tournamentName) &&
+            tournament.getTournamentFormat().equals(tournamentFormat) &&
+            tournament.getTournamentType().equals(tournamentType) &&
+            tournament.getStartDate().equals(tournamentStartDate)) {
+                return tournament;
+            }
+        }
+        return null;
     }
-
 
 }

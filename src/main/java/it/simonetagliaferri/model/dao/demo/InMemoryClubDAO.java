@@ -22,7 +22,7 @@ public class InMemoryClubDAO implements ClubDAO {
 
     @Override
     public void saveClub(Club club) {
-
+        clubs.put(club.getOwner().getUsername(), club);
     }
 
 
@@ -35,6 +35,5 @@ public class InMemoryClubDAO implements ClubDAO {
     public Club getClubByName(String hostName, String clubName) {
         return null;
     }
-
 
 }

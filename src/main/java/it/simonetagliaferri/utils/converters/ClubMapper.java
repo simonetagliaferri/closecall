@@ -3,8 +3,6 @@ package it.simonetagliaferri.utils.converters;
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.model.domain.Club;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClubMapper {
 
@@ -13,7 +11,10 @@ public class ClubMapper {
     public static Club fromBean(ClubBean clubBean) {
         Club club = new Club(clubBean.getName());
         club.updateAddress(clubBean.getStreet(), clubBean.getNumber(), clubBean.getCity(), clubBean.getState(), clubBean.getZip(), clubBean.getCountry());
-        club.updateContacts(clubBean.getPhone(), clubBean.getEmail());
+        club.updateContacts(clubBean.getPhone());
+        if (clubBean.getOwner() != null) {
+            club.setOwner(HostMapper.fromBean(clubBean.getOwner()));
+        }
         return club;
     }
 
@@ -27,18 +28,8 @@ public class ClubMapper {
         clubBean.setZip(club.getZip());
         clubBean.setCountry(club.getCountry());
         clubBean.setPhone(club.getPhone());
-        clubBean.setEmail(club.getEmail());
         clubBean.setOwner(HostMapper.toBean(club.getOwner()));
         return clubBean;
-    }
-
-    public static List<ClubBean> toBean(List<Club> clubs) {
-        List<ClubBean> clubBeans = new ArrayList<>();
-        for (Club club : clubs) {
-            ClubBean clubBean = toBean(club);
-            clubBeans.add(clubBean);
-        }
-        return clubBeans;
     }
 
 }

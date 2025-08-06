@@ -27,9 +27,7 @@ public class GraphicAddClubControllerGUI extends GraphicController implements GU
     @FXML private TextField clubEmail;
 
     public void postInit() {
-        if (this.controller.firstClub()) {
-            firstClubWarning.setVisible(true);
-        }
+        firstClubWarning.setVisible(true);
     }
 
     @Override
@@ -68,7 +66,6 @@ public class GraphicAddClubControllerGUI extends GraphicController implements GU
         clubBean.setState(clubState.getText());
         clubBean.setCountry(clubCountry.getText());
         clubBean.setPhone(clubPhone.getText());
-        clubBean.setEmail(clubEmail.getText());
         controller.addClub(clubBean);
         navigationManager.goToDashboard(Role.HOST);
     }

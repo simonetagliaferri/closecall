@@ -3,10 +3,11 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamRegistry {
+public class TeamRegistry implements Serializable {
 
     private int teamsNumber;
     private List<Team> confirmedTeams;

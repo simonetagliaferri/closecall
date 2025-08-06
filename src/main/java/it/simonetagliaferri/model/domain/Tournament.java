@@ -8,12 +8,13 @@ import it.simonetagliaferri.model.strategy.TournamentFormatStrategy;
 import it.simonetagliaferri.model.strategy.TournamentFormatStrategyFactory;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tournament implements Publisher {
-    private String name;
+public class Tournament implements Publisher, Serializable {
+    private final String name;
     private TournamentRules tournamentRules;
     private List<Double> prizes;
     private Club club;
@@ -28,9 +29,6 @@ public class Tournament implements Publisher {
 
     public void setHost(Subscriber host) {
         this.host = host;
-    }
-
-    public Tournament() {
     }
 
     public Tournament(String name) {
@@ -263,6 +261,5 @@ public class Tournament implements Publisher {
     public void setTeamRegistry(TeamRegistry teamRegistry) {
         this.teamRegistry = teamRegistry;
     }
-
 
 }

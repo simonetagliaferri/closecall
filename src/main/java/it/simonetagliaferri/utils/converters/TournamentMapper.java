@@ -2,7 +2,6 @@ package it.simonetagliaferri.utils.converters;
 
 import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.beans.TournamentBean;
-import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Team;
 import it.simonetagliaferri.model.domain.Tournament;
 
@@ -74,15 +73,20 @@ public class TournamentMapper {
 
     public static Tournament fromBean(TournamentBean tournamentBean) {
         Tournament tournament = new Tournament(tournamentBean.getTournamentName());
-        tournament.setTournamentRules(tournamentBean.getTournamentFormat(),
-                tournamentBean.getTournamentType(),
-                tournamentBean.getMatchFormat(),
-                tournamentBean.getCourtType(),
-                tournamentBean.getCourtNumber(),
-                tournamentBean.getTeamsNumber());
-        tournament.setTournamentDates(tournamentBean.getStartDate(), tournamentBean.getSignupDeadline(), tournamentBean.getEndDate());
-        tournament.setTournamentCosts(tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
-        tournament.setPrizes(tournamentBean.getPrizes());
+        if (tournamentBean.getTournamentFormat() != null) {
+            tournament.setTournamentRules(tournamentBean.getTournamentFormat(),
+                    tournamentBean.getTournamentType(),
+                    tournamentBean.getMatchFormat(),
+                    tournamentBean.getCourtType(),
+                    tournamentBean.getCourtNumber(),
+                    tournamentBean.getTeamsNumber());
+            tournament.setTournamentDates(tournamentBean.getStartDate(), tournamentBean.getSignupDeadline(), tournamentBean.getEndDate());
+            tournament.setTournamentCosts(tournamentBean.getJoinFee(), tournamentBean.getCourtPrice());
+            tournament.setPrizes(tournamentBean.getPrizes());
+        }
+        if (tournamentBean.getClub() != null) {
+            tournament.setClub(ClubMapper.fromBean(tournamentBean.getClub()));
+        }
         return tournament;
     }
 }

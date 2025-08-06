@@ -1,8 +1,9 @@
 package it.simonetagliaferri.model.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class TournamentRules {
+public class TournamentRules implements Serializable {
 
     private String tournamentFormat;
     private String tournamentType;
@@ -76,26 +77,6 @@ public class TournamentRules {
     }
     public double getCourtPrice() {
         return courtPrice;
-    }
-
-    public static LocalDate minimumStartDate() {
-        return LocalDate.now().plusDays(2);
-    }
-
-    public static LocalDate minimumStartDate(LocalDate signupDeadline) {
-        return signupDeadline.plusDays(1);
-    }
-
-    public static LocalDate minimumDeadline() {
-        return LocalDate.now().plusDays(1);
-    }
-
-    public static LocalDate minimumDeadline(LocalDate startDate) {
-        return startDate.minusDays(1);
-    }
-
-    public static LocalDate minimumEndDate(LocalDate startDate) {
-        return startDate;
     }
 
 }

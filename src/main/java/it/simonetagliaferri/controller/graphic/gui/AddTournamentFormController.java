@@ -1,6 +1,5 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
@@ -11,7 +10,6 @@ import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -24,7 +22,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AddTournamentFormController extends GraphicController implements GUIController {
 
@@ -109,14 +106,14 @@ public class AddTournamentFormController extends GraphicController implements GU
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(empty || date.isBefore(controller.MinimumStartDate()));
+                setDisable(empty || date.isBefore(controller.minimumStartDate()));
             }
         });
         deadlinePicker.setDayCellFactory(param -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(empty || date.isBefore(controller.MinimumDeadline()));
+                setDisable(empty || date.isBefore(controller.maxDeadline()));
             }
         });
         updateConfirmButtonBinding();
@@ -221,7 +218,7 @@ public class AddTournamentFormController extends GraphicController implements GU
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    setDisable(empty || date.isAfter(controller.MinimumDeadline(tournamentBean)) || date.isBefore(controller.MinimumDeadline()));
+                    setDisable(empty || date.isAfter(controller.maxDeadline(tournamentBean)) || date.isBefore(controller.maxDeadline()));
                 }
             });
             estimateEndDate();
@@ -241,7 +238,7 @@ public class AddTournamentFormController extends GraphicController implements GU
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    setDisable(empty || date.isBefore(controller.MinimumStartDate(tournamentBean)));
+                    setDisable(empty || date.isBefore(controller.minimumStartDate(tournamentBean)));
                 }
             });
         } catch (DateTimeException | InvalidDateException e) {
@@ -316,7 +313,7 @@ public class AddTournamentFormController extends GraphicController implements GU
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(empty || date.isBefore(controller.MinimumEndDate(tournamentBean)));
+                setDisable(empty || date.isBefore(controller.minimumEndDate(tournamentBean)));
             }
         });
         endDatePicker.requestFocus();

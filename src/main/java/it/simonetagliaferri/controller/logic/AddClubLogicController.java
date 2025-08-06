@@ -11,14 +11,13 @@ import it.simonetagliaferri.utils.converters.ClubMapper;
 
 public class AddClubLogicController extends LogicController {
 
-    ClubDAO clubDAO;
-    HostDAO hostDAO;
+    private final ClubDAO clubDAO;
+    private final HostDAO hostDAO;
 
     public AddClubLogicController(SessionManager sessionManager, ClubDAO clubDAO, HostDAO hostDAO) {
         super(sessionManager);
         this.clubDAO = clubDAO;
         this.hostDAO = hostDAO;
-
     }
 
     public boolean addClub(ClubBean clubBean) {
@@ -29,14 +28,7 @@ public class AddClubLogicController extends LogicController {
             return false;
         }
         clubDAO.saveClub(club);
-        hostDAO.saveHost(host);
         return true;
-    }
-
-    public boolean firstClub() {
-        User currentUser = sessionManager.getCurrentUser();
-        Host host = hostDAO.getHostByUsername(currentUser.getUsername());
-        return !host.hasClub();
     }
 
 }

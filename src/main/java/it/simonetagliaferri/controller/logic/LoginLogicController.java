@@ -52,6 +52,7 @@ public class LoginLogicController extends LogicController {
     */
     public void signup(UserBean bean) {
         User user = UserMapper.fromBean(bean); // It's okay to go from bean to model because this user doesn't exist yet.
+        user.hashPassword();
         loginDAO.signup(user);
         if (user.isHost()) {
             Host host = new Host(user.getUsername(), user.getEmail());
@@ -66,19 +67,19 @@ public class LoginLogicController extends LogicController {
     /**
      * Used before signup to check if the provided username is already in use.
      */
-    public boolean userLookUp(UserBean bean) {
+    public boolean usernameLookUp(UserBean bean) {
         String username = bean.getUsername();
         return loginDAO.findByUsername(username) != null;
-    }
-
-    public boolean isUsernameValid(UserBean bean) {
-        User user = UserMapper.fromBean(bean);
-        return user.isUsernameValid();
     }
 
     public boolean emailLookUp(UserBean bean) {
         String email = bean.getEmail();
         return loginDAO.findByEmail(email) != null;
+    }
+
+    public boolean isUsernameValid(UserBean bean) {
+        User user = UserMapper.fromBean(bean);
+        return user.isUsernameValid();
     }
 
     protected void setCurrentUser(User user) {

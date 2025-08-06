@@ -3,8 +3,6 @@ package it.simonetagliaferri.model.dao.jdbc;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Tournament;
-
-import java.time.LocalDate;
 import java.util.List;
 
 public class JDBCTournamentDAO implements TournamentDAO {
@@ -21,7 +19,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public Tournament getTournament(Club club, String name, String tournamentFormat, String tournamentType, LocalDate startDate) {
+    public Tournament getTournament(Club club, String name) {
         //TODO
         return null;
     }

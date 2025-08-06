@@ -9,7 +9,6 @@ public class ClubBean {
     private String country;
     private String zip;
     private String phone;
-    private String email;
     private HostBean owner;
 
     public void setName(String clubName) {
@@ -59,12 +58,6 @@ public class ClubBean {
     }
     public String getPhone() {
         return phone;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getEmail() {
-        return email;
     }
     public void setOwner(HostBean owner) {
         this.owner = owner;

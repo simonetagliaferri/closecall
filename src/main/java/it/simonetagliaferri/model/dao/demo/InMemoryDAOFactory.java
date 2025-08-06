@@ -11,7 +11,7 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     // Storing here the hashmaps, that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
     private final Map<String, User> users = new HashMap<>();
-    private final Map<Club, List<Tournament>> tournaments = new HashMap<>();
+    private final Map<String, List<Tournament>> tournaments = new HashMap<>();
     private final Map<String, Club> clubs = new HashMap<>();
     private final Map<String, Host> hosts = new HashMap<>();
     private final Map<String, Player> players = new HashMap<>();
@@ -28,9 +28,9 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     // Just for tests
     public void populate() {
-        User marco = new User("marco", "marco@gmail.com", "a", Role.HOST);
-        User p1 = new User("p1", "p1@gmail.com", "a", Role.PLAYER);
-        User p2 = new User("p2", "p2@gmail.com", "a", Role.PLAYER);
+        User marco = new User("marco", "marco@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.HOST);
+        User p1 = new User("p1", "p1@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.PLAYER);
+        User p2 = new User("p2", "p2@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.PLAYER);
         users.put(marco.getUsername(), marco);
         users.put(p1.getUsername(), p1);
         users.put(p2.getUsername(), p2);
@@ -41,11 +41,11 @@ public class InMemoryDAOFactory extends DAOFactory {
         players.put(p2.getUsername(), new Player(p2.getUsername(), p2.getEmail()));
         Club sanP = new Club("SanP", host);
         sanP.updateAddress("a", "a", "a", "a", "a", "a");
-        sanP.updateContacts("a", "a");
+        sanP.updateContacts("a");
         ClubDAO clubDAO1 = getClubDAO();
-        host.addClub(sanP);
+        //host.addClub(sanP);
         hostDAO1.saveHost(host);
-        clubDAO1.saveClub(sanP);
+        //clubDAO1.saveClub(sanP);
     }
 
     @Override

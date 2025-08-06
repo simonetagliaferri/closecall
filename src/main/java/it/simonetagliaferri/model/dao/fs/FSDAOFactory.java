@@ -4,21 +4,50 @@ import it.simonetagliaferri.model.dao.*;
 
 public class FSDAOFactory extends DAOFactory {
 
+    private LoginDAO loginDAO;
+    private TournamentDAO tournamentDAO;
+    private HostDAO hostDAO;
+    private PlayerDAO playerDAO;
+    private ClubDAO clubDAO;
+
     @Override
     public LoginDAO getLoginDAO() {
-        return new FSLoginDAO();
+        if (loginDAO == null) {
+            loginDAO = new FSLoginDAO();
+        }
+        return loginDAO;
     }
 
     @Override
-    public TournamentDAO getTournamentDAO() { return new FSTournamentDAO();}
+    public TournamentDAO getTournamentDAO() {
+        if (tournamentDAO == null) {
+            tournamentDAO = new FSTournamentDAO();
+        }
+        return tournamentDAO;
+    }
 
     @Override
-    public HostDAO getHostDAO() { return new FSHostDAO();}
+    public HostDAO getHostDAO() {
+        if (hostDAO == null) {
+            hostDAO = new FSHostDAO();
+        }
+        return hostDAO;
+    }
 
     @Override
-    public PlayerDAO getPlayerDAO() { return new FSPlayerDAO();}
+    public PlayerDAO getPlayerDAO() {
+        if (playerDAO == null) {
+            playerDAO = new FSPlayerDAO();
+        }
+        return playerDAO;
+    }
 
     @Override
-    public ClubDAO getClubDAO() { return new FSClubDAO();}
+    public ClubDAO getClubDAO() {
+        if (clubDAO == null) {
+            clubDAO = new FSClubDAO();
+        }
+        return clubDAO;
+    }
 
 }

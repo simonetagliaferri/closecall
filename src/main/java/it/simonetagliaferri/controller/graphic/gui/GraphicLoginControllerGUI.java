@@ -68,7 +68,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
     private void handleMainButton() {
         if (state == UIState.USERNAME_INPUT) {
             String username = usernameField.getText().trim();
-            if (this.controller.userLookUp(new UserBean(username))) {
+            if (this.controller.usernameLookUp(new UserBean(username))) {
                 welcomeText.setText("Welcome back!");
                 usernameField.setVisible(false);
                 passwordField.setVisible(true);
@@ -114,7 +114,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
     @FXML
     private void handleSignupButton() {
         UserBean user = new UserBean(usernameField.getText().trim());
-        if (this.controller.userLookUp(user)) {
+        if (this.controller.usernameLookUp(user)) {
             usernameField.clear();
             roleSpinner.requestFocus();
             usernameField.setPromptText("Username already exists");

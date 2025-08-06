@@ -6,18 +6,14 @@ import org.apache.commons.validator.routines.EmailValidator;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private String username;
+    private final String username;
     private String password;
-    private String email;
+    private final String email;
     private Role role;
-
-    public User() {
-
-    }
 
     public User(String username, String email, String password, Role role) {
         this.username = username;
-        this.password = hashPassword(password);
+        this.password = password;
         this.email = email;
         this.role = role;
     }
@@ -43,12 +39,6 @@ public class User implements Serializable {
         this.role = null;
     }
 
-    public void updateCredentials(String username, String password, String email) {
-        this.username = username;
-        this.password = hashPassword(password);
-        this.email = email;
-    }
-
     public boolean isUsernameValid() {
         return !EmailValidator.getInstance().isValid(this.username); // The username can't be an email address.
     }
@@ -57,12 +47,17 @@ public class User implements Serializable {
         return PasswordUtils.sha256Hex(password);
     }
 
+    public void hashPassword() {
+        this.password = hashPassword(this.password);
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
 
     public boolean isPasswordCorrect(String password) {
-        String hashedPassword = PasswordUtils.sha256Hex(password);
+        String hashedPassword = hashPassword(password);
+        if (this.password==null) return false;
         return this.password.equals(hashedPassword);
     }
 

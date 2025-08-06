@@ -74,6 +74,7 @@ public class InvitePlayerLogicController extends LogicController{
             }
             tournamentDAO.saveTournament(tournament.getClub(), tournament);
             playerDAO.savePlayer(player);
+            hostDAO.saveHost(tournament.getClub().getOwner());
         }
     }
 
@@ -114,13 +115,9 @@ public class InvitePlayerLogicController extends LogicController{
     public Tournament getTournamentFromBean(TournamentBean tournamentBean) {
         ClubBean clubBean = tournamentBean.getClub();
         HostBean hostBean = clubBean.getOwner();
-        Host host = hostDAO.getHostByUsername(hostBean.getUsername());
-        Club club = host.getClub();
+        Club club = clubDAO.getClubByHostName(hostBean.getUsername());
         return tournamentDAO.getTournament(club,
-                tournamentBean.getTournamentName(),
-                tournamentBean.getTournamentFormat(),
-                tournamentBean.getTournamentType(),
-                tournamentBean.getStartDate());
+                tournamentBean.getTournamentName());
     }
 
     public PlayerBean teammate(InviteBean inviteBean) {
@@ -145,6 +142,7 @@ public class InvitePlayerLogicController extends LogicController{
         sendInvite(invite, email);
         tournament.reserveSpot(player);
         tournamentDAO.saveTournament(tournament.getClub(), tournament);
+        playerDAO.savePlayer(player);
     }
 
     public void inviteTeam(PlayerBean player1, PlayerBean player2, TournamentBean tournamentBean, LocalDate inviteExpireDate, String message1, String message2, boolean email1, boolean email2) {
@@ -156,6 +154,8 @@ public class InvitePlayerLogicController extends LogicController{
         sendInvite(invite1, email1);
         sendInvite(invite2, email2);
         tournament.reserveSpot(p1,p2);
+        playerDAO.savePlayer(p1);
+        playerDAO.savePlayer(p2);
     }
 
     public boolean playerAlreadyInvited(PlayerBean playerBean, TournamentBean tournamentBean) {

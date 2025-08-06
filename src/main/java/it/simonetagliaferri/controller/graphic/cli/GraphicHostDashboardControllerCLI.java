@@ -23,7 +23,7 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
     public GraphicHostDashboardControllerCLI(AppContext appContext) {
         super(appContext);
         this.view = new HostDashboardCLIView();
-        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO());
+        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
         this.currentUser = this.controller.getHostBean();
 
         this.tournamentController = new ManageTournamentsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),

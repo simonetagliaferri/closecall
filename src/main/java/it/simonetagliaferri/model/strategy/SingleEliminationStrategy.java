@@ -1,6 +1,8 @@
 package it.simonetagliaferri.model.strategy;
 
-public class SingleEliminationStrategy implements TournamentFormatStrategy{
+import java.io.Serializable;
+
+public class SingleEliminationStrategy implements TournamentFormatStrategy, Serializable {
     private static final int MATCHES_A_DAY_PER_COURT = 3;
 
     @Override

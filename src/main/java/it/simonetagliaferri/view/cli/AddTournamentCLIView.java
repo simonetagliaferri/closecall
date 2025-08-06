@@ -98,7 +98,7 @@ public class AddTournamentCLIView {
     }
 
     public void tournamentAlreadyExists() {
-        CliUtils.println("This tournament already exists! Try again.");
+        CliUtils.println("You already have a tournament with this name. Try again.");
     }
 
     public String editEndDate() {

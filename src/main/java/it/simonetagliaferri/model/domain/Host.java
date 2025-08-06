@@ -8,7 +8,7 @@ public class Host extends User implements Subscriber {
 
     private Club club;
 
-    private Map<Tournament, List<Player>> newPlayers = new HashMap<>();
+    private final Map<Tournament, List<Player>> newPlayers = new HashMap<>();
 
     @Override
     public void update(Club club, Tournament tournament) {
@@ -27,7 +27,6 @@ public class Host extends User implements Subscriber {
         return newPlayers;
     }
 
-    public Host() { super();}
     public Host(String username, String email, Role role) {
         super(username, email, role);
     }

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class FSHostDAO implements HostDAO {
 
-    private final String outputFile = "hosts.db";
+    private static final String outputFile = "hosts.db";
     private Map<String, Host> hosts;
 
     public FSHostDAO() {

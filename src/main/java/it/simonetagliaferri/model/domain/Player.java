@@ -19,7 +19,6 @@ public class Player extends User implements Subscriber {
     public Player(String username) {
         super(username);
     }
-    public Player() { super(); }
 
     private List<Invite> invites;
 
@@ -81,7 +80,7 @@ public class Player extends User implements Subscriber {
 
     public Invite getInviteForTournament(Tournament tournament) {
         for (Invite invite : invites) {
-            if (invite.getTournament().equals(tournament)) {
+            if (sameTournament(invite.getTournament(), tournament)) {
                 return invite;
             }
         }
@@ -95,11 +94,18 @@ public class Player extends User implements Subscriber {
     public Invite isInvitedToTournament(Tournament tournament) {
         if (tournament == null) { return null; }
         for (Invite invite : invites) {
-            if (invite.getTournament().equals(tournament)) {
+            if (sameTournament(invite.getTournament(), tournament)) {
                 return invite;
             }
         }
         return null;
+    }
+
+    private boolean sameTournament(Tournament tournament1, Tournament tournament2) {
+        Club club = tournament1.getClub();
+        Club cl = tournament2.getClub();
+        return tournament1.getName().equals(tournament2.getName()) && club.getName().equals(cl.getName()) &&
+                club.getOwner().getUsername().equals(cl.getOwner().getUsername());
     }
 
 }

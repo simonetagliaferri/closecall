@@ -1,17 +1,16 @@
 package it.simonetagliaferri.model.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Team {
+public class Team implements Serializable {
     private Player player1;
     private Player player2;
-    private Tournament tournament;
-    private TeamType type;
+    private final Tournament tournament;
+    private final TeamType type;
+    private TeamStatus status;
 
-    public Team() {
-
-    }
     public Team(Player player, TeamType type, Tournament tournament) {
         this.player1 = player;
         this.player2 = null;
@@ -35,6 +34,12 @@ public class Team {
         return players;
     }
 
+    public TeamStatus getStatus() {
+        return status;
+    }
+    public void setStatus(TeamStatus status) {
+        this.status = status;
+    }
 
     public Tournament getTournament() {
         return tournament;
