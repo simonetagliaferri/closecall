@@ -1,6 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
-import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.logic.PlayerDashboardLogicController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -32,9 +32,6 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
                 case SEARCH_TOURNAMENTS:
                     searchTournament();
                     break;
-                case SEARCH_CLUBS:
-                    searchClub();
-                    break;
                 case LOGOUT:
                     home=false;
                     logout();
@@ -48,16 +45,12 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
     }
 
     private void myTournaments() {
-
+        List<TournamentBean> tournamentBeans = this.controller.getMyTournaments();
+        view.listTournament(tournamentBeans);
     }
 
     private void searchTournament() {
         navigationManager.goToJoinTournament();
-    }
-
-    private void searchClub() {
-        List<ClubBean> clubs = this.controller.searchClub(view.clubByCity());
-        view.listClubs(clubs);
     }
 
     private void logout() {

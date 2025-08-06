@@ -169,7 +169,6 @@ public class AddTournamentFormController extends GraphicController implements GU
     @FXML
     private void checkPrize(String prize, int i) {
         try {
-            Double number = Double.parseDouble(prize);
             prizesLabels.get(i-1).setText("Prize #" + i);
             prizesLabels.get(i-1).setTextFill(Color.BLACK);
         } catch (NumberFormatException e) {

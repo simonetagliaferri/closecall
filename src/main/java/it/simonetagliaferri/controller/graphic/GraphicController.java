@@ -7,9 +7,9 @@ public abstract class GraphicController {
     
     protected NavigationManager navigationManager; // Not final only because I need to initialize it with initializeController for GUI controllers.
 
-    public GraphicController() {}
+    protected GraphicController() {}
 
-    public GraphicController(AppContext appContext) {
+    protected GraphicController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
     }
 }

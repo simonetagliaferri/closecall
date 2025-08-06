@@ -43,9 +43,9 @@ public class InMemoryDAOFactory extends DAOFactory {
         sanP.updateAddress("a", "a", "a", "a", "a", "a");
         sanP.updateContacts("a");
         ClubDAO clubDAO1 = getClubDAO();
-        //host.addClub(sanP);
+        host.addClub(sanP);
         hostDAO1.saveHost(host);
-        //clubDAO1.saveClub(sanP);
+        clubDAO1.saveClub(sanP);
     }
 
     @Override

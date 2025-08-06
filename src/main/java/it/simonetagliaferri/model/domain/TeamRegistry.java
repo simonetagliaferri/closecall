@@ -10,9 +10,9 @@ import java.util.List;
 public class TeamRegistry implements Serializable {
 
     private int teamsNumber;
-    private List<Team> confirmedTeams;
-    private List<Team> pendingTeams;
-    private List<Team> partialTeams;
+    private final List<Team> confirmedTeams;
+    private final List<Team> pendingTeams;
+    private final List<Team> partialTeams;
 
     public TeamRegistry(int teamsNumber) {
         this.confirmedTeams = new ArrayList<>();
@@ -164,23 +164,4 @@ public class TeamRegistry implements Serializable {
     public int getTeamsNumber() {
         return teamsNumber;
     }
-
-    public void setTeamsNumber(int teamsNumber) {
-        this.teamsNumber = teamsNumber;
-    }
-
-    public void setConfirmedTeams(ArrayList<Team> confirmedTeams) {
-        this.confirmedTeams = confirmedTeams;
-    }
-
-    public void setPendingTeams(ArrayList<Team> pendingTeams) {
-        this.pendingTeams = pendingTeams;
-    }
-
-    public void setPartialTeams(ArrayList<Team> partialTeams) {
-        this.partialTeams = partialTeams;
-    }
-
-
-
 }

@@ -1,6 +1,6 @@
 package it.simonetagliaferri.view.cli;
 
-import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.utils.CliUtils;
 
 import java.util.List;
@@ -19,28 +19,21 @@ public class PlayerDashboardCLIView {
         CliUtils.println("Welcome to your dashboard.");
         while (true) {
             CliUtils.println("1. My tournaments");
-            CliUtils.println("2. Search tournaments");
-            CliUtils.println("3. Search clubs");
-            CliUtils.println("4. Logout");
-            CliUtils.println("5. Notifications");
+            CliUtils.println("2. Search tournaments by city");
+            CliUtils.println("3. Logout");
+            CliUtils.println("4. Notifications");
             int choice = CliUtils.promptPositiveInt("Enter your choice: ");
-            if (choice >= 1 && choice <= 5) {
+            if (choice >= 1 && choice <= 4) {
                 return PlayerDashboardCommand.values()[choice-1];
             }
             CliUtils.println("Invalid choice. Try again.");
         }
     }
 
-    public String clubByCity() {
-        return CliUtils.prompt("Please enter the city you would like to search clubs in: ");
-    }
-
-    public void listClubs(List<ClubBean> clubs) {
-        for (ClubBean club : clubs) {
-            CliUtils.println(club.getName());
-            CliUtils.println(club.getStreet());
-            CliUtils.println(club.getNumber());
-            CliUtils.println(club.getCity());
+    public void listTournament(List<TournamentBean> tournaments) {
+        for (TournamentBean tournament : tournaments) {
+            CliUtils.println("Tournament name: " + tournament.getTournamentName());
+            CliUtils.println("Club name: " + tournament.getClub().getName());
             CliUtils.println("");
         }
     }

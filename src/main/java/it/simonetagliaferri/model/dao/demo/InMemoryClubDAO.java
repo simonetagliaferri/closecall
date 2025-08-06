@@ -27,8 +27,7 @@ public class InMemoryClubDAO implements ClubDAO {
 
 
     public List<Club> getClubsByCity(String city) {
-        List<Club> result = new ArrayList<>();
-        return result;
+        return new ArrayList<>();
     }
 
     @Override

@@ -43,9 +43,13 @@ public class GraphicHandleNotificationsControllerCLI extends GraphicController {
 
     public void startHost() {
         Map<TournamentBean, List<PlayerBean>> notifications = this.controller.getHostNotifications();
-        for (TournamentBean tournamentBean : notifications.keySet()) {
+        TournamentBean tournamentBean;
+        List<PlayerBean> players;
+        for (Map.Entry<TournamentBean, List<PlayerBean>> tournamentNotifications : notifications.entrySet()) {
+            tournamentBean = tournamentNotifications.getKey();
+            players = tournamentNotifications.getValue();
             hostView.tournament(tournamentBean);
-            for (PlayerBean playerBean : notifications.get(tournamentBean)) {
+            for (PlayerBean playerBean : players) {
                 hostView.newPlayer(playerBean);
             }
         }

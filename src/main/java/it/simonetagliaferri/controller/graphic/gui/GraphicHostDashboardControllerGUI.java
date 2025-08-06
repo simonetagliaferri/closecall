@@ -149,9 +149,8 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     }
 
     @FXML public void showHome() {
-        GraphicHostHomeControllerGUI homeController;
         try {
-            homeController = SceneManagerGUI.loadWrapperWithContext("hostHome", contentWrapper);
+            SceneManagerGUI.loadWrapperWithContext("hostHome", contentWrapper);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

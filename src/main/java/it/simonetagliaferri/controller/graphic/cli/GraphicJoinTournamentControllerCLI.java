@@ -31,13 +31,12 @@ public class GraphicJoinTournamentControllerCLI extends GraphicController {
             }
             TournamentBean tournamentBean = tournaments.get(choice);
             JoinTournamentView.JoinStatus status = view.expandedTournament(tournamentBean);
-            JoinTournamentView.JoinError result = JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS;
-            switch (status) {
-                case BACK:
-                    break;
-                case JOIN:
-                    result = this.controller.joinTournament(tournamentBean);
-                    break;
+            JoinTournamentView.JoinError result;
+            if (status.equals(JoinTournamentView.JoinStatus.BACK)) {
+                break;
+            }
+            else {
+                result = this.controller.joinTournament(tournamentBean);
             }
             if (result == JoinTournamentView.JoinError.SUCCESS) {
                 view.success();

@@ -71,8 +71,7 @@ public class SceneManagerGUI extends Application {
     }
 
     public static <T extends GUIController> T getController(FXMLLoader fxmlLoader) {
-        T controller = fxmlLoader.getController();
-        return controller;
+        return fxmlLoader.getController();
     }
 
     public static Node getRoot(FXMLLoader fxmlLoader) throws IOException {

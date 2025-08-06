@@ -2,7 +2,7 @@ package it.simonetagliaferri.model.invite.decorator;
 
 import it.simonetagliaferri.model.invite.Invite;
 
-abstract public class InviteNotificationDecorator implements InviteNotification {
+public abstract class InviteNotificationDecorator implements InviteNotification {
 
     protected InviteNotification wrappee;
 
