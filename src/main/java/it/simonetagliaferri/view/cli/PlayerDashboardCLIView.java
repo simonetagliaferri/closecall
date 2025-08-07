@@ -7,10 +7,14 @@ import java.util.List;
 
 public class PlayerDashboardCLIView {
 
+    public enum NotificationType {
+        INVITES,
+        NOTIFICATIONS
+    }
+
     public enum PlayerDashboardCommand {
         LIST_TOURNAMENTS,
         SEARCH_TOURNAMENTS,
-        SEARCH_CLUBS,
         LOGOUT,
         INVITES
     }
@@ -36,5 +40,10 @@ public class PlayerDashboardCLIView {
             CliUtils.println("Club name: " + tournament.getClub().getName());
             CliUtils.println("");
         }
+    }
+
+    public NotificationType chooseNotification() {
+        int choice = CliUtils.multipleChoiceInt("What notifications do you want to check?", "Invites", "New tournaments from favourite clubs");
+        return NotificationType.values()[choice-1];
     }
 }

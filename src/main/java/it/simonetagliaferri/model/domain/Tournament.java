@@ -179,11 +179,15 @@ public class Tournament implements Publisher, Serializable {
         return JoinTournamentView.JoinError.SUCCESS;
     }
 
+    public boolean isSameAs(Tournament other) {
+        if (other == null) return false;
+        return this.name.equals(other.getName()) && this.club.isSameAs(other.getClub());
+    }
+
+
     @Override
     public void subscribe(Subscriber host) {
-        if (this.host == null) {
-            this.host = host;
-        }
+        this.host = host;
     }
 
     @Override
@@ -258,8 +262,16 @@ public class Tournament implements Publisher, Serializable {
         return teamRegistry;
     }
 
-    public void setTeamRegistry(TeamRegistry teamRegistry) {
-        this.teamRegistry = teamRegistry;
+    public LocalDate minInviteExpiryDate() {
+        return LocalDate.now();
+    }
+
+    public LocalDate maxInviteExpiryDate() {
+        return getSignupDeadline();
+    }
+
+    public boolean isInviteExpireDateValid(LocalDate date) {
+        return !date.isAfter(getSignupDeadline());
     }
 
 }

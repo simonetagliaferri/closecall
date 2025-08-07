@@ -24,9 +24,13 @@ public class PlayerDashboardLogicController extends LogicController {
         this.clubDAO = clubDAO;
     }
 
-    public List<TournamentBean> getMyTournaments() {
+    private Player loadPlayer() {
         User user = getCurrentUser();
-        Player player = playerDAO.findByUsername(user.getUsername());
+        return playerDAO.findByUsername(user.getUsername());
+    }
+
+    public List<TournamentBean> getMyTournaments() {
+        Player player = loadPlayer();
         List<TournamentBean> tournaments = new ArrayList<>();
         Tournament tournament;
         for (Team team : player.getTeams()) {

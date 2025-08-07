@@ -5,10 +5,7 @@ import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
-import it.simonetagliaferri.model.domain.Club;
-import it.simonetagliaferri.model.domain.Host;
-import it.simonetagliaferri.model.domain.Player;
-import it.simonetagliaferri.model.domain.Tournament;
+import it.simonetagliaferri.model.domain.*;
 import it.simonetagliaferri.utils.converters.PlayerMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -28,8 +25,18 @@ public class HandleNotificationsLogicController extends LogicController {
         this.hostDAO = hostDAO;
     }
 
+    private Player loadPlayer() {
+        User user = getCurrentUser();
+        return playerDAO.findByUsername(user.getUsername());
+    }
+
+    private Host loadHost() {
+        User user = getCurrentUser();
+        return hostDAO.getHostByUsername(user.getUsername());
+    }
+
     public List<TournamentBean> getPlayerNotifications() {
-        Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
+        Player player = loadPlayer();
         Map<Club, List<Tournament>> notifications = player.getNotifications();
         List<TournamentBean> tournamentBeans = new ArrayList<>();
         for (Map.Entry<Club, List<Tournament>> entry : notifications.entrySet()) {
@@ -42,12 +49,13 @@ public class HandleNotificationsLogicController extends LogicController {
     }
 
     public void clearPlayerNotifications() {
-        Player player = playerDAO.findByUsername(getCurrentUser().getUsername());
+        Player player = loadPlayer();
         player.clearNotifications();
+        playerDAO.savePlayer(player);
     }
 
     public Map<TournamentBean, List<PlayerBean>> getHostNotifications() {
-        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        Host host = loadHost();
         Map<Tournament, List<Player>> notifications = host.getNewPlayers();
         Map<TournamentBean, List<PlayerBean>> hostNotifications = new HashMap<>();
         List<PlayerBean> playerBeans = new ArrayList<>();
@@ -64,8 +72,9 @@ public class HandleNotificationsLogicController extends LogicController {
     }
 
     public void clearHostNotifications() {
-        Host host = hostDAO.getHostByUsername(getCurrentUser().getUsername());
+        Host host = loadHost();
         host.clearNotifications();
+        hostDAO.saveHost(host);
     }
 
 }

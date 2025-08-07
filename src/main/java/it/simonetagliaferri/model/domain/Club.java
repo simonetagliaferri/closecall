@@ -3,7 +3,6 @@ import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +91,14 @@ public class Club implements Publisher, Serializable {
         return this.owner;
     }
 
+    public void setClubTournaments(List<Tournament> clubTournaments) {
+        for (Tournament tournament : clubTournaments) {
+            tournament.setClub(this);
+            tournament.subscribe(owner);
+        }
+        this.clubTournaments = clubTournaments;
+    }
+
     @Override
     public void subscribe(Subscriber player) {
         if (subscribedPlayers == null) {
@@ -114,6 +121,16 @@ public class Club implements Publisher, Serializable {
                 subscriber.update(this, tournament);
             }
         }
+    }
+
+    public List<Player> getSubscribedPlayers() {
+        List<Player> subscribers = new ArrayList<>();
+        for (Subscriber subscriber : this.subscribedPlayers) {
+            if (subscriber instanceof Player) {
+                subscribers.add((Player) subscriber);
+            }
+        }
+        return subscribers;
     }
 
     public boolean isSubscribed(Player player) {
@@ -142,19 +159,21 @@ public class Club implements Publisher, Serializable {
     }
 
     private boolean tournamentAlreadyExists(Tournament tournament) {
-        return clubTournaments.contains(tournament);
+        return getTournament(tournament.getName()) != null;
     }
 
-    public Tournament getTournament(String tournamentName, String tournamentFormat, String tournamentType, LocalDate tournamentStartDate) {
+    public Tournament getTournament(String tournamentName) {
         for (Tournament tournament : clubTournaments) {
-            if (tournament.getName().equals(tournamentName) &&
-            tournament.getTournamentFormat().equals(tournamentFormat) &&
-            tournament.getTournamentType().equals(tournamentType) &&
-            tournament.getStartDate().equals(tournamentStartDate)) {
+            if (tournament.getName().equals(tournamentName)) {
                 return tournament;
             }
         }
         return null;
+    }
+
+    public boolean isSameAs(Club other) {
+        if (other == null) return false;
+        return this.name.equals(other.getName()) && this.owner.isSameAs(other.getOwner());
     }
 
 }

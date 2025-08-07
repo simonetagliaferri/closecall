@@ -6,7 +6,6 @@ import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
-import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -64,7 +63,7 @@ public class AddTournamentFormController extends GraphicController implements GU
         this.navigationManager = appContext.getNavigationManager();
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(),
-                appContext.getDAOFactory().getHostDAO());
+                appContext.getDAOFactory().getPlayerDAO());
         postInit();
     }
 
@@ -351,7 +350,7 @@ public class AddTournamentFormController extends GraphicController implements GU
         alert.resultProperty().addListener((obs, oldResult, newResult) -> {
             this.controller.addTournament(tournamentBean);
             if (newResult == yesButton) {
-                navigationManager.goToInvitePlayer(Role.HOST, tournamentBean);
+                navigationManager.goToInvitePlayer(tournamentBean);
             } else if (newResult == noButton) {
             }
             // If Cancel (window closed or cancel pressed), do nothing

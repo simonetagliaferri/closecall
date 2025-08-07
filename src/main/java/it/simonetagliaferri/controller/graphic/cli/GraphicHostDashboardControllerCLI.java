@@ -95,7 +95,7 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
     }
 
     private void clubInfo() {
-        ClubBean club = this.controller.getClub();
+        ClubBean club = this.controller.getClubBean();
         view.clubInfo(club);
     }
 

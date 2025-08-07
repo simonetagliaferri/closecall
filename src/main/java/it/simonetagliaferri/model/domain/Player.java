@@ -21,21 +21,13 @@ public class Player extends User implements Subscriber {
     }
 
     private List<Invite> invites;
-
-    private List<Club> favouriteClubs;
     private List<Team> teams;
-
     private Map<Club, List<Tournament>> notifications;
 
     @Override
     public void update(Club club, Tournament newTournament) {
-        if (favouriteClubs == null) { favouriteClubs = new ArrayList<>(); }
         if (notifications == null) { notifications = new HashMap<>(); }
         notifications.computeIfAbsent(club, k -> new ArrayList<>()).add(newTournament);
-    }
-
-    public List<Tournament> getNotificationsForClub(Club club) {
-        return notifications.getOrDefault(club, List.of());
     }
 
     public Map<Club, List<Tournament>> getNotifications() {
@@ -80,7 +72,7 @@ public class Player extends User implements Subscriber {
 
     public Invite getInviteForTournament(Tournament tournament) {
         for (Invite invite : invites) {
-            if (sameTournament(invite.getTournament(), tournament)) {
+            if (invite.getTournament().isSameAs(tournament)) {
                 return invite;
             }
         }
@@ -89,23 +81,6 @@ public class Player extends User implements Subscriber {
 
     public void clearInvite(Invite invite) {
         invites.remove(invite);
-    }
-
-    public Invite isInvitedToTournament(Tournament tournament) {
-        if (tournament == null) { return null; }
-        for (Invite invite : invites) {
-            if (sameTournament(invite.getTournament(), tournament)) {
-                return invite;
-            }
-        }
-        return null;
-    }
-
-    private boolean sameTournament(Tournament tournament1, Tournament tournament2) {
-        Club club = tournament1.getClub();
-        Club cl = tournament2.getClub();
-        return tournament1.getName().equals(tournament2.getName()) && club.getName().equals(cl.getName()) &&
-                club.getOwner().getUsername().equals(cl.getOwner().getUsername());
     }
 
 }

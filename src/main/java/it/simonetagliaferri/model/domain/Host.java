@@ -45,11 +45,9 @@ public class Host extends User implements Subscriber {
         return club != null;
     }
 
-    public boolean addClub(Club club) {
-        if (hasClub()) { return false; }
+    public void addClub(Club club) {
         club.setOwner(this);
         this.club = club;
-        return true;
     }
 
 
@@ -57,5 +55,8 @@ public class Host extends User implements Subscriber {
         return club;
     }
 
-
+    public boolean isSameAs(Host other) {
+        if (other == null) return false;
+        return this.getUsername().equals(other.getUsername());
+    }
 }

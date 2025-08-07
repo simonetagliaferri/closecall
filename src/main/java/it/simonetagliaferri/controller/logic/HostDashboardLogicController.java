@@ -2,7 +2,6 @@ package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.beans.HostBean;
-import it.simonetagliaferri.exception.InvalidUserState;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
@@ -25,35 +24,30 @@ public class HostDashboardLogicController extends LogicController {
     }
 
     public boolean additionalInfoNeeded() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        if (host.hasClub()) { return false; }
-        Club club = clubDAO.getClubByHostName(host.getUsername());
-        if (club == null) return true;
-        host.addClub(club);
-        return false;
+        Host host = loadHost();
+        return !host.hasClub();
     }
 
     public HostBean getHostBean() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
+        Host host = loadHost();
         return HostMapper.toBean(host);
     }
 
-    public ClubBean getClub()  {
+    public ClubBean getClubBean()  {
+        Host host = loadHost();
+        return ClubMapper.toBean(host.getClub());
+    }
+
+    private Host loadHost() {
         User user = getCurrentUser();
         Host host = hostDAO.getHostByUsername(user.getUsername());
-        Club club;
-        if (host.hasClub()) {
-            return ClubMapper.toBean(host.getClub());
+        if (host.hasClub()) { return host; }
+        Club club = clubDAO.getClubByHostName(host.getUsername());
+        if (club == null) {
+            return host;
         }
-        else {
-            club = clubDAO.getClubByHostName(host.getUsername());
-            if (club == null) {
-                throw new InvalidUserState("A host without a club should not be able to get to the dashboard.");
-            }
-            return ClubMapper.toBean(club);
-        }
+        host.addClub(club);
+        return host;
     }
 
 }

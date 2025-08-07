@@ -10,11 +10,6 @@ import java.util.List;
 
 public class InvitePlayersPlayerView {
 
-    public enum NotificationType {
-        INVITES,
-        NOTIFICATIONS
-    }
-
     public int listNotifications(List<InviteBean> invites) {
         List<String> inv = new ArrayList<>();
         for (InviteBean invite : invites) {
@@ -52,13 +47,8 @@ public class InvitePlayersPlayerView {
         CliUtils.println("You got invited in a team, your team mate is: " + teammateName);
     }
 
-    public void noNotifications() {
+    public void noInvites() {
         CliUtils.println("There are no notifications for you.");
-    }
-
-    public NotificationType chooseNotification() {
-        int choice = CliUtils.multipleChoiceInt("What notifications do you want to check?", "Invites", "New tournaments from favourite clubs");
-        return NotificationType.values()[choice-1];
     }
 
 }

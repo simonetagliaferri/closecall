@@ -9,37 +9,43 @@ import it.simonetagliaferri.utils.DateRules;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AddTournamentLogicController extends LogicController {
 
     TournamentDAO tournamentDAO;
-    HostDAO hostDAO;
     ClubDAO clubDAO;
+    PlayerDAO playerDAO;
 
-    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO) {
+    public AddTournamentLogicController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, PlayerDAO playerDAO) {
         super(sessionManager);
         this.tournamentDAO = tournamentDAO;
         this.clubDAO = clubDAO;
-        this.hostDAO = hostDAO;
+        this.playerDAO = playerDAO;
+    }
+
+    private Club loadClub() {
+        User user = getCurrentUser();
+        Club club = clubDAO.getClubByHostName(user.getUsername());
+        List<Tournament> tournaments = tournamentDAO.getTournaments(club);
+        club.setClubTournaments(tournaments);
+        return club;
     }
 
     public boolean addTournament(TournamentBean tournamentBean) {
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Creating the tournament model.
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        Club club = host.getClub();
-        if (club == null) { return false; }
+        Club club = loadClub();
         if (!club.addTournament(tournament)) {return false;} // If club returns false the tournament already exists.
         tournamentDAO.saveTournament(club, tournament); // Saves the actual tournament.
         clubDAO.saveClub(club); // To save the updated club's tournaments list.
-        hostDAO.saveHost(host); // To save the list of observed tournaments to get notifications about players joining the tournament.
+        for (Player player : club.getSubscribedPlayers()) {
+            playerDAO.savePlayer(player); // To save the notification of the new tournament that was sent to players with the club in their favourites.
+        }
         return true;
     }
 
     public boolean invalidTournamentName(TournamentBean tournamentBean) {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        Club club = host.getClub();
+        Club club = loadClub();
         Tournament tournament = TournamentMapper.fromBean(tournamentBean);
         return tournamentDAO.tournamentAlreadyExists(club, tournament);
     }

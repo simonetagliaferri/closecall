@@ -21,14 +21,16 @@ public class AddClubLogicController extends LogicController {
     }
 
     public boolean addClub(ClubBean clubBean) {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
+        Host host = loadHost();
         Club club = ClubMapper.fromBean(clubBean);
-        if (!host.addClub(club)) {
-            return false;
-        }
+        host.addClub(club);
         clubDAO.saveClub(club);
         return true;
+    }
+
+    private Host loadHost() {
+        User user = getCurrentUser();
+        return hostDAO.getHostByUsername(user.getUsername());
     }
 
 }

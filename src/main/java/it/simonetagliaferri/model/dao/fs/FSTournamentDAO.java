@@ -40,19 +40,29 @@ public class FSTournamentDAO implements TournamentDAO {
 
     @Override
     public void saveTournament(Club club, Tournament tournament) {
-        List<Tournament> tournaments = this.tournaments.computeIfAbsent(club.getOwner().getUsername(), k -> new ArrayList<>());
-        int index = tournaments.indexOf(tournament);
-        if (index >= 0) {
-            tournaments.set(index, tournament);
-        } else {
-            tournaments.add(tournament);
+        List<Tournament> tournaments = this.tournaments
+                .computeIfAbsent(club.getOwner().getUsername(), k -> new ArrayList<>());
+
+        for (int i = 0; i < tournaments.size(); i++) {
+            Tournament t = tournaments.get(i);
+            if (t.getName().equals(tournament.getName())) {
+                tournaments.set(i, tournament);
+                saveTournaments();
+                return;
+            }
         }
+
+        tournaments.add(tournament);
         saveTournaments();
     }
 
     @Override
     public List<Tournament> getTournaments(Club club) {
-        return tournaments.get(club.getOwner().getUsername());
+        List<Tournament> clubTournaments = this.tournaments.get(club.getOwner().getUsername());
+        if (clubTournaments == null) {
+            return new ArrayList<>();
+        }
+        return clubTournaments;
     }
 
     @Override

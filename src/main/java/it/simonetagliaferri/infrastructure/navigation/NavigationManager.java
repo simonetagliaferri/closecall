@@ -30,10 +30,11 @@ public abstract class NavigationManager {
 
     public abstract void goToAddClub();
 
-    public abstract void goToInvitePlayer(Role role, TournamentBean tournamentBean);
+    public abstract void goToInvitePlayer(TournamentBean tournamentBean);
 
     public abstract void goToJoinTournament();
 
     public abstract void goToNotifications(Role role);
 
+    public abstract void goToProcessInvites();
 }

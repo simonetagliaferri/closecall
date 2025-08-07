@@ -55,13 +55,8 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     @Override
-    public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
-        if (role == Role.HOST) {
-            this.graphicHostDashboardControllerGUI.showInvitePlayers(tournamentBean);
-        }
-        else {
-
-        }
+    public void goToInvitePlayer(TournamentBean tournamentBean) {
+        this.graphicHostDashboardControllerGUI.showInvitePlayers(tournamentBean);
     }
 
     public void goToJoinTournament() {
@@ -72,4 +67,11 @@ public class NavigationManagerGUI extends NavigationManager {
     public void goToNotifications(Role role) {
 
     }
+
+    @Override
+    public void goToProcessInvites() {
+
+    }
+
+
 }

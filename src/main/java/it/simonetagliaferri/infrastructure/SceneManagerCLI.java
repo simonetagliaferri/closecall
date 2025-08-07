@@ -34,9 +34,9 @@ public class SceneManagerCLI {
         addClubControllerCLI.start();
     }
 
-    public void invitePlayer(AppContext appContext, Role role, TournamentBean tournamentBean) {
+    public void invitePlayer(AppContext appContext, TournamentBean tournamentBean) {
         GraphicInvitePlayerControllerCLI graphicInvitePlayerControllerCLI = new GraphicInvitePlayerControllerCLI(appContext, tournamentBean);
-        graphicInvitePlayerControllerCLI.start(role);
+        graphicInvitePlayerControllerCLI.start();
     }
 
     public void joinTournament(AppContext appContext) {
@@ -47,6 +47,10 @@ public class SceneManagerCLI {
     public void goToNotifications(AppContext appContext, Role role) {
         GraphicHandleNotificationsControllerCLI graphicHandleNotificationsControllerCLI = new GraphicHandleNotificationsControllerCLI(appContext);
         graphicHandleNotificationsControllerCLI.start(role);
+    }
 
+    public void goToProcessInvites(AppContext appContext) {
+        GraphicProcessPlayerInviteControllerCLI graphicProcessPlayerInviteControllerCLI = new GraphicProcessPlayerInviteControllerCLI(appContext);
+        graphicProcessPlayerInviteControllerCLI.start();
     }
 }

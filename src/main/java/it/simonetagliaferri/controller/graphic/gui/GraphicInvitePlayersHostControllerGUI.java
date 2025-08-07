@@ -4,7 +4,7 @@ import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.InvitePlayerLogicController;
+import it.simonetagliaferri.controller.logic.SendPlayerInviteLogicController;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import javafx.application.Platform;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 
 public class GraphicInvitePlayersHostControllerGUI extends GraphicController implements GUIController {
     private TournamentBean tournamentBean;
-    private InvitePlayerLogicController controller;
+    private SendPlayerInviteLogicController controller;
     private InviteBean inviteBean;
 
     @FXML private Button confirmButton;
@@ -44,9 +44,10 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new InvitePlayerLogicController(appContext.getSessionManager(),
-                appContext.getDAOFactory().getPlayerDAO(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getClubDAO());
+        this.controller = new SendPlayerInviteLogicController(appContext.getSessionManager(),
+                appContext.getDAOFactory().getPlayerDAO(), appContext.getDAOFactory().getTournamentDAO(),
+                appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO(),
+                tournamentBean);
         postInit();
     }
 
@@ -60,10 +61,10 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    setDisable(empty || date.isAfter(controller.maxExpireDate(tournamentBean)) || date.isBefore(controller.minExpireDate()));
+                    setDisable(empty || date.isAfter(controller.maxExpireDate()) || date.isBefore(controller.minExpireDate()));
                 }
             });
-            expireDatePicker.setValue(this.controller.maxExpireDate(this.tournamentBean));
+            expireDatePicker.setValue(this.controller.maxExpireDate());
             if (!tournamentBean.isSingles()) {
                 ObservableList<Node> children = inviteDetails.getChildren();
                 VBox vbox = new VBox();
@@ -94,10 +95,10 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
     }
 
     public void newInvite() {
-        if (tournamentBean.isSingles() && !this.controller.spotAvailable(tournamentBean)) {
+        if (tournamentBean.isSingles() && !this.controller.spotAvailable()) {
             //Stop
         }
-        else if (!tournamentBean.isSingles() && !this.controller.teamAvailable(tournamentBean)) {
+        else if (!tournamentBean.isSingles() && !this.controller.teamAvailable()) {
             //Stop
         }
     }
@@ -140,11 +141,11 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
                 }
             }
             else {
-                if (this.controller.playerAlreadyInvited(playerBean, this.tournamentBean)) {
+                if (this.controller.playerAlreadyInvited(playerBean)) {
                     title.setText("Player has already been invited.");
                 }
                 else {
-                    this.controller.invitePlayer(playerBean, tournamentBean, expireDatePicker.getValue(), getMessagePlayer(player1Message),
+                    this.controller.invitePlayer(playerBean, expireDatePicker.getValue(), getMessagePlayer(player1Message),
                             sendEmail(emailPlayer1));
                     addInvitedTeam(playerName);
                 }

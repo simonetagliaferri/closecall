@@ -42,8 +42,12 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.addClub(this.appContext);
     }
 
-    public void goToInvitePlayer(Role role, TournamentBean tournamentBean) {
-        sceneManager.invitePlayer(this.appContext, role, tournamentBean);
+    public void goToInvitePlayer(TournamentBean tournamentBean) {
+        sceneManager.invitePlayer(this.appContext, tournamentBean);
+    }
+
+    public void goToProcessInvites() {
+        sceneManager.goToProcessInvites(this.appContext);
     }
 
     public void goToJoinTournament() {

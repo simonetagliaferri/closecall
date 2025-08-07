@@ -26,7 +26,7 @@ public class DateRules {
     }
 
     public static boolean isEndDateValid(LocalDate endDate, LocalDate startDate) {
-        return endDate.isAfter(startDate);
+        return !endDate.isBefore(startDate);
     }
 
     public static LocalDate minimumStartDate() {
