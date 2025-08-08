@@ -27,6 +27,10 @@ public class Invite implements Serializable {
         this.player = player;
     }
 
+    public void updateTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+
 
     public void updateStatus(InviteStatus inviteStatus){
         this.status = inviteStatus;
@@ -59,6 +63,11 @@ public class Invite implements Serializable {
     }
     public String getMessage() {
         return message;
+    }
+
+    public boolean isSameAs(Invite invite) {
+        return this.tournament.isSameAs(invite.getTournament()) &&
+                this.player.isSameAs(invite.getPlayer());
     }
 
 }

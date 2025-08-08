@@ -75,8 +75,20 @@ public class Tournament implements Publisher, Serializable {
         this.club = club;
     }
 
+    public void setTeamsNumber(int teamsNumber) {
+        getTeamRegistry().setTeamsNumber(teamsNumber);
+    }
+
     private void setTournamentFormatStrategy() {
         this.tournamentFormatStrategy = TournamentFormatStrategyFactory.createTournamentFormatStrategy(getTournamentFormat());
+    }
+
+    public void setTournamentRules(TournamentRules tournamentRules) {
+        this.tournamentRules = tournamentRules;
+    }
+
+    public void setTeamRegistry(TeamRegistry teamRegistry) {
+        this.teamRegistry = teamRegistry;
     }
 
     public Club getClub() {
@@ -130,6 +142,12 @@ public class Tournament implements Publisher, Serializable {
         return null;
     }
 
+    public TeamType getTeamType() {
+        if (isSingles()) {
+            return TeamType.SINGLE;
+        } else return TeamType.DOUBLE;
+    }
+
     public boolean isSingles() {
         return getTournamentType().equals("Men's singles") || getTournamentType().equals("Women's singles");
     }
@@ -170,6 +188,8 @@ public class Tournament implements Publisher, Serializable {
     public boolean playerAlreadyInATeam(Player player) {
         return getTeamRegistry().playerAlreadyInATeam(player);
     }
+
+
 
     public JoinTournamentView.JoinError addPlayer(Player player) {
         if (!availableSpot()) return JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS;

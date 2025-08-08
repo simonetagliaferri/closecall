@@ -29,12 +29,15 @@ public class PlayerDashboardLogicController extends LogicController {
         return playerDAO.findByUsername(user.getUsername());
     }
 
-    public List<TournamentBean> getMyTournaments() {
+    private List<Tournament> loadTournaments() {
         Player player = loadPlayer();
+        return tournamentDAO.getPlayerTournaments(player);
+    }
+
+    public List<TournamentBean> getMyTournaments() {
         List<TournamentBean> tournaments = new ArrayList<>();
-        Tournament tournament;
-        for (Team team : player.getTeams()) {
-            tournament = team.getTournament();
+        List<Tournament> tournamentList = loadTournaments();
+        for (Tournament tournament : tournamentList) {
             tournaments.add(TournamentMapper.toBean(tournament));
         }
         return tournaments;

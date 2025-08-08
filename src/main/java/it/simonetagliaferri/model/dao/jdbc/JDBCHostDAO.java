@@ -2,6 +2,8 @@ package it.simonetagliaferri.model.dao.jdbc;
 
 import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.HostDAO;
+import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
@@ -10,8 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JDBCHostDAO implements HostDAO {
 
@@ -19,12 +20,26 @@ public class JDBCHostDAO implements HostDAO {
             "FROM hosts " +
             "WHERE username = ?";
 
-    private static final String SAVE_HOST = "INSERT INTO hosts (username, email) VALUES (?, ?)";
-    private static final String SAVE_NOTIFICATIONS = "INSERT INTO host_new_players(clubName, " +
-            "host, tournamentName, player) VALUES (?, ?, ?, ?)";
+    private static final String SAVE_HOST =
+            "INSERT INTO hosts (username, email) VALUES (?, ?) " +
+                    "ON DUPLICATE KEY UPDATE email = VALUES(email)";
 
+    private static final String UPSERT_NOTIFICATION =
+            "INSERT INTO hostnotifications (clubName, host, tournamentName, player, batchToken) " +
+                    "VALUES (?, ?, ?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE batchToken = VALUES(batchToken)";
 
+    private static final String DELETE_OLD_FOR_HOST =
+            "DELETE FROM hostnotifications " +
+                    "WHERE host = ? AND (batchToken IS NULL OR batchToken <> ?)";
 
+    private static final String GET_NOTIFICATIONS = "SELECT clubName, tournamentName, player FROM hostnotifications " +
+            "WHERE host = ?";
+
+    TournamentDAO tournamentDAO;
+    public JDBCHostDAO(TournamentDAO tournamentDAO) {
+        this.tournamentDAO = tournamentDAO;
+    }
 
     @Override
     public Host getHostByUsername(String username) {
@@ -34,15 +49,48 @@ public class JDBCHostDAO implements HostDAO {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Host(
+                    Host host = new Host(
                             rs.getString("username"),
                             rs.getString("email")
                     );
+                    Map<Tournament, List<Player>> newPlayers = getNotifications(host);
+                    host.setNewPlayers(newPlayers);
+                    return host;
                 }
                 return null;
             }
         } catch (SQLException e) {
             throw new DAOException("Error in login procedure: " + e.getMessage());
+        }
+    }
+
+    private Map<Tournament, List<Player>> getNotifications(Host host) {
+        Map<Tournament, List<Player>> newPlayers = new HashMap<>();
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(GET_NOTIFICATIONS);
+            ps.setString(1, host.getUsername());
+            ResultSet rs = ps.executeQuery();
+            Tournament tournament;
+            Club club;
+            Player player;
+            while (rs.next()) {
+                club = new Club(rs.getString("clubName"), host);
+                tournament = tournamentDAO.getTournament(club, rs.getString("tournamentName"));
+                tournament.setClub(club);
+                player = new Player(rs.getString("player"));
+                List<Player> players;
+                if (!newPlayers.containsKey(tournament)) {
+                    players = new ArrayList<>();
+                } else {
+                    players = newPlayers.get(tournament);
+                }
+                players.add(player);
+                newPlayers.put(tournament, players);
+            }
+            return newPlayers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -52,10 +100,12 @@ public class JDBCHostDAO implements HostDAO {
         String email = host.getEmail();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_HOST);
-            ps.setString(1, username);
-            ps.setString(2, email);
-            ps.executeUpdate();
+            if (getHostByUsername(username) == null) {
+                PreparedStatement ps = conn.prepareStatement(SAVE_HOST);
+                ps.setString(1, username);
+                ps.setString(2, email);
+                ps.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new DAOException("Error in signup procedure: " + e.getMessage());
         }
@@ -65,20 +115,26 @@ public class JDBCHostDAO implements HostDAO {
     }
 
     private void saveNotifications(Host host) {
+        String token = UUID.randomUUID().toString();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_NOTIFICATIONS);
+            PreparedStatement upsert = conn.prepareStatement(UPSERT_NOTIFICATION);
+            PreparedStatement purge  = conn.prepareStatement(DELETE_OLD_FOR_HOST);
             for (Map.Entry<Tournament, List<Player>> entry : host.getNewPlayers().entrySet()) {
                 Tournament t = entry.getKey();
                 for (Player p : entry.getValue()) {
-                    ps.setString(1, host.getUsername());
-                    ps.setString(2, t.getClub().getName());
-                    ps.setString(3, t.getName());
-                    ps.setString(4, p.getUsername());
-                    ps.addBatch();
+                    upsert.setString(1, t.getClub().getName());
+                    upsert.setString(2, host.getUsername());
+                    upsert.setString(3, t.getName());
+                    upsert.setString(4, p.getUsername());
+                    upsert.setString(5, token);
+                    upsert.addBatch();
                 }
             }
-            ps.executeBatch();
+            upsert.executeBatch();
+            purge.setString(1, host.getUsername());
+            purge.setString(2, token);
+            purge.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Error in signup procedure: " + e.getMessage());
         }

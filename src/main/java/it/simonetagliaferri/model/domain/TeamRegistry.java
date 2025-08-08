@@ -21,10 +21,10 @@ public class TeamRegistry implements Serializable {
         this.teamsNumber = teamsNumber;
     }
 
-    public TeamRegistry() {
-        this.confirmedTeams = new ArrayList<>();
-        this.pendingTeams = new ArrayList<>();
-        this.partialTeams = new ArrayList<>();
+    public TeamRegistry(List<Team> confirmedTeams, List<Team> pendingTeams, List<Team> partialTeams) {
+        this.confirmedTeams = confirmedTeams;
+        this.pendingTeams = pendingTeams;
+        this.partialTeams = partialTeams;
     }
 
     public List<Team> getConfirmedTeams() {
@@ -91,7 +91,6 @@ public class TeamRegistry implements Serializable {
                 confirmedTeams.add(team);
                 break;
             case DECLINED:
-            case REVOKED:
             case EXPIRED:
                 pendingTeams.remove(team);
                 break;
@@ -111,15 +110,15 @@ public class TeamRegistry implements Serializable {
                 team.setStatus(TeamStatus.PARTIAL);
                 partialTeams.add(team);
             }
-        } else if (s2 == null && (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED)) {
+        } else if (s2 == null && (s1 == InviteStatus.DECLINED || s1 == InviteStatus.EXPIRED)) {
             pendingTeams.remove(team);
             if (team.isFull()) {
                 team.removePlayer(invite.getPlayer());
                 team.setStatus(TeamStatus.PARTIAL);
                 partialTeams.add(team);
             }
-        } else if (s1 == InviteStatus.DECLINED || s1 == InviteStatus.REVOKED || s1 == InviteStatus.EXPIRED ||
-                s2 == InviteStatus.DECLINED || s2 == InviteStatus.REVOKED || s2 == InviteStatus.EXPIRED) {
+        } else if (s1 == InviteStatus.DECLINED || s1 == InviteStatus.EXPIRED ||
+                s2 == InviteStatus.DECLINED || s2 == InviteStatus.EXPIRED) {
             pendingTeams.remove(team);
         } else if (s1 == InviteStatus.ACCEPTED && s2 == InviteStatus.ACCEPTED) {
             team.setStatus(TeamStatus.CONFIRMED);
@@ -130,17 +129,17 @@ public class TeamRegistry implements Serializable {
 
     public boolean playerAlreadyInATeam(Player player) {
         for (Team team : this.confirmedTeams) {
-            if (team.getPlayers().contains(player)) {
+            if (team.hasPlayer(player)) {
                 return true;
             }
         }
         for (Team team : this.pendingTeams) {
-            if (team.getPlayers().contains(player)) {
+            if (team.hasPlayer(player)) {
                 return true;
             }
         }
         for (Team team : this.partialTeams) {
-            if (team.getPlayers().contains(player)) {
+            if (team.hasPlayer(player)) {
                 return true;
             }
         }
@@ -151,6 +150,7 @@ public class TeamRegistry implements Serializable {
         Player p = null;
         if (isSingles) {
             Team team = new Team(player, getTeamType(true), tournament);
+            team.setStatus(TeamStatus.CONFIRMED);
             this.confirmedTeams.add(team);
             p = player;
         } else {
@@ -159,8 +159,10 @@ public class TeamRegistry implements Serializable {
                     team.addPlayer(player);
                     p = player;
                     if (this.pendingTeams.contains(team)) {
+                        team.setStatus(TeamStatus.PENDING);
                         this.partialTeams.remove(team);
                     } else {
+                        team.setStatus(TeamStatus.CONFIRMED);
                         this.confirmedTeams.add(team);
                     }
                     break;
@@ -168,6 +170,10 @@ public class TeamRegistry implements Serializable {
             }
         }
         return p;
+    }
+
+    public void setTeamsNumber(int teamsNumber) {
+        this.teamsNumber = teamsNumber;
     }
 
     public int getTeamsNumber() {

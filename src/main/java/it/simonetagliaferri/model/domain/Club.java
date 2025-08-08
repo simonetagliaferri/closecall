@@ -42,6 +42,10 @@ public class Club implements Publisher, Serializable {
         this.owner = owner;
     }
 
+    public void setSubscribers(List<Subscriber> subscribers) {
+        this.subscribedPlayers = subscribers;
+    }
+
     public void updateAddress(String street, String number, String city, String state, String zip, String country) {
         this.street = street;
         this.number = number;
@@ -158,7 +162,7 @@ public class Club implements Publisher, Serializable {
         return clubTournaments;
     }
 
-    private boolean tournamentAlreadyExists(Tournament tournament) {
+    public boolean tournamentAlreadyExists(Tournament tournament) {
         return getTournament(tournament.getName()) != null;
     }
 

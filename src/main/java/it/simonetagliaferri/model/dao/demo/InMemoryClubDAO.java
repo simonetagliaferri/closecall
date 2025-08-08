@@ -2,9 +2,6 @@ package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class InMemoryClubDAO implements ClubDAO {
@@ -23,16 +20,6 @@ public class InMemoryClubDAO implements ClubDAO {
     @Override
     public void saveClub(Club club) {
         clubs.put(club.getOwner().getUsername(), club);
-    }
-
-
-    public List<Club> getClubsByCity(String city) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Club getClubByName(String hostName, String clubName) {
-        return null;
     }
 
 }

@@ -46,8 +46,8 @@ public class AddTournamentLogicController extends LogicController {
 
     public boolean invalidTournamentName(TournamentBean tournamentBean) {
         Club club = loadClub();
-        Tournament tournament = TournamentMapper.fromBean(tournamentBean);
-        return tournamentDAO.tournamentAlreadyExists(club, tournament);
+        Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Temp model to check no duplicates.
+        return club.tournamentAlreadyExists(tournament);
     }
 
     public LocalDate estimatedEndDate(TournamentBean tournamentBean) {

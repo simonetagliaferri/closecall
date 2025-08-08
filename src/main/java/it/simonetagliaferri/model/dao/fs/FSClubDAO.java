@@ -48,14 +48,4 @@ public class FSClubDAO implements ClubDAO {
         saveClubs();
     }
 
-
-    public List<Club> getClubsByCity(String city) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Club getClubByName(String hostName, String clubName) {
-        return null;
-    }
-
 }

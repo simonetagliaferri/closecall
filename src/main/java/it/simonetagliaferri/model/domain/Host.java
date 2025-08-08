@@ -8,14 +8,14 @@ public class Host extends User implements Subscriber {
 
     private Club club;
 
-    private final Map<Tournament, List<Player>> newPlayers = new HashMap<>();
+    private Map<Tournament, List<Player>> newPlayers;
 
     @Override
     public void update(Club club, Tournament tournament) {
         // In this case, notify about the *latest player* joining
         Player last = tournament.getParticipants()
                 .get(tournament.getParticipants().size() - 1);
-
+        if (newPlayers == null) { newPlayers = new HashMap<>(); }
         newPlayers.computeIfAbsent(tournament, t -> new ArrayList<>()).add(last);
     }
 
@@ -45,6 +45,10 @@ public class Host extends User implements Subscriber {
         return club != null;
     }
 
+    public void setNewPlayers(Map<Tournament, List<Player>> newPlayers) {
+        this.newPlayers = newPlayers;
+    }
+
     public void addClub(Club club) {
         club.setOwner(this);
         this.club = club;
@@ -53,10 +57,5 @@ public class Host extends User implements Subscriber {
 
     public Club getClub() {
         return club;
-    }
-
-    public boolean isSameAs(Host other) {
-        if (other == null) return false;
-        return this.getUsername().equals(other.getUsername());
     }
 }

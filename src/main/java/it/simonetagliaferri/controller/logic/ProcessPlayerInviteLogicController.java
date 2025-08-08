@@ -47,12 +47,10 @@ public class ProcessPlayerInviteLogicController extends LogicController {
 
     public void updateInvite(InviteBean inviteBean, InviteStatus status){
         if (status != InviteStatus.PENDING) {
-            User user = getCurrentUser();
-            Player player = playerDAO.findByUsername(user.getUsername());
             Invite invite = loadInvite(inviteBean);
+            Player player = invite.getPlayer();
             Tournament tournament = invite.getTournament();
             invite.updateStatus(status);
-            player.clearInvite(invite);
             Team team = tournament.getReservedTeam(player);
             if (tournament.isSingles())
                 tournament.processInviteForSingles(invite, team);
@@ -67,6 +65,7 @@ public class ProcessPlayerInviteLogicController extends LogicController {
             tournamentDAO.saveTournament(tournament.getClub(), tournament);
             playerDAO.savePlayer(player);
             hostDAO.saveHost(tournament.getClub().getOwner());
+            player.clearInvite(invite);
         }
     }
 

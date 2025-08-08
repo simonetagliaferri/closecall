@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,16 @@ public class InMemoryTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public boolean tournamentAlreadyExists(Club club, Tournament tournament) {
-        return getTournament(club, tournament.getName()) != null;
+    public List<Tournament> getPlayerTournaments(Player player) {
+        List<Tournament> tournamentList = new ArrayList<>();
+        for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
+            for (Tournament tournament : entry.getValue()) {
+                if (tournament.playerAlreadyInATeam(player)) {
+                    tournamentList.add(tournament);
+                }
+            }
+        }
+        return tournamentList;
     }
+
 }

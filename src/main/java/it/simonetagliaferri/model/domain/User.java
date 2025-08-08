@@ -81,4 +81,8 @@ public class User implements Serializable {
         return role;
     }
 
+    public boolean isSameAs(User user) {
+        if (user == null) return false;
+        return this.username.equals(user.username);
+    }
 }

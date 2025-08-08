@@ -21,7 +21,6 @@ public class Player extends User implements Subscriber {
     }
 
     private List<Invite> invites;
-    private List<Team> teams;
     private Map<Club, List<Tournament>> notifications;
 
     @Override
@@ -34,24 +33,18 @@ public class Player extends User implements Subscriber {
         return notifications;
     }
 
-    public void addTeam(Team team) {
-        if (teams == null) { teams = new ArrayList<>(); }
-        teams.add(team);
-    }
-
-    public void removeTeam(Team team) {
-        if (teams == null) { return; }
-        teams.remove(team);
-    }
-
-    public List<Team> getTeams() {
-        return teams;
-    }
-
     public void clearNotifications() {
         for (Club club : notifications.keySet()) {
             clearNotificationsForClub(club);
         }
+    }
+
+    public void setNotifications(Map<Club, List<Tournament>> notifications) {
+        this.notifications = notifications;
+    }
+
+    public void setInvites(List<Invite> invites) {
+        this.invites = invites;
     }
 
     public void clearNotificationsForClub(Club club) {
@@ -73,6 +66,7 @@ public class Player extends User implements Subscriber {
     public Invite getInviteForTournament(Tournament tournament) {
         for (Invite invite : invites) {
             if (invite.getTournament().isSameAs(tournament)) {
+                invite.updateTournament(tournament);
                 return invite;
             }
         }
@@ -80,7 +74,7 @@ public class Player extends User implements Subscriber {
     }
 
     public void clearInvite(Invite invite) {
-        invites.remove(invite);
+        invites.removeIf(inv -> inv.isSameAs(invite));
     }
 
 }

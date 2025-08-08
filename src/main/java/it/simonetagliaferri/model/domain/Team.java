@@ -16,15 +16,16 @@ public class Team implements Serializable {
         this.player2 = null;
         this.tournament = tournament;
         this.type = type;
-        player1.addTeam(this);
     }
     public Team(Player player1, Player player2, Tournament tournament) {
         this.player1 = player1;
         this.player2 = player2;
         this.tournament = tournament;
-        this.type = TeamType.DOUBLE;
-        player1.addTeam(this);
-        player2.addTeam(this);
+        if (this.player2 != null) {
+            this.type = TeamType.DOUBLE;
+        } else {
+            this.type = TeamType.SINGLE;
+        }
     }
 
     public List<Player> getPlayers() {
@@ -39,6 +40,13 @@ public class Team implements Serializable {
     }
     public void setStatus(TeamStatus status) {
         this.status = status;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+    public Player getPlayer2() {
+        return player2;
     }
 
     public Tournament getTournament() {
@@ -59,11 +67,9 @@ public class Team implements Serializable {
         }
         else if (this.player1 == null) {
             this.player1 = player;
-            player.addTeam(this);
         }
         else if (this.player2 == null) {
             this.player2 = player;
-            player.addTeam(this);
         }
     }
 
@@ -80,12 +86,14 @@ public class Team implements Serializable {
     public void removePlayer(Player player) {
         if (player2.getUsername().equals(player.getUsername())) {
             this.player2=null;
-            player.removeTeam(this);
         }
         else if (player1.getUsername().equals(player.getUsername())) {
             this.player1=null;
-            player.removeTeam(this);
         }
+    }
+
+    public boolean hasPlayer(Player player) {
+        return player.isSameAs(player1) || player.isSameAs(player2);
     }
 
     public TeamType getType() {
