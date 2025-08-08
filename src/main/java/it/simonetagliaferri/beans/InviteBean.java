@@ -10,6 +10,7 @@ public class InviteBean {
     LocalDate expiryDate;
     InviteStatus status;
     String message;
+    boolean sendEmail;
 
     public InviteBean(TournamentBean tournament, PlayerBean player, LocalDate sendDate, LocalDate expiryDate, InviteStatus status, String message) {
         this.tournament = tournament;
@@ -20,11 +21,11 @@ public class InviteBean {
         this.message = message;
     }
 
-    public InviteBean(TournamentBean tournament, PlayerBean player, LocalDate expiryDate, String message) {
-        this.tournament = tournament;
+    public InviteBean(PlayerBean player, LocalDate expiryDate, String message, boolean sendEmail) {
         this.player = player;
         this.expiryDate = expiryDate;
         this.message = message;
+        this.sendEmail = sendEmail;
     }
 
 
@@ -63,6 +64,12 @@ public class InviteBean {
     }
     public String getMessage() {
         return message;
+    }
+    public boolean getSendEmail() {
+        return sendEmail;
+    }
+    public void setSendEmail(boolean sendEmail) {
+        this.sendEmail = sendEmail;
     }
 
 }

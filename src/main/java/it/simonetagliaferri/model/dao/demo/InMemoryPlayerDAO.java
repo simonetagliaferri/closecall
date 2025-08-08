@@ -22,7 +22,7 @@ public class InMemoryPlayerDAO implements PlayerDAO {
     @Override
     public Player findByEmail(String email) {
         for (Player player : players.values()) {
-            if (player.getEmail().equals(email)) {
+            if (email.equals(player.getEmail())) {
                 return player;
             }
         }

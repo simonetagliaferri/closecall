@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
@@ -43,8 +44,12 @@ public class SendPlayerInviteLogicController extends LogicController {
         return tournamentDAO.getTournament(club, tournamentBean.getTournamentName());
     }
 
-    public void invitePlayer(PlayerBean playerBean, LocalDate inviteExpireDate, String message, boolean email) {
-        Player player = playerDAO.findByUsername(playerBean.getUsername());
+    public void invitePlayer(InviteBean inviteBean) {
+        PlayerBean playerBean = inviteBean.getPlayer();
+        LocalDate inviteExpireDate = inviteBean.getExpiryDate();
+        String message = inviteBean.getMessage();
+        boolean email = inviteBean.getSendEmail();
+        Player player = loadPlayer(playerBean);
         Invite invite = createInvite(player, inviteExpireDate, message);
         sendInvite(invite, email);
         tournament.reserveSpot(player);
@@ -52,9 +57,16 @@ public class SendPlayerInviteLogicController extends LogicController {
         playerDAO.savePlayer(player);
     }
 
-    public void inviteTeam(PlayerBean player1, PlayerBean player2, LocalDate inviteExpireDate, String message1, String message2, boolean email1, boolean email2) {
-        Player p1 = playerDAO.findByUsername(player1.getUsername());
-        Player p2 = playerDAO.findByUsername(player2.getUsername());
+    public void inviteTeam(InviteBean inviteBean1, InviteBean inviteBean2) {
+        PlayerBean playerBean1 = inviteBean1.getPlayer();
+        PlayerBean playerBean2 = inviteBean2.getPlayer();
+        Player p1 = loadPlayer(playerBean1);
+        Player p2 = loadPlayer(playerBean2);
+        String message1 = inviteBean1.getMessage();
+        String message2 = inviteBean2.getMessage();
+        boolean email1 = inviteBean1.getSendEmail();
+        boolean email2 = inviteBean2.getSendEmail();
+        LocalDate inviteExpireDate = inviteBean1.getExpiryDate();
         Invite invite1 = createInvite(p1, inviteExpireDate, message1);
         Invite invite2 = createInvite(p2, inviteExpireDate, message2);
         sendInvite(invite1, email1);
@@ -69,8 +81,17 @@ public class SendPlayerInviteLogicController extends LogicController {
         return new Invite(tournament, player, LocalDate.now(), expireDate, InviteStatus.PENDING, message);
     }
 
-    public boolean playerAlreadyInvited(PlayerBean playerBean) {
+    private Player loadPlayer(PlayerBean playerBean) {
         Player player = playerDAO.findByUsername(playerBean.getUsername());
+        if (player == null) { player = PlayerMapper.fromBean(playerBean); }
+        /* If player is null it means it's not a registered player. It will be saved as a player that has email=username,
+         * so that if the player ever signs up, the invite will be in their dashboard.
+         */
+        return player;
+    }
+
+    public boolean playerAlreadyInvited(PlayerBean playerBean) {
+        Player player = loadPlayer(playerBean);
         return tournament.playerAlreadyInATeam(player);
     }
 
@@ -85,7 +106,10 @@ public class SendPlayerInviteLogicController extends LogicController {
             playerBean.setUsername(player);
             p = playerDAO.findByUsername(player);
         }
-        return PlayerMapper.toBean(p);
+        if (p != null) {
+            return PlayerMapper.toBean(p);
+        }
+        return null;
     }
 
     public boolean isEmail(String email) {

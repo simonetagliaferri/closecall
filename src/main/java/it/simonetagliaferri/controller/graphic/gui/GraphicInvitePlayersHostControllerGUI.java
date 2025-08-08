@@ -145,8 +145,8 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
                     title.setText("Player has already been invited.");
                 }
                 else {
-                    this.controller.invitePlayer(playerBean, expireDatePicker.getValue(), getMessagePlayer(player1Message),
-                            sendEmail(emailPlayer1));
+//                    this.controller.invitePlayer(playerBean, expireDatePicker.getValue(), getMessagePlayer(player1Message),
+//                            sendEmail(emailPlayer1));
                     addInvitedTeam(playerName);
                 }
             }

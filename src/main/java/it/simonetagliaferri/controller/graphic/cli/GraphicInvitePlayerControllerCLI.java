@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
+import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -27,30 +28,9 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     public void start() {
-        addPlayersToTournament(tournamentBean);
-    }
-
-    public void addPlayersToTournament(TournamentBean tournamentBean) {
         InvitePlayersHostView.InviteChoices choice = InvitePlayersHostView.InviteChoices.YES;
-        boolean expireDateSet = false;
-        LocalDate inviteExpireDate = null;
+        LocalDate inviteExpireDate = setInvitesExpireDate();
         while (choice == InvitePlayersHostView.InviteChoices.YES) {
-            if (!expireDateSet) {
-                while (inviteExpireDate == null) {
-                    try {
-                        inviteExpireDate = DateConverter.formatDate(view.inviteExpireDate());
-                    } catch (DateTimeException e) {
-                        view.invalidDate();
-                        continue;
-                    }
-                    if (!this.controller.isExpireDateValid(inviteExpireDate)) {
-                        inviteExpireDate = null;
-                        view.invalidExpireDate();
-                    } else {
-                        expireDateSet = true;
-                    }
-                }
-            }
             if (tournamentBean.isSingles())
                 invite(inviteExpireDate);
             else {
@@ -60,17 +40,34 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         }
     }
 
+    private LocalDate setInvitesExpireDate() {
+        LocalDate inviteExpireDate;
+        while (true) {
+            try {
+                inviteExpireDate = DateConverter.formatDate(view.inviteExpireDate());
+            } catch (DateTimeException e) {
+                view.invalidDate();
+                continue;
+            }
+            if (!this.controller.isExpireDateValid(inviteExpireDate)) {
+                view.invalidExpireDate();
+            } else {
+                break;
+            }
+        }
+        return inviteExpireDate;
+    }
+
     private PlayerBean getPlayer() {
         String playerName = view.getPlayer();
         PlayerBean playerBean = this.controller.isPlayerValid(playerName);
-        if (playerBean != null) return playerBean;
+        if (playerBean != null) return playerBean; // The player is valid
         view.invalidPlayerUsername();
         if (sendEmail()) {
-            if (!this.controller.isEmail(playerName)) {
+            if (!this.controller.isEmail(playerName)) { // If the host did not enter an email address, we ask for one
                 String playerEmail = getEmail();
                 return new PlayerBean(playerName, playerEmail);
             }
-            return null;
         }
         return null;
     }
@@ -80,26 +77,11 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
             view.fullTournament();
             return;
         }
-        PlayerBean player = getPlayer();
-        boolean email = true;
-        if (player == null) return;
-        String message = null;
-        if (this.controller.playerAlreadyInvited(player)) {
-            view.playerAlreadyInvited();
-        }
-        else {
-            if (view.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
-            message = view.getMessage();
-            }
-            if (this.controller.isPlayerRegistered(player)) {
-                if (!sendEmail()) {
-                    email = false;
-                }
-            }
-            this.controller.invitePlayer(player, inviteExpireDate, message, email);
+        InviteBean inviteBean = invitePlayer(inviteExpireDate);
+        if (inviteBean != null) {
+            this.controller.invitePlayer(inviteBean);
         }
     }
-
 
     public boolean sendEmail() {
         return view.askToSendEmail() == InvitePlayersHostView.InviteChoices.YES;
@@ -109,53 +91,61 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         return view.getEmail();
     }
 
+    private InviteBean invitePlayer(LocalDate inviteExpireDate) {
+        PlayerBean player = getPlayer();
+        boolean email = true;
+        String message = null;
+        if (player != null) {
+            if (this.controller.playerAlreadyInvited(player)) {
+                view.playerAlreadyInvited();
+                return null;
+            } else {
+                if (view.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
+                    message = view.getMessage();
+                }
+                if (this.controller.isPlayerRegistered(player)) {
+                    /*
+                     * If the player is registered, there is no need to ask for the email address. We already have it.
+                     */
+                    if (!sendEmail()) {
+                        email = false;
+                    }
+                }
+                return new InviteBean(player, inviteExpireDate, message, email);
+            }
+        }
+        return null;
+    }
+
 
     public void inviteTeam(LocalDate inviteExpireDate) {
         if (!this.controller.teamAvailable()) {
             view.noSpaceForTeam();
             return;
         }
-        PlayerBean player1 = getPlayer();
-        boolean email1 = true;
-        if (player1 == null) return;
-        String message1 = null;
+        InviteBean invite1 = invitePlayer(inviteExpireDate);
+        if (invite1 == null) { return; }
+        PlayerBean player1 = invite1.getPlayer();
+        if (player1 == null) {return;}
         if (this.controller.playerAlreadyInvited(player1)) {
             view.playerAlreadyInvited();
             view.teamDeleted();
+            return;
+        }
+        if (view.askToAddTeammate() == InvitePlayersHostView.InviteChoices.YES) {
+            InviteBean invite2 = invitePlayer(inviteExpireDate);
+            if (invite2 == null) { return; }
+            PlayerBean player2 = invite2.getPlayer();
+            if (this.controller.playerAlreadyInvited(player2)) {
+                view.playerAlreadyInvited();
+                view.teamDeleted();
+                return;
+            }
+            this.controller.inviteTeam(invite1, invite2);
         }
         else {
-            if (view.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
-                message1 = view.getMessage();
-            }
-            if (this.controller.isPlayerRegistered(player1)) {
-                if (!sendEmail()) {
-                    email1 = false;
-                }
-            }
-            if (view.askToAddTeammate() == InvitePlayersHostView.InviteChoices.YES) {
-                PlayerBean player2 = getPlayer();
-                boolean email2 = true;
-                if (player2 == null) return;
-                String message2 = null;
-                if (this.controller.playerAlreadyInvited(player2)) {
-                    view.playerAlreadyInvited();
-                    view.teamDeleted();
-                }
-                else {
-                    if (view.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
-                        message2 = view.getMessage();
-                    }
-                    if (this.controller.isPlayerRegistered(player2)) {
-                        if (!sendEmail()) {
-                            email2 = false;
-                        }
-                    }
-                    this.controller.inviteTeam(player1, player2, inviteExpireDate, message1, message2, email1, email2);
-                }
-            }
-            else {
-                this.controller.invitePlayer(player1, inviteExpireDate, message1, email1);
-            }
+            this.controller.invitePlayer(invite1);
         }
     }
+
 }
