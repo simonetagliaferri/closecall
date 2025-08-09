@@ -37,4 +37,6 @@ public abstract class NavigationManager {
     public abstract void goToNotifications(Role role);
 
     public abstract void goToProcessInvites();
+
+    public abstract void goHome(Role role);
 }

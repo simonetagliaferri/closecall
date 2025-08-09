@@ -68,6 +68,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
                 String playerEmail = getEmail();
                 return new PlayerBean(playerName, playerEmail);
             }
+            return new PlayerBean(playerName, playerName); // If the host entered an email address we create a player that has username=email.
         }
         return null;
     }

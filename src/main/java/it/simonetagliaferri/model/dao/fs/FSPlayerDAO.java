@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FSPlayerDAO implements PlayerDAO {
 
-    private static final String outputFile = "players.db";
+    private static final String FILE = "players.db";
     private Map<String, Player> players;
 
     public FSPlayerDAO() {
@@ -19,7 +19,7 @@ public class FSPlayerDAO implements PlayerDAO {
 
     @SuppressWarnings("unchecked")
     private void loadPlayers() {
-        File file = new File(outputFile);
+        File file = new File(FILE);
         if (!file.exists()) return; // Start empty if no file
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             players = (Map<String, Player>) ois.readObject();
@@ -31,7 +31,7 @@ public class FSPlayerDAO implements PlayerDAO {
     }
 
     private void savePlayers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(players);
         } catch (IOException e) {
             throw new RuntimeException("Error saving users", e);

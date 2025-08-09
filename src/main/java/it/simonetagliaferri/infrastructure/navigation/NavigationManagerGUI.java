@@ -52,6 +52,7 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     public void goToAddClub() {
+        this.graphicHostDashboardControllerGUI.showAddClub();
     }
 
     @Override
@@ -60,17 +61,30 @@ public class NavigationManagerGUI extends NavigationManager {
     }
 
     public void goToJoinTournament() {
-
+        this.graphicPlayerDashboardControllerGUI.showJoinTournament();
     }
 
     @Override
     public void goToNotifications(Role role) {
-
+        if (role == Role.HOST) {
+            this.graphicHostDashboardControllerGUI.showNotifications();
+        } else {
+            this.graphicPlayerDashboardControllerGUI.showNotifications();
+        }
     }
 
     @Override
     public void goToProcessInvites() {
+        this.graphicPlayerDashboardControllerGUI.showInvites();
+    }
 
+    @Override
+    public void goHome(Role role) {
+        if (role == Role.HOST) {
+            this.graphicHostDashboardControllerGUI.showHome();
+        } else {
+            this.graphicPlayerDashboardControllerGUI.showHome();
+        }
     }
 
 

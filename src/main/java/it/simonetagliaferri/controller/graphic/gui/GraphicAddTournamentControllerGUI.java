@@ -2,16 +2,14 @@ package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
-import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
+import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,14 +20,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddTournamentFormController extends GraphicController implements GUIController {
-
+public class GraphicAddTournamentControllerGUI extends GraphicController implements GUIController {
 
     private AddTournamentLogicController controller;
-    private HostBean user;
+    private final TournamentBean tournamentBean = new TournamentBean();
 
-
-    @FXML private VBox addTournamentContent;
     @FXML private ChoiceBox<String> tournamentTypeChoice;
     @FXML private ChoiceBox<String> tournamentFormatChoice;
     @FXML private ChoiceBox<String> matchFormatChoice;
@@ -50,13 +45,18 @@ public class AddTournamentFormController extends GraphicController implements GU
     @FXML private CheckBox courtCostCheckBox;
     @FXML private TextField courtCostField;
     @FXML private Button confirmButton;
-    @FXML private ComboBox clubs;
+    @FXML private Label tournamentNameLabel;
+    @FXML private Label joinFeeLabel;
+    @FXML private Label courtCostLabel;
+    @FXML private Label numOfPrizesLabel;
+    @FXML private Label numOfTeamsLabel;
+    @FXML private Label numOfCourtsLabel;
 
-    private VBox prizesBox = new VBox();
-    private List<Label> prizesLabels = new ArrayList<>();
-    private List<TextField> prizesFields = new ArrayList<>();
-
-    private TournamentBean tournamentBean = new TournamentBean();
+    private final VBox prizesBox = new VBox();
+    private final List<Label> prizesLabels = new ArrayList<>();
+    private final List<TextField> prizesFields = new ArrayList<>();
+    List<Double> prizes = new ArrayList<>();
+    private static final String PRIZE = "Prize #";
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -64,28 +64,6 @@ public class AddTournamentFormController extends GraphicController implements GU
         this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(),
                 appContext.getDAOFactory().getPlayerDAO());
-        postInit();
-    }
-
-    public void postInit() {
-//        List<ClubBean> clubBeans = this.controller.getClubBeans();
-//        List<String> clubNames = clubBeans.stream().map(ClubBean::getName).collect(Collectors.toList());
-//        clubs.setItems(FXCollections.observableList(clubNames));
-//        clubs.getSelectionModel().selectFirst();
-//        setClub();
-    }
-
-    @FXML
-    public void setClub() {
-//        List<ClubBean> clubBeans = this.controller.getClubBeans();
-//        String clubName = clubs.getValue().toString();
-//        ClubBean clubBean = null;
-//        for (ClubBean club : clubBeans) {
-//            if (club.getName().equals(clubName)) {
-//                clubBean = club;
-//            }
-//        }
-//        tournamentBean.setClub(clubBean);
     }
 
     @FXML private void initialize() {
@@ -97,10 +75,14 @@ public class AddTournamentFormController extends GraphicController implements GU
         setChoiceBox(tournamentFormatChoice, tournamentFormat);
         setChoiceBox(matchFormatChoice, matchFormat);
         setChoiceBox(courtTypeChoice, courtType);
+        tournamentFormatChoice.requestFocus();
+        tournamentNameField.textProperty().addListener((observable, oldValue, newValue) -> setTournamentName());
         numOfPrizesField.textProperty().addListener((obs, oldVal, newVal) -> requestPrizes());
-        numOfPrizesField.textProperty().addListener((obs, oldVal, newVal) -> checkNumber(numOfPrizesField));
+        numOfPrizesField.textProperty().addListener((obs, oldVal, newVal) -> checkNumOfPrizes());
         numOfCourtsField.textProperty().addListener((obs, oldVal, newVal) -> setCourtsNumber());
         numOfTeamsField.textProperty().addListener((obs, oldVal, newVal) -> setTeamsNumber());
+        joinFeeField.textProperty().addListener((obs, oldVal, newVal) -> setJoinFee());
+        courtCostField.textProperty().addListener((obs, oldVal, newVal) -> setCourtCost());
         startDatePicker.setDayCellFactory(param -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -150,14 +132,16 @@ public class AddTournamentFormController extends GraphicController implements GU
         VBox box = (VBox) numOfPrizesField.getParent();
         prizesBox.getChildren().clear();
         prizesFields.clear();
+        prizesLabels.clear();
+        prizes.clear();
         for (int i = 0; i < numOfPrizes; i++) {
-            Label prizeLabel = new Label("Prize #" + (i + 1));
+            Label prizeLabel = new Label(PRIZE + (i + 1));
             TextField prizeTextField = new TextField();
             prizesBox.getChildren().addAll(prizeLabel, prizeTextField);
             prizesFields.add(prizeTextField);
             prizesLabels.add(prizeLabel);
             int me = i+1;
-            prizeTextField.textProperty().addListener((obs, oldVal, newVal) -> checkPrize(prizeTextField.getText(), me));
+            prizeTextField.textProperty().addListener((obs, oldVal, newVal) -> checkPrize(me));
         }
         if (!box.getChildren().contains(prizesBox)) {
             box.getChildren().add(prizesBox);
@@ -166,44 +150,35 @@ public class AddTournamentFormController extends GraphicController implements GU
     }
 
     @FXML
-    private void checkPrize(String prize, int i) {
+    private void checkPrize(int i) {
+        Label lbl = prizesLabels.get(i - 1);
+        TextField tf = prizesFields.get(i - 1);
+        lbl.setText(PRIZE + i);
+        lbl.setTextFill(Color.BLACK);
+        if (!checkDouble(tf, lbl)) return;
+        List<Double> current = new ArrayList<>();
+        for (TextField f : prizesFields) {
+            if (f.getText().isBlank()) return;
+            current.add(Double.parseDouble(f.getText()));
+        }
+        tournamentBean.setPrizes(current);
+    }
+
+    private boolean checkInt(TextField textField, Label label) {
         try {
-            prizesLabels.get(i-1).setText("Prize #" + i);
-            prizesLabels.get(i-1).setTextFill(Color.BLACK);
+            Integer.parseInt(textField.getText());
+            return true;
         } catch (NumberFormatException e) {
-            prizesLabels.get(i-1).setText("Prize #" + i + " Invalid prize entered.");
-            prizesLabels.get(i-1).setTextFill(Color.RED);
+            label.setText("Please enter a valid number.");
+            label.setTextFill(Color.RED);
+            return false;
         }
     }
 
-    @FXML
-    private int checkNumber(TextField field) {
-        String input = field.getText();
-        Parent parent = field.getParent();
-        if (parent instanceof VBox) {
-            VBox vbox = (VBox) parent;
-            Node child = vbox.getChildren().get(0);
-            if (child instanceof Label) {
-                Label label = (Label) child;
-                if (label.getUserData()==null) {
-                    label.setUserData(label.getText());
-                }
-                String originalText = label.getUserData().toString();
-                try {
-                    int number=0;
-                    if (!input.isEmpty())
-                        number = Integer.parseInt(input);
-                    if (number<0 || (number==0 && field!=numOfPrizesField)) throw new NumberFormatException();
-                    label.setText(originalText);
-                    label.setTextFill(Color.BLACK);
-                    return number;
-                } catch (NumberFormatException e) {
-                    label.setText(originalText + " Invalid input entered.");
-                    label.setTextFill(Color.RED);
-                }
-            }
-        }
-        return 0;
+    private void checkNumOfPrizes() {
+        numOfPrizesLabel.setText("Number of prizes");
+        numOfPrizesLabel.setTextFill(Color.BLACK);
+        checkInt(numOfPrizesField, numOfPrizesLabel);
     }
 
     @FXML
@@ -252,6 +227,17 @@ public class AddTournamentFormController extends GraphicController implements GU
     }
 
     @FXML
+    private void setTournamentName() {
+        tournamentNameLabel.setText("Tournament name");
+        tournamentNameLabel.setTextFill(Color.BLACK);
+        tournamentBean.setTournamentName(tournamentNameField.getText());
+        if (this.controller.invalidTournamentName(tournamentBean)) {
+            tournamentNameLabel.setText("You already have a tournament with this name.");
+            tournamentNameLabel.setTextFill(Color.RED);
+        }
+    }
+
+    @FXML
     private void setTournamentFormat() {
         tournamentBean.setTournamentFormat(tournamentFormatChoice.getValue());
         estimateEndDate();
@@ -261,11 +247,6 @@ public class AddTournamentFormController extends GraphicController implements GU
     private void setTournamentType() {
         tournamentBean.setTournamentType(tournamentTypeChoice.getValue());
         estimateEndDate();
-    }
-
-    @FXML
-    private void setTournamentName() {
-        tournamentBean.setTournamentName(tournamentNameField.getText());
     }
 
     @FXML
@@ -281,20 +262,65 @@ public class AddTournamentFormController extends GraphicController implements GU
 
     @FXML
     private void setTeamsNumber() {
-        int n = checkNumber(numOfTeamsField);
-        tournamentBean.setTeamsNumber(n);
-        estimateEndDate();
+        numOfTeamsLabel.setText("Number of teams");
+        numOfTeamsLabel.setTextFill(Color.BLACK);
+        if (checkInt(numOfTeamsField, numOfTeamsLabel)) {
+            int n = Integer.parseInt(numOfTeamsField.getText());
+            tournamentBean.setTeamsNumber(n);
+            estimateEndDate();
+        }
     }
+
     @FXML
     private void setCourtsNumber() {
-        int n = checkNumber(numOfCourtsField);
-        tournamentBean.setCourtNumber(n);
-        estimateEndDate();
+        numOfCourtsLabel.setText("Number of available courts");
+        numOfCourtsLabel.setTextFill(Color.BLACK);
+        if (checkInt(numOfCourtsField, numOfCourtsLabel)) {
+            int n = Integer.parseInt(numOfCourtsField.getText());
+            tournamentBean.setCourtNumber(n);
+            estimateEndDate();
+        }
+    }
+
+    @FXML
+    private void setJoinFee() {
+        joinFeeLabel.setText("Join fee");
+        joinFeeLabel.setTextFill(Color.BLACK);
+        if (checkDouble(joinFeeField, joinFeeLabel)) {
+            double fee = Double.parseDouble(joinFeeField.getText());
+            tournamentBean.setJoinFee(fee);
+        }
+    }
+
+    private boolean checkDouble(TextField textField, Label label) {
+        try {
+            Double.parseDouble(textField.getText());
+            return true;
+        } catch (NumberFormatException e) {
+            label.setText("Please enter a valid number.");
+            label.setTextFill(Color.RED);
+            return false;
+        }
+    }
+
+    @FXML
+    private void setCourtCost() {
+        courtCostLabel.setText("Court cost");
+        courtCostLabel.setTextFill(Color.BLACK);
+        if (courtCostField.getText().isEmpty()) {
+            tournamentBean.setCourtPrice(0);
+        } else {
+            if (checkDouble(courtCostField, courtCostLabel)) {
+                double courtCost = Double.parseDouble(courtCostField.getText());
+                tournamentBean.setCourtPrice(courtCost);
+            }
+        }
     }
 
     @FXML
     private void estimateEndDate() {
-        if (!numOfTeamsField.getText().isEmpty() && !numOfCourtsField.getText().isEmpty() && startDatePicker.getValue() != null) {
+        if ( (numOfTeamsField.getText().isEmpty() || checkInt(numOfTeamsField, numOfTeamsLabel)) &&
+        (numOfCourtsField.getText().isEmpty() || checkInt(numOfCourtsField, numOfCourtsLabel)) && startDatePicker.getValue() != null) {
             endDateLabel1.setVisible(true);
             LocalDate endDate = this.controller.estimatedEndDate(tournamentBean);
             endDateLabel2.setText(DateConverter.dateToString(endDate));
@@ -303,7 +329,6 @@ public class AddTournamentFormController extends GraphicController implements GU
             endDateHyper.setVisible(true);
         }
     }
-
 
     @FXML
     private void editEndDate() {
@@ -320,19 +345,6 @@ public class AddTournamentFormController extends GraphicController implements GU
 
     @FXML
     private void confirmTournamentData() {
-        // Check if data is valid here if needed (optional, since button disabled when invalid)
-
-        tournamentBean.setTournamentName(tournamentNameField.getText());
-        tournamentBean.setCourtNumber(Integer.parseInt(numOfCourtsField.getText()));
-        tournamentBean.setTeamsNumber(Integer.parseInt(numOfTeamsField.getText()));
-        tournamentBean.setJoinFee(Double.valueOf(joinFeeField.getText()));
-        tournamentBean.setCourtPrice(Double.valueOf(courtCostField.getText()));
-        int numOfPrizes = Integer.parseInt(numOfPrizesField.getText());
-        List<Double> prizes = new ArrayList<>();
-        for (int i = 0; i < numOfPrizes; i++) {
-            prizes.add(Double.valueOf(prizesFields.get(i).getText()));
-        }
-        tournamentBean.setPrizes(prizes);
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Tournament Creation");
@@ -351,17 +363,14 @@ public class AddTournamentFormController extends GraphicController implements GU
             this.controller.addTournament(tournamentBean);
             if (newResult == yesButton) {
                 navigationManager.goToInvitePlayer(tournamentBean);
-            } else if (newResult == noButton) {
+            } else {
+                navigationManager.goToDashboard(Role.HOST);
             }
-            // If Cancel (window closed or cancel pressed), do nothing
         });
     }
 
     private void updateConfirmButtonBinding() {
-        // First: collect all relevant observables
         List<Observable> observables = new ArrayList<>();
-
-        // Static fields
         observables.add(tournamentNameField.textProperty());
         observables.add(numOfCourtsField.textProperty());
         observables.add(numOfTeamsField.textProperty());
@@ -372,16 +381,10 @@ public class AddTournamentFormController extends GraphicController implements GU
         observables.add(numOfPrizesField.textProperty());
         observables.add(startDatePicker.valueProperty());
         observables.add(deadlinePicker.valueProperty());
-
-        // Dynamic prize fields
         for (TextField prizeField : prizesFields) {
             observables.add(prizeField.textProperty());
         }
-
-        // Unbind any previous binding
         confirmButton.disableProperty().unbind();
-
-        // Bind with updated fields
         confirmButton.disableProperty().bind(
                 Bindings.createBooleanBinding(this::isAnyFieldInvalid,
                         observables.toArray(new Observable[0]))
@@ -389,20 +392,17 @@ public class AddTournamentFormController extends GraphicController implements GU
     }
 
     private boolean isAnyFieldInvalid() {
-        if (tournamentNameField.getText().trim().isEmpty()) return true;
-        if (numOfCourtsField.getText().trim().isEmpty()) return true;
-        if (numOfTeamsField.getText().trim().isEmpty()) return true;
-        if (joinFeeField.getText().trim().isEmpty()) return true;
+        if (tournamentNameField.getText().trim().isEmpty() || this.controller == null || this.controller.invalidTournamentName(tournamentBean)) return true;
+        if (numOfCourtsField.getText().isEmpty() || !checkInt(numOfCourtsField, numOfCourtsLabel)) return true;
+        if (numOfTeamsField.getText().isEmpty() || !checkInt(numOfTeamsField, numOfTeamsLabel)) return true;
+        if (joinFeeField.getText().isEmpty() || !checkDouble(joinFeeField, joinFeeLabel)) return true;
         if (!courtCostCheckBox.isSelected() && courtCostField.getText().trim().isEmpty()) return true;
-        if (numOfPrizesField.getText().trim().isEmpty()) return true;
+        if (numOfPrizesField.getText().isEmpty() || !checkInt(numOfPrizesField, numOfPrizesLabel)) return true;
         if (startDatePicker.getValue() == null) return true;
         if (deadlinePicker.getValue() == null) return true;
-
-        // Check prizes
-        for (TextField prizeField : prizesFields) {
-            if (prizeField.getText().trim().isEmpty()) return true;
+        for (int i = 0 ; i < prizesFields.size(); i++) {
+            if (prizesFields.get(i).getText().isEmpty() || !checkDouble(prizesFields.get(i), prizesLabels.get(i))) return true;
         }
-
         return false;
     }
 }

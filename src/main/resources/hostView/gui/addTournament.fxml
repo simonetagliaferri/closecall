@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="addTournaments" alignment="CENTER" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.AddTournamentFormController">
+<HBox fx:id="addTournaments" alignment="CENTER" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicAddTournamentControllerGUI">
    <children>
       <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportWidth="450.0" HBox.hgrow="NEVER">
          <HBox.margin>
@@ -22,15 +21,9 @@
          <content>
             <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" styleClass="box">
                <children>
-                  <VBox>
-                     <children>
-                        <Label styleClass="text" text="Club name" />
-                        <ComboBox fx:id="clubs" onAction="#setClub" prefWidth="150.0" />
-                     </children>
-                  </VBox>
                   <VBox fx:id="tournamentDataPanel" styleClass="box">
                      <children>
-                        <Label styleClass="text" text="Tournament name" />
+                        <Label fx:id="tournamentNameLabel" styleClass="text" text="Tournament name" />
                         <TextField fx:id="tournamentNameField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setTournamentName" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                      </children>
                      <VBox.margin>
@@ -63,32 +56,32 @@
                   </VBox>
                   <VBox fx:id="tournamentDataPanel1" styleClass="box">
                      <children>
-                        <Label styleClass="text" text="Number of available courts" />
+                        <Label fx:id="numOfCourtsLabel" styleClass="text" text="Number of available courts" />
                         <TextField fx:id="numOfCourtsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <VBox fx:id="tournamentDataPanel11" styleClass="box">
                      <children>
-                        <Label styleClass="text" text="Number of teams" />
+                        <Label fx:id="numOfTeamsLabel" styleClass="text" text="Number of teams" />
                         <TextField fx:id="numOfTeamsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <VBox fx:id="tournamentDataPanel113" styleClass="box">
                      <children>
-                        <Label styleClass="text" text="Join fee" />
+                        <Label fx:id="joinFeeLabel" styleClass="text" text="Join fee" />
                         <TextField fx:id="joinFeeField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" />
                         <CheckBox fx:id="courtCostCheckBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#courtCost" selected="true" text="Court costs included" wrapText="true" />
                      </children>
                   </VBox>
                   <VBox fx:id="tournamentDataPanel114" styleClass="box">
                      <children>
-                        <Label styleClass="text" text="Court cost" />
+                        <Label fx:id="courtCostLabel" styleClass="text" text="Court cost" />
                         <TextField fx:id="courtCostField" disable="true" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <VBox fx:id="tournamentDataPanel112" styleClass="box">
                      <children>
-                        <Label fx:id="numOfPrizes" styleClass="text" text="Number of prizes" />
+                        <Label fx:id="numOfPrizesLabel" styleClass="text" text="Number of prizes" />
                         <TextField fx:id="numOfPrizesField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>

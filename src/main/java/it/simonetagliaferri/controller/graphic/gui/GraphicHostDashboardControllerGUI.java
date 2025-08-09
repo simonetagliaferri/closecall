@@ -6,12 +6,10 @@ import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.HostDashboardLogicController;
 import it.simonetagliaferri.infrastructure.SceneManagerGUI;
-import it.simonetagliaferri.utils.CliUtils;
+import it.simonetagliaferri.model.domain.Role;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -20,35 +18,28 @@ import java.util.List;
 
 
 public class GraphicHostDashboardControllerGUI extends GraphicController implements GUIController {
+
     private HostDashboardLogicController controller;
-    private HostBean hostBean;
 
-
-    @FXML private Text logo;
     @FXML private MenuButton account;
     @FXML private ToggleButton home;
     @FXML private ToggleButton newTournaments;
-    @FXML private ToggleButton searchScreen;
     @FXML private VBox contentWrapper;
-    private Node addClubView;
-    private Node addTournamentView;
-    private Node homeView;
-    List<ToggleButton> buttons;
-
-
+    private List<ToggleButton> buttons;
 
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
+        this.controller = new HostDashboardLogicController(appContext.getSessionManager(),
+                appContext.getDAOFactory().getHostDAO(),
+                appContext.getDAOFactory().getClubDAO());
         postInit();
     }
 
     public void postInit() {
-        hostBean = this.controller.getHostBean();
+        HostBean hostBean = this.controller.getHostBean();
         account.setText(hostBean.getUsername());
         additionalInfo();
-        showHome();
     }
 
     @FXML
@@ -57,10 +48,8 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         icon1.setIconSize(24);
         FontIcon icon2 = new FontIcon("oct-plus-16");
         icon2.setIconSize(24);
-        FontIcon icon3 = new FontIcon("oct-search-16");
-        icon3.setIconSize(24);
-        List<FontIcon> icons = Arrays.asList(icon1, icon2, icon3);
-        buttons = Arrays.asList(home, newTournaments, searchScreen);
+        List<FontIcon> icons = Arrays.asList(icon1, icon2);
+        buttons = Arrays.asList(home, newTournaments);
         setButtons(buttons, icons);
     }
 
@@ -68,6 +57,8 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         if (this.controller.additionalInfoNeeded()) {
             disableButtons(buttons);
             showAddClub();
+        } else {
+            showHome();
         }
     }
 
@@ -78,27 +69,23 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     }
 
     private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
-        if (buttons == null ) {
-            CliUtils.println("No buttons selected");
-        } else {
-            ToggleGroup tabs = new ToggleGroup();
-            for (int i = 0; i < buttons.size(); i++) {
-                ToggleButton button = buttons.get(i);
-                button.setToggleGroup(tabs);
-                button.setText("");
-                button.setGraphic(icons.get(i));
-                button.setMinHeight(40);
-                button.setMaxHeight(40);
-                button.setMinWidth(40);
-                button.setMaxWidth(40);
-            }
-            tabs.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-                if (newToggle == null) {
-                    oldToggle.setSelected(true); // Re-select the old one
-                }
-            });
-            buttons.get(0).setSelected(true);
+        ToggleGroup tabs = new ToggleGroup();
+        for (int i = 0; i < buttons.size(); i++) {
+            ToggleButton button = buttons.get(i);
+            button.setToggleGroup(tabs);
+            button.setText("");
+            button.setGraphic(icons.get(i));
+            button.setMinHeight(40);
+            button.setMaxHeight(40);
+            button.setMinWidth(40);
+            button.setMaxWidth(40);
         }
+        tabs.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                oldToggle.setSelected(true);
+            }
+        });
+        buttons.get(0).setSelected(true);
     }
 
     @FXML
@@ -110,12 +97,10 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     @FXML
     private void changeScreen() {
         if (newTournaments.isSelected()) {
-            showAddTournament();
-        }
-        else if (searchScreen.isSelected()) {
+            navigationManager.goToAddTournament();
         }
         else if (home.isSelected()) {
-            showHome();
+            navigationManager.goHome(Role.HOST);
         }
     }
 
@@ -156,14 +141,8 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         }
     }
 
-    TournamentBean tournamentBean;
+    public void showNotifications() {
 
-    public void setTournamentBean(TournamentBean tournamentBean) {
-        this.tournamentBean = tournamentBean;
-    }
-
-    public TournamentBean getTournamentBean(TournamentBean tournamentBean) {
-        return this.tournamentBean;
     }
 
 }

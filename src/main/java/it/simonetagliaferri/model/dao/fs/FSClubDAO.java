@@ -8,7 +8,7 @@ import java.util.*;
 
 public class FSClubDAO implements ClubDAO {
 
-    private static final String outputFile = "clubs.db";
+    private static final String FILE = "clubs.db";
     Map<String, Club> clubs;
 
     public FSClubDAO() {
@@ -18,7 +18,7 @@ public class FSClubDAO implements ClubDAO {
 
     @SuppressWarnings("unchecked")
     private void loadClubs() {
-        File file = new File(outputFile);
+        File file = new File(FILE);
         if (!file.exists()) return; // Start empty if no file
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             clubs = (Map<String, Club>) ois.readObject();
@@ -30,7 +30,7 @@ public class FSClubDAO implements ClubDAO {
     }
 
     private void saveClubs() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(clubs);
         } catch (IOException e) {
             throw new RuntimeException("Error saving users", e);

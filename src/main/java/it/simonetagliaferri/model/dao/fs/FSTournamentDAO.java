@@ -10,7 +10,7 @@ import java.util.*;
 
 public class FSTournamentDAO implements TournamentDAO {
 
-    private static final String outputFile = "tournaments.db";
+    private static final String FILE = "tournaments.db";
     Map<String, List<Tournament>> tournaments;
 
     public FSTournamentDAO() {
@@ -20,7 +20,7 @@ public class FSTournamentDAO implements TournamentDAO {
 
     @SuppressWarnings("unchecked")
     private void loadTournaments() {
-        File file = new File(outputFile);
+        File file = new File(FILE);
         if (!file.exists()) return; // Start empty if no file
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             tournaments = (Map<String, List<Tournament>>) ois.readObject();
@@ -32,7 +32,7 @@ public class FSTournamentDAO implements TournamentDAO {
     }
 
     private void saveTournaments() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(tournaments);
         } catch (IOException e) {
             throw new RuntimeException("Error saving users", e);

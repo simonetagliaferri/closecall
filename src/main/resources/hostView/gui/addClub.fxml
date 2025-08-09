@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <HBox fx:id="addClub" alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicAddClubControllerGUI">
    <children>
       <VBox fx:id="firstClubWarning" alignment="CENTER" visible="false">
@@ -43,6 +42,12 @@
                   <TextField fx:id="clubCity" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                </children>
             </VBox>
+            <VBox fx:id="tournamentDataPanel1214" styleClass="box">
+               <children>
+                  <Label styleClass="text" text="Zip code" />
+                  <TextField fx:id="clubZip" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
+               </children>
+            </VBox>
             <VBox fx:id="tournamentDataPanel1211" styleClass="box">
                <children>
                   <Label styleClass="text" text="State" />
@@ -59,12 +64,6 @@
                <children>
                   <Label styleClass="text" text="Phone" />
                   <TextField fx:id="clubPhone" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
-               </children>
-            </VBox>
-            <VBox fx:id="tournamentDataPanel1214" styleClass="box">
-               <children>
-                  <Label styleClass="text" text="Email" />
-                  <TextField fx:id="clubEmail" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
                </children>
             </VBox>
             <HBox alignment="CENTER">

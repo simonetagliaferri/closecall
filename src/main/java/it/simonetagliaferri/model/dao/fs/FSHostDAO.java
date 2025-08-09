@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class FSHostDAO implements HostDAO {
 
-    private static final String outputFile = "hosts.db";
+    private static final String FILE = "hosts.db";
     private Map<String, Host> hosts;
 
     public FSHostDAO() {
@@ -18,7 +18,7 @@ public class FSHostDAO implements HostDAO {
 
     @SuppressWarnings("unchecked")
     private void loadHosts() {
-        File file = new File(outputFile);
+        File file = new File(FILE);
         if (!file.exists()) return;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             hosts = (Map<String, Host>) ois.readObject();
@@ -30,7 +30,7 @@ public class FSHostDAO implements HostDAO {
     }
 
     private void saveHosts() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(hosts);
         } catch (IOException e) {
             throw new RuntimeException(e);

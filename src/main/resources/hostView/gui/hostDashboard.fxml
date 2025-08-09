@@ -23,7 +23,6 @@
             <MenuButton fx:id="account" mnemonicParsing="false" styleClass="menu-button" text="MenuButton">
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#logout" styleClass="menu-item" text="Logout" />
-                    <MenuItem mnemonicParsing="false" styleClass="menu-item" text="Action 2" />
                 </items>
             </MenuButton>
             <FontIcon iconLiteral="oct-bell-16" iconSize="16" />
@@ -42,11 +41,6 @@
                 </VBox.margin>
             </ToggleButton>
             <ToggleButton fx:id="newTournaments" mnemonicParsing="false" onAction="#changeScreen" styleClass="control-button" text="ToggleButton">
-                <VBox.margin>
-                    <Insets bottom="5.0" />
-                </VBox.margin>
-            </ToggleButton>
-            <ToggleButton fx:id="searchScreen" mnemonicParsing="false" onAction="#changeScreen" styleClass="control-button" text="ToggleButton">
                 <VBox.margin>
                     <Insets bottom="5.0" />
                 </VBox.margin>

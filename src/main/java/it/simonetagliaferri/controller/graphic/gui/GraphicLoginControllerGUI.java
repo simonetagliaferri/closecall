@@ -20,6 +20,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
 
     private LoginLogicController controller;
     private UIState state = UIState.USERNAME_INPUT;
+    private boolean showingTempMessage = false;
 
     @FXML private Text welcomeText;
     @FXML private TextField usernameField;
@@ -36,8 +37,6 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
     @FXML private TextField confirmPassField;
     @FXML private Button signupButton;
     @FXML private Spinner<String> roleSpinner;
-
-    private boolean showingTempMessage = false;
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -73,11 +72,9 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
                 usernameField.setVisible(false);
                 passwordField.setVisible(true);
                 mainButton.setText("Sign in");
-
                 subText.setText(username);
                 subHyper.setText("switch account");
                 passResetHyper.setVisible(true);
-
                 googleLogin.setVisible(false);
                 divider.setVisible(false);
                 mainButton.requestFocus();
@@ -100,7 +97,6 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
 
     @FXML
     private void handleSubHyperClick() {
-        // Reset UI to username entry state
         if (state == UIState.PASSWORD_INPUT) {
             switchToLogin();
         } else if (state == UIState.USERNAME_INPUT) {
@@ -186,28 +182,22 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
         usernameField.setVisible(true);
         passwordField.setVisible(false);
         passResetHyper.setVisible(false);
-
         welcomeText.setText("Welcome to the court.");
         mainButton.setText("Continue");
-
         subText.setText("First time here?");
         subHyper.setText("Create account");
-
         googleLogin.setVisible(true);
         divider.setVisible(true);
         subtitle.setVisible(true);
         mainButton.setVisible(true);
-
         state = UIState.USERNAME_INPUT;
     }
 
     private void tempMessage() {
         if (showingTempMessage) return;
-
         showingTempMessage = true;
         String old = welcomeText.getText();
         welcomeText.setText("Not implemented yet.");
-
         PauseTransition pause = new PauseTransition(Duration.millis(500));
         pause.setOnFinished(e -> {
             welcomeText.setText(old);

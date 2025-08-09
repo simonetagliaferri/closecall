@@ -1,11 +1,13 @@
 package it.simonetagliaferri.controller.logic;
 
+import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.utils.converters.PlayerMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.util.ArrayList;
@@ -22,6 +24,10 @@ public class PlayerDashboardLogicController extends LogicController {
         this.playerDAO = playerDAO;
         this.tournamentDAO = tournamentDAO;
         this.clubDAO = clubDAO;
+    }
+
+    public PlayerBean getPlayerBean() {
+        return PlayerMapper.toBean(loadPlayer());
     }
 
     private Player loadPlayer() {

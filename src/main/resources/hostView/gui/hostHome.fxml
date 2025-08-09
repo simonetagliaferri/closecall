@@ -4,22 +4,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicHostHomeControllerGUI">
-   <children>
-      <VBox fx:id="clubs" prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <Label text="My clubs" />
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <Label text="Tournaments" />
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES">
-         <children>
-            <Label text="Tournament details" />
-         </children>
-      </VBox>
-   </children>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicHostHomeControllerGUI">
+   <VBox fx:id="tournaments" prefHeight="200.0" prefWidth="100.0">
+      <Label text="Tournaments"/>
+   </VBox>
+   <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES">
+      <Label fx:id="details" text="Tournament details"/>
+   </VBox>
 </HBox>

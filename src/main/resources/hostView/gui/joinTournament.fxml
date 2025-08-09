@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicJoinTournamentControllerGUI">
+   <children>
+      <HBox alignment="CENTER">
+         <children>
+            <TextField fx:id="searchField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="400.0" promptText="Search tournaments by city" styleClass="text-field" HBox.hgrow="SOMETIMES" />
+            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchTournaments" text="Button" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER">
+         <children>
+            <ScrollPane>
+               <content>
+                  <Accordion fx:id="tournamentList" />
+               </content>
+            </ScrollPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

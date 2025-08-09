@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FSLoginDAO implements LoginDAO {
 
-    private static final String outputFile = "users.db";
+    private static final String FILE = "users.db";
     private Map<String, User> users;
 
     public FSLoginDAO() {
@@ -19,7 +19,7 @@ public class FSLoginDAO implements LoginDAO {
 
     @SuppressWarnings("unchecked")
     private void loadUsers() {
-        File file = new File(outputFile);
+        File file = new File(FILE);
         if (!file.exists()) return; // Start empty if no file
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             users = (Map<String, User>) ois.readObject();
@@ -31,7 +31,7 @@ public class FSLoginDAO implements LoginDAO {
     }
 
     private void saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(users);
         } catch (IOException e) {
             throw new RuntimeException("Error saving users", e);

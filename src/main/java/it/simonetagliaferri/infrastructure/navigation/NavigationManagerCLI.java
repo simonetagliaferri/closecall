@@ -59,4 +59,8 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.goToNotifications(this.appContext, role);
     }
 
+    public void goHome(Role role) {
+        goToDashboard(role);
+    }
+
 }

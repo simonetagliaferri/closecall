@@ -53,7 +53,7 @@ public class HostDashboardCLIView {
 
     public void clubInfo(ClubBean clubBean) {
         CliUtils.println("Club name: " + clubBean.getName());
-        CliUtils.println("Address: " + clubBean.getStreet() + ", " + clubBean.getCity() + ", " + clubBean.getZip());
+        CliUtils.println("Address: " + clubBean.getStreet() + ", "  + clubBean.getNumber() + ", " + clubBean.getCity() + ", " + clubBean.getZip());
         CliUtils.println("State: " + clubBean.getState() + ", " + clubBean.getCountry());
         CliUtils.println("");
     }

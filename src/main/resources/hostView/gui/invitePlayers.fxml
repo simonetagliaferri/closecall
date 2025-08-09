@@ -36,8 +36,10 @@
                   </VBox>
                   <VBox fx:id="tournamentDataPanel" styleClass="box">
                      <children>
+                        <Label fx:id="player1Label" styleClass="text" text="Player" />
                         <TextField fx:id="player1NameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" promptText="Player username/Email" styleClass="text-field" VBox.vgrow="NEVER" />
-                        <TextField fx:id="player1Message" />
+                        <Label fx:id="expDateLabel11" styleClass="text" text="Message" />
+                        <TextField fx:id="player1Message" promptText="Add a message to the invite" />
                         <RadioButton fx:id="emailPlayer1" mnemonicParsing="false" text="Send email" />
                      </children>
                      <VBox.margin>
@@ -46,7 +48,12 @@
                   </VBox>
                   <VBox alignment="BOTTOM_RIGHT" styleClass="box">
                      <children>
-                        <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#inviteTeam" prefHeight="30.0" prefWidth="125.0" styleClass="blue-button" text="Confirm" />
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#inviteTeam" prefHeight="30.0" prefWidth="125.0" styleClass="blue-button" text="Add team" />
+                              <Button fx:id="exitButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#goHome" prefHeight="30.0" prefWidth="125.0" styleClass="blue-button" text="Exit" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
