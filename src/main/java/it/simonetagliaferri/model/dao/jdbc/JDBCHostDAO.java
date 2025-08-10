@@ -119,14 +119,14 @@ public class JDBCHostDAO implements HostDAO {
             Connection conn = ConnectionFactory.getConnection();
             PreparedStatement upsert = conn.prepareStatement(UPSERT_NOTIFICATION);
             PreparedStatement purge  = conn.prepareStatement(DELETE_OLD_FOR_HOST);
+            upsert.setString(5, token);
             for (Map.Entry<Tournament, List<Player>> entry : host.getNewPlayers().entrySet()) {
                 Tournament t = entry.getKey();
+                upsert.setString(1, t.getClub().getName());
+                upsert.setString(2, host.getUsername());
                 for (Player p : entry.getValue()) {
-                    upsert.setString(1, t.getClub().getName());
-                    upsert.setString(2, host.getUsername());
                     upsert.setString(3, t.getName());
                     upsert.setString(4, p.getUsername());
-                    upsert.setString(5, token);
                     upsert.addBatch();
                 }
             }

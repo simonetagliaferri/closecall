@@ -52,7 +52,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                     "message = VALUES(message), " +
                     "status  = VALUES(status)";
 
-    private static final String GET_INVITES = "SELECT * FROM invites WHERE player = ?";
+    private static final String GET_INVITES = "SELECT clubOwner, clubName, tournamentName, sendDate, expireDate, status, message FROM invites WHERE player = ?";
 
     TournamentDAO tournamentDAO;
 
@@ -192,17 +192,16 @@ public class JDBCPlayerDAO implements PlayerDAO {
             Connection conn = ConnectionFactory.getConnection();
             PreparedStatement upsert = conn.prepareStatement(UPSERT_PLAYER_NOTIFICATION);
             PreparedStatement purge = conn.prepareStatement(DELETE_OLD_PLAYER_NOTIFICATIONS);
+            upsert.setString(5, token);
             for (Map.Entry<Club, List<Tournament>> e : notifications.entrySet()) {
                 Club club = e.getKey();
                 List<Tournament> ts = e.getValue();
                 if (ts == null) continue;
-
+                upsert.setString(2, club.getOwner().getUsername());
+                upsert.setString(3, club.getName());
                 for (Tournament t : ts) {
                     upsert.setString(1, playerName);
-                    upsert.setString(2, club.getOwner().getUsername());     // or club.getOwnerUsername()
-                    upsert.setString(3, club.getName());      // or club.getClubName()
-                    upsert.setString(4, t.getName());         // tournament name
-                    upsert.setString(5, token);
+                    upsert.setString(4, t.getName());
                     upsert.addBatch();
                 }
             }

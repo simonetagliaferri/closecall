@@ -105,10 +105,10 @@ public class JDBCClubDAO implements ClubDAO {
         try {
             Connection conn = ConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(SAVE_SUBSCRIBERS);
+            ps.setString(2, clubName);
+            ps.setString(3, clubOwner);
             for (Player p : subscribers) {
                 ps.setString(1, p.getUsername());
-                ps.setString(2, clubName);
-                ps.setString(3, clubOwner);
                 ps.addBatch();
             }
             ps.executeBatch();

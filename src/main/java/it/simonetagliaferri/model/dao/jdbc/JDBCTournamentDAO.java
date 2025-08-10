@@ -190,7 +190,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             while (rs.next()) {
                 String clubName = rs.getString("clubName");
                 String clubOwner = rs.getString("clubOwner");
-                String tournamentName = rs.getString("tournamentName");
+                String tournamentName = rs.getString(TOURNAMENT_NAME);
                 Host host = new Host(clubOwner);
                 Club club = new Club(clubName, host);
                 tournaments.add(getTournament(club, tournamentName));
@@ -329,22 +329,16 @@ public class JDBCTournamentDAO implements TournamentDAO {
     }
 
     private void prepareTeam(Club club, Tournament tournament, List<Team> teamList, PreparedStatement ps) throws SQLException {
+        ps.setString(2, club.getName());
+        ps.setString(3, club.getOwner().getUsername());
+        ps.setString(4, tournament.getName());
         for (int i = 0; i < teamList.size(); i++) {
             Team team = teamList.get(i);
             ps.setInt(1, i);
-            ps.setString(2, club.getName());
-            ps.setString(3, club.getOwner().getUsername());
-            ps.setString(4, tournament.getName());
-            if (team.getPlayer1() != null) {
-                ps.setString(5, team.getPlayer1().getUsername());
-            } else {
-                ps.setNull(5, Types.VARCHAR);
-            }
-            if (team.getPlayer2() != null) {
-                ps.setString(6, team.getPlayer2().getUsername());
-            } else {
-                ps.setNull(6, Types.VARCHAR);
-            }
+            ps.setObject(5, team.getPlayer1() != null ? team.getPlayer1().getUsername() : null,
+                    Types.VARCHAR);
+            ps.setObject(5, team.getPlayer2() != null ? team.getPlayer2().getUsername() : null,
+                    Types.VARCHAR);
             ps.setString(7, team.getStatus().name());
             ps.addBatch();
         }
