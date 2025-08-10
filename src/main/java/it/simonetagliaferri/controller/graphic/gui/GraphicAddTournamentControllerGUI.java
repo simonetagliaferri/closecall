@@ -392,14 +392,45 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private boolean isAnyFieldInvalid() {
-        if (tournamentNameField.getText().trim().isEmpty() || this.controller == null || this.controller.invalidTournamentName(tournamentBean)) return true;
-        if (numOfCourtsField.getText().isEmpty() || !checkInt(numOfCourtsField, numOfCourtsLabel)) return true;
-        if (numOfTeamsField.getText().isEmpty() || !checkInt(numOfTeamsField, numOfTeamsLabel)) return true;
-        if (joinFeeField.getText().isEmpty() || !checkDouble(joinFeeField, joinFeeLabel)) return true;
-        if (!courtCostCheckBox.isSelected() && courtCostField.getText().trim().isEmpty()) return true;
-        if (numOfPrizesField.getText().isEmpty() || !checkInt(numOfPrizesField, numOfPrizesLabel)) return true;
-        if (startDatePicker.getValue() == null) return true;
-        if (deadlinePicker.getValue() == null) return true;
+        return isTournamentNameInvalid() || isNumOfCourtsInvalid() || isNumOfTeamsInvalid() ||
+                isJoinFeeInvalid() || isCourtCostInvalid() || isNumOfPrizesInvalid() ||
+                isStartDateInvalid() || isDeadlineInvalid() || arePrizesInvalid();
+
+    }
+
+    private boolean isTournamentNameInvalid() {
+        return tournamentNameField.getText().trim().isEmpty() || this.controller == null || this.controller.invalidTournamentName(tournamentBean);
+    }
+
+    private boolean isNumOfCourtsInvalid() {
+        return numOfCourtsField.getText().isEmpty() || !checkInt(numOfCourtsField, numOfCourtsLabel);
+    }
+
+    private boolean isNumOfTeamsInvalid() {
+        return numOfTeamsField.getText().isEmpty() || !checkInt(numOfTeamsField, numOfTeamsLabel);
+    }
+
+    private boolean isJoinFeeInvalid() {
+        return joinFeeField.getText().isEmpty() || !checkDouble(joinFeeField, joinFeeLabel);
+    }
+
+    private boolean isCourtCostInvalid() {
+        return !courtCostCheckBox.isSelected() && courtCostField.getText().trim().isEmpty();
+    }
+
+    private boolean isNumOfPrizesInvalid() {
+        return numOfPrizesField.getText().isEmpty() || !checkInt(numOfPrizesField, numOfPrizesLabel);
+    }
+
+    private boolean isStartDateInvalid() {
+        return startDatePicker.getValue() == null;
+    }
+
+    private boolean isDeadlineInvalid() {
+        return deadlinePicker.getValue() == null;
+    }
+
+    private boolean arePrizesInvalid() {
         for (int i = 0 ; i < prizesFields.size(); i++) {
             if (prizesFields.get(i).getText().isEmpty() || !checkDouble(prizesFields.get(i), prizesLabels.get(i))) return true;
         }

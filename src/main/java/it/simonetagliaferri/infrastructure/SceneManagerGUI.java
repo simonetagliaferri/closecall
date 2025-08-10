@@ -97,12 +97,13 @@ public class SceneManagerGUI extends Application {
         stage.setMinWidth(baseWidth / 2);
         stage.setMinHeight(baseHeight / 2);
         FXMLLoader loader = getLoader("login");
-        scene = new Scene(loadFXML(loader), baseWidth, baseHeight);
+        Scene scene = new Scene(loadFXML(loader), baseWidth, baseHeight);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/hostView/css/start.css")).toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.setTitle("CloseCall");
         stage.show();
+        setScene(scene);
     }
 
     public static <T extends GUIController> T loadWrapperWithContext(String fxml, VBox contentWrapper) throws IOException {
@@ -112,6 +113,10 @@ public class SceneManagerGUI extends Application {
         controller.initializeController(appContext); // optional
         contentWrapper.getChildren().setAll(root);
         return controller;
+    }
+
+    private static void setScene(Scene s) {
+        scene = s;
     }
 
 }

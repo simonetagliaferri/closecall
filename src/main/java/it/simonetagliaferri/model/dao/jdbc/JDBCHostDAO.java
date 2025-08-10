@@ -21,8 +21,7 @@ public class JDBCHostDAO implements HostDAO {
             "WHERE username = ?";
 
     private static final String SAVE_HOST =
-            "INSERT INTO hosts (username, email) VALUES (?, ?) " +
-                    "ON DUPLICATE KEY UPDATE email = VALUES(email)";
+            "INSERT INTO hosts (username, email) VALUES (?, ?)";
 
     private static final String UPSERT_NOTIFICATION =
             "INSERT INTO hostnotifications (clubName, host, tournamentName, player, batchToken) " +

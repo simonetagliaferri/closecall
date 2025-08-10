@@ -94,6 +94,7 @@ public class TeamRegistry implements Serializable {
             case EXPIRED:
                 pendingTeams.remove(team);
                 break;
+            case PENDING:
         }
     }
 
@@ -101,7 +102,20 @@ public class TeamRegistry implements Serializable {
         if (!pendingTeams.contains(team)) return;
         InviteStatus s1 = invite.getStatus();
         InviteStatus s2 = teammateInvite != null ? teammateInvite.getStatus() : null;
-        if (s2 == null && s1 == InviteStatus.ACCEPTED) {
+        if (s2 == null) {
+            soloTeamDoubles(team, s1, invite);
+        } else if (s1 == InviteStatus.DECLINED || s1 == InviteStatus.EXPIRED ||
+                s2 == InviteStatus.DECLINED || s2 == InviteStatus.EXPIRED) {
+            pendingTeams.remove(team);
+        } else if (s1 == InviteStatus.ACCEPTED && s2 == InviteStatus.ACCEPTED) {
+            team.setStatus(TeamStatus.CONFIRMED);
+            pendingTeams.remove(team);
+            confirmedTeams.add(team);
+        }
+    }
+
+    private void soloTeamDoubles(Team team, InviteStatus status, Invite invite) {
+        if (status == InviteStatus.ACCEPTED) {
             pendingTeams.remove(team);
             if (team.isFull()) {
                 team.setStatus(TeamStatus.CONFIRMED);
@@ -110,20 +124,13 @@ public class TeamRegistry implements Serializable {
                 team.setStatus(TeamStatus.PARTIAL);
                 partialTeams.add(team);
             }
-        } else if (s2 == null && (s1 == InviteStatus.DECLINED || s1 == InviteStatus.EXPIRED)) {
+        } else if (status == InviteStatus.DECLINED || status == InviteStatus.EXPIRED) {
             pendingTeams.remove(team);
             if (team.isFull()) {
                 team.removePlayer(invite.getPlayer());
                 team.setStatus(TeamStatus.PARTIAL);
                 partialTeams.add(team);
             }
-        } else if (s1 == InviteStatus.DECLINED || s1 == InviteStatus.EXPIRED ||
-                s2 == InviteStatus.DECLINED || s2 == InviteStatus.EXPIRED) {
-            pendingTeams.remove(team);
-        } else if (s1 == InviteStatus.ACCEPTED && s2 == InviteStatus.ACCEPTED) {
-            team.setStatus(TeamStatus.CONFIRMED);
-            pendingTeams.remove(team);
-            confirmedTeams.add(team);
         }
     }
 

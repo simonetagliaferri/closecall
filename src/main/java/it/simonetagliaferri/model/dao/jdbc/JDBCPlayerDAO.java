@@ -25,8 +25,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
             "SELECT username, email FROM players WHERE email = ?";
 
     private static final String SAVE_PLAYER =
-            "INSERT INTO players (username, email) VALUES (?, ?) " +
-                    "ON DUPLICATE KEY UPDATE email = VALUES(email)";
+            "INSERT INTO players (username, email) VALUES (?, ?)";
 
     private static final String UPSERT_PLAYER_NOTIFICATION =
             "INSERT INTO playernotifications (player, clubOwner, clubName, tournamentName, batchToken) " +
@@ -146,7 +145,6 @@ public class JDBCPlayerDAO implements PlayerDAO {
             ps.setString(1, player.getUsername());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                // Build Club and Tournament with minimal fields
                 String owner = rs.getString("clubOwner");
                 String clubName = rs.getString("clubName");
                 String tName = rs.getString("tournamentName");

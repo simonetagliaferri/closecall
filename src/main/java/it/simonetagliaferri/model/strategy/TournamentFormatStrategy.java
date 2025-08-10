@@ -1,5 +1,7 @@
 package it.simonetagliaferri.model.strategy;
 
-public interface TournamentFormatStrategy {
+import java.io.Serializable;
+
+public interface TournamentFormatStrategy extends Serializable {
     int estimateNeededDays(int teamsNumber, int courtNumber);
 }

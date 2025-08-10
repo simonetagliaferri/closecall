@@ -41,13 +41,12 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     private LocalDate setInvitesExpireDate() {
-        LocalDate inviteExpireDate;
+        LocalDate inviteExpireDate = null;
         while (true) {
             try {
                 inviteExpireDate = DateConverter.formatDate(view.inviteExpireDate());
             } catch (DateTimeException e) {
                 view.invalidDate();
-                continue;
             }
             if (!this.controller.isExpireDateValid(inviteExpireDate)) {
                 view.invalidExpireDate();
@@ -104,13 +103,11 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
                 if (view.addMessage() == InvitePlayersHostView.InviteChoices.YES) {
                     message = view.getMessage();
                 }
-                if (this.controller.isPlayerRegistered(player)) {
+                if (this.controller.isPlayerRegistered(player) && !sendEmail()) {
                     /*
                      * If the player is registered, there is no need to ask for the email address. We already have it.
                      */
-                    if (!sendEmail()) {
-                        email = false;
-                    }
+                    email = false;
                 }
                 return new InviteBean(player, inviteExpireDate, message, email);
             }

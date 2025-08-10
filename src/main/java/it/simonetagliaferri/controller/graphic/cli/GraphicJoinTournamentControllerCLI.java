@@ -27,13 +27,13 @@ public class GraphicJoinTournamentControllerCLI extends GraphicController {
         while (tournamentList) {
             int choice = view.listTournaments(tournaments);
             if (choice == -1) {
-                break;
+                return;
             }
             TournamentBean tournamentBean = tournaments.get(choice);
             JoinTournamentView.JoinStatus status = view.expandedTournament(tournamentBean);
             JoinTournamentView.JoinError result;
             if (status.equals(JoinTournamentView.JoinStatus.BACK)) {
-                break;
+                continue;
             }
             else {
                 result = this.controller.joinTournament(tournamentBean);

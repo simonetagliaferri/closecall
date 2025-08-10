@@ -14,25 +14,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
             "INSERT INTO tournaments (clubOwner, clubName, tournamentName, " +
                     "tournamentFormat, tournamentType, matchFormat, courtType, teamsNumber, courtNumber, " +
                     "joinFee, courtPrice, startDate, endDate, signupDeadline) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE " +
-                    "tournamentFormat = VALUES(tournamentFormat), " +
-                    "tournamentType = VALUES(tournamentType), " +
-                    "matchFormat = VALUES(matchFormat), " +
-                    "courtType = VALUES(courtType), " +
-                    "teamsNumber = VALUES(teamsNumber), " +
-                    "courtNumber = VALUES(courtNumber), " +
-                    "joinFee = VALUES(joinFee), " +
-                    "courtPrice = VALUES(courtPrice), " +
-                    "startDate = VALUES(startDate), " +
-                    "endDate = VALUES(endDate), " +
-                    "signupDeadline = VALUES(signupDeadline)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String SAVE_PRIZE =
             "INSERT INTO prizes (place, clubOwner, clubName, tournamentName, value) " +
-                    "VALUES (?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE " +
-                    "value = VALUES(value)";
+                    "VALUES (?, ?, ?, ?, ?)";
 
     private static final String SAVE_TEAM =
             "INSERT INTO teams (id, clubName, clubOwner, tournamentName, player1, player2, status) " +
@@ -42,7 +28,8 @@ public class JDBCTournamentDAO implements TournamentDAO {
                     "player2 = VALUES(player2), " +
                     "status  = VALUES(status)";
 
-    private static final String GET_TOURNAMENT = "SELECT * FROM tournaments WHERE clubOwner = ? AND clubName = ? AND tournamentName = ?";
+    private static final String GET_TOURNAMENT = "SELECT tournamentName, tournamentFormat, tournamentType, matchFormat, courtType, courtNumber," +
+            "joinFee, courtPrice, startDate, signupDeadline, endDate, teamsNumber FROM tournaments WHERE clubOwner = ? AND clubName = ? AND tournamentName = ?";
     private static final String GET_PRIZES = "SELECT value FROM prizes WHERE clubOwner = ? AND clubName = ? AND tournamentName = ?";
     private static final String GET_TEAMS = "SELECT player1, player2, status FROM teams WHERE clubOwner = ? AND clubName = ? AND tournamentName = ? AND status = ?";
     private static final String GET_TOURNAMENT_NAMES = "SELECT tournamentName FROM tournaments WHERE clubOwner = ? AND clubName = ?";
@@ -53,6 +40,10 @@ public class JDBCTournamentDAO implements TournamentDAO {
     private static final String GET_TOURNAMENTS_BY_PLAYER = "SELECT tournaments.clubName, tournaments.clubOwner, tournaments.tournamentName FROM tournaments JOIN teams " +
             "WHERE tournaments.tournamentName = teams.tournamentName AND tournaments.clubName = teams.clubName AND tournaments.clubOwner = " +
             "teams.clubOwner AND teams.player1 = ? OR teams.player2 = ?";
+    public static final String TOURNAMENT_NAME = "tournamentName";
+    public static final String PLAYER_1 = "player1";
+    public static final String PLAYER_2 = "player2";
+    public static final String STATUS = "status";
 
     @Override
     public void saveTournament(Club club, Tournament tournament) {
@@ -89,11 +80,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
                 ps.setDate(13, Date.valueOf(endDate));
                 ps.setDate(14, Date.valueOf(signupDeadline));
                 ps.executeUpdate();
+                savePrizes(club, tournament);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        savePrizes(club, tournament);
         saveTeams(club, tournament);
     }
 
@@ -110,7 +101,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String name = rs.getString("tournamentName");
+                    String name = rs.getString(TOURNAMENT_NAME);
                     Tournament t = getTournament(club, name);
                     if (t != null) {
                         tournaments.add(t);
@@ -137,7 +128,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             ps.setString(3, tournamentName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                tournament = new Tournament(rs.getString("tournamentName"));
+                tournament = new Tournament(rs.getString(TOURNAMENT_NAME));
                 tournament.setClub(club);
                 tournament.setHost(club.getOwner());
                 tournamentRules = new TournamentRules(
@@ -266,8 +257,8 @@ public class JDBCTournamentDAO implements TournamentDAO {
             ps.setString(4, TeamStatus.CONFIRMED.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Team team = getTeam(rs.getString("player1"), rs.getString("player2"),
-                        TeamStatus.valueOf(rs.getString("status")), tournament);
+                Team team = getTeam(rs.getString(PLAYER_1), rs.getString(PLAYER_2),
+                        TeamStatus.valueOf(rs.getString(STATUS)), tournament);
                 confirmedTeams.add(team);
             }
             PreparedStatement ps2 = conn.prepareStatement(GET_TEAMS);
@@ -277,8 +268,8 @@ public class JDBCTournamentDAO implements TournamentDAO {
             ps2.setString(4, TeamStatus.PENDING.name());
             ResultSet rs2 = ps2.executeQuery();
             while (rs2.next()) {
-                Team team = getTeam(rs2.getString("player1"), rs2.getString("player2"),
-                        TeamStatus.valueOf(rs2.getString("status")), tournament);
+                Team team = getTeam(rs2.getString(PLAYER_1), rs2.getString(PLAYER_2),
+                        TeamStatus.valueOf(rs2.getString(STATUS)), tournament);
                 pendingTeams.add(team);
             }
             PreparedStatement ps3 = conn.prepareStatement(GET_TEAMS);
@@ -288,8 +279,8 @@ public class JDBCTournamentDAO implements TournamentDAO {
             ps3.setString(4, TeamStatus.PARTIAL.name());
             ResultSet rs3 = ps3.executeQuery();
             while (rs3.next()) {
-                Team team = getTeam(rs3.getString("player1"), rs3.getString("player2"),
-                        TeamStatus.valueOf(rs3.getString("status")), tournament);
+                Team team = getTeam(rs3.getString(PLAYER_1), rs3.getString(PLAYER_2),
+                        TeamStatus.valueOf(rs3.getString(STATUS)), tournament);
                 partialTeams.add(team);
             }
             PreparedStatement ps4 = conn.prepareStatement(GET_TEAMS);
@@ -299,8 +290,8 @@ public class JDBCTournamentDAO implements TournamentDAO {
             ps4.setString(4, TeamStatus.PENDING_PARTIAL.name());
             ResultSet rs4 = ps4.executeQuery();
             while (rs4.next()) {
-                Team team = getTeam(rs4.getString("player1"), rs4.getString("player2"),
-                        TeamStatus.valueOf(rs4.getString("status")), tournament);
+                Team team = getTeam(rs4.getString(PLAYER_1), rs4.getString(PLAYER_2),
+                        TeamStatus.valueOf(rs4.getString(STATUS)), tournament);
                 partialTeams.add(team);
                 pendingTeams.add(team);
             }

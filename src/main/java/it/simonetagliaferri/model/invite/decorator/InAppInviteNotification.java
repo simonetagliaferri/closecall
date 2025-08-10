@@ -5,10 +5,6 @@ import it.simonetagliaferri.model.invite.Invite;
 
 public class InAppInviteNotification implements InviteNotification {
 
-
-    public InAppInviteNotification() {
-    }
-
     @Override
     public void send(Invite invite) {
         Player player = invite.getPlayer();

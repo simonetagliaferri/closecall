@@ -17,6 +17,7 @@ public class Club implements Publisher, Serializable {
     private String phone;
     private Host owner;
     private List<Tournament> clubTournaments = new ArrayList<>();
+
     private List<Subscriber> subscribedPlayers = new ArrayList<>();
 
     public Club() {}

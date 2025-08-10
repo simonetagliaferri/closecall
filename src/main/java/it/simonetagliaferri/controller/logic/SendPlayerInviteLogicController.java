@@ -52,9 +52,9 @@ public class SendPlayerInviteLogicController extends LogicController {
         Player player = loadPlayer(playerBean);
         Invite invite = createInvite(player, inviteExpireDate, message);
         sendInvite(invite, email);
+        playerDAO.savePlayer(player);
         tournament.reserveSpot(player);
         tournamentDAO.saveTournament(tournament.getClub(), tournament);
-        playerDAO.savePlayer(player);
     }
 
     public void inviteTeam(InviteBean inviteBean1, InviteBean inviteBean2) {
@@ -146,6 +146,7 @@ public class SendPlayerInviteLogicController extends LogicController {
     }
 
     public boolean isExpireDateValid(LocalDate date) {
+        if (date == null) { return false; }
         return tournament.isInviteExpireDateValid(date);
     }
 }

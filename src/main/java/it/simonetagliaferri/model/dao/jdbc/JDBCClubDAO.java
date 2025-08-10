@@ -17,15 +17,7 @@ public class JDBCClubDAO implements ClubDAO {
 
     private static final String SAVE_CLUB =
             "INSERT INTO clubs (clubName, street, number, city, state, zip, country, phone, owner) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE " +
-                    "street = VALUES(street), " +
-                    "number = VALUES(number), " +
-                    "city = VALUES(city), " +
-                    "state = VALUES(state), " +
-                    "zip = VALUES(zip), " +
-                    "country = VALUES(country), " +
-                    "phone = VALUES(phone)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String SAVE_SUBSCRIBERS =
             "INSERT INTO favouriteclubs (player, clubName, clubOwner) VALUES (?, ?, ?) " +
@@ -33,8 +25,8 @@ public class JDBCClubDAO implements ClubDAO {
                     "clubName = VALUES(clubName), " +
                     "clubOwner = VALUES(clubOwner)";
 
-    private static final String GET_CLUB = "SELECT * FROM clubs WHERE owner = ?";
-    private static final String GET_SUBSCRIBERS = "SELECT * FROM favouriteclubs WHERE clubName = ? AND clubOwner = ?";
+    private static final String GET_CLUB = "SELECT owner, clubName, street, number, city, state, zip, country, phone FROM clubs WHERE owner = ?";
+    private static final String GET_SUBSCRIBERS = "SELECT player FROM favouriteclubs WHERE clubName = ? AND clubOwner = ?";
 
     @Override
     public Club getClubByHostName(String hostName) {

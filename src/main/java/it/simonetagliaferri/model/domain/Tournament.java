@@ -125,21 +125,21 @@ public class Tournament implements Publisher, Serializable {
         if (getTeamRegistry() != null) {
             return getTeamRegistry().getConfirmedTeams();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public List<Team> getPendingTeams() {
         if (getTeamRegistry() != null) {
             return getTeamRegistry().getPendingTeams();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public List<Team> getPartialTeams() {
         if (getTeamRegistry() != null) {
             return getTeamRegistry().getPartialTeams();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public TeamType getTeamType() {

@@ -21,7 +21,6 @@ public class JDBCLoginDAO implements LoginDAO {
 
     @Override
     public User findByUsername(String username) throws DAOException {
-        // Checking if the user exists, if so take the role and the password.
         return getUser(username, FIND_BY_USERNAME);
     }
 
@@ -67,7 +66,6 @@ public class JDBCLoginDAO implements LoginDAO {
 
     @Override
     public User findByEmail(String email) throws DAOException {
-        // Checking if the user exists, if so take the role and the password.
         return getUser(email, FIND_BY_EMAIL);
     }
 }
