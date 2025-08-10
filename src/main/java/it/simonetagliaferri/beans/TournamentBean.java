@@ -82,6 +82,8 @@ public class TournamentBean {
     public double getJoinFee() { return joinFee; }
     public double getCourtPrice() { return courtPrice; }
 
+    public int getAvailableSpots() { return teamsNumber - confirmedTeams.size() - partialTeams.size()/2 - pendingTeams.size(); }
+
     public boolean isSingles() {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
     }

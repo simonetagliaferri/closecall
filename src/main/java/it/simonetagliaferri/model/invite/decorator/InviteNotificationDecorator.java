@@ -6,7 +6,7 @@ public abstract class InviteNotificationDecorator implements InviteNotification 
 
     protected InviteNotification wrappee;
 
-    public InviteNotificationDecorator(InviteNotification notification) {
+    protected InviteNotificationDecorator(InviteNotification notification) {
         wrappee = notification;
     }
 

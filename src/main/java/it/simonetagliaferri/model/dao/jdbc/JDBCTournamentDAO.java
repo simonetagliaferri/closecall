@@ -47,7 +47,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
     private static final String GET_TEAMS = "SELECT player1, player2, status FROM teams WHERE clubOwner = ? AND clubName = ? AND tournamentName = ? AND status = ?";
     private static final String GET_TOURNAMENT_NAMES = "SELECT tournamentName FROM tournaments WHERE clubOwner = ? AND clubName = ?";
 
-    private static final String GET_TOURNAMENTS_BY_CITY = "SELECT clubs.clubName, clubOwner FROM tournaments JOIN clubs WHERE tournaments.clubOwner = clubs.owner " +
+    private static final String GET_TOURNAMENTS_BY_CITY = "SELECT DISTINCT clubs.clubName, clubOwner FROM tournaments JOIN clubs WHERE tournaments.clubOwner = clubs.owner " +
             "AND tournaments.clubName = clubs.clubName AND clubs.city = ?";
 
     private static final String GET_TOURNAMENTS_BY_PLAYER = "SELECT tournaments.clubName, tournaments.clubOwner, tournaments.tournamentName FROM tournaments JOIN teams " +

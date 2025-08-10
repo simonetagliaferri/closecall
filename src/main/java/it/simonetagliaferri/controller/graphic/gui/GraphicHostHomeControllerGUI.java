@@ -25,11 +25,6 @@ public class GraphicHostHomeControllerGUI extends GraphicController implements G
         postInit();
     }
 
-    @FXML
-    public void initialize() {
-
-    }
-
     private void postInit() {
         List<TournamentBean> tournamentBeans = this.controller.getTournaments();
         for (TournamentBean tournamentBean : tournamentBeans) {
@@ -42,7 +37,4 @@ public class GraphicHostHomeControllerGUI extends GraphicController implements G
     private void showDetails(TournamentBean tournamentBean) {
         CliUtils.println("Tournament: " + tournamentBean.getTournamentName());
     }
-
-
-
 }

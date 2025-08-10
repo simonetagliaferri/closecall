@@ -17,7 +17,7 @@
       </HBox>
       <HBox alignment="CENTER">
          <children>
-            <ScrollPane>
+            <ScrollPane HBox.hgrow="SOMETIMES">
                <content>
                   <Accordion fx:id="tournamentList" />
                </content>

@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <VBox alignment="CENTER_LEFT" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicPlayerDashboardControllerGUI">
     <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0" styleClass="box" VBox.vgrow="NEVER">
@@ -25,7 +24,12 @@
                     <MenuItem mnemonicParsing="false" onAction="#logout" styleClass="menu-item" text="Logout" />
                 </items>
             </MenuButton>
-            <FontIcon iconLiteral="oct-bell-16" iconSize="16" />
+         <MenuButton fx:id="notifications" mnemonicParsing="false">
+           <items>
+             <MenuItem fx:id="invites" mnemonicParsing="false" onAction="#openInvites" text="Invites" />
+             <MenuItem fx:id="newTournaments" mnemonicParsing="false" onAction="#openNotifications" text="New tournaments" />
+           </items>
+         </MenuButton>
         </HBox>
         <VBox.margin>
         </VBox.margin>

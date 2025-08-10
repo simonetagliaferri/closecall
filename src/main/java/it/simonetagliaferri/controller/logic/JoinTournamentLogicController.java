@@ -45,6 +45,18 @@ public class JoinTournamentLogicController extends LogicController {
         return host;
     }
 
+    private List<Tournament> loadTournaments(String search) {
+        List<Tournament> tournaments = tournamentDAO.getTournamentsByCity(search);
+        for (Tournament tournament : tournaments) {
+            String hostName = tournament.getClub().getOwner().getUsername();
+            Host host = hostDAO.getHostByUsername(hostName);
+            Club club = clubDAO.getClubByHostName(hostName);
+            host.addClub(club);
+            tournament.setClub(club);
+        }
+        return tournaments;
+    }
+
     private Club loadClub(TournamentBean tournament) {
         ClubBean clubBean = tournament.getClub();
         HostBean hostBean = clubBean.getOwner();
@@ -54,7 +66,7 @@ public class JoinTournamentLogicController extends LogicController {
 
     public List<TournamentBean> searchTournament(String search) {
         List<TournamentBean> tournamentBeanList = new ArrayList<>();
-        List<Tournament> tournaments = tournamentDAO.getTournamentsByCity(search);
+        List<Tournament> tournaments = loadTournaments(search);
         for (Tournament tournament : tournaments) {
             tournamentBeanList.add(TournamentMapper.toBean(tournament));
         }

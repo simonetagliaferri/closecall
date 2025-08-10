@@ -139,7 +139,11 @@ public class Club implements Publisher, Serializable {
 
     public boolean isSubscribed(Player player) {
         if (subscribedPlayers != null) {
-            return subscribedPlayers.contains(player);
+            for (Subscriber subscriber : subscribedPlayers) {
+                if (subscriber instanceof Player && ((Player) subscriber).isSameAs(player)) {
+                    return true;
+                }
+            }
         }
         return false;
     }

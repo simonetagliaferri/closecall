@@ -1,6 +1,5 @@
 package it.simonetagliaferri.utils.converters;
 
-import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Team;
@@ -20,12 +19,4 @@ public class TeamMapper {
             return new TeamBean(PlayerMapper.toBean(players.get(0)), PlayerMapper.toBean(players.get(1)), TournamentMapper.lightToBean(team.getTournament()));
     }
 
-    public static Team fromBean(TeamBean teamBean) {
-        List<PlayerBean> players = teamBean.getPlayers();
-        if (players.size() == 1) {
-            return new Team(PlayerMapper.fromBean(players.get(0)), teamBean.getType(), TournamentMapper.lightFromBean(teamBean.getTournament()));
-        }
-        else
-            return new Team(PlayerMapper.fromBean(players.get(0)), PlayerMapper.fromBean(players.get(1)), TournamentMapper.lightFromBean(teamBean.getTournament()));
-    }
 }

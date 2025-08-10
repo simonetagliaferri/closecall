@@ -25,6 +25,7 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
     @FXML private MenuButton account;
     @FXML private ToggleButton home;
     @FXML private ToggleButton joinTournament;
+    @FXML private MenuButton notifications;
 
 
     @FXML
@@ -36,6 +37,9 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
         List<FontIcon> icons = Arrays.asList(icon1, icon2);
         List<ToggleButton> buttons = Arrays.asList(home, joinTournament);
         setButtons(buttons, icons);
+        FontIcon icon3 = new FontIcon("oct-bell-16");
+        icon3.setIconSize(16);
+        notifications.setGraphic(icon3);
     }
 
     @Override
@@ -51,6 +55,7 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
     public void postInit() {
         PlayerBean playerBean = this.controller.getPlayerBean();
         account.setText(playerBean.getUsername());
+        showHome();
     }
 
     private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
@@ -105,12 +110,30 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
         }
     }
 
-    public void showNotifications() {
+    @FXML
+    private void openNotifications() {
+        navigationManager.goToNotifications(Role.PLAYER);
+    }
 
+    @FXML
+    private void openInvites() {
+        navigationManager.goToProcessInvites();
+    }
+
+    public void showNotifications() {
+        try {
+            SceneManagerGUI.loadWrapperWithContext("playerNotifications", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void showInvites() {
-
+        try {
+            SceneManagerGUI.loadWrapperWithContext("playerInvites", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

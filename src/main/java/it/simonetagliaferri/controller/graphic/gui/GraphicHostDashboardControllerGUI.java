@@ -126,7 +126,7 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
     public void showInvitePlayers(TournamentBean tournamentBean) {
         GraphicInvitePlayersHostControllerGUI addPlayersFormController;
         try {
-            addPlayersFormController = SceneManagerGUI.loadWrapperWithContext("addPlayers", contentWrapper);
+            addPlayersFormController = SceneManagerGUI.loadWrapperWithContext("invitePlayers", contentWrapper);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -141,8 +141,17 @@ public class GraphicHostDashboardControllerGUI extends GraphicController impleme
         }
     }
 
-    public void showNotifications() {
+    @FXML
+    private void openNotifications() {
+        navigationManager.goToNotifications(Role.HOST);
+    }
 
+    public void showNotifications() {
+        try {
+            SceneManagerGUI.loadWrapperWithContext("hostNotifications", contentWrapper);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

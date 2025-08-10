@@ -4,8 +4,6 @@ import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.model.domain.Team;
 import it.simonetagliaferri.model.domain.Tournament;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,14 +49,6 @@ public class TournamentMapper {
         tournamentBean.setJoinFee(tournament.getJoinFee());
         tournamentBean.setCourtPrice(tournament.getCourtPrice());
         return tournamentBean;
-    }
-
-    public static Tournament lightFromBean(TournamentBean tournamentBean) {
-        String tournamentName = tournamentBean.getTournamentName();
-        String tournamentFormat = tournamentBean.getTournamentFormat();
-        String tournamentType = tournamentBean.getTournamentType();
-        LocalDate startDate = tournamentBean.getStartDate();
-        return new Tournament(tournamentName, tournamentFormat, tournamentType, startDate);
     }
 
     public static TournamentBean lightToBean(Tournament tournament) {
