@@ -59,7 +59,7 @@ public class JDBCHostDAO implements HostDAO {
                 return null;
             }
         } catch (SQLException e) {
-            throw new DAOException("Error in login procedure: " + e.getMessage());
+            throw new DAOException("Error while fetching the host: " + e.getMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class JDBCHostDAO implements HostDAO {
             }
             return newPlayers;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching host's notifications: " + e.getMessage());
         }
     }
 
@@ -106,7 +106,7 @@ public class JDBCHostDAO implements HostDAO {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new DAOException("Error in signup procedure: " + e.getMessage());
+            throw new DAOException("Error while saving the host: " + e.getMessage());
         }
         if (host.getNewPlayers() != null) {
             saveNotifications(host);
@@ -135,7 +135,7 @@ public class JDBCHostDAO implements HostDAO {
             purge.setString(2, token);
             purge.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Error in signup procedure: " + e.getMessage());
+            throw new DAOException("Error while saving host's notifications: " + e.getMessage());
         }
     }
 }

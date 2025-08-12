@@ -44,47 +44,45 @@ public class AddTournamentLogicController extends LogicController {
         return true;
     }
 
-    public boolean invalidTournamentName(TournamentBean tournamentBean) {
+    public boolean tournamentAlreadyExists(TournamentBean tournamentBean) {
         Club club = loadClub();
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Temp model to check no duplicates.
         return club.tournamentAlreadyExists(tournament);
     }
 
-    public LocalDate estimatedEndDate(TournamentBean tournamentBean) {
+    public LocalDate estimateEndDate(TournamentBean tournamentBean) {
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Temp model to estimate the end date.
         return tournament.estimateEndDate();
     }
 
-    public LocalDate getStartDate(TournamentBean tournamentBean, LocalDate startDate) {
-        startDate = DateRules.isDateValid(startDate);
-        if (startDate == null) {
-            throw new InvalidDateException();
-        }
+    public boolean validStartDate(TournamentBean tournamentBean, LocalDate startDate) {
         LocalDate signupDeadline = tournamentBean.getSignupDeadline();
         LocalDate endDate = tournamentBean.getEndDate();
-        if (!DateRules.isStartDateValid(startDate, signupDeadline, endDate)) {
+        if (startDate == null || !DateRules.isDateValid(startDate) || !DateRules.isStartDateValid(startDate, signupDeadline, endDate)) {
             throw new InvalidDateException();
         }
-        return startDate;
+        return true;
     }
 
-    public LocalDate getSignupDeadline(TournamentBean tournamentBean, LocalDate deadline) {
-        deadline = DateRules.isDateValid(deadline);
+    public boolean validSignupDeadline(TournamentBean tournamentBean, LocalDate deadline) {
         LocalDate startDate = tournamentBean.getStartDate();
-        if (deadline == null || !DateRules.isDeadlineValid(deadline, startDate)) {
+        if (deadline == null || !DateRules.isDeadlineValid(deadline, startDate) || !DateRules.isDateValid(deadline)) {
             throw new InvalidDateException();
         }
-        return deadline;
+        return true;
     }
 
-    public LocalDate getEndDate(TournamentBean tournamentBean, LocalDate endDate) {
-        endDate = DateRules.isDateValid(endDate);
+    public boolean validEndDate(TournamentBean tournamentBean, LocalDate endDate) {
         LocalDate startDate = tournamentBean.getStartDate();
-        if (endDate == null || !DateRules.isEndDateValid(endDate, startDate)) {
+        if (endDate == null || !DateRules.isEndDateValid(endDate, startDate) || !DateRules.isDateValid(endDate)) {
             throw new InvalidDateException();
         }
-        return endDate;
+        return true;
     }
+
+    /*
+     * The following methods are used to dynamically update the date pickers in the GUI disabling all the invalid dates.
+     */
 
     public LocalDate minimumStartDate() {
         return DateRules.minimumStartDate();

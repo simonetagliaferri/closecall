@@ -6,11 +6,8 @@ public class DateRules {
 
     private DateRules() {}
 
-    public static LocalDate isDateValid(LocalDate date) {
-        if (date.isBefore(LocalDate.now())) {
-            return null;
-        }
-        return date;
+    public static boolean isDateValid(LocalDate date) {
+        return !date.isBefore(LocalDate.now());
     }
 
     public static boolean isStartDateValid(LocalDate startDate, LocalDate signupDeadline, LocalDate endDate) {
@@ -40,7 +37,7 @@ public class DateRules {
     }
 
     public static LocalDate maxDeadline() {
-        return LocalDate.now().plusDays(1);
+        return LocalDate.now().minusDays(1);
     }
 
     public static LocalDate maxDeadline(LocalDate startDate) {

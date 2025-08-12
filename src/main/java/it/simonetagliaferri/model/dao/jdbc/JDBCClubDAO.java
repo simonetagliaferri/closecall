@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.dao.jdbc;
 
+import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
@@ -53,7 +54,7 @@ public class JDBCClubDAO implements ClubDAO {
             }
             return club;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching club", e);
         }
     }
 
@@ -71,7 +72,7 @@ public class JDBCClubDAO implements ClubDAO {
             }
             return subscribers;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching subscribed players", e);
         }
     }
 
@@ -94,7 +95,7 @@ public class JDBCClubDAO implements ClubDAO {
             }
             saveSubscribers(club);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving club", e);
         }
     }
 
@@ -113,7 +114,7 @@ public class JDBCClubDAO implements ClubDAO {
             }
             ps.executeBatch();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving subscribed players", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.dao.fs;
 
+import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.domain.Host;
 import java.io.*;
@@ -25,7 +26,7 @@ public class FSHostDAO implements HostDAO {
         } catch (EOFException e) {
             // Empty file, ignore
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error loading hosts", e);
         }
     }
 
@@ -33,7 +34,7 @@ public class FSHostDAO implements HostDAO {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(hosts);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error saving hosts", e);
         }
     }
 

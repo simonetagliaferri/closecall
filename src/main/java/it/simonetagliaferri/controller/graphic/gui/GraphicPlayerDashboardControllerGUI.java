@@ -3,17 +3,18 @@ package it.simonetagliaferri.controller.graphic.gui;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.PlayerDashboardLogicController;
+import it.simonetagliaferri.exception.NavigationException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.SceneManagerGUI;
 import it.simonetagliaferri.model.domain.Role;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,9 +54,15 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
     }
 
     public void postInit() {
-        PlayerBean playerBean = this.controller.getPlayerBean();
-        account.setText(playerBean.getUsername());
-        showHome();
+        try {
+            Platform.runLater(() -> {
+                PlayerBean playerBean = this.controller.getPlayerBean();
+                account.setText(playerBean.getUsername());
+                navigationManager.goHome(Role.PLAYER);
+            });
+        } catch (NavigationException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
     }
 
     private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
@@ -80,60 +87,59 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
 
     @FXML
     private void logout() {
-        this.controller.logout();
-        navigationManager.login();
+        try {
+            this.controller.logout();
+            navigationManager.login();
+        } catch (NavigationException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
     }
 
     @FXML
     private void changeScreen() {
-        if (joinTournament.isSelected()) {
-            navigationManager.goToJoinTournament();
-        }
-        else if (home.isSelected()) {
-            navigationManager.goHome(Role.PLAYER);
+        try {
+            if (joinTournament.isSelected()) {
+                navigationManager.goToJoinTournament();
+            } else if (home.isSelected()) {
+                navigationManager.goHome(Role.PLAYER);
+            }
+        } catch (NavigationException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
     }
 
     public void showJoinTournament() {
-        try {
-            SceneManagerGUI.loadWrapperWithContext("joinTournament", contentWrapper);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManagerGUI.loadWrapperWithContext("joinTournament", contentWrapper);
     }
 
     public void showHome() {
-        try {
-            SceneManagerGUI.loadWrapperWithContext("playerHome", contentWrapper);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManagerGUI.loadWrapperWithContext("playerHome", contentWrapper);
     }
 
     @FXML
     private void openNotifications() {
-        navigationManager.goToNotifications(Role.PLAYER);
+        try {
+            navigationManager.goToNotifications(Role.PLAYER);
+        } catch (NavigationException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
     }
 
     @FXML
     private void openInvites() {
-        navigationManager.goToProcessInvites();
+        try {
+            navigationManager.goToProcessInvites();
+        } catch (NavigationException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
     }
 
     public void showNotifications() {
-        try {
-            SceneManagerGUI.loadWrapperWithContext("playerNotifications", contentWrapper);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManagerGUI.loadWrapperWithContext("playerNotifications", contentWrapper);
     }
 
     public void showInvites() {
-        try {
-            SceneManagerGUI.loadWrapperWithContext("playerInvites", contentWrapper);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManagerGUI.loadWrapperWithContext("playerInvites", contentWrapper);
     }
 
 }

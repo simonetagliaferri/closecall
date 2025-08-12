@@ -31,17 +31,16 @@ public class PropertiesUtils {
         String value = null;
         try {
             value = readProperty(filePath, property).trim().toUpperCase();
+            return Enum.valueOf(enumType, value);
         } catch (IOException e) {
             CliUtils.println("Error in reading persistence mode: " + e.getMessage());
-        }
-        if (value == null) {
-            throw new IllegalArgumentException("Empty property: " + property);
-        }
-        try {
-            return Enum.valueOf(enumType, value);
+            CliUtils.println("Falling back to default value: " + enumType.getEnumConstants()[0].toString());
+            return enumType.getEnumConstants()[0];
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid value '" + value + "' for property '" + property +
+            CliUtils.println("Invalid value '" + value + "' for property '" + property +
                     "'. Expected one of: " + Arrays.toString(enumType.getEnumConstants()));
+            CliUtils.println("Falling back to default value: " + enumType.getEnumConstants()[0].toString());
+            return enumType.getEnumConstants()[0];
         }
     }
 }

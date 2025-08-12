@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.dao.jdbc;
 
+import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.*;
 
@@ -83,7 +84,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
                 savePrizes(club, tournament);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving the tournament: " + e.getMessage());
         }
         saveTeams(club, tournament);
     }
@@ -109,7 +110,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching club's tournaments: " + e.getMessage());
         }
         return tournaments;
     }
@@ -149,7 +150,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             }
             return tournament;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching the tournament: " + e.getMessage());
         }
     }
 
@@ -173,7 +174,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             }
             return tournaments;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching tournaments: " + e.getMessage());
         }
     }
 
@@ -197,7 +198,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             }
             return tournaments;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching the player's tournaments: " + e.getMessage());
         }
     }
 
@@ -217,7 +218,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             }
             ps.executeBatch();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving the tournament's prizes: " + e.getMessage());
         }
 
     }
@@ -238,7 +239,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             }
             return prizes;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching the tournament's prizes: " + e.getMessage());
         }
     }
 
@@ -297,7 +298,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             }
             return new TeamRegistry(confirmedTeams, pendingTeams, partialTeams);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while fetching the tournament's teams: " + e.getMessage());
         }
     }
 
@@ -324,7 +325,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
             prepareTeam(club, tournament, pendingTeams, ps);
             ps.executeBatch();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving the tournament's teams: " + e.getMessage());
         }
     }
 

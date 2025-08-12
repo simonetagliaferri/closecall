@@ -78,7 +78,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                 return null;
             }
         } catch (SQLException e) {
-            throw new DAOException("Error in login procedure: " + e.getMessage());
+            throw new DAOException("Error while fetching the player: " + e.getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                 return null;
             }
         } catch (SQLException e) {
-            throw new DAOException("Error in login procedure: " + e.getMessage());
+            throw new DAOException("Error while fetching the player: " + e.getMessage());
         }
     }
 
@@ -132,7 +132,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException("Error fetching player notifications: " + e.getMessage());
+            throw new DAOException("Error fetching player's notifications: " + e.getMessage());
         }
         return map;
     }
@@ -162,7 +162,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                 invites.add(invite);
             }
         } catch (SQLException e) {
-            throw new DAOException("Error fetching invites: " + e.getMessage());
+            throw new DAOException("Error fetching player's invites: " + e.getMessage());
         }
         return invites;
     }
@@ -180,7 +180,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
             saveInvites(player, player.getInvites());
             saveNotifications(player, player.getNotifications());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving the player: " + e.getMessage());
         }
     }
 
@@ -193,6 +193,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
             PreparedStatement upsert = conn.prepareStatement(UPSERT_PLAYER_NOTIFICATION);
             PreparedStatement purge = conn.prepareStatement(DELETE_OLD_PLAYER_NOTIFICATIONS);
             upsert.setString(5, token);
+            upsert.setString(1, playerName);
             for (Map.Entry<Club, List<Tournament>> e : notifications.entrySet()) {
                 Club club = e.getKey();
                 List<Tournament> ts = e.getValue();
@@ -200,7 +201,6 @@ public class JDBCPlayerDAO implements PlayerDAO {
                 upsert.setString(2, club.getOwner().getUsername());
                 upsert.setString(3, club.getName());
                 for (Tournament t : ts) {
-                    upsert.setString(1, playerName);
                     upsert.setString(4, t.getName());
                     upsert.addBatch();
                 }
@@ -212,7 +212,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
             purge.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving the player's notifications: " + e.getMessage());
         }
     }
 
@@ -249,7 +249,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
             ps.executeBatch();
             delete.executeBatch();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException("Error while saving the player's invites: " + e.getMessage());
         }
     }
 

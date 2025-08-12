@@ -25,7 +25,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     public void start() {
         view.welcome();
         tournamentBean.setTournamentName(view.tournamentName());
-        if (this.controller.invalidTournamentName(tournamentBean)) {
+        if (this.controller.tournamentAlreadyExists(tournamentBean)) {
             view.tournamentAlreadyExists();
             return;
         }
@@ -62,7 +62,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             strDate=view.startDate();
             try {
                 startDate = DateConverter.formatDate(strDate);
-                tournamentBean.setStartDate(this.controller.getStartDate(tournamentBean, startDate));
+                if (this.controller.validStartDate(tournamentBean, startDate)) {
+                    tournamentBean.setStartDate(startDate);
+                }
                 validDate = true;
             } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
@@ -78,7 +80,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             strDate=view.signupDeadline();
             try {
                 deadline = DateConverter.formatDate(strDate);
-                tournamentBean.setSignupDeadline(this.controller.getSignupDeadline(tournamentBean, deadline));
+                if (this.controller.validSignupDeadline(tournamentBean, deadline)) {
+                    tournamentBean.setSignupDeadline(deadline);
+                }
                 validDate = true;
             } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
@@ -87,7 +91,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     }
 
     public void estimatedEndDate() {
-        LocalDate endDate = this.controller.estimatedEndDate(tournamentBean);
+        LocalDate endDate = this.controller.estimateEndDate(tournamentBean);
         AddTournamentCLIView.Choice choice = view.showEstimatedEndDate(endDate);
         if (choice == AddTournamentCLIView.Choice.YES) {
             String strEndDate;
@@ -96,7 +100,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 strEndDate=view.editEndDate();
                 try {
                     LocalDate newEndDate = DateConverter.formatDate(strEndDate);
-                    tournamentBean.setEndDate(this.controller.getEndDate(tournamentBean, newEndDate));
+                    if (this.controller.validEndDate(tournamentBean, newEndDate)) {
+                        tournamentBean.setEndDate(newEndDate);
+                    }
                     validDate = true;
                 } catch (DateTimeException | InvalidDateException e) {
                     view.invalidDate();
@@ -104,7 +110,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             }
         }
         else {
-            tournamentBean.setEndDate(this.controller.getEndDate(tournamentBean, endDate));
+            if (this.controller.validEndDate(tournamentBean, endDate)) {
+                tournamentBean.setEndDate(endDate);
+            }
         }
     }
 

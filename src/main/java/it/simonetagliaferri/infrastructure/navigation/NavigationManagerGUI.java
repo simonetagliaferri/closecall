@@ -3,13 +3,13 @@ package it.simonetagliaferri.infrastructure.navigation;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI;
 import it.simonetagliaferri.controller.graphic.gui.GraphicPlayerDashboardControllerGUI;
+import it.simonetagliaferri.exception.NavigationException;
+import it.simonetagliaferri.exception.ResourceNotFoundException;
+import it.simonetagliaferri.exception.ViewLoadException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.SceneManagerGUI;
 import it.simonetagliaferri.model.domain.Role;
 import javafx.application.Application;
-
-import java.io.IOException;
-
 
 public class NavigationManagerGUI extends NavigationManager {
 
@@ -32,60 +32,103 @@ public class NavigationManagerGUI extends NavigationManager {
      * Navigates to the login screen.
      */
     public void login() {
-        try {
-            SceneManagerGUI.setRoot("login");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManagerGUI.login();
     }
 
     public void goToDashboard(Role role) {
-        if (role == Role.HOST) {
-            graphicHostDashboardControllerGUI = SceneManagerGUI.hostDashboard();
-        } else {
-            graphicPlayerDashboardControllerGUI = SceneManagerGUI.playerDashboard();
+        try {
+            if (role == Role.HOST) {
+                graphicHostDashboardControllerGUI = SceneManagerGUI.hostDashboard();
+            } else {
+                graphicPlayerDashboardControllerGUI = SceneManagerGUI.playerDashboard();
+            }
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load dashboard (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load dashboard (load error)", vle);
         }
     }
 
     public void goToAddTournament() {
-        this.graphicHostDashboardControllerGUI.showAddTournament();
+        try {
+            this.graphicHostDashboardControllerGUI.showAddTournament();
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load add tournament screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load add tournament screen (load error)", vle);
+        }
     }
 
     public void goToAddClub() {
-        this.graphicHostDashboardControllerGUI.showAddClub();
+        try {
+            this.graphicHostDashboardControllerGUI.showAddClub();
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load add club screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load add club screen (load error)", vle);
+        }
     }
 
     @Override
     public void goToInvitePlayer(TournamentBean tournamentBean) {
-        this.graphicHostDashboardControllerGUI.showInvitePlayers(tournamentBean);
+        try {
+            this.graphicHostDashboardControllerGUI.showInvitePlayers(tournamentBean);
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load invite players screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load invite players screen (load error)", vle);
+        }
     }
 
     public void goToJoinTournament() {
-        this.graphicPlayerDashboardControllerGUI.showJoinTournament();
+        try {
+            this.graphicPlayerDashboardControllerGUI.showJoinTournament();
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load join tournament screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load join tournament screen (load error)", vle);
+        }
     }
 
     @Override
     public void goToNotifications(Role role) {
-        if (role == Role.HOST) {
-            this.graphicHostDashboardControllerGUI.showNotifications();
-        } else {
-            this.graphicPlayerDashboardControllerGUI.showNotifications();
+        try {
+            if (role == Role.HOST) {
+                this.graphicHostDashboardControllerGUI.showNotifications();
+            } else {
+                this.graphicPlayerDashboardControllerGUI.showNotifications();
+            }
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load notifications screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load notifications screen (load error)", vle);
         }
     }
 
     @Override
     public void goToProcessInvites() {
-        this.graphicPlayerDashboardControllerGUI.showInvites();
+        try {
+            this.graphicPlayerDashboardControllerGUI.showInvites();
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load invites screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load invites screen (load error)", vle);
+        }
     }
 
     @Override
     public void goHome(Role role) {
-        if (role == Role.HOST) {
-            this.graphicHostDashboardControllerGUI.showHome();
-        } else {
-            this.graphicPlayerDashboardControllerGUI.showHome();
+        try {
+            if (role == Role.HOST) {
+                this.graphicHostDashboardControllerGUI.showHome();
+            } else {
+                this.graphicPlayerDashboardControllerGUI.showHome();
+            }
+        } catch (ResourceNotFoundException rnfe) {
+            throw new NavigationException("Failed to load home screen (resource missing)", rnfe);
+        } catch (ViewLoadException vle) {
+            throw new NavigationException("Failed to load home screen (load error)", vle);
         }
     }
-
 
 }

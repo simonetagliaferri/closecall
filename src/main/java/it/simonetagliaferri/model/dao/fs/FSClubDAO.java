@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.dao.fs;
 
+import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
 
@@ -25,7 +26,7 @@ public class FSClubDAO implements ClubDAO {
         } catch (EOFException e) {
             // Empty file, ignore
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error loading users", e);
+            throw new DAOException("Error loading clubs", e);
         }
     }
 
@@ -33,7 +34,7 @@ public class FSClubDAO implements ClubDAO {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(clubs);
         } catch (IOException e) {
-            throw new RuntimeException("Error saving users", e);
+            throw new DAOException("Error saving clubs", e);
         }
     }
 

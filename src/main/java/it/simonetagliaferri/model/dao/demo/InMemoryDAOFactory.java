@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class InMemoryDAOFactory extends DAOFactory {
 
+    private static final String PASS = "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
+
     // Storing here the hashmaps, that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
     private final Map<String, User> users = new HashMap<>();
     private final Map<String, List<Tournament>> tournaments = new HashMap<>();
@@ -28,9 +30,9 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     // Just for tests
     public void populate() {
-        User marco = new User("marco", "marco@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.HOST);
-        User p1 = new User("p1", "p1@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.PLAYER);
-        User p2 = new User("p2", "p2@gmail.com", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", Role.PLAYER);
+        User marco = new User("marco", "marco@gmail.com", PASS, Role.HOST);
+        User p1 = new User("p1", "p1@gmail.com", PASS, Role.PLAYER);
+        User p2 = new User("p2", "p2@gmail.com", PASS, Role.PLAYER);
         users.put(marco.getUsername(), marco);
         users.put(p1.getUsername(), p1);
         users.put(p2.getUsername(), p2);

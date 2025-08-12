@@ -3,6 +3,8 @@ package it.simonetagliaferri.infrastructure;
 import it.simonetagliaferri.controller.graphic.gui.GUIController;
 import it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI;
 import it.simonetagliaferri.controller.graphic.gui.GraphicPlayerDashboardControllerGUI;
+import it.simonetagliaferri.exception.ResourceNotFoundException;
+import it.simonetagliaferri.exception.ViewLoadException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,9 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.util.Objects;
+import java.net.URL;
 
 /**
  * It handles JavaFX scenes. Everything other than the start method is static since JavaFX internally instantiates SceneManagerGUI when Application.launch(SceneManagerGUI.class) is called,
@@ -27,12 +28,13 @@ public class SceneManagerGUI extends Application {
         appContext = context;
     }
 
-    /**
-     * Used by graphic controllers to swap root nodes in the scene.
-     */
-    public static void setRoot(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = getLoader(fxml);
-        scene.setRoot(loadFXML(fxmlLoader));
+    public static void login() {
+        FXMLLoader fxmlLoader = getLoader("login");
+        try {
+            scene.setRoot(loadFXML(fxmlLoader));
+        } catch (IOException e) {
+            throw new ViewLoadException("Failed to load login view", e);
+        }
     }
 
     public static GraphicHostDashboardControllerGUI hostDashboard() {
@@ -40,7 +42,7 @@ public class SceneManagerGUI extends Application {
         try {
             scene.setRoot(loadFXML(fxmlLoader));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ViewLoadException("Failed to load hostDashboard view", e);
         }
         return fxmlLoader.getController();
     }
@@ -50,7 +52,7 @@ public class SceneManagerGUI extends Application {
         try {
             scene.setRoot(loadFXML(fxmlLoader));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ViewLoadException("Failed to load playerDashboard view", e);
         }
         return fxmlLoader.getController();
     }
@@ -67,7 +69,11 @@ public class SceneManagerGUI extends Application {
     }
 
     public static FXMLLoader getLoader(String fxml) {
-        return new FXMLLoader(SceneManagerGUI.class.getResource("/hostView/gui/" + fxml + ".fxml"));
+        URL url = SceneManagerGUI.class.getResource("/hostView/gui/" + fxml + ".fxml");
+        if (url == null) {
+            throw new ResourceNotFoundException("FXML not found: /hostView/gui/" + fxml + ".fxml");
+        }
+        return new FXMLLoader(url);
     }
 
     public static <T extends GUIController> T getController(FXMLLoader fxmlLoader) {
@@ -98,7 +104,8 @@ public class SceneManagerGUI extends Application {
         stage.setMinHeight(baseHeight / 2);
         FXMLLoader loader = getLoader("login");
         Scene s = new Scene(loadFXML(loader), baseWidth, baseHeight);
-        s.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/hostView/css/start.css")).toExternalForm());
+        URL css = getResourceOrThrow();
+        s.getStylesheets().add(css.toExternalForm());
         stage.setScene(s);
         stage.centerOnScreen();
         stage.setTitle("CloseCall");
@@ -106,9 +113,22 @@ public class SceneManagerGUI extends Application {
         setScene(s);
     }
 
-    public static <T extends GUIController> T loadWrapperWithContext(String fxml, VBox contentWrapper) throws IOException {
-        FXMLLoader loader = SceneManagerGUI.getLoader(fxml);
-        Node root = SceneManagerGUI.getRoot(loader);
+    private static URL getResourceOrThrow() {
+        URL url = SceneManagerGUI.class.getResource("/hostView/css/start.css");
+        if (url == null) {
+            throw new ResourceNotFoundException("Resource not found: " + "/hostView/css/start.css");
+        }
+        return url;
+    }
+
+    public static <T extends GUIController> T loadWrapperWithContext(String fxml, VBox contentWrapper) {
+        FXMLLoader loader = getLoader(fxml);
+        Node root;
+        try {
+            root = SceneManagerGUI.getRoot(loader);
+        } catch (IOException e) {
+            throw new ViewLoadException("Failed to load view: " + fxml + " for the wrapper", e);
+        }
         T controller = SceneManagerGUI.getController(loader);
         controller.initializeController(appContext); // optional
         contentWrapper.getChildren().setAll(root);

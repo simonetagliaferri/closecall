@@ -1,5 +1,6 @@
 package it.simonetagliaferri.model.dao.fs;
 
+import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.domain.Player;
 
@@ -26,7 +27,7 @@ public class FSPlayerDAO implements PlayerDAO {
         } catch (EOFException e) {
             // Empty file, ignore
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error loading users", e);
+            throw new DAOException("Error loading players", e);
         }
     }
 
@@ -34,7 +35,7 @@ public class FSPlayerDAO implements PlayerDAO {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(players);
         } catch (IOException e) {
-            throw new RuntimeException("Error saving users", e);
+            throw new DAOException("Error saving players", e);
         }
     }
 

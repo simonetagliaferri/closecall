@@ -21,14 +21,13 @@ public abstract class DAOFactory {
     public static DAOFactory getDAOFactory() {
         PersistenceProvider provider = loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
         switch (provider) {
-            case IN_MEMORY:
-                return new InMemoryDAOFactory();
             case FS:
                 return new FSDAOFactory();
             case JDBC:
                 return new JDBCDAOFactory();
+            case IN_MEMORY:
             default:
-                throw new RuntimeException("Unknown persistence provider: " + provider);
+                return new InMemoryDAOFactory();
         }
     }
 

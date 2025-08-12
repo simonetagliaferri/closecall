@@ -1,6 +1,5 @@
 package it.simonetagliaferri.infrastructure.navigation;
 
-import it.simonetagliaferri.exception.InvalidConfigFile;
 import it.simonetagliaferri.infrastructure.AppContext;
 
 import static it.simonetagliaferri.utils.PropertiesUtils.*;
@@ -20,9 +19,8 @@ public class NavigationManagerFactory {
             case CLI:
                 return new NavigationManagerCLI(context);
             case GUI:
-                return new NavigationManagerGUI(context);
             default:
-                throw new InvalidConfigFile("Invalid UI mode: " + uiMode);
+                return new NavigationManagerGUI(context);
             }
     }
 

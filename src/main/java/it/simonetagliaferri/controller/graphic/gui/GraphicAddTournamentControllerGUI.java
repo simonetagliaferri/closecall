@@ -1,6 +1,7 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.exception.InvalidDateException;
+import it.simonetagliaferri.exception.NavigationException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -184,7 +185,9 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     @FXML
     private void checkStartDate() {
         try {
-            tournamentBean.setStartDate(this.controller.getStartDate(tournamentBean, startDatePicker.getValue()));
+            if (this.controller.validStartDate(tournamentBean, startDatePicker.getValue())) {
+                tournamentBean.setStartDate(startDatePicker.getValue());
+            }
             startDateLabel.setText("Start date");
             startDateLabel.setTextFill(Color.BLACK);
             deadlinePicker.setDayCellFactory(param -> new DateCell() {
@@ -204,7 +207,9 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     @FXML
     private void checkSignupDeadline() {
         try {
-            tournamentBean.setSignupDeadline(this.controller.getSignupDeadline(tournamentBean, deadlinePicker.getValue()));
+            if (this.controller.validSignupDeadline(tournamentBean, deadlinePicker.getValue())) {
+                tournamentBean.setSignupDeadline(deadlinePicker.getValue());
+            }
             deadlineLabel.setText("Signup deadline");
             deadlineLabel.setTextFill(Color.BLACK);
             startDatePicker.setDayCellFactory(param -> new DateCell() {
@@ -231,7 +236,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         tournamentNameLabel.setText("Tournament name");
         tournamentNameLabel.setTextFill(Color.BLACK);
         tournamentBean.setTournamentName(tournamentNameField.getText());
-        if (this.controller.invalidTournamentName(tournamentBean)) {
+        if (this.controller.tournamentAlreadyExists(tournamentBean)) {
             tournamentNameLabel.setText("You already have a tournament with this name.");
             tournamentNameLabel.setTextFill(Color.RED);
         }
@@ -322,7 +327,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         if ( (numOfTeamsField.getText().isEmpty() || checkInt(numOfTeamsField, numOfTeamsLabel)) &&
         (numOfCourtsField.getText().isEmpty() || checkInt(numOfCourtsField, numOfCourtsLabel)) && startDatePicker.getValue() != null) {
             endDateLabel1.setVisible(true);
-            LocalDate endDate = this.controller.estimatedEndDate(tournamentBean);
+            LocalDate endDate = this.controller.estimateEndDate(tournamentBean);
             endDateLabel2.setText(DateConverter.dateToString(endDate));
             endDateLabel2.setVisible(true);
             tournamentBean.setEndDate(endDate);
@@ -361,10 +366,14 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         // Listen to user's choice
         alert.resultProperty().addListener((obs, oldResult, newResult) -> {
             this.controller.addTournament(tournamentBean);
-            if (newResult == yesButton) {
-                navigationManager.goToInvitePlayer(tournamentBean);
-            } else {
-                navigationManager.goToDashboard(Role.HOST);
+            try {
+                if (newResult == yesButton) {
+                    navigationManager.goToInvitePlayer(tournamentBean);
+                } else {
+                    navigationManager.goToDashboard(Role.HOST);
+                }
+            } catch (NavigationException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
             }
         });
     }
@@ -399,7 +408,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private boolean isTournamentNameInvalid() {
-        return tournamentNameField.getText().trim().isEmpty() || this.controller == null || this.controller.invalidTournamentName(tournamentBean);
+        return tournamentNameField.getText().trim().isEmpty() || this.controller == null || this.controller.tournamentAlreadyExists(tournamentBean);
     }
 
     private boolean isNumOfCourtsInvalid() {

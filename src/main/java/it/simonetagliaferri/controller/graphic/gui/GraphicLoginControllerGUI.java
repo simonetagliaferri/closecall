@@ -1,5 +1,6 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
+import it.simonetagliaferri.exception.NavigationException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
@@ -87,7 +88,11 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
         } else if (state == UIState.PASSWORD_INPUT) {
             String password = passwordField.getText().trim();
             if (login(usernameField.getText(), password)) {
-                navigationManager.goToDashboard(this.controller.getCurrentUserRole());
+                try {
+                    navigationManager.goToDashboard(this.controller.getCurrentUserRole());
+                } catch (NavigationException e) {
+                    new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+                }
             }
             else {
                 welcomeText.setText("Log in failed");
