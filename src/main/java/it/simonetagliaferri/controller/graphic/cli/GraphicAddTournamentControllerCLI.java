@@ -64,8 +64,8 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 startDate = DateConverter.formatDate(strDate);
                 if (this.controller.validStartDate(tournamentBean, startDate)) {
                     tournamentBean.setStartDate(startDate);
+                    validDate = true;
                 }
-                validDate = true;
             } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
             }
@@ -82,8 +82,8 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 deadline = DateConverter.formatDate(strDate);
                 if (this.controller.validSignupDeadline(tournamentBean, deadline)) {
                     tournamentBean.setSignupDeadline(deadline);
+                    validDate = true;
                 }
-                validDate = true;
             } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
             }
@@ -102,8 +102,8 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                     LocalDate newEndDate = DateConverter.formatDate(strEndDate);
                     if (this.controller.validEndDate(tournamentBean, newEndDate)) {
                         tournamentBean.setEndDate(newEndDate);
+                        validDate = true;
                     }
-                    validDate = true;
                 } catch (DateTimeException | InvalidDateException e) {
                     view.invalidDate();
                 }
