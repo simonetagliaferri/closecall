@@ -21,14 +21,14 @@ public abstract class DAOFactory {
      */
     public static DAOFactory getDAOFactory() {
         PersistenceProvider provider = PropertiesUtils.loadProperty(PERSISTENCE_PROPERTIES, PERSISTENCE_KEY, PersistenceProvider.class);
-        return getDaoFactory(provider);
+        return getDAOFactoryFromProvider(provider);
     }
 
     public static DAOFactory getDAOFactory(PersistenceProvider provider) {
-        return getDaoFactory(provider);
+        return getDAOFactoryFromProvider(provider);
     }
 
-    private static DAOFactory getDaoFactory(PersistenceProvider provider) {
+    private static DAOFactory getDAOFactoryFromProvider(PersistenceProvider provider) {
         switch (provider) {
             case FS:
                 return new FSDAOFactory();

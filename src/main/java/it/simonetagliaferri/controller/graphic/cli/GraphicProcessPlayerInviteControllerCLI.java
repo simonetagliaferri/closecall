@@ -39,10 +39,8 @@ public class GraphicProcessPlayerInviteControllerCLI extends GraphicController {
     }
 
     private void favouriteClub(InviteBean invite) {
-        if (this.controller.isNotSubscribed(invite)) {
-            if (view.addClubToFavourites() == InvitePlayersPlayerView.AddClubToFavourites.YES) {
+        if (this.controller.isNotSubscribed(invite) && view.addClubToFavourites() == InvitePlayersPlayerView.AddClubToFavourites.YES) {
                 this.controller.addClubToFavourites(invite);
-            }
         }
     }
 

@@ -1,3 +1,5 @@
+package integration;
+
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.logic.LoginApplicationController;
 import it.simonetagliaferri.exception.DuplicateUserException;
@@ -5,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public abstract class LoginControllerIntegrationTest {
+abstract class LoginControllerIntegrationTest {
 
     protected LoginApplicationController controller;
 

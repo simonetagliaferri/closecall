@@ -22,6 +22,7 @@ import java.util.List;
 
 public class GraphicProcessPlayerInviteControllerGUI extends GraphicController implements GUIController {
 
+    public static final String BLUE_BUTTON = "blue-button";
     private ProcessPlayerInviteApplicationController controller;
 
     @FXML private Accordion tournamentList;
@@ -77,10 +78,10 @@ public class GraphicProcessPlayerInviteControllerGUI extends GraphicController i
                 if (vBox == null) return;
                 Label subscribeLabel = new Label("Do you want to add this club to your favourites?");
                 Button yesButton = new Button("Yes");
-                yesButton.getStyleClass().add("blue-button");
+                yesButton.getStyleClass().add(BLUE_BUTTON);
                 yesButton.setOnAction(event1 -> addClubToFavourites(event1, invite));
                 Button noButton = new Button("No");
-                noButton.getStyleClass().add("blue-button");
+                noButton.getStyleClass().add(BLUE_BUTTON);
                 noButton.setOnAction(this::reload);
                 hBox.setSpacing(10);
                 hBox.getChildren().addAll(yesButton, noButton);
@@ -128,10 +129,10 @@ public class GraphicProcessPlayerInviteControllerGUI extends GraphicController i
         VBox vbox4 = new VBox();
         vbox4.setAlignment(Pos.TOP_RIGHT);
         Button acceptButton = new Button("Accept");
-        acceptButton.getStyleClass().add("blue-button");
+        acceptButton.getStyleClass().add(BLUE_BUTTON);
         acceptButton.setOnAction(event -> acceptInvite(event, inviteBean));
         Button declineButton = new Button("Decline");
-        declineButton.getStyleClass().add("blue-button");
+        declineButton.getStyleClass().add(BLUE_BUTTON);
         declineButton.setOnAction(event -> declineInvite(event, inviteBean));
         hbox2.getChildren().addAll(acceptButton, declineButton);
         vbox4.getChildren().add(hbox2);

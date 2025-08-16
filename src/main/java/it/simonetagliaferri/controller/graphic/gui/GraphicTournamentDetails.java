@@ -8,6 +8,8 @@ import java.util.List;
 
 public class GraphicTournamentDetails {
 
+    public static final String ACCORDION_LABEL = "accordion-label";
+
     protected List<Label> getTournamentDetails(TournamentBean tournamentBean) {
         List<Label> details = new ArrayList<>();
         Label tournamentName = new Label("Tournament name: " + tournamentBean.getTournamentName());
@@ -47,7 +49,7 @@ public class GraphicTournamentDetails {
         Label estimatedEndDate = new Label("Estimated end date: " + tournamentBean.getEndDate());
         details.add(estimatedEndDate);
         for (Label label : details) {
-            label.getStyleClass().add("accordion-label");
+            label.getStyleClass().add(ACCORDION_LABEL);
         }
         return details;
     }
@@ -69,7 +71,7 @@ public class GraphicTournamentDetails {
             }
         }
         for (Label label : teams) {
-            label.getStyleClass().add("accordion-label");
+            label.getStyleClass().add(ACCORDION_LABEL);
         }
         return teams;
     }
@@ -83,7 +85,7 @@ public class GraphicTournamentDetails {
             teams.addAll(getPlayers(confirmed));
         }
         for (Label label : teams) {
-            label.getStyleClass().add("accordion-label");
+            label.getStyleClass().add(ACCORDION_LABEL);
         }
         return teams;
     }

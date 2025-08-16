@@ -20,6 +20,7 @@ import java.util.List;
 
 public class GraphicJoinTournamentControllerGUI extends GraphicController implements GUIController {
 
+    public static final String BLUE_BUTTON = "blue-button";
     private JoinTournamentApplicationController controller;
     @FXML private Button searchButton;
     @FXML private TextField searchField;
@@ -64,10 +65,10 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
                 if (this.controller.isNotSubscribed(tournamentBean)) {
                     Label subscribeLabel = new Label("Do you want to add this club to your favourites?");
                     Button yesButton = new Button("Yes");
-                    yesButton.getStyleClass().add("blue-button");
+                    yesButton.getStyleClass().add(BLUE_BUTTON);
                     yesButton.setOnAction(event1 -> addClubToFavourites(event1, tournamentBean));
                     Button noButton = new Button("No");
-                    noButton.getStyleClass().add("blue-button");
+                    noButton.getStyleClass().add(BLUE_BUTTON);
                     noButton.setOnAction(this::showConfirmation);
                     HBox hBox = new HBox();
                     hBox.setSpacing(10);
@@ -125,7 +126,7 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
         HBox hbox2 = new HBox();
         VBox vbox4 = new VBox();
         Button joinButton = new Button("Join");
-        joinButton.getStyleClass().add("blue-button");
+        joinButton.getStyleClass().add(BLUE_BUTTON);
         vbox4.getChildren().add(joinButton);
         vbox4.setAlignment(Pos.BOTTOM_RIGHT);
         hbox2.getChildren().add(vbox4);

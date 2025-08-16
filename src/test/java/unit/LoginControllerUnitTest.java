@@ -1,3 +1,5 @@
+package unit;
+
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.logic.LoginApplicationController;
 import it.simonetagliaferri.exception.DuplicateUserException;
@@ -16,7 +18,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LoginControllerUnitTest {
+class LoginControllerUnitTest {
 
     LoginApplicationController controller;
 

@@ -1,3 +1,5 @@
+package integration;
+
 import it.simonetagliaferri.controller.logic.LoginApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.navigation.UIMode;
@@ -6,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
 @Tag("in-memory")
-public class LoginControllerInMemoryIntegrationTest extends LoginControllerIntegrationTest {
+class LoginControllerInMemoryIntegrationTest extends LoginControllerIntegrationTest {
 
     @BeforeEach
     void setup() {

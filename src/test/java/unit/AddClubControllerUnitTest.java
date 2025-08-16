@@ -1,3 +1,5 @@
+package unit;
+
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.controller.logic.AddClubApplicationController;
 import it.simonetagliaferri.exception.ClubAlreadyAddedException;
@@ -16,14 +18,14 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddClubControllerUnitTest {
+class AddClubControllerUnitTest {
 
     AddClubApplicationController controller;
     FakeClubDAO clubDAO = new FakeClubDAO();
     FakeHostDAO hostDAO = new FakeHostDAO();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         User user = new User("Test", "Test", Role.HOST);
         Host host = new Host("Test", "Test");
         FakeSessionManager sessionManager = new FakeSessionManager();

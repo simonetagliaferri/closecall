@@ -1,3 +1,5 @@
+package integration;
+
 import it.simonetagliaferri.controller.logic.LoginApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.navigation.UIMode;
@@ -8,7 +10,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Path;
 
 @Tag("integration")
-public class LoginControllerFSIntegrationTest extends LoginControllerIntegrationTest {
+class LoginControllerFSIntegrationTest extends LoginControllerIntegrationTest {
 
     @TempDir
     Path temp;

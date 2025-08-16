@@ -1,3 +1,5 @@
+package integration;
+
 import it.simonetagliaferri.controller.logic.LoginApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.navigation.UIMode;
@@ -13,11 +15,11 @@ import java.sql.DriverManager;
 import java.sql.Savepoint;
 
 @Tag("integration")
-public class LoginControllerJDBCIntegrationTest extends LoginControllerIntegrationTest {
+class LoginControllerJDBCIntegrationTest extends LoginControllerIntegrationTest {
 
     private Connection connection;
     private Savepoint savepoint;
-    private final static String DB_PROPERTIES = "src/main/resources/properties/db.properties";
+    private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
 
     @BeforeEach
     void open() throws Exception {
