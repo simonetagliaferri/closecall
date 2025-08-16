@@ -6,6 +6,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import java.io.Serializable;
 
 public class User implements Serializable {
+
     private final String username;
     private String password;
     private final String email;
@@ -51,10 +52,6 @@ public class User implements Serializable {
         this.password = hashPassword(this.password);
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public boolean isPasswordCorrect(String password) {
         String hashedPassword = hashPassword(password);
         if (this.password==null) return false;
@@ -63,6 +60,11 @@ public class User implements Serializable {
 
     public boolean isHost() {
         return this.role == Role.HOST;
+    }
+
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getUsername() {

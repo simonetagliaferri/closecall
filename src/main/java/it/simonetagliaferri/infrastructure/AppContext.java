@@ -2,7 +2,9 @@ package it.simonetagliaferri.infrastructure;
 
 import it.simonetagliaferri.infrastructure.navigation.NavigationManager;
 import it.simonetagliaferri.infrastructure.navigation.NavigationManagerFactory;
+import it.simonetagliaferri.infrastructure.navigation.UIMode;
 import it.simonetagliaferri.model.dao.DAOFactory;
+import it.simonetagliaferri.model.dao.PersistenceProvider;
 
 /**
  * The context needed for the application consists of the navigation manager, the session manager and the dao factory.
@@ -22,9 +24,21 @@ public class AppContext {
      * It calls DAOFactory's(abstract class) static getDAOFactory method to get the correct DAOFactory instance.
      */
     public AppContext() {
-        navigationManager = NavigationManagerFactory.getNavigationManager(this);
         sessionManager = new SessionManager();
         daoFactory = DAOFactory.getDAOFactory();
+        navigationManager = NavigationManagerFactory.getNavigationManager(this);
+    }
+
+    public AppContext(PersistenceProvider persistenceProvider, UIMode uiMode) {
+        sessionManager = new SessionManager();
+        daoFactory = DAOFactory.getDAOFactory(persistenceProvider);
+        navigationManager = NavigationManagerFactory.getNavigationManager(this, uiMode);
+    }
+
+    public AppContext(DAOFactory daoFactory, UIMode uiMode) {
+        sessionManager = new SessionManager();
+        this.daoFactory = daoFactory;
+        navigationManager = NavigationManagerFactory.getNavigationManager(this, uiMode);
     }
 
     public NavigationManager getNavigationManager() {

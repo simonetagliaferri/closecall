@@ -40,7 +40,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     private static final String GET_TOURNAMENTS_BY_PLAYER = "SELECT tournaments.clubName, tournaments.clubOwner, tournaments.tournamentName FROM tournaments JOIN teams " +
             "WHERE tournaments.tournamentName = teams.tournamentName AND tournaments.clubName = teams.clubName AND tournaments.clubOwner = " +
-            "teams.clubOwner AND teams.player1 = ? OR teams.player2 = ?";
+            "teams.clubOwner AND status = 'CONFIRMED' AND teams.player1 = ? OR teams.player2 = ?";
     public static final String TOURNAMENT_NAME = "tournamentName";
     public static final String PLAYER_1 = "player1";
     public static final String PLAYER_2 = "player2";

@@ -2,7 +2,7 @@ package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.AddClubLogicController;
+import it.simonetagliaferri.controller.logic.AddClubApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
 import javafx.beans.binding.BooleanBinding;
@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 
 public class GraphicAddClubControllerGUI extends GraphicController implements GUIController{
 
-    private AddClubLogicController controller;
+    private AddClubApplicationController controller;
 
     @FXML private HBox addClub;
     @FXML private VBox firstClubWarning;
@@ -32,7 +32,7 @@ public class GraphicAddClubControllerGUI extends GraphicController implements GU
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new AddClubLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getClubDAO(),
+        this.controller = new AddClubApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getClubDAO(),
                 appContext.getDAOFactory().getHostDAO());
         postInit();
     }

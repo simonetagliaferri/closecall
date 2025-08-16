@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<HBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicHostNotificationsControllerGUI">
+   <VBox fx:id="notificationList" alignment="TOP_CENTER"/>
+</HBox>

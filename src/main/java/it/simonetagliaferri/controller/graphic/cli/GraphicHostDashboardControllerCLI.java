@@ -1,12 +1,12 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.controller.logic.ManageTournamentsLogicController;
+import it.simonetagliaferri.controller.logic.ManageTournamentsApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.HostDashboardLogicController;
+import it.simonetagliaferri.controller.logic.HostDashboardApplicationController;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
@@ -15,18 +15,18 @@ import java.util.List;
 public class GraphicHostDashboardControllerCLI extends GraphicController {
 
     HostDashboardCLIView view;
-    HostDashboardLogicController controller;
+    HostDashboardApplicationController controller;
     HostBean currentUser;
 
-    ManageTournamentsLogicController tournamentController;
+    ManageTournamentsApplicationController tournamentController;
 
     public GraphicHostDashboardControllerCLI(AppContext appContext) {
         super(appContext);
         this.view = new HostDashboardCLIView();
-        this.controller = new HostDashboardLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
+        this.controller = new HostDashboardApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
         this.currentUser = this.controller.getHostBean();
 
-        this.tournamentController = new ManageTournamentsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+        this.tournamentController = new ManageTournamentsApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
 
     }

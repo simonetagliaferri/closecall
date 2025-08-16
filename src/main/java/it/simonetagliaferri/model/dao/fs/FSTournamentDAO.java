@@ -7,24 +7,32 @@ import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class FSTournamentDAO implements TournamentDAO {
+public class FSTournamentDAO extends FSDAO implements TournamentDAO {
 
-    private static final String FILE = "tournaments.db";
-    Map<String, List<Tournament>> tournaments;
+    private static final String FILE_NAME = "tournaments.db";
+    private final Map<String, List<Tournament>> tournaments;
 
-    public FSTournamentDAO() {
+    public FSTournamentDAO(Path baseDir) {
+        super(baseDir, FILE_NAME);
         tournaments = new HashMap<>();
         loadTournaments();
     }
 
     @SuppressWarnings("unchecked")
     private void loadTournaments() {
-        File file = new File(FILE);
-        if (!file.exists()) return; // Start empty if no file
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            tournaments = (Map<String, List<Tournament>>) ois.readObject();
+        Path f = file();
+        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(f))) {
+            Object obj = ois.readObject();
+            if (obj instanceof Map) {
+                Map<String, List<Tournament>> loaded = (Map<String, List<Tournament>>) obj;
+                tournaments.clear();
+                tournaments.putAll(loaded);
+            }
         } catch (EOFException e) {
             // Empty file, ignore
         } catch (IOException | ClassNotFoundException e) {
@@ -33,7 +41,8 @@ public class FSTournamentDAO implements TournamentDAO {
     }
 
     private void saveTournaments() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
+        Path f = file();
+        try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(f, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))) {
             oos.writeObject(tournaments);
         } catch (IOException e) {
             throw new DAOException("Error saving tournaments", e);
@@ -86,7 +95,7 @@ public class FSTournamentDAO implements TournamentDAO {
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
             for (Tournament tournament : entry.getValue()) {
                 location = tournament.getClub().getCity();
-                if (location.equals(city)) {
+                if (location.equalsIgnoreCase(city)) {
                     tournamentList.add(tournament);
                 }
             }
@@ -99,7 +108,7 @@ public class FSTournamentDAO implements TournamentDAO {
         List<Tournament> tournamentList = new ArrayList<>();
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
             for (Tournament tournament : entry.getValue()) {
-                if (tournament.playerAlreadyInATeam(player)) {
+                if (tournament.playerAlreadyConfirmed(player)) {
                     tournamentList.add(tournament);
                 }
             }

@@ -13,18 +13,21 @@ public class NavigationManagerCLI extends NavigationManager {
         super(appContext);
     }
 
-    public void login() {
-        sceneManager.login(this.appContext);
-    }
-
     /**
      * For CLI navigation the start method just calls the login method, it's here just for symmetry with the GUI navigation, in which
      * the start method calls the needed Application.launch() for JavaFX.
      */
+    @Override
     public void start() {
         login();
     }
 
+    @Override
+    public void login() {
+        sceneManager.login(this.appContext);
+    }
+
+    @Override
     public void goToDashboard(Role role) {
         if (role == Role.HOST) {
             sceneManager.hostDashboard(this.appContext);
@@ -34,22 +37,27 @@ public class NavigationManagerCLI extends NavigationManager {
         }
     }
 
+    @Override
     public void goToAddTournament() {
         sceneManager.addTournament(this.appContext);
     }
 
+    @Override
     public void goToAddClub() {
         sceneManager.addClub(this.appContext);
     }
 
+    @Override
     public void goToInvitePlayer(TournamentBean tournamentBean) {
         sceneManager.invitePlayer(this.appContext, tournamentBean);
     }
 
+    @Override
     public void goToProcessInvites() {
         sceneManager.goToProcessInvites(this.appContext);
     }
 
+    @Override
     public void goToJoinTournament() {
         sceneManager.joinTournament(this.appContext);
     }
@@ -59,6 +67,7 @@ public class NavigationManagerCLI extends NavigationManager {
         sceneManager.goToNotifications(this.appContext, role);
     }
 
+    @Override
     public void goHome(Role role) {
         goToDashboard(role);
     }

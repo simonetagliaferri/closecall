@@ -4,7 +4,7 @@ import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.SendPlayerInviteLogicController;
+import it.simonetagliaferri.controller.logic.SendPlayerInviteApplicationController;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
@@ -16,17 +16,13 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class GraphicInvitePlayersHostControllerGUI extends GraphicController implements GUIController {
 
-    private static final String PLAYER_INVITED = "Player has already been invited.";
-    private static final String PLAYER_NOT_REGISTERED = "The player is not registered. You have to enable the email invite.";
-
     private TournamentBean tournamentBean;
-    private SendPlayerInviteLogicController controller;
+    private SendPlayerInviteApplicationController controller;
 
     @FXML private Button confirmButton;
     @FXML private TextField player1NameField;
@@ -55,7 +51,7 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         BooleanBinding fieldEmpty = player1NameField.textProperty().isEmpty();
         confirmButton.disableProperty().bind(fieldEmpty);
         Platform.runLater(() -> {
-            this.controller = new SendPlayerInviteLogicController(appContext.getSessionManager(),
+            this.controller = new SendPlayerInviteApplicationController(appContext.getSessionManager(),
                     appContext.getDAOFactory().getPlayerDAO(), appContext.getDAOFactory().getTournamentDAO(),
                     appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO(),
                     tournamentBean);
@@ -100,13 +96,16 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
     }
 
     public void newInvite() {
-        if (tournamentBean.isSingles() && !this.controller.spotAvailable()) {
+        if (tournamentBean.isSingles() && this.controller.noSingleSpotsAvailable()) {
             title.setText("There are no more open spots available.");
             confirmButton.disableProperty();
         }
-        else if (!tournamentBean.isSingles() && !this.controller.teamAvailable()) {
+        else if (!tournamentBean.isSingles() && this.controller.noTeamSpotsAvailable()) {
             title.setText("There are no more spots to invite another team.");
             confirmButton.disableProperty();
+        }
+        else {
+            title.setText("Invite players to the tournament");
         }
     }
 
@@ -132,7 +131,7 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
 
     public void invitePlayer() {
         PlayerBean playerBean = getPlayerBean(player1NameField);
-        if (playerBean != null && !playerInvitedOrNotRegistered(playerBean, sendEmail(emailPlayer1))) {
+        if (playerBean != null && !playerInvitedOrNotRegistered(playerBean, sendEmail(emailPlayer1), player1NameField)) {
             title.setText("Invite players to the tournament");
             InviteBean inviteBean = new InviteBean(playerBean, expireDatePicker.getValue(), getMessagePlayer(player1Message), sendEmail(emailPlayer1));
             this.controller.invitePlayer(inviteBean);
@@ -149,12 +148,11 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         } else {
             playerBean = this.controller.isPlayerValid(playerName);
             if (playerBean == null) {
-                playerField.clear();
                 if (this.controller.isEmail(playerName)) {
-                    title.setText("An invite email will be sent to the entered email address.");
+                    title.setText("An invite email will be sent to the entered email address: " + playerName);
                     playerBean = new PlayerBean(playerName, playerName);
                 } else {
-                    title.setText("The player is not registered. Use an email address to send the invite via email.");
+                    title.setText("The player " + playerName + " is not registered. Use an email address to send the invite via email.");
                     return null;
                 }
             }
@@ -163,20 +161,28 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
     }
 
     public void addInvitedTeam(String ... players) {
-        for (String player : players) {
-            Label team = new Label(player);
-            invitedTeams.getChildren().add(team);
+        boolean first = true;
+        for (String s : players) {
+            Label player;
+            if (first) {
+                int number = invitedTeams.getChildren().size();
+                player = new Label(number + ". " + s);
+                first = false;
+            } else {
+                player = new Label("    " + s);
+            }
+            invitedTeams.getChildren().add(player);
         }
-
     }
 
-    private boolean playerInvitedOrNotRegistered(PlayerBean playerBean, boolean sendEmail) {
+    private boolean playerInvitedOrNotRegistered(PlayerBean playerBean, boolean sendEmail, TextField playerNameField) {
         if (this.controller.playerAlreadyInvited(playerBean)) {
-            title.setText(PLAYER_INVITED);
-            player1NameField.clear();
+            title.setText("Player " + playerNameField.getText() + " has already been invited.");
+            playerNameField.clear();
             return true;
         } else if (!this.controller.isPlayerRegistered(playerBean) && !sendEmail) {
-            title.setText(PLAYER_NOT_REGISTERED);
+            title.setText("The player " + playerNameField.getText() +" is not registered. You have to enable the email invite.");
+            playerNameField.clear();
             return true;
         }
         return false;
@@ -187,18 +193,18 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         PlayerBean playerBean2 = getPlayerBean(player2NameField);
         InviteBean inviteBean1;
         InviteBean inviteBean2;
-        if (playerBean1 != null && !playerInvitedOrNotRegistered(playerBean1, sendEmail(emailPlayer1))) {
-            title.setText("Invite players to the tournament");
+        if (playerBean1 != null && !playerInvitedOrNotRegistered(playerBean1, sendEmail(emailPlayer1), player1NameField)) {
             inviteBean1 = new InviteBean(playerBean1, expireDatePicker.getValue(), getMessagePlayer(player1Message), sendEmail(emailPlayer1));
-            if (playerBean2 != null && !playerInvitedOrNotRegistered(playerBean2, sendEmail(emailPlayer2))) {
+            if (playerBean2 != null && !playerInvitedOrNotRegistered(playerBean2, sendEmail(emailPlayer2), player2NameField)) {
                 inviteBean2 = new InviteBean(playerBean2, expireDatePicker.getValue(), getMessagePlayer(player2Message), sendEmail(emailPlayer2));
                 this.controller.inviteTeam(inviteBean1, inviteBean2);
                 addInvitedTeam(playerBean1.getUsername(), playerBean2.getUsername());
-            } else {
+                newInvite();
+            } else if (playerBean2 == null && player2NameField.getText().isEmpty()) {
                 this.controller.invitePlayer(inviteBean1);
                 addInvitedTeam(playerBean1.getUsername());
+                newInvite();
             }
-            newInvite();
         }
     }
 

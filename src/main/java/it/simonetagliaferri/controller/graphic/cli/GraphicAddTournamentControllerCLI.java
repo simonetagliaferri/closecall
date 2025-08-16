@@ -4,7 +4,7 @@ import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
+import it.simonetagliaferri.controller.logic.AddTournamentApplicationController;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
 import java.time.DateTimeException;
@@ -14,10 +14,10 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
 
     AddTournamentCLIView view;
     TournamentBean tournamentBean;
-    AddTournamentLogicController controller;
+    AddTournamentApplicationController controller;
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
-        this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+        this.controller = new AddTournamentApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getPlayerDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();

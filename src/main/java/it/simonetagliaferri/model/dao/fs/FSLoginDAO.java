@@ -5,37 +5,47 @@ import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.User;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FSLoginDAO implements LoginDAO {
+public class FSLoginDAO extends FSDAO implements LoginDAO {
 
-    private static final String FILE = "users.db";
-    private Map<String, User> users;
+    private static final String FILE_NAME = "users.db";
+    private final Map<String, User> users;
 
-    public FSLoginDAO() {
+    public FSLoginDAO(Path baseDir) {
+        super(baseDir, FILE_NAME);
         users = new HashMap<>();
         loadUsers();
     }
 
     @SuppressWarnings("unchecked")
     private void loadUsers() {
-        File file = new File(FILE);
-        if (!file.exists()) return; // Start empty if no file
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            users = (Map<String, User>) ois.readObject();
+        Path f = file();
+        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(f))) {
+            Object obj = in.readObject();
+            if (obj instanceof Map) {
+                Map<String, User> loaded = (Map<String, User>) obj;
+                users.clear();
+                users.putAll(loaded);
+            }
         } catch (EOFException e) {
-            // Empty file, ignore
+            // empty file: start with empty map
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Error loading users", e);
+            throw new DAOException("Error loading users from " + f, e);
         }
     }
 
     private void saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
-            oos.writeObject(users);
+        Path f = file();
+        try (ObjectOutputStream out = new ObjectOutputStream(
+                Files.newOutputStream(f, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))) {
+            out.writeObject(users);
         } catch (IOException e) {
-            throw new DAOException("Error saving users", e);
+            throw new DAOException("Error saving users to " + f, e);
         }
     }
 

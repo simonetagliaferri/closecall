@@ -3,10 +3,7 @@ package it.simonetagliaferri.model.domain;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.observer.Subscriber;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player extends User implements Subscriber {
 
@@ -30,12 +27,15 @@ public class Player extends User implements Subscriber {
     }
 
     public Map<Club, List<Tournament>> getNotifications() {
+        if (notifications == null) { return Collections.emptyMap(); }
         return notifications;
     }
 
     public void clearNotifications() {
-        for (Club club : notifications.keySet()) {
-            clearNotificationsForClub(club);
+        if (notifications != null) {
+            for (Club club : notifications.keySet()) {
+                clearNotificationsForClub(club);
+            }
         }
     }
 

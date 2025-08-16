@@ -3,7 +3,7 @@ package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.AddClubLogicController;
+import it.simonetagliaferri.controller.logic.AddClubApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.view.cli.AddClubCLIView;
 import it.simonetagliaferri.view.cli.AddClubCLIView.PreambleChoice;
@@ -12,12 +12,12 @@ import static it.simonetagliaferri.view.cli.AddClubCLIView.PreambleChoice.ADD_CL
 public class GraphicAddClubControllerCLI extends GraphicController {
 
     AddClubCLIView view;
-    AddClubLogicController controller;
+    AddClubApplicationController controller;
 
     public GraphicAddClubControllerCLI(AppContext appContext) {
         super(appContext);
         this.view = new AddClubCLIView();
-        this.controller = new AddClubLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getClubDAO(),
+        this.controller = new AddClubApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getClubDAO(),
                 appContext.getDAOFactory().getHostDAO());
     }
 

@@ -1,6 +1,7 @@
 package it.simonetagliaferri.exception;
 
 public class DAOException extends RuntimeException {
+
     public DAOException() {
         super();
     }

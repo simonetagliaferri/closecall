@@ -138,15 +138,15 @@ public class Club implements Publisher, Serializable {
         return subscribers;
     }
 
-    public boolean isSubscribed(Player player) {
+    public boolean isNotSubscribed(Player player) {
         if (subscribedPlayers != null) {
             for (Subscriber subscriber : subscribedPlayers) {
                 if (subscriber instanceof Player && ((Player) subscriber).isSameAs(player)) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public boolean addTournament(Tournament tournament) {
@@ -159,12 +159,7 @@ public class Club implements Publisher, Serializable {
         tournament.setClub(this);
         clubTournaments.add(tournament);
         tournament.subscribe(owner);
-        notifySubscribers(tournament);
         return true;
-    }
-
-    public List<Tournament> getClubTournaments() {
-        return clubTournaments;
     }
 
     public boolean tournamentAlreadyExists(Tournament tournament) {

@@ -10,10 +10,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * It handles JavaFX scenes. Everything other than the start method is static since JavaFX internally instantiates SceneManagerGUI when Application.launch(SceneManagerGUI.class) is called,
@@ -24,8 +26,35 @@ public class SceneManagerGUI extends Application {
     private static Scene scene;
     private static AppContext appContext = null;
 
-    public static void setAppContext(AppContext context) {
-        appContext = context;
+    public static void main(String[] args) {
+        launch();
+    }
+
+    /**
+     * The start method is not static because it's the method called by JavaFX after initializing its runtime.
+     */
+    @Override
+    public void start(Stage stage) throws IOException {
+        /*
+         * These two properties are set to fix blurry text.
+         */
+        System.setProperty("prism.lcdtext", "false");
+        System.setProperty("prism.text", "t2k");
+        double baseWidth = 1280;
+        double baseHeight = 720;
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/logo.png")));
+        stage.getIcons().add(icon);
+        stage.setMinWidth(baseWidth / 2);
+        stage.setMinHeight(baseHeight / 2);
+        FXMLLoader loader = getLoader("login");
+        Scene s = new Scene(loadFXML(loader), baseWidth, baseHeight);
+        URL css = getResource();
+        s.getStylesheets().add(css.toExternalForm());
+        stage.setScene(s);
+        stage.centerOnScreen();
+        stage.setTitle("CloseCall");
+        stage.show();
+        setScene(s);
     }
 
     public static void login() {
@@ -68,8 +97,22 @@ public class SceneManagerGUI extends Application {
         return root;
     }
 
+    public static <T extends GUIController> T loadWrapperWithContext(String fxml, HBox contentWrapper) {
+        FXMLLoader loader = getLoader(fxml);
+        Node root;
+        try {
+            root = SceneManagerGUI.getRoot(loader);
+        } catch (IOException e) {
+            throw new ViewLoadException("Failed to load view: " + fxml + " for the wrapper", e);
+        }
+        T controller = SceneManagerGUI.getController(loader);
+        controller.initializeController(appContext);
+        contentWrapper.getChildren().setAll(root);
+        return controller;
+    }
+
     public static FXMLLoader getLoader(String fxml) {
-        URL url = SceneManagerGUI.class.getResource("/hostView/gui/" + fxml + ".fxml");
+        URL url = SceneManagerGUI.class.getResource("/view/gui/" + fxml + ".fxml");
         if (url == null) {
             throw new ResourceNotFoundException("FXML not found: /hostView/gui/" + fxml + ".fxml");
         }
@@ -84,59 +127,20 @@ public class SceneManagerGUI extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
-
-    /**
-     * The start method is not static because it's the method called by JavaFX after initializing its runtime.
-     */
-    @Override
-    public void start(Stage stage) throws IOException {
-        /*
-         * These two properties are set to fix blurry text.
-         */
-        System.setProperty("prism.lcdtext", "false");
-        System.setProperty("prism.text", "t2k");
-        double baseWidth = 1280;
-        double baseHeight = 720;
-        stage.setMinWidth(baseWidth / 2);
-        stage.setMinHeight(baseHeight / 2);
-        FXMLLoader loader = getLoader("login");
-        Scene s = new Scene(loadFXML(loader), baseWidth, baseHeight);
-        URL css = getResourceOrThrow();
-        s.getStylesheets().add(css.toExternalForm());
-        stage.setScene(s);
-        stage.centerOnScreen();
-        stage.setTitle("CloseCall");
-        stage.show();
-        setScene(s);
-    }
-
-    private static URL getResourceOrThrow() {
-        URL url = SceneManagerGUI.class.getResource("/hostView/css/start.css");
+    private static URL getResource() {
+        URL url = SceneManagerGUI.class.getResource("/view/css/style.css");
         if (url == null) {
-            throw new ResourceNotFoundException("Resource not found: " + "/hostView/css/start.css");
+            throw new ResourceNotFoundException("Resource not found: " + "/view/css/style.css");
         }
         return url;
     }
 
-    public static <T extends GUIController> T loadWrapperWithContext(String fxml, VBox contentWrapper) {
-        FXMLLoader loader = getLoader(fxml);
-        Node root;
-        try {
-            root = SceneManagerGUI.getRoot(loader);
-        } catch (IOException e) {
-            throw new ViewLoadException("Failed to load view: " + fxml + " for the wrapper", e);
-        }
-        T controller = SceneManagerGUI.getController(loader);
-        controller.initializeController(appContext); // optional
-        contentWrapper.getChildren().setAll(root);
-        return controller;
-    }
-
     private static void setScene(Scene s) {
         scene = s;
+    }
+
+    public static void setAppContext(AppContext context) {
+        appContext = context;
     }
 
 }

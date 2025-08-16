@@ -58,7 +58,7 @@ public class InMemoryTournamentDAO implements TournamentDAO {
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
             for (Tournament tournament : entry.getValue()) {
                 location = tournament.getClub().getCity();
-                if (location.equals(city)) {
+                if (location.equalsIgnoreCase(city)) {
                     tournamentList.add(tournament);
                 }
             }
@@ -71,7 +71,7 @@ public class InMemoryTournamentDAO implements TournamentDAO {
         List<Tournament> tournamentList = new ArrayList<>();
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
             for (Tournament tournament : entry.getValue()) {
-                if (tournament.playerAlreadyInATeam(player)) {
+                if (tournament.playerAlreadyConfirmed(player)) {
                     tournamentList.add(tournament);
                 }
             }

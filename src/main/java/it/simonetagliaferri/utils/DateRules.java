@@ -37,7 +37,7 @@ public class DateRules {
     }
 
     public static LocalDate maxDeadline() {
-        return LocalDate.now().minusDays(1);
+        return LocalDate.now().plusDays(1);
     }
 
     public static LocalDate maxDeadline(LocalDate startDate) {

@@ -4,7 +4,7 @@ import it.simonetagliaferri.beans.InviteBean;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.SendPlayerInviteLogicController;
+import it.simonetagliaferri.controller.logic.SendPlayerInviteApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.InvitePlayersHostView;
@@ -16,11 +16,11 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
     InvitePlayersHostView view;
     TournamentBean tournamentBean;
-    SendPlayerInviteLogicController controller;
+    SendPlayerInviteApplicationController controller;
 
     public GraphicInvitePlayerControllerCLI(AppContext appContext, TournamentBean tournamentBean) {
         super(appContext);
-        this.controller = new SendPlayerInviteLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
+        this.controller = new SendPlayerInviteApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
                 appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO(),
                 tournamentBean);
         this.view = new InvitePlayersHostView();
@@ -73,7 +73,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
     }
 
     public void invite(LocalDate inviteExpireDate) {
-        if (!this.controller.spotAvailable()) {
+        if (this.controller.noSingleSpotsAvailable()) {
             view.fullTournament();
             return;
         }
@@ -117,7 +117,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
 
     public void inviteTeam(LocalDate inviteExpireDate) {
-        if (!this.controller.teamAvailable()) {
+        if (this.controller.noTeamSpotsAvailable()) {
             view.noSpaceForTeam();
             return;
         }

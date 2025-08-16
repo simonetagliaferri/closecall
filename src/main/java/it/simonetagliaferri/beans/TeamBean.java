@@ -7,8 +7,8 @@ import java.util.List;
 
 public class TeamBean {
     private final PlayerBean player1;
-    private PlayerBean player2;
-    private TournamentBean tournament;
+    private final PlayerBean player2;
+    private final TournamentBean tournament;
     private final TeamType type;
 
     public TeamBean(PlayerBean player, TeamType type, TournamentBean tournament) {
@@ -37,7 +37,4 @@ public class TeamBean {
         return tournament;
     }
 
-    public TeamType getType() {
-        return type;
-    }
 }

@@ -27,20 +27,6 @@ public class TeamRegistry implements Serializable {
         this.partialTeams = partialTeams;
     }
 
-    public List<Team> getConfirmedTeams() {
-        return confirmedTeams;
-    }
-    public List<Team> getPendingTeams() {
-        return pendingTeams;
-    }
-    public List<Team> getPartialTeams() {
-        return partialTeams;
-    }
-
-    public int getTotalTeams() {
-        return confirmedTeams.size() + pendingTeams.size() + partialTeams.size();
-    }
-
     public int takenSpots() {
         return confirmedTeams.size() + pendingTeams.size() + partialTeams.size()/2;
     }
@@ -63,23 +49,6 @@ public class TeamRegistry implements Serializable {
         } else {
             throw new IllegalArgumentException("A team must have either 1 or 2 players.");
         }
-    }
-
-    private TeamType getTeamType(boolean isSingles) {
-        if (isSingles) {
-            return TeamType.SINGLE;
-        } else return TeamType.DOUBLE;
-    }
-
-    public Team getReservedTeam(Player player) {
-        for (Team team : this.pendingTeams) {
-            for (Player p : team.getPlayers()) {
-                if (p.getUsername().equals(player.getUsername())) {
-                    return team;
-                }
-            }
-        }
-        return null;
     }
 
     public void processInviteForSingles(Invite invite, Team team) {
@@ -153,6 +122,13 @@ public class TeamRegistry implements Serializable {
         return false;
     }
 
+    public boolean playerAlreadyConfirmed(Player player) {
+        for (Team team : confirmedTeams) {
+            if (team.hasPlayer(player)) return true;
+        }
+        return false;
+    }
+
     public Player addPlayer(Player player, boolean isSingles, Tournament tournament) {
         Player p = null;
         if (isSingles) {
@@ -179,11 +155,42 @@ public class TeamRegistry implements Serializable {
         return p;
     }
 
+
     public void setTeamsNumber(int teamsNumber) {
         this.teamsNumber = teamsNumber;
     }
 
     public int getTeamsNumber() {
         return teamsNumber;
+    }
+
+    private TeamType getTeamType(boolean isSingles) {
+        if (isSingles) {
+            return TeamType.SINGLE;
+        } else return TeamType.DOUBLE;
+    }
+
+    public Team getReservedTeam(Player player) {
+        for (Team team : this.pendingTeams) {
+            for (Player p : team.getPlayers()) {
+                if (p.getUsername().equals(player.getUsername())) {
+                    return team;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Team> getConfirmedTeams() {
+        return confirmedTeams;
+    }
+    public List<Team> getPendingTeams() {
+        return pendingTeams;
+    }
+    public List<Team> getPartialTeams() {
+        return partialTeams;
+    }
+    public int getTotalTeams() {
+        return confirmedTeams.size() + pendingTeams.size() + partialTeams.size();
     }
 }

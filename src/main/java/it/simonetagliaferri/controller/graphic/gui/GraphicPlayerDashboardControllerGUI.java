@@ -1,8 +1,7 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
 import it.simonetagliaferri.beans.PlayerBean;
-import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.PlayerDashboardLogicController;
+import it.simonetagliaferri.controller.logic.PlayerDashboardApplicationController;
 import it.simonetagliaferri.exception.NavigationException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.infrastructure.SceneManagerGUI;
@@ -12,17 +11,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 import java.util.Arrays;
 import java.util.List;
 
-public class GraphicPlayerDashboardControllerGUI extends GraphicController implements GUIController {
+public class GraphicPlayerDashboardControllerGUI extends GraphicDashboardControllerGUI {
 
-    PlayerDashboardLogicController controller;
+    PlayerDashboardApplicationController controller;
 
-    @FXML private VBox contentWrapper;
+    @FXML private HBox contentWrapper;
     @FXML private MenuButton account;
     @FXML private ToggleButton home;
     @FXML private ToggleButton joinTournament;
@@ -46,7 +44,7 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new PlayerDashboardLogicController(appContext.getSessionManager(),
+        this.controller = new PlayerDashboardApplicationController(appContext.getSessionManager(),
                 appContext.getDAOFactory().getPlayerDAO(),
                 appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO());
@@ -66,23 +64,7 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicController imple
     }
 
     private void setButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
-        ToggleGroup tabs = new ToggleGroup();
-        for (int i = 0; i < buttons.size(); i++) {
-            ToggleButton button = buttons.get(i);
-            button.setToggleGroup(tabs);
-            button.setText("");
-            button.setGraphic(icons.get(i));
-            button.setMinHeight(40);
-            button.setMaxHeight(40);
-            button.setMinWidth(40);
-            button.setMaxWidth(40);
-        }
-        tabs.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == null) {
-                oldToggle.setSelected(true);
-            }
-        });
-        buttons.get(0).setSelected(true);
+        setDashboardButtons(buttons, icons);
     }
 
     @FXML

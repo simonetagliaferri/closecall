@@ -36,18 +36,32 @@ public class HostDashboardCLIView {
     }
 
     public void listTournaments(List<TournamentBean> tournaments) {
-        for (TournamentBean tournamentBean : tournaments) {
-            CliUtils.println("Tournament " + tournamentBean.getTournamentName());
-            CliUtils.println("Club " + tournamentBean.getClub().getName());
-            CliUtils.println("Join fee " + tournamentBean.getJoinFee());
-            CliUtils.println("Court price " + tournamentBean.getCourtPrice());
-            CliUtils.println("Teams: ");
-            for (TeamBean teamBean : tournamentBean.getConfirmedTeams()) {
-                for (PlayerBean playerBean : teamBean.getPlayers()) {
-                    CliUtils.println("\t" + playerBean.getUsername());
+        for (TournamentBean tournament : tournaments) {
+            CliUtils.println("Tournament name: " + tournament.getTournamentName());
+            CliUtils.println("Tournament format: " + tournament.getTournamentFormat());
+            CliUtils.println("Tournament type: " + tournament.getTournamentType());
+            CliUtils.println("Court type: " + tournament.getCourtType());
+            CliUtils.println("Number of teams: " + tournament.getTeamsNumber());
+            CliUtils.println("Available spots: " + tournament.getAvailableSpots());
+            CliUtils.println("Tournament join fee: " + tournament.getJoinFee());
+            String courtPrice = tournament.getCourtPrice() > 0 ? Double.toString(tournament.getCourtPrice()) : "Included in join fee";
+            CliUtils.println("Court costs: " + courtPrice);
+            CliUtils.print("Prizes:");
+            if (!tournament.getPrizes().isEmpty()) {
+                CliUtils.println("");
+                for (int i = 0; i < tournament.getPrizes().size(); i++) {
+                    double prize = tournament.getPrizes().get(i);
+                    int place = i + 1;
+                    CliUtils.println(place + ": " + prize);
                 }
             }
-            CliUtils.println("");
+            else CliUtils.println("none");
+            CliUtils.println("Confirmed teams:");
+            getPlayers(tournament.getConfirmedTeams());
+            CliUtils.println("Pending teams:");
+            getPlayers(tournament.getPendingTeams());
+            CliUtils.println("Partial teams:");
+            getPlayers(tournament.getPartialTeams());
         }
     }
 
@@ -60,6 +74,23 @@ public class HostDashboardCLIView {
 
     public void noTournaments() {
         CliUtils.println("No tournaments found.");
+    }
+
+    private void getPlayers(List<TeamBean> teams) {
+        for (int i = 0; i < teams.size() ; i++) {
+            boolean first = true;
+            for (PlayerBean playerBean : teams.get(i).getPlayers()) {
+                if (playerBean != null) {
+                    if (first) {
+                        int number = i + 1;
+                        CliUtils.println("\t" + number + ". " + playerBean.getUsername());
+                        first = false;
+                    } else {
+                        CliUtils.println("\t    " + playerBean.getUsername());
+                    }
+                }
+            }
+        }
     }
 
 }

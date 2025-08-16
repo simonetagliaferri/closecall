@@ -35,15 +35,7 @@ public class InviteBean {
     public void setPlayer(PlayerBean player) {
         this.player = player;
     }
-    public void setSendDate(LocalDate sendDate) {
-        this.sendDate = sendDate;
-    }
-    public void setExpiryDate(LocalDate expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-    public void setStatus(InviteStatus status) {
-        this.status = status;
-    }
+
     public void setMessage(String message) {
         this.message = message;
     }
@@ -53,23 +45,16 @@ public class InviteBean {
     public PlayerBean getPlayer() {
         return player;
     }
-    public LocalDate getSendDate() {
-        return sendDate;
-    }
+
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
-    public InviteStatus getStatus() {
-        return status;
-    }
+
     public String getMessage() {
         return message;
     }
     public boolean getSendEmail() {
         return sendEmail;
-    }
-    public void setSendEmail(boolean sendEmail) {
-        this.sendEmail = sendEmail;
     }
 
 }

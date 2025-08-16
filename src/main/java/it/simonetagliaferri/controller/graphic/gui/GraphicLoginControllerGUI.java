@@ -4,7 +4,7 @@ import it.simonetagliaferri.exception.NavigationException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.LoginLogicController;
+import it.simonetagliaferri.controller.logic.LoginApplicationController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -19,7 +19,7 @@ import javafx.util.Duration;
 
 public class GraphicLoginControllerGUI extends GraphicController implements GUIController {
 
-    private LoginLogicController controller;
+    private LoginApplicationController controller;
     private UIState state = UIState.USERNAME_INPUT;
     private boolean showingTempMessage = false;
 
@@ -42,7 +42,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new LoginLogicController(appContext.getSessionManager(),
+        this.controller = new LoginApplicationController(appContext.getSessionManager(),
                 appContext.getDAOFactory().getLoginDAO(),
                 appContext.getDAOFactory().getHostDAO(),
                 appContext.getDAOFactory().getPlayerDAO());

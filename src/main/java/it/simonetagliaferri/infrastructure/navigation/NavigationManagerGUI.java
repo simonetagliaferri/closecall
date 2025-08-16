@@ -23,6 +23,7 @@ public class NavigationManagerGUI extends NavigationManager {
     /**
      * The start method calls the SceneManagerGUI's setAppContext method so that the app context can be passed to the graphic controller.
      */
+    @Override
     public void start() {
         SceneManagerGUI.setAppContext(appContext);
         Application.launch(SceneManagerGUI.class);
@@ -31,10 +32,12 @@ public class NavigationManagerGUI extends NavigationManager {
     /**
      * Navigates to the login screen.
      */
+    @Override
     public void login() {
         SceneManagerGUI.login();
     }
 
+    @Override
     public void goToDashboard(Role role) {
         try {
             if (role == Role.HOST) {
@@ -49,6 +52,7 @@ public class NavigationManagerGUI extends NavigationManager {
         }
     }
 
+    @Override
     public void goToAddTournament() {
         try {
             this.graphicHostDashboardControllerGUI.showAddTournament();
@@ -59,6 +63,7 @@ public class NavigationManagerGUI extends NavigationManager {
         }
     }
 
+    @Override
     public void goToAddClub() {
         try {
             this.graphicHostDashboardControllerGUI.showAddClub();
@@ -80,6 +85,7 @@ public class NavigationManagerGUI extends NavigationManager {
         }
     }
 
+    @Override
     public void goToJoinTournament() {
         try {
             this.graphicPlayerDashboardControllerGUI.showJoinTournament();

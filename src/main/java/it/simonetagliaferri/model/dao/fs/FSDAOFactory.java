@@ -2,7 +2,21 @@ package it.simonetagliaferri.model.dao.fs;
 
 import it.simonetagliaferri.model.dao.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class FSDAOFactory extends DAOFactory {
+
+    private final Path baseDir;
+
+    public FSDAOFactory() {
+        this(Paths.get("data"));
+    }
+
+    /** Tests: point to @TempDir so every test is isolated. */
+    public FSDAOFactory(Path baseDir) {
+        this.baseDir = baseDir;
+    }
 
     private LoginDAO loginDAO;
     private TournamentDAO tournamentDAO;
@@ -13,7 +27,7 @@ public class FSDAOFactory extends DAOFactory {
     @Override
     public LoginDAO getLoginDAO() {
         if (loginDAO == null) {
-            loginDAO = new FSLoginDAO();
+            loginDAO = new FSLoginDAO(baseDir);
         }
         return loginDAO;
     }
@@ -21,7 +35,7 @@ public class FSDAOFactory extends DAOFactory {
     @Override
     public TournamentDAO getTournamentDAO() {
         if (tournamentDAO == null) {
-            tournamentDAO = new FSTournamentDAO();
+            tournamentDAO = new FSTournamentDAO(baseDir);
         }
         return tournamentDAO;
     }
@@ -29,7 +43,7 @@ public class FSDAOFactory extends DAOFactory {
     @Override
     public HostDAO getHostDAO() {
         if (hostDAO == null) {
-            hostDAO = new FSHostDAO();
+            hostDAO = new FSHostDAO(baseDir);
         }
         return hostDAO;
     }
@@ -37,7 +51,7 @@ public class FSDAOFactory extends DAOFactory {
     @Override
     public PlayerDAO getPlayerDAO() {
         if (playerDAO == null) {
-            playerDAO = new FSPlayerDAO();
+            playerDAO = new FSPlayerDAO(baseDir);
         }
         return playerDAO;
     }
@@ -45,7 +59,7 @@ public class FSDAOFactory extends DAOFactory {
     @Override
     public ClubDAO getClubDAO() {
         if (clubDAO == null) {
-            clubDAO = new FSClubDAO();
+            clubDAO = new FSClubDAO(baseDir);
         }
         return clubDAO;
     }

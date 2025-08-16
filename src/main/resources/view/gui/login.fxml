@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<StackPane styleClass="classic-pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicLoginControllerGUI">
+   <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="classic-pane">
+      <columnConstraints>
+         <ColumnConstraints hgrow="SOMETIMES" />
+         <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" prefWidth="441.0" />
+         <ColumnConstraints hgrow="SOMETIMES" />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="NEVER" />
+         <RowConstraints vgrow="SOMETIMES" />
+      </rowConstraints>
+      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="33.0" prefWidth="441.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
+         <GridPane.margin>
+            <Insets bottom="30.0" />
+         </GridPane.margin>
+         <Text fx:id="welcomeText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="big-text" text="Welcome to the court." textOrigin="CENTER">
+         </Text>
+      </HBox>
+      <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="441.0" minHeight="-Infinity" prefHeight="30.0" promptText="Username" styleClass="text-field" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </TextField>
+      <TextFlow fx:id="subtitle" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="14.0" prefWidth="441.0" styleClass="text" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets bottom="15.0" />
+         </GridPane.margin>
+         <Text fx:id="subText" strokeType="OUTSIDE" strokeWidth="0.0" text="First time here?">
+         </Text>
+         <Hyperlink fx:id="subHyper" onAction="#handleSubHyperClick" styleClass="hyperlink" text="Create account">
+         </Hyperlink>
+      </TextFlow>
+      <HBox fx:id="divider" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <Line endX="90.0" startX="-120.0" HBox.hgrow="NEVER">
+            <HBox.margin>
+               <Insets right="2.0" />
+            </HBox.margin>
+         </Line>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="or" textAlignment="CENTER" textOrigin="CENTER" HBox.hgrow="NEVER">
+            <HBox.margin>
+               <Insets bottom="5.0" />
+            </HBox.margin>
+         </Text>
+         <Line endX="90.0" startX="-120.0" />
+      </HBox>
+      <Button fx:id="mainButton" alignment="CENTER" defaultButton="true" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#handleMainButton" prefHeight="30.0" prefWidth="250.0" styleClass="blue-button" text="Continue" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </GridPane.margin>
+         <font>
+            <Font name="Noto Sans Regular" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="googleLogin" alignment="BOTTOM_LEFT" graphicTextGap="35.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#handleGoogleLogin" prefHeight="30.0" prefWidth="250.0" styleClass="border-button" text="Continue with Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5">
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../images/google-login.png" />
+            </ImageView>
+         </graphic>
+         <GridPane.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </GridPane.margin>
+      </Button>
+      <Hyperlink fx:id="passResetHyper" onAction="#handlePassResetHyper" styleClass="hyperlink" text="Reset your password" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+      </Hyperlink>
+      <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="441.0" minHeight="-Infinity" prefHeight="30.0" promptText="Password" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      </PasswordField>
+      <Button fx:id="signupButton" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#handleSignupButton" prefHeight="30.0" prefWidth="250.0" styleClass="blue-button" text="Sign up" textFill="WHITE" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets top="5.0" />
+         </GridPane.margin>
+      </Button>
+      <TextField fx:id="emailField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Email" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      </TextField>
+      <PasswordField fx:id="passwordFieldSignup" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Password" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+      </PasswordField>
+      <PasswordField fx:id="confirmPassField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="Confirm password" styleClass="text-field" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+      </PasswordField>
+      <Spinner fx:id="roleSpinner" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="spinner" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+   </GridPane>
+</StackPane>

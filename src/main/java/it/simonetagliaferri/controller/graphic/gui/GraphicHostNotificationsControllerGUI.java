@@ -3,7 +3,7 @@ package it.simonetagliaferri.controller.graphic.gui;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.HandleNotificationsLogicController;
+import it.simonetagliaferri.controller.logic.HandleNotificationsApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,12 +14,12 @@ import java.util.Map;
 
 public class GraphicHostNotificationsControllerGUI extends GraphicController implements GUIController {
 
-    HandleNotificationsLogicController controller;
+    HandleNotificationsApplicationController controller;
     @FXML private VBox notificationList;
 
     @Override
     public void initializeController(AppContext appContext) {
-        this.controller = new HandleNotificationsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
+        this.controller = new HandleNotificationsApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
                 appContext.getDAOFactory().getHostDAO());
         getNotifications();
     }
@@ -48,7 +48,7 @@ public class GraphicHostNotificationsControllerGUI extends GraphicController imp
     }
 
     private void showPlayer(PlayerBean playerBean) {
-        Label playerName = new Label("\t" + playerBean.getUsername());
+        Label playerName = new Label(playerBean.getUsername());
         notificationList.getChildren().add(playerName);
     }
 

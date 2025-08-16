@@ -5,24 +5,32 @@ import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class FSClubDAO implements ClubDAO {
+public class FSClubDAO extends FSDAO implements ClubDAO {
 
-    private static final String FILE = "clubs.db";
-    Map<String, Club> clubs;
+    private static final String FILE_NAME = "clubs.db";
+    private final Map<String, Club> clubs;
 
-    public FSClubDAO() {
+    public FSClubDAO(Path baseDir) {
+        super(baseDir, FILE_NAME);
         clubs = new HashMap<>();
         loadClubs();
     }
 
     @SuppressWarnings("unchecked")
     private void loadClubs() {
-        File file = new File(FILE);
-        if (!file.exists()) return; // Start empty if no file
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            clubs = (Map<String, Club>) ois.readObject();
+        Path f = file();
+        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(f))) {
+            Object obj = ois.readObject();
+            if (obj instanceof Map) {
+                Map<String, Club> loaded = (Map<String, Club>) obj;
+                clubs.clear();
+                clubs.putAll(loaded);
+            }
         } catch (EOFException e) {
             // Empty file, ignore
         } catch (IOException | ClassNotFoundException e) {
@@ -31,7 +39,8 @@ public class FSClubDAO implements ClubDAO {
     }
 
     private void saveClubs() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
+        Path f = file();
+        try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(f, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))) {
             oos.writeObject(clubs);
         } catch (IOException e) {
             throw new DAOException("Error saving clubs", e);

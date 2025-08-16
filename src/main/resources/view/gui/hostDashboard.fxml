@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox alignment="CENTER_LEFT" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicHostDashboardControllerGUI">
+    <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0" styleClass="box" VBox.vgrow="NEVER">
+      <Text styleClass="logo" text="CloseCall" />
+        <Region HBox.hgrow="SOMETIMES" />
+      <MenuButton fx:id="clubDetails" alignment="CENTER" mnemonicParsing="false" visible="false" />
+        <HBox alignment="CENTER_LEFT" styleClass="box">
+            <MenuButton fx:id="account" alignment="CENTER" mnemonicParsing="false" styleClass="menu-button" text="MenuButton">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#logout" styleClass="menu-item" text="Logout" />
+                </items>
+            </MenuButton>
+            <FontIcon fx:id="notificationBell" iconLiteral="oct-bell-16" iconSize="16" onMouseReleased="#openNotifications" text="" />
+        </HBox>
+        <VBox.margin>
+        </VBox.margin>
+    </HBox>
+    <HBox styleClass="box" VBox.vgrow="ALWAYS">
+        <VBox alignment="CENTER" styleClass="box">
+            <HBox.margin>
+                <Insets left="10.0" right="20.0" />
+            </HBox.margin>
+            <ToggleButton fx:id="home" mnemonicParsing="false" onAction="#changeScreen" styleClass="control-button" text="ToggleButton">
+                <VBox.margin>
+                    <Insets bottom="5.0" top="5.0" />
+                </VBox.margin>
+            </ToggleButton>
+            <ToggleButton fx:id="newTournaments" mnemonicParsing="false" onAction="#changeScreen" styleClass="control-button" text="ToggleButton">
+                <VBox.margin>
+                    <Insets bottom="5.0" />
+                </VBox.margin>
+            </ToggleButton>
+        </VBox>
+        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" HBox.hgrow="ALWAYS">
+            <fx:include fx:id="contentWrapper" source="contentWrapper.fxml" visible="true" />
+        </ScrollPane>
+    </HBox>
+</VBox>

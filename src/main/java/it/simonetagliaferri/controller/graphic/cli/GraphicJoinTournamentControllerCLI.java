@@ -2,7 +2,7 @@ package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.JoinTournamentLogicController;
+import it.simonetagliaferri.controller.logic.JoinTournamentApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
 
@@ -10,12 +10,12 @@ import java.util.List;
 
 public class GraphicJoinTournamentControllerCLI extends GraphicController {
 
-    JoinTournamentLogicController controller;
+    JoinTournamentApplicationController controller;
     JoinTournamentView view;
 
     public GraphicJoinTournamentControllerCLI(AppContext appContext) {
         super(appContext);
-        this.controller = new JoinTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+        this.controller = new JoinTournamentApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(), appContext.getDAOFactory().getHostDAO(),
                 appContext.getDAOFactory().getPlayerDAO());
         this.view = new JoinTournamentView();
@@ -41,7 +41,7 @@ public class GraphicJoinTournamentControllerCLI extends GraphicController {
             if (result == JoinTournamentView.JoinError.SUCCESS) {
                 view.success();
                 tournamentList = false;
-                if (!this.controller.isSubscribed(tournamentBean)) {
+                if (this.controller.isNotSubscribed(tournamentBean)) {
                     addClubToFavourites(tournamentBean);
                 }
             }

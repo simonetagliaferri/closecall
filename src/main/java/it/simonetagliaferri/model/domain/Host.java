@@ -20,10 +20,13 @@ public class Host extends User implements Subscriber {
     }
 
     public void clearNotifications() {
-        newPlayers.clear();
+        if (newPlayers != null) {
+            newPlayers.clear();
+        }
     }
 
     public Map<Tournament, List<Player>> getNewPlayers() {
+        if (newPlayers == null) { return Collections.emptyMap(); }
         return newPlayers;
     }
 

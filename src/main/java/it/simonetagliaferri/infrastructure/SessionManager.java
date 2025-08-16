@@ -9,7 +9,7 @@ import it.simonetagliaferri.model.domain.User;
  */
 public class SessionManager {
 
-    SessionManager() {}
+    protected SessionManager() {}
 
     private User currentUser;
 

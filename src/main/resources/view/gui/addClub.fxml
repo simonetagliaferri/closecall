@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="addClub" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicAddClubControllerGUI">
+   <StackPane alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+      <VBox fx:id="firstClubWarning" alignment="TOP_CENTER" visible="false">
+         <Label maxWidth="500.0" styleClass="label"
+                text="Hey there. It looks like it's your first time around here. To be an actual host on our platform, you need to have at least one club. What do you say? Are you ready to add a new club?"
+                wrapText="true">
+            <font>
+               <Font name="Noto Sans Regular" size="12.0"/>
+            </font>
+            <VBox.margin>
+               <Insets bottom="20.0"/>
+            </VBox.margin>
+         </Label>
+         <HBox alignment="CENTER">
+            <Button minHeight="-Infinity" mnemonicParsing="false" onAction="#addClub" prefHeight="30.0"
+                    prefWidth="50.0" styleClass="blue-button" text="Yes">
+               <HBox.margin>
+                  <Insets right="10.0"/>
+               </HBox.margin>
+            </Button>
+            <Button minHeight="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="30.0"
+                    prefWidth="50.0" styleClass="gray-button" text="No">
+               <HBox.margin>
+                  <Insets left="10.0"/>
+               </HBox.margin>
+            </Button>
+         </HBox>
+      </VBox>
+      <VBox fx:id="clubDetails" alignment="TOP_CENTER" maxWidth="-Infinity" prefWidth="441.0" visible="false">
+         <VBox styleClass="box">
+            <Label styleClass="text" text="Club name"/>
+            <TextField fx:id="clubName" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="Street"/>
+            <TextField fx:id="clubStreet" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="Number"/>
+            <TextField fx:id="clubNumber" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="City"/>
+            <TextField fx:id="clubCity" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="Zip code"/>
+            <TextField fx:id="clubZip" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="State"/>
+            <TextField fx:id="clubState" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="Country"/>
+            <TextField fx:id="clubCountry" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <VBox styleClass="box">
+            <Label styleClass="text" text="Phone"/>
+            <TextField fx:id="clubPhone" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
+                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+         </VBox>
+         <HBox alignment="CENTER">
+            <padding>
+               <Insets top="20.0"/>
+            </padding>
+            <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity"
+                    mnemonicParsing="false" onAction="#confirmClubDetails" prefHeight="30.0" prefWidth="125.0"
+                    styleClass="blue-button" text="Confirm"/>
+         </HBox>
+      </VBox>
+   </StackPane>
+</HBox>

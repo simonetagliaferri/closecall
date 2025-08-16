@@ -5,7 +5,7 @@ import it.simonetagliaferri.exception.NavigationException;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.AddTournamentLogicController;
+import it.simonetagliaferri.controller.logic.AddTournamentApplicationController;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class GraphicAddTournamentControllerGUI extends GraphicController implements GUIController {
 
-    private AddTournamentLogicController controller;
+    private AddTournamentApplicationController controller;
     private final TournamentBean tournamentBean = new TournamentBean();
 
     @FXML private ChoiceBox<String> tournamentTypeChoice;
@@ -62,7 +62,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     @Override
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
-        this.controller = new AddTournamentLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
+        this.controller = new AddTournamentApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
                 appContext.getDAOFactory().getClubDAO(),
                 appContext.getDAOFactory().getPlayerDAO());
     }

@@ -66,8 +66,4 @@ public class ClubBean {
         return owner;
     }
 
-    public String getAddress() {
-        return street + " " + number + " " + city + " " + state + " " + zip + " " + country;
-    }
-
 }

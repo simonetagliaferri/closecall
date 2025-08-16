@@ -5,17 +5,17 @@ import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.LoginCLIView;
-import it.simonetagliaferri.controller.logic.LoginLogicController;
+import it.simonetagliaferri.controller.logic.LoginApplicationController;
 
 public class GraphicLoginControllerCLI extends GraphicController {
 
     LoginCLIView view;
-    LoginLogicController controller;
+    LoginApplicationController controller;
 
     public GraphicLoginControllerCLI(AppContext appContext) {
         super(appContext);
         this.view = new LoginCLIView();
-        this.controller = new LoginLogicController(appContext.getSessionManager(),
+        this.controller = new LoginApplicationController(appContext.getSessionManager(),
                 appContext.getDAOFactory().getLoginDAO(),
                 appContext.getDAOFactory().getHostDAO(),
                 appContext.getDAOFactory().getPlayerDAO());

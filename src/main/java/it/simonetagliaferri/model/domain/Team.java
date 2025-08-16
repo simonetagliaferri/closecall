@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Team implements Serializable {
+
     private Player player1;
     private Player player2;
     private final Tournament tournament;
@@ -17,6 +18,7 @@ public class Team implements Serializable {
         this.tournament = tournament;
         this.type = type;
     }
+
     public Team(Player player1, Player player2, Tournament tournament) {
         this.player1 = player1;
         this.player2 = player2;
@@ -26,35 +28,6 @@ public class Team implements Serializable {
         } else {
             this.type = TeamType.SINGLE;
         }
-    }
-
-    public List<Player> getPlayers() {
-        List<Player> players = new ArrayList<>();
-        players.add(player1);
-        if (type == TeamType.DOUBLE) players.add(player2);
-        return players;
-    }
-
-    public TeamStatus getStatus() {
-        return status;
-    }
-    public void setStatus(TeamStatus status) {
-        this.status = status;
-    }
-
-    public Player getPlayer1() {
-        return player1;
-    }
-    public Player getPlayer2() {
-        return player2;
-    }
-
-    public Tournament getTournament() {
-        return tournament;
-    }
-
-    public Player getPlayer() {
-        return player1 != null ? player1 : player2;
     }
 
     public boolean isFull() {
@@ -73,16 +46,6 @@ public class Team implements Serializable {
         }
     }
 
-    public Player getOtherPlayer(String player) {
-        if (player1.getUsername().equals(player)) {
-            return player2;
-        }
-        else if (player2.getUsername().equals(player)) {
-            return player1;
-        }
-        return null;
-    }
-
     public void removePlayer(Player player) {
         if (player2.getUsername().equals(player.getUsername())) {
             this.player2=null;
@@ -96,8 +59,45 @@ public class Team implements Serializable {
         return player.isSameAs(player1) || player.isSameAs(player2);
     }
 
+    public void setStatus(TeamStatus status) {
+        this.status = status;
+    }
+
     public TeamType getType() {
         return type;
+    }
+
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<>();
+        players.add(player1);
+        if (type == TeamType.DOUBLE) players.add(player2);
+        return players;
+    }
+
+    public Player getOtherPlayer(String player) {
+        if (player1.getUsername().equals(player)) {
+            return player2;
+        }
+        else if (player2.getUsername().equals(player)) {
+            return player1;
+        }
+        return null;
+    }
+
+    public TeamStatus getStatus() {
+        return status;
+    }
+    public Player getPlayer1() {
+        return player1;
+    }
+    public Player getPlayer2() {
+        return player2;
+    }
+    public Tournament getTournament() {
+        return tournament;
+    }
+    public Player getPlayer() {
+        return player1 != null ? player1 : player2;
     }
 
 }

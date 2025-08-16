@@ -3,7 +3,7 @@ package it.simonetagliaferri.controller.graphic.cli;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
-import it.simonetagliaferri.controller.logic.HandleNotificationsLogicController;
+import it.simonetagliaferri.controller.logic.HandleNotificationsApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.HostNotificationsView;
@@ -14,13 +14,13 @@ import java.util.Map;
 
 public class GraphicHandleNotificationsControllerCLI extends GraphicController {
 
-    HandleNotificationsLogicController controller;
+    HandleNotificationsApplicationController controller;
     PlayerNotificationsView playerView;
     HostNotificationsView hostView;
 
     public GraphicHandleNotificationsControllerCLI(AppContext appContext) {
         super(appContext);
-        this.controller = new HandleNotificationsLogicController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
+        this.controller = new HandleNotificationsApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
                 appContext.getDAOFactory().getHostDAO());
         this.playerView = new PlayerNotificationsView();
         this.hostView = new HostNotificationsView();

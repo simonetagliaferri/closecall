@@ -11,6 +11,7 @@ module it.simonetagliaferri {
     requires org.kordamp.ikonli.octicons;
 
     requires java.sql;
+    requires java.desktop;
 
     opens it.simonetagliaferri to javafx.fxml;
     exports it.simonetagliaferri;
@@ -24,8 +25,14 @@ module it.simonetagliaferri {
     exports it.simonetagliaferri.model.strategy;
     exports it.simonetagliaferri.controller.graphic.gui;
     exports it.simonetagliaferri.beans;
-    opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
     exports it.simonetagliaferri.infrastructure;
+    exports it.simonetagliaferri.controller.logic;
+    exports it.simonetagliaferri.model.dao.fs;
+    exports it.simonetagliaferri.model.dao.jdbc;
+    exports it.simonetagliaferri.utils;
+    exports it.simonetagliaferri.exception;
+    opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
     opens it.simonetagliaferri.infrastructure to javafx.fxml, javafx.graphics;
     opens it.simonetagliaferri.infrastructure.navigation to javafx.fxml, javafx.graphics;
+
 }
