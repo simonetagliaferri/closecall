@@ -131,7 +131,7 @@ class LoginControllerUnitTest {
         }
     }
 
-    private final static class FakePlayerDAO implements PlayerDAO {
+    private static final class FakePlayerDAO implements PlayerDAO {
 
         Map<String, Player> players = new HashMap<>();
 

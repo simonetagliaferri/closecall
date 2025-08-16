@@ -20,9 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AddClubControllerUnitTest {
 
-    AddClubApplicationController controller;
-    FakeClubDAO clubDAO = new FakeClubDAO();
-    FakeHostDAO hostDAO = new FakeHostDAO();
+    private AddClubApplicationController controller;
 
     @BeforeEach
     void setup() {
@@ -30,9 +28,9 @@ class AddClubControllerUnitTest {
         Host host = new Host("Test", "Test");
         FakeSessionManager sessionManager = new FakeSessionManager();
         sessionManager.setCurrentUser(user);
-        hostDAO = new FakeHostDAO();
+        FakeHostDAO hostDAO = new FakeHostDAO();
         hostDAO.saveHost(host);
-        clubDAO = new FakeClubDAO();
+        FakeClubDAO clubDAO = new FakeClubDAO();
         controller = new AddClubApplicationController(sessionManager, clubDAO, hostDAO);
     }
 
