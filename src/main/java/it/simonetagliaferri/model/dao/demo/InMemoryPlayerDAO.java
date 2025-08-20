@@ -16,13 +16,13 @@ public class InMemoryPlayerDAO implements PlayerDAO {
 
     @Override
     public Player findByUsername(String username) {
-        return players.get(username);
+        return players.get(username.toLowerCase());
     }
 
     @Override
     public Player findByEmail(String email) {
         for (Player player : players.values()) {
-            if (email.equals(player.getEmail())) {
+            if (email.equalsIgnoreCase(player.getEmail())) {
                 return player;
             }
         }
@@ -31,7 +31,7 @@ public class InMemoryPlayerDAO implements PlayerDAO {
 
     @Override
     public void savePlayer(Player player) {
-        players.put(player.getUsername(), player);
+        players.put(player.getUsername().toLowerCase(), player);
     }
 
 }

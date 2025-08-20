@@ -53,4 +53,5 @@ public class SceneManagerCLI {
         GraphicProcessPlayerInviteControllerCLI graphicProcessPlayerInviteControllerCLI = new GraphicProcessPlayerInviteControllerCLI(appContext);
         graphicProcessPlayerInviteControllerCLI.start();
     }
+
 }

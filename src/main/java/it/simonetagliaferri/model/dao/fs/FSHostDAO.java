@@ -50,13 +50,13 @@ public class FSHostDAO extends FSDAO implements HostDAO {
 
     @Override
     public Host getHostByUsername(String username) {
-        return hosts.get(username);
+        return hosts.get(username.toLowerCase());
     }
 
 
     @Override
     public void saveHost(Host host) {
-        hosts.put(host.getUsername(), host);
+        hosts.put(host.getUsername().toLowerCase(), host);
         saveHosts();
     }
 }

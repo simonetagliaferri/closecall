@@ -54,7 +54,6 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
     public void saveTournament(Club club, Tournament tournament) {
         List<Tournament> clubTournaments = this.tournaments
                 .computeIfAbsent(club.getOwner().getUsername(), k -> new ArrayList<>());
-
         for (int i = 0; i < clubTournaments.size(); i++) {
             Tournament t = clubTournaments.get(i);
             if (t.getName().equals(tournament.getName())) {
@@ -63,7 +62,6 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
                 return;
             }
         }
-
         clubTournaments.add(tournament);
         saveTournaments();
     }

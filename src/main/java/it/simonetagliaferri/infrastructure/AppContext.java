@@ -26,19 +26,19 @@ public class AppContext {
     public AppContext() {
         sessionManager = new SessionManager();
         daoFactory = DAOFactory.getDAOFactory();
-        navigationManager = NavigationManagerFactory.getNavigationManager(this);
+        navigationManager = new NavigationManagerFactory().getNavigationManager(this);
     }
 
     public AppContext(PersistenceProvider persistenceProvider, UIMode uiMode) {
         sessionManager = new SessionManager();
         daoFactory = DAOFactory.getDAOFactory(persistenceProvider);
-        navigationManager = NavigationManagerFactory.getNavigationManager(this, uiMode);
+        navigationManager = new NavigationManagerFactory().getNavigationManager(this, uiMode);
     }
 
     public AppContext(DAOFactory daoFactory, UIMode uiMode) {
         sessionManager = new SessionManager();
         this.daoFactory = daoFactory;
-        navigationManager = NavigationManagerFactory.getNavigationManager(this, uiMode);
+        navigationManager = new NavigationManagerFactory().getNavigationManager(this, uiMode);
     }
 
     public NavigationManager getNavigationManager() {

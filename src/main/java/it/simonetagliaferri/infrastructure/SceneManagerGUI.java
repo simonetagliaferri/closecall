@@ -48,7 +48,7 @@ public class SceneManagerGUI extends Application {
         stage.setMinHeight(baseHeight / 2);
         FXMLLoader loader = getLoader("login");
         Scene s = new Scene(loadFXML(loader), baseWidth, baseHeight);
-        URL css = getResource();
+        URL css = getCss();
         s.getStylesheets().add(css.toExternalForm());
         stage.setScene(s);
         stage.centerOnScreen();
@@ -127,7 +127,7 @@ public class SceneManagerGUI extends Application {
         return fxmlLoader.load();
     }
 
-    private static URL getResource() {
+    private static URL getCss() {
         URL url = SceneManagerGUI.class.getResource("/view/css/style.css");
         if (url == null) {
             throw new ResourceNotFoundException("Resource not found: " + "/view/css/style.css");

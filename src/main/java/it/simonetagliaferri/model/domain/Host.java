@@ -12,7 +12,6 @@ public class Host extends User implements Subscriber {
 
     @Override
     public void update(Club club, Tournament tournament) {
-        // In this case, notify about the *latest player* joining
         Player last = tournament.getParticipants()
                 .get(tournament.getParticipants().size() - 1);
         if (newPlayers == null) { newPlayers = new HashMap<>(); }

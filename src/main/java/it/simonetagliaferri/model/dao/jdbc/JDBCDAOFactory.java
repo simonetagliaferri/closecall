@@ -4,11 +4,11 @@ import it.simonetagliaferri.model.dao.*;
 
 public class JDBCDAOFactory extends DAOFactory {
 
-    JDBCLoginDAO loginDAO;
-    JDBCTournamentDAO tournamentDAO;
-    JDBCHostDAO hostDAO;
-    JDBCPlayerDAO playerDAO;
-    JDBCClubDAO clubDAO;
+    private JDBCLoginDAO loginDAO;
+    private JDBCTournamentDAO tournamentDAO;
+    private JDBCHostDAO hostDAO;
+    private JDBCPlayerDAO playerDAO;
+    private JDBCClubDAO clubDAO;
 
     @Override
     public LoginDAO getLoginDAO() {

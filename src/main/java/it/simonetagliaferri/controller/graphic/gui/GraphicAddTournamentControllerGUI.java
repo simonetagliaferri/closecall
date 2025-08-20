@@ -355,15 +355,10 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         alert.setTitle("Confirm Tournament Creation");
         alert.setHeaderText(null);
         alert.setContentText("Do you want to add players now?");
-
         ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
         ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
         alert.getButtonTypes().setAll(yesButton, noButton);
-
-        // Non-blocking
         alert.show();
-
-        // Listen to user's choice
         alert.resultProperty().addListener((obs, oldResult, newResult) -> {
             this.controller.addTournament(tournamentBean);
             try {

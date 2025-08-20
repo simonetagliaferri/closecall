@@ -49,20 +49,20 @@ public class FSPlayerDAO extends FSDAO implements PlayerDAO {
 
     @Override
     public Player findByUsername(String username) {
-        return players.get(username);
+        return players.get(username.toLowerCase());
     }
 
     @Override
     public Player findByEmail(String email) {
         for (Player player : players.values()) {
-            if (player.getEmail().equals(email)) return player;
+            if (player.getEmail().equalsIgnoreCase(email)) return player;
         }
         return null;
     }
 
     @Override
     public void savePlayer(Player player) {
-        players.put(player.getUsername(), player);
+        players.put(player.getUsername().toLowerCase(), player);
         savePlayers();
     }
 

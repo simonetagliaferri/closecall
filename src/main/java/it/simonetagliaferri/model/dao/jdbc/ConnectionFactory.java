@@ -9,12 +9,12 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
+    private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
+    private static Connection connection;
+
     private static volatile Connection overrideForTests;
     public static void setTestConnection(Connection c) { overrideForTests = c; }
     public static void clearTestConnection() { overrideForTests = null; }
-
-    private static final String DB_PROPERTIES = "src/main/resources/properties/db.properties";
-    private static Connection connection;
 
     private ConnectionFactory() {
     }

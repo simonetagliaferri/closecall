@@ -20,10 +20,6 @@ public abstract class NavigationManager {
 
     public abstract void login();
 
-    /**
-     * Navigates to the correct dashboard based on the role.
-     * @param role can be either HOST or PLAYER.
-     */
     public abstract void goToDashboard(Role role);
 
     public abstract void goToAddTournament();

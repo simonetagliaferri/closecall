@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Club implements Publisher, Serializable {
-    private String name;
+    private final String name;
     private String street;
     private String number;
     private String city;
@@ -17,10 +17,7 @@ public class Club implements Publisher, Serializable {
     private String phone;
     private Host owner;
     private List<Tournament> clubTournaments = new ArrayList<>();
-
     private List<Subscriber> subscribedPlayers = new ArrayList<>();
-
-    public Club() {}
 
     public Club(String name, Host owner) {
         this.name = name;

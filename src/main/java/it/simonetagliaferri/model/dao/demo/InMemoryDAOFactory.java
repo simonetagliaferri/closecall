@@ -11,7 +11,7 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     private static final String PASS = "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
 
-    // Storing here the hashmaps, that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
+    // Storing here the hashmaps that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
     private final Map<String, User> users = new HashMap<>();
     private final Map<String, List<Tournament>> tournaments = new HashMap<>();
     private final Map<String, Club> clubs = new HashMap<>();

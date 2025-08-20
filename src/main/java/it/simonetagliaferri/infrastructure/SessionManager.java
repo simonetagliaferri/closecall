@@ -21,8 +21,8 @@ public class SessionManager {
         this.currentUser = currentUser;
     }
 
-    // Not actually needed, but I think  it's better to have a clean Session after a logout and not have the previous user data still lurking around.
     public void clearSession() {
         currentUser = null;
     }
+
 }

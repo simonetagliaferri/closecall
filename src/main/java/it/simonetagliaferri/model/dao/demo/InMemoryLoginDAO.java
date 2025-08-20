@@ -14,18 +14,18 @@ public class InMemoryLoginDAO implements LoginDAO {
 
     @Override
     public User findByUsername(String username) {
-        return users.get(username);
+        return users.get(username.toLowerCase());
     }
 
     @Override
     public void signup(User user) {
-        users.put(user.getUsername(), user);
+        users.put(user.getUsername().toLowerCase(), user);
     }
 
     @Override
     public User findByEmail(String email) {
         for (User user : users.values()) {
-            if (user.getEmail().equals(email)) {return user; }
+            if (user.getEmail().equalsIgnoreCase(email)) {return user; }
         }
         return null;
     }
