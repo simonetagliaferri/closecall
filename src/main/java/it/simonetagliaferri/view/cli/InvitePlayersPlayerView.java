@@ -32,25 +32,7 @@ public class InvitePlayersPlayerView {
                 " from club " + club.getName());
         CliUtils.println("The invite expires on " + invite.getExpiryDate());
         CliUtils.println("Tournament details:");
-        CliUtils.println("Tournament name: " + tournament.getTournamentName());
-        CliUtils.println("Tournament format: " + tournament.getTournamentFormat());
-        CliUtils.println("Tournament type: " + tournament.getTournamentType());
-        CliUtils.println("Court type: " + tournament.getCourtType());
-        CliUtils.println("Number of teams: " + tournament.getTeamsNumber());
-        CliUtils.println("Available spots: " + tournament.getAvailableSpots());
-        CliUtils.println("Tournament join fee: " + tournament.getJoinFee());
-        String courtPrice = tournament.getCourtPrice() > 0 ? Double.toString(tournament.getCourtPrice()) : "Included in join fee";
-        CliUtils.println("Court costs: " + courtPrice);
-        CliUtils.print("Prizes:");
-        if (!tournament.getPrizes().isEmpty()) {
-            CliUtils.println("");
-            for (int i = 0; i < tournament.getPrizes().size(); i++) {
-                double prize = tournament.getPrizes().get(i);
-                int place = i + 1;
-                CliUtils.println(place + ": " + prize);
-            }
-        }
-        else CliUtils.println("none");
+        HostDashboardCLIView.listTournament(tournament);
         CliUtils.println("Club details:");
         CliUtils.println("Club name: " + club.getName());
         CliUtils.println("Club street: " + club.getStreet());

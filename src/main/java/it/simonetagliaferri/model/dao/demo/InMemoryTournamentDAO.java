@@ -41,6 +41,10 @@ public class InMemoryTournamentDAO implements TournamentDAO {
 
     @Override
     public Tournament getTournament(Club club, String name) {
+        return getTournament(club, name, tournaments);
+    }
+
+    public static Tournament getTournament(Club club, String name, Map<String, List<Tournament>> tournaments) {
         List<Tournament> tournamentList = tournaments.get(club.getOwner().getUsername());
         if (tournamentList != null) {
             for (Tournament tournament : tournamentList) {
@@ -53,6 +57,10 @@ public class InMemoryTournamentDAO implements TournamentDAO {
     }
 
     public List<Tournament> getTournamentsByCity(String city) {
+        return getTournaments(city, tournaments);
+    }
+
+    public static List<Tournament> getTournaments(String city, Map<String, List<Tournament>> tournaments) {
         List<Tournament> tournamentList = new ArrayList<>();
         String location;
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
@@ -68,6 +76,10 @@ public class InMemoryTournamentDAO implements TournamentDAO {
 
     @Override
     public List<Tournament> getPlayerTournaments(Player player) {
+        return getPlayerTournaments(player, tournaments);
+    }
+
+    public static List<Tournament> getPlayerTournaments(Player player, Map<String, List<Tournament>> tournaments) {
         List<Tournament> tournamentList = new ArrayList<>();
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
             for (Tournament tournament : entry.getValue()) {

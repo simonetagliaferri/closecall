@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.fs;
 
 import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.dao.demo.InMemoryTournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
@@ -78,42 +79,16 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
 
     @Override
     public Tournament getTournament(Club club, String name) {
-        List<Tournament> tournamentList = tournaments.get(club.getOwner().getUsername());
-        if (tournamentList != null) {
-            for (Tournament tournament : tournamentList) {
-                if (tournament.getName().equals(name)) {
-                    return tournament;
-                }
-            }
-        }
-        return null;
+        return InMemoryTournamentDAO.getTournament(club, name, tournaments);
     }
 
     public List<Tournament> getTournamentsByCity(String city) {
-        List<Tournament> tournamentList = new ArrayList<>();
-        String location;
-        for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
-            for (Tournament tournament : entry.getValue()) {
-                location = tournament.getClub().getCity();
-                if (location.equalsIgnoreCase(city)) {
-                    tournamentList.add(tournament);
-                }
-            }
-        }
-        return tournamentList;
+        return InMemoryTournamentDAO.getTournaments(city, tournaments);
     }
 
     @Override
     public List<Tournament> getPlayerTournaments(Player player) {
-        List<Tournament> tournamentList = new ArrayList<>();
-        for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
-            for (Tournament tournament : entry.getValue()) {
-                if (tournament.playerAlreadyConfirmed(player)) {
-                    tournamentList.add(tournament);
-                }
-            }
-        }
-        return tournamentList;
+        return InMemoryTournamentDAO.getPlayerTournaments(player, tournaments);
     }
 
 }
