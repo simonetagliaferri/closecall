@@ -30,7 +30,7 @@ public class TournamentQueries {
 
     private static final String GET_TOURNAMENTS_BY_PLAYER = "SELECT tournaments.clubName, tournaments.clubOwner, tournaments.tournamentName FROM tournaments JOIN teams " +
             "WHERE tournaments.tournamentName = teams.tournamentName AND tournaments.clubName = teams.clubName AND tournaments.clubOwner = " +
-            "teams.clubOwner AND status = 'CONFIRMED' AND teams.player1 = ? OR teams.player2 = ?";
+            "teams.clubOwner AND status = 'CONFIRMED' AND (teams.player1 = ? OR teams.player2 = ?)";
 
     private TournamentQueries() {
     }

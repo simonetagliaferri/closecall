@@ -251,11 +251,15 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     private Team getTeam(String p1, String p2, TeamStatus status, Tournament tournament) {
         Player player1 = new Player(p1);
-        Player player2 = null;
+        Player player2;
+        Team team;
         if (p2 != null) {
             player2 = new Player(p2);
+            team = new Team(player1, player2, tournament);
+        } else {
+            TeamType teamType = tournament.isSingles() ? TeamType.SINGLE : TeamType.DOUBLE;
+            team = new Team(player1, teamType, tournament);
         }
-        Team team = new Team(player1, player2, tournament);
         team.setStatus(status);
         return team;
     }
@@ -267,29 +271,44 @@ public class JDBCTournamentDAO implements TournamentDAO {
         try {
             Connection conn = ConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(TournamentQueries.saveTeam());
-            prepareTeam(club, tournament, confirmedTeams, ps);
-            prepareTeam(club, tournament, partialTeams, ps);
-            prepareTeam(club, tournament, pendingTeams, ps);
+            prepareTeams(club, tournament, confirmedTeams, ps);
+            prepareTeams(club, tournament, pendingTeams, ps);
+            preparePartialTeams(club, tournament, partialTeams, ps);
             ps.executeBatch();
         } catch (SQLException e) {
             throw new DAOException("Error while saving the tournament's teams: " + e.getMessage());
         }
     }
 
-    private void prepareTeam(Club club, Tournament tournament, List<Team> teamList, PreparedStatement ps) throws SQLException {
+    private void prepareTeams(Club club, Tournament tournament, List<Team> teamList, PreparedStatement ps) throws SQLException {
         ps.setString(2, club.getName());
         ps.setString(3, club.getOwnerUsername());
         ps.setString(4, tournament.getName());
         for (int i = 0; i < teamList.size(); i++) {
-            Team team = teamList.get(i);
-            ps.setInt(1, i);
-            ps.setObject(5, team.getPlayer1() != null ? team.getPlayer1().getUsername() : null,
-                    Types.VARCHAR);
-            ps.setObject(5, team.getPlayer2() != null ? team.getPlayer2().getUsername() : null,
-                    Types.VARCHAR);
-            ps.setString(7, team.getStatus().name());
-            ps.addBatch();
+            prepareTeam(teamList, ps, i);
         }
+    }
+
+    private void preparePartialTeams(Club club, Tournament tournament, List<Team> teamList, PreparedStatement ps) throws SQLException {
+        ps.setString(2, club.getName());
+        ps.setString(3, club.getOwnerUsername());
+        ps.setString(4, tournament.getName());
+        for (int i = 0; i < teamList.size(); i++) {
+            if (teamList.get(i).getStatus() != TeamStatus.PENDING_PARTIAL) {
+                prepareTeam(teamList, ps, i);
+            }
+        }
+    }
+
+    private void prepareTeam(List<Team> teamList, PreparedStatement ps, int i) throws SQLException {
+        Team team = teamList.get(i);
+        ps.setInt(1, i);
+        ps.setObject(5, team.getPlayer1() != null ? team.getPlayer1().getUsername() : null,
+                Types.VARCHAR);
+        ps.setObject(6, team.getPlayer2() != null ? team.getPlayer2().getUsername() : null,
+                Types.VARCHAR);
+        ps.setString(7, team.getStatus().name());
+        ps.addBatch();
     }
 
 }

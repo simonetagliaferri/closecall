@@ -179,7 +179,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         TextField tf = prizesFields.get(i - 1);
         lbl.setText(PRIZE + i);
         lbl.setTextFill(Color.BLACK);
-        if (!checkDouble(tf, lbl)) return;
+        if (!validDouble(tf, lbl)) return;
         List<Double> current = new ArrayList<>();
         for (TextField f : prizesFields) {
             if (f.getText().isBlank()) return;
@@ -195,6 +195,15 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         } catch (NumberFormatException e) {
             label.setText("Please enter a valid number.");
             label.setTextFill(Color.RED);
+            return false;
+        }
+    }
+
+    private boolean validInt(TextField textField) {
+        try {
+            Integer.parseInt(textField.getText());
+            return true;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -310,13 +319,13 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     private void setJoinFee() {
         joinFeeLabel.setText("Join fee");
         joinFeeLabel.setTextFill(Color.BLACK);
-        if (checkDouble(joinFeeField, joinFeeLabel)) {
+        if (validDouble(joinFeeField, joinFeeLabel)) {
             double fee = Double.parseDouble(joinFeeField.getText());
             tournamentBean.setJoinFee(fee);
         }
     }
 
-    private boolean checkDouble(TextField textField, Label label) {
+    private boolean validDouble(TextField textField, Label label) {
         try {
             Double.parseDouble(textField.getText());
             return true;
@@ -333,7 +342,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         if (courtCostField.getText().isEmpty()) {
             tournamentBean.setCourtPrice(0);
         } else {
-            if (checkDouble(courtCostField, courtCostLabel)) {
+            if (validDouble(courtCostField, courtCostLabel)) {
                 double courtCost = Double.parseDouble(courtCostField.getText());
                 tournamentBean.setCourtPrice(courtCost);
             }
@@ -341,8 +350,8 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private void estimateEndDate() {
-        if ((!numOfTeamsField.getText().isEmpty() || validInt(numOfTeamsField, numOfTeamsLabel)) &&
-                (!numOfCourtsField.getText().isEmpty() || validInt(numOfCourtsField, numOfCourtsLabel)) && startDatePicker.getValue() != null) {
+        if ((!numOfTeamsField.getText().isEmpty() || validInt(numOfTeamsField)) &&
+                (!numOfCourtsField.getText().isEmpty() || validInt(numOfCourtsField)) && startDatePicker.getValue() != null) {
             endDateLabel1.setVisible(true);
             LocalDate endDate = this.controller.estimateEndDate(tournamentBean);
             endDateLabel2.setText(DateConverter.dateToString(endDate));
@@ -432,7 +441,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private boolean isJoinFeeInvalid() {
-        return joinFeeField.getText().isEmpty() || !checkDouble(joinFeeField, joinFeeLabel);
+        return joinFeeField.getText().isEmpty() || !validDouble(joinFeeField, joinFeeLabel);
     }
 
     private boolean isCourtCostInvalid() {
@@ -453,7 +462,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
 
     private boolean arePrizesInvalid() {
         for (int i = 0; i < prizesFields.size(); i++) {
-            if (prizesFields.get(i).getText().isEmpty() || !checkDouble(prizesFields.get(i), prizesLabels.get(i)))
+            if (prizesFields.get(i).getText().isEmpty() || !validDouble(prizesFields.get(i), prizesLabels.get(i)))
                 return true;
         }
         return false;

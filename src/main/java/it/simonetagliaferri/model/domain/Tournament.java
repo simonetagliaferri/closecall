@@ -111,7 +111,13 @@ public class Tournament implements Publisher, Serializable {
     }
 
     public int numOfAvailableSpots() {
-        return getTeamsNumber() - getTeamRegistry().takenSpots();
+        int totalSpots;
+        if (isSingles()) {
+            totalSpots = getTeamsNumber();
+        } else {
+            totalSpots = getTeamsNumber()*2;
+        }
+        return totalSpots - getTeamRegistry().takenSpots(isSingles());
     }
 
     public void reserveSpot(Player... players) {

@@ -3,6 +3,7 @@ package it.simonetagliaferri.model.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Team implements Serializable {
 
@@ -23,15 +24,11 @@ public class Team implements Serializable {
         this.player1 = player1;
         this.player2 = player2;
         this.tournament = tournament;
-        if (this.player2 != null) {
-            this.type = TeamType.DOUBLE;
-        } else {
-            this.type = TeamType.SINGLE;
-        }
+        this.type = TeamType.DOUBLE;
     }
 
     public boolean isFull() {
-        return (player1 != null && player2 != null && this.type == TeamType.DOUBLE) || (player1 != null && this.type == TeamType.SINGLE);
+        return (player1 != null && player2 != null && this.type == TeamType.DOUBLE) || ((player1 != null || player2 != null) && this.type == TeamType.SINGLE);
     }
 
     public void addPlayer(Player player) {
@@ -100,4 +97,16 @@ public class Team implements Serializable {
         return player1 != null ? player1 : player2;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Team)) return false;
+        Team team = (Team) o;
+        if (team == this) return true;
+        return Objects.equals(getTournament(), team.getTournament()) && Objects.equals(getPlayer1(), team.getPlayer1()) && Objects.equals(getPlayer2(), team.getPlayer2());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTournament(), getPlayer1(), getPlayer2());
+    }
 }

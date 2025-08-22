@@ -40,6 +40,10 @@ public class ProcessPlayerInviteApplicationController extends ApplicationControl
         return playerDAO.findByUsername(username);
     }
 
+    private Player loadPlayer(String username) {
+        return playerDAO.findByUsername(username);
+    }
+
     private Invite loadInvite(InviteBean inviteBean) {
         TournamentBean tournamentBean = inviteBean.getTournament();
         String tournamentName = tournamentBean.getTournamentName();
@@ -87,6 +91,7 @@ public class ProcessPlayerInviteApplicationController extends ApplicationControl
                 Invite otherInvite = null;
                 Player player2 = team.getOtherPlayer(player.getUsername());
                 if (player2 != null) {
+                    player2 = loadPlayer(player2.getUsername());
                     otherInvite = player2.getInviteForTournament(tournament);
                 }
                 tournament.processInviteForDoubles(invite, team, otherInvite);

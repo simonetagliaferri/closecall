@@ -24,6 +24,7 @@ public class TournamentBean {
     private List<TeamBean> partialTeams;
     private double joinFee;
     private double courtPrice;
+    private int availableSpots;
 
     public TournamentBean() {
         confirmedTeams = new ArrayList<>();
@@ -147,8 +148,12 @@ public class TournamentBean {
         return club.getName();
     }
 
+    public void setAvailableSpots(int availableSpots) {
+        this.availableSpots = availableSpots;
+    }
+
     public int getAvailableSpots() {
-        return teamsNumber - confirmedTeams.size() - partialTeams.size() / 2 - pendingTeams.size();
+        return availableSpots;
     }
 
     public boolean isSingles() {

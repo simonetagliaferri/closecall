@@ -27,8 +27,28 @@ public class TeamRegistry implements Serializable {
         this.partialTeams = partialTeams;
     }
 
-    public int takenSpots() {
-        return confirmedTeams.size() + pendingTeams.size() + partialTeams.size() / 2;
+    public int takenSpots(boolean isSingles) {
+        if (isSingles) {
+            return confirmedTeams.size() + pendingTeams.size();
+        } else {
+            return countTakenSpotsInDoubles();
+        }
+    }
+
+    private int countTakenSpotsInDoubles() {
+        int pendingPartials = 0;
+        int pending = 0;
+        int partial = partialTeams.size();
+        int confirmed = confirmedTeams.size()*2;
+        for (Team team : pendingTeams) {
+            if (partialTeams.contains(team)) {
+                pendingPartials++;
+            } else {
+                pending+=2;
+            }
+        }
+        partial -= pendingPartials;
+        return confirmed + pending + partial + pendingPartials;
     }
 
     public void reserveSpot(Tournament tournament, boolean isSingles, Player... players) {
@@ -91,6 +111,7 @@ public class TeamRegistry implements Serializable {
                 confirmedTeams.add(team);
             } else {
                 team.setStatus(TeamStatus.PARTIAL);
+                partialTeams.remove(team);
                 partialTeams.add(team);
             }
         } else if (status == InviteStatus.DECLINED || status == InviteStatus.EXPIRED) {

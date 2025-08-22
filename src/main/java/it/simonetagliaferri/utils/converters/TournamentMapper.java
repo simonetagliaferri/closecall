@@ -50,6 +50,7 @@ public class TournamentMapper {
         tournamentBean.setPartialTeams(partialTeamsBean);
         tournamentBean.setJoinFee(tournament.getJoinFee());
         tournamentBean.setCourtPrice(tournament.getCourtPrice());
+        tournamentBean.setAvailableSpots(tournament.numOfAvailableSpots());
         return tournamentBean;
     }
 
