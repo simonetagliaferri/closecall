@@ -45,15 +45,15 @@ public class Team implements Serializable {
     }
 
     public void removePlayer(Player player) {
-        if (player2.getUsername().equals(player.getUsername())) {
+        if (player2 != null && player2.getUsername().equals(player.getUsername())) {
             this.player2 = null;
-        } else if (player1.getUsername().equals(player.getUsername())) {
+        } else if (player1 != null && player1.getUsername().equals(player.getUsername())) {
             this.player1 = null;
         }
     }
 
     public boolean hasPlayer(Player player) {
-        return player.isSameAs(player1) || player.isSameAs(player2);
+        return player.equals(player1) || player.equals(player2);
     }
 
     public TeamType getType() {

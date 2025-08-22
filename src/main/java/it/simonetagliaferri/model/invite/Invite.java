@@ -5,6 +5,7 @@ import it.simonetagliaferri.model.domain.Tournament;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Invite implements Serializable {
     Tournament tournament;
@@ -70,9 +71,16 @@ public class Invite implements Serializable {
         return message;
     }
 
-    public boolean isSameAs(Invite invite) {
-        return this.tournament.isSameAs(invite.getTournament()) &&
-                this.player.isSameAs(invite.getPlayer());
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Invite)) return false;
+        Invite invite = (Invite) o;
+        if (invite == this) return true;
+        return Objects.equals(getTournament(), invite.getTournament()) && Objects.equals(getPlayer(), invite.getPlayer());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTournament(), getPlayer());
+    }
 }

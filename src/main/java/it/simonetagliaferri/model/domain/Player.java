@@ -67,12 +67,14 @@ public class Player extends User implements Subscriber {
         if (invites == null) {
             invites = new ArrayList<>();
         }
-        invites.add(invite);
+        if (!invites.contains(invite)) {
+            invites.add(invite);
+        }
     }
 
     public Invite getInviteForTournament(Tournament tournament) {
         for (Invite invite : invites) {
-            if (invite.getTournament().isSameAs(tournament)) {
+            if (invite.getTournament().equals(tournament)) {
                 invite.updateTournament(tournament);
                 return invite;
             }
@@ -81,7 +83,7 @@ public class Player extends User implements Subscriber {
     }
 
     public void clearInvite(Invite invite) {
-        invites.removeIf(inv -> inv.isSameAs(invite));
+        invites.remove(invite);
     }
 
 }

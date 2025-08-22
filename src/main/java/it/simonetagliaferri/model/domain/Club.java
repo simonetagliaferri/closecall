@@ -6,6 +6,7 @@ import it.simonetagliaferri.model.observer.Subscriber;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Club implements Publisher, Serializable {
     private final String name;
@@ -143,7 +144,7 @@ public class Club implements Publisher, Serializable {
     public boolean isNotSubscribed(Player player) {
         if (subscribedPlayers != null) {
             for (Subscriber subscriber : subscribedPlayers) {
-                if (subscriber instanceof Player && ((Player) subscriber).isSameAs(player)) {
+                if (subscriber instanceof Player && (subscriber).equals(player)) {
                     return false;
                 }
             }
@@ -177,9 +178,16 @@ public class Club implements Publisher, Serializable {
         return null;
     }
 
-    public boolean isSameAs(Club other) {
-        if (other == null) return false;
-        return this.name.equals(other.getName()) && this.owner.isSameAs(other.getOwner());
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Club)) return false;
+        Club club = (Club) o;
+        if (club == this) return true;
+        return Objects.equals(getName(), club.getName()) && Objects.equals(getOwner(), club.getOwner());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getOwner());
+    }
 }

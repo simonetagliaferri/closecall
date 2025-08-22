@@ -88,7 +88,7 @@ public class SceneManagerGUI extends Application {
     public static FXMLLoader getLoader(String fxml) {
         URL url = SceneManagerGUI.class.getResource("/view/gui/" + fxml + ".fxml");
         if (url == null) {
-            throw new ResourceNotFoundException("FXML not found: /hostView/gui/" + fxml + ".fxml");
+            throw new ResourceNotFoundException("FXML not found: /view/gui/" + fxml + ".fxml");
         }
         return new FXMLLoader(url);
     }

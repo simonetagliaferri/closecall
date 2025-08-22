@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Tournament implements Publisher, Serializable {
     private final String name;
@@ -290,10 +291,16 @@ public class Tournament implements Publisher, Serializable {
         return club.getName();
     }
 
-
-    public boolean isSameAs(Tournament other) {
-        if (other == null) return false;
-        return this.name.equals(other.getName()) && this.club.isSameAs(other.getClub());
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Tournament)) return false;
+        Tournament that = (Tournament) o;
+        if (that == this) return true;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getClub(), that.getClub());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getClub());
+    }
 }

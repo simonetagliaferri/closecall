@@ -4,6 +4,7 @@ import it.simonetagliaferri.utils.PasswordUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable {
 
@@ -82,8 +83,16 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public boolean isSameAs(User user) {
-        if (user == null) return false;
-        return this.username.equals(user.username);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        if (user == this) return true;
+        return Objects.equals(getUsername(), user.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getUsername());
     }
 }
