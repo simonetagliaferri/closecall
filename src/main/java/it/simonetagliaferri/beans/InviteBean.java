@@ -1,4 +1,5 @@
 package it.simonetagliaferri.beans;
+
 import it.simonetagliaferri.model.invite.InviteStatus;
 
 import java.time.LocalDate;
@@ -28,22 +29,20 @@ public class InviteBean {
         this.sendEmail = sendEmail;
     }
 
+    public TournamentBean getTournament() {
+        return tournament;
+    }
 
     public void setTournament(TournamentBean tournament) {
         this.tournament = tournament;
     }
-    public void setPlayer(PlayerBean player) {
-        this.player = player;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-    public TournamentBean getTournament() {
-        return tournament;
-    }
     public PlayerBean getPlayer() {
         return player;
+    }
+
+    public void setPlayer(PlayerBean player) {
+        this.player = player;
     }
 
     public LocalDate getExpiryDate() {
@@ -53,6 +52,11 @@ public class InviteBean {
     public String getMessage() {
         return message;
     }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public boolean getSendEmail() {
         return sendEmail;
     }

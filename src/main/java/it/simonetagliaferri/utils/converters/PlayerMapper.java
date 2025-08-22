@@ -5,7 +5,8 @@ import it.simonetagliaferri.model.domain.Player;
 
 public class PlayerMapper {
 
-    private PlayerMapper() {}
+    private PlayerMapper() {
+    }
 
     public static PlayerBean toBean(Player player) {
         if (player == null) return null;

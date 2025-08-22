@@ -23,11 +23,12 @@ import java.util.List;
 public class GraphicProcessPlayerInviteControllerGUI extends GraphicController implements GUIController {
 
     public static final String BLUE_BUTTON = "blue-button";
-    private ProcessPlayerInviteApplicationController controller;
-
-    @FXML private Accordion tournamentList;
-    @FXML private VBox invitesContainer;
     List<TitledPane> invitesList;
+    private ProcessPlayerInviteApplicationController controller;
+    @FXML
+    private Accordion tournamentList;
+    @FXML
+    private VBox invitesContainer;
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -88,8 +89,7 @@ public class GraphicProcessPlayerInviteControllerGUI extends GraphicController i
                 hBox.setAlignment(Pos.CENTER);
                 vBox.getChildren().clear();
                 vBox.getChildren().addAll(subscribeLabel, hBox);
-            }
-            else {
+            } else {
                 getInvites();
             }
         }
@@ -117,7 +117,7 @@ public class GraphicProcessPlayerInviteControllerGUI extends GraphicController i
         TitledPane tournamentPane = new TitledPane();
         tournamentPane.setAlignment(Pos.CENTER);
         TournamentBean tournamentBean = inviteBean.getTournament();
-        tournamentPane.setText("You just got invited to a new tournament from " + tournamentBean.getClub().getName() + "\nThe invite expires on " + inviteBean.getExpiryDate());
+        tournamentPane.setText("You just got invited to a new tournament from " + tournamentBean.getClubName() + "\nThe invite expires on " + inviteBean.getExpiryDate());
         HBox hbox1 = new HBox();
         hbox1.setSpacing(20);
         VBox vbox1 = new VBox();

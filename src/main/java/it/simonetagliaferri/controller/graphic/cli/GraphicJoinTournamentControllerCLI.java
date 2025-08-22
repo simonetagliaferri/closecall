@@ -34,8 +34,7 @@ public class GraphicJoinTournamentControllerCLI extends GraphicController {
             JoinTournamentView.JoinError result;
             if (status.equals(JoinTournamentView.JoinStatus.BACK)) {
                 continue;
-            }
-            else {
+            } else {
                 result = this.controller.joinTournament(tournamentBean);
             }
             if (result == JoinTournamentView.JoinError.SUCCESS) {
@@ -44,11 +43,9 @@ public class GraphicJoinTournamentControllerCLI extends GraphicController {
                 if (this.controller.isNotSubscribed(tournamentBean)) {
                     addClubToFavourites(tournamentBean);
                 }
-            }
-            else if (result == JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS) {
+            } else if (result == JoinTournamentView.JoinError.NO_AVAILABLE_SPOTS) {
                 view.noAvailableSpots();
-            }
-            else if (result == JoinTournamentView.JoinError.ALREADY_IN_A_TEAM) {
+            } else if (result == JoinTournamentView.JoinError.ALREADY_IN_A_TEAM) {
                 view.alreadyJoined();
             }
         }

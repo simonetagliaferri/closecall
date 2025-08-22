@@ -10,11 +10,29 @@ public class Host extends User implements Subscriber {
 
     private Map<Tournament, List<Player>> newPlayers;
 
+    public Host(String username, String email, Role role) {
+        super(username, email, role);
+    }
+
+    public Host(String username, String email) {
+        super(username, email);
+    }
+
+    public Host(String username) {
+        super(username);
+    }
+
+    public Host(String username, String password, String email, Role role) {
+        super(username, password, email, role);
+    }
+
     @Override
     public void update(Club club, Tournament tournament) {
         Player last = tournament.getParticipants()
                 .get(tournament.getParticipants().size() - 1);
-        if (newPlayers == null) { newPlayers = new HashMap<>(); }
+        if (newPlayers == null) {
+            newPlayers = new HashMap<>();
+        }
         newPlayers.computeIfAbsent(tournament, t -> new ArrayList<>()).add(last);
     }
 
@@ -25,30 +43,18 @@ public class Host extends User implements Subscriber {
     }
 
     public Map<Tournament, List<Player>> getNewPlayers() {
-        if (newPlayers == null) { return Collections.emptyMap(); }
+        if (newPlayers == null) {
+            return Collections.emptyMap();
+        }
         return newPlayers;
-    }
-
-    public Host(String username, String email, Role role) {
-        super(username, email, role);
-    }
-    public Host(String username, String email) {
-        super(username, email);
-    }
-
-    public Host(String username) {
-        super(username);
-    }
-    public Host(String username, String password, String email, Role role) {
-        super(username, password, email, role);
-    }
-
-    public boolean hasClub() {
-        return club != null;
     }
 
     public void setNewPlayers(Map<Tournament, List<Player>> newPlayers) {
         this.newPlayers = newPlayers;
+    }
+
+    public boolean hasClub() {
+        return club != null;
     }
 
     public void addClub(Club club) {

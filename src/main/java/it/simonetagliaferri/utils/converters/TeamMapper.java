@@ -8,14 +8,14 @@ import java.util.List;
 
 public class TeamMapper {
 
-    private TeamMapper() {}
+    private TeamMapper() {
+    }
 
     public static TeamBean toBean(Team team) {
         List<Player> players = team.getPlayers();
         if (players.size() == 1) {
             return new TeamBean(PlayerMapper.toBean(players.get(0)), team.getType(), TournamentMapper.lightToBean(team.getTournament()));
-        }
-        else
+        } else
             return new TeamBean(PlayerMapper.toBean(players.get(0)), PlayerMapper.toBean(players.get(1)), TournamentMapper.lightToBean(team.getTournament()));
     }
 

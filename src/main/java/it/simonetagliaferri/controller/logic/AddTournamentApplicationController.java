@@ -3,8 +3,12 @@ package it.simonetagliaferri.controller.logic;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.exception.InvalidDateException;
 import it.simonetagliaferri.infrastructure.SessionManager;
-import it.simonetagliaferri.model.dao.*;
-import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.dao.ClubDAO;
+import it.simonetagliaferri.model.dao.PlayerDAO;
+import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.utils.DateRules;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -25,8 +29,8 @@ public class AddTournamentApplicationController extends ApplicationController {
     }
 
     private Club loadClub() {
-        User user = getCurrentUser();
-        Club club = clubDAO.getClubByHostName(user.getUsername());
+        String username = getCurrentUserUsername();
+        Club club = clubDAO.getClubByHostName(username);
         List<Tournament> tournaments = tournamentDAO.getTournaments(club);
         club.setClubTournaments(tournaments);
         return club;
@@ -35,10 +39,11 @@ public class AddTournamentApplicationController extends ApplicationController {
     public boolean addTournament(TournamentBean tournamentBean) {
         Tournament tournament = TournamentMapper.fromBean(tournamentBean); // Creating the tournament model.
         Club club = loadClub();
-        if (!club.addTournament(tournament)) {return false;} // If club returns false the tournament already exists.
+        if (!club.addTournament(tournament)) {
+            return false;
+        } // If club returns false the tournament already exists.
         club.notifySubscribers(tournament); // Notify subscribed players about the new tournament.
         tournamentDAO.saveTournament(club, tournament); // Saves the actual tournament.
-        clubDAO.saveClub(club); // To save the updated club's tournaments list.
         for (Player player : club.getSubscribedPlayers()) {
             playerDAO.savePlayer(player); // To save the notification of the new tournament that was sent to players with the club in their favourites.
         }

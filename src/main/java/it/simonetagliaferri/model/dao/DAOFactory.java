@@ -5,8 +5,8 @@ import it.simonetagliaferri.model.dao.fs.FSDAOFactory;
 import it.simonetagliaferri.model.dao.jdbc.JDBCDAOFactory;
 import it.simonetagliaferri.utils.PropertiesUtils;
 
-
-import static it.simonetagliaferri.utils.PropertiesUtils.*;
+import static it.simonetagliaferri.utils.PropertiesUtils.PERSISTENCE_KEY;
+import static it.simonetagliaferri.utils.PropertiesUtils.PERSISTENCE_PROPERTIES;
 
 /**
  * Abstract factory to get the right DAO factory based on config files.
@@ -41,8 +41,12 @@ public abstract class DAOFactory {
     }
 
     public abstract LoginDAO getLoginDAO();
+
     public abstract TournamentDAO getTournamentDAO();
+
     public abstract HostDAO getHostDAO();
+
     public abstract PlayerDAO getPlayerDAO();
+
     public abstract ClubDAO getClubDAO();
 }

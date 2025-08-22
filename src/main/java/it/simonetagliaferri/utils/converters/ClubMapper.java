@@ -6,7 +6,8 @@ import it.simonetagliaferri.model.domain.Club;
 
 public class ClubMapper {
 
-    private ClubMapper() {}
+    private ClubMapper() {
+    }
 
     public static Club fromBean(ClubBean clubBean) {
         Club club = new Club(clubBean.getName());

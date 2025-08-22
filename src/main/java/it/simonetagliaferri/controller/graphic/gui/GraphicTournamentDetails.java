@@ -92,7 +92,7 @@ public class GraphicTournamentDetails {
 
     private List<Label> getPlayers(List<TeamBean> teams) {
         List<Label> players = new ArrayList<>();
-        for (int i = 0; i < teams.size() ; i++) {
+        for (int i = 0; i < teams.size(); i++) {
             boolean first = true;
             for (PlayerBean playerBean : teams.get(i).getPlayers()) {
                 if (playerBean != null) {

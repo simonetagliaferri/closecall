@@ -9,10 +9,10 @@ import java.util.List;
 
 public class TeamRegistry implements Serializable {
 
-    private int teamsNumber;
     private final List<Team> confirmedTeams;
     private final List<Team> pendingTeams;
     private final List<Team> partialTeams;
+    private int teamsNumber;
 
     public TeamRegistry(int teamsNumber) {
         this.confirmedTeams = new ArrayList<>();
@@ -28,7 +28,7 @@ public class TeamRegistry implements Serializable {
     }
 
     public int takenSpots() {
-        return confirmedTeams.size() + pendingTeams.size() + partialTeams.size()/2;
+        return confirmedTeams.size() + pendingTeams.size() + partialTeams.size() / 2;
     }
 
     public void reserveSpot(Tournament tournament, boolean isSingles, Player... players) {
@@ -136,32 +136,36 @@ public class TeamRegistry implements Serializable {
             team.setStatus(TeamStatus.CONFIRMED);
             this.confirmedTeams.add(team);
             p = player;
-        } else {
+        } else if (!this.partialTeams.isEmpty()) {
             for (Team team : this.partialTeams) {
                 if (!team.isFull()) {
                     team.addPlayer(player);
                     p = player;
                     if (this.pendingTeams.contains(team)) {
                         team.setStatus(TeamStatus.PENDING);
-                        this.partialTeams.remove(team);
                     } else {
                         team.setStatus(TeamStatus.CONFIRMED);
                         this.confirmedTeams.add(team);
                     }
+                    this.partialTeams.remove(team);
                     break;
                 }
             }
+        } else {
+            Team team = new Team(player, getTeamType(false), tournament);
+            team.setStatus(TeamStatus.PARTIAL);
+            this.partialTeams.add(team);
+            p = player;
         }
         return p;
     }
 
+    public int getTeamsNumber() {
+        return teamsNumber;
+    }
 
     public void setTeamsNumber(int teamsNumber) {
         this.teamsNumber = teamsNumber;
-    }
-
-    public int getTeamsNumber() {
-        return teamsNumber;
     }
 
     private TeamType getTeamType(boolean isSingles) {
@@ -184,12 +188,15 @@ public class TeamRegistry implements Serializable {
     public List<Team> getConfirmedTeams() {
         return confirmedTeams;
     }
+
     public List<Team> getPendingTeams() {
         return pendingTeams;
     }
+
     public List<Team> getPartialTeams() {
         return partialTeams;
     }
+
     public int getTotalTeams() {
         return confirmedTeams.size() + pendingTeams.size() + partialTeams.size();
     }

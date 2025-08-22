@@ -31,65 +31,151 @@ public class TournamentBean {
         partialTeams = new ArrayList<>();
     }
 
-
-    public void setClub(ClubBean club) { this.club = club; }
-    public void setTournamentName(String tournamentName) {
-        this.name=tournamentName;
+    public ClubBean getClub() {
+        return club;
     }
+
+    public void setClub(ClubBean club) {
+        this.club = club;
+    }
+
+    public String getTournamentName() {
+        return name;
+    }
+
+    public void setTournamentName(String tournamentName) {
+        this.name = tournamentName;
+    }
+
+    public String getTournamentType() {
+        return tournamentType;
+    }
+
     public void setTournamentType(String tournamentType) {
         this.tournamentType = tournamentType;
     }
+
+    public String getTournamentFormat() {
+        return tournamentFormat;
+    }
+
     public void setTournamentFormat(String tournamentFormat) {
         this.tournamentFormat = tournamentFormat;
     }
+
+    public String getMatchFormat() {
+        return matchFormat;
+    }
+
     public void setMatchFormat(String matchFormat) {
         this.matchFormat = matchFormat;
     }
+
+    public String getCourtType() {
+        return courtType;
+    }
+
     public void setCourtType(String courtType) {
         this.courtType = courtType;
     }
-    public void setCourtNumber(int courtNumber) { this.courtNumber = courtNumber; }
+
+    public int getCourtNumber() {
+        return courtNumber;
+    }
+
+    public void setCourtNumber(int courtNumber) {
+        this.courtNumber = courtNumber;
+    }
+
+    public int getTeamsNumber() {
+        return teamsNumber;
+    }
+
     public void setTeamsNumber(int teamsNumber) {
         this.teamsNumber = teamsNumber;
     }
+
+    public List<Double> getPrizes() {
+        return prizes;
+    }
+
     public void setPrizes(List<Double> prizes) {
         this.prizes = prizes;
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public LocalDate getSignupDeadline() {
+        return signupDeadline;
+    }
+
     public void setSignupDeadline(LocalDate signupDeadline) {
         this.signupDeadline = signupDeadline;
     }
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
-    public void setConfirmedTeams(List<TeamBean> confirmedTeams) { this.confirmedTeams = confirmedTeams; }
-    public void setPendingTeams(List<TeamBean> pendingTeams) { this.pendingTeams = pendingTeams; }
-    public void setPartialTeams(List<TeamBean> partialTeams) { this.partialTeams = partialTeams; }
-    public void setJoinFee(double joinFee) { this.joinFee = joinFee; }
-    public void setCourtPrice(double courtPrice) { this.courtPrice = courtPrice; }
-    public ClubBean getClub() { return club; }
-    public String getTournamentName() { return name; }
-    public String getTournamentType() { return tournamentType; }
-    public String getTournamentFormat() { return tournamentFormat; }
-    public String getMatchFormat() { return matchFormat; }
-    public String getCourtType() { return courtType; }
-    public int getCourtNumber() { return courtNumber; }
-    public int getTeamsNumber() { return teamsNumber; }
-    public List<Double> getPrizes() { return prizes; }
-    public LocalDate getStartDate() { return startDate; }
-    public LocalDate getEndDate() { return endDate; }
-    public LocalDate getSignupDeadline() { return signupDeadline; }
-    public double getJoinFee() { return joinFee; }
-    public double getCourtPrice() { return courtPrice; }
 
-    public int getAvailableSpots() { return teamsNumber - confirmedTeams.size() - partialTeams.size()/2 - pendingTeams.size(); }
+    public double getJoinFee() {
+        return joinFee;
+    }
+
+    public void setJoinFee(double joinFee) {
+        this.joinFee = joinFee;
+    }
+
+    public double getCourtPrice() {
+        return courtPrice;
+    }
+
+    public void setCourtPrice(double courtPrice) {
+        this.courtPrice = courtPrice;
+    }
+
+    public String getClubName() {
+        return club.getName();
+    }
+
+    public int getAvailableSpots() {
+        return teamsNumber - confirmedTeams.size() - partialTeams.size() / 2 - pendingTeams.size();
+    }
 
     public boolean isSingles() {
         return this.tournamentType.equals("Men's singles") || this.tournamentType.equals("Women's singles");
     }
 
+    public List<TeamBean> getConfirmedTeams() {
+        return confirmedTeams;
+    }
 
-    public List<TeamBean> getConfirmedTeams() { return confirmedTeams; }
-    public List<TeamBean> getPendingTeams() { return pendingTeams; }
-    public List<TeamBean> getPartialTeams() { return partialTeams; }
+    public void setConfirmedTeams(List<TeamBean> confirmedTeams) {
+        this.confirmedTeams = confirmedTeams;
+    }
+
+    public List<TeamBean> getPendingTeams() {
+        return pendingTeams;
+    }
+
+    public void setPendingTeams(List<TeamBean> pendingTeams) {
+        this.pendingTeams = pendingTeams;
+    }
+
+    public List<TeamBean> getPartialTeams() {
+        return partialTeams;
+    }
+
+    public void setPartialTeams(List<TeamBean> partialTeams) {
+        this.partialTeams = partialTeams;
+    }
 }

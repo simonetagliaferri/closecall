@@ -7,8 +7,6 @@ import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
-import it.simonetagliaferri.model.domain.User;
-
 import it.simonetagliaferri.utils.converters.ClubMapper;
 import it.simonetagliaferri.utils.converters.HostMapper;
 
@@ -24,9 +22,11 @@ public class HostDashboardApplicationController extends ApplicationController {
     }
 
     private Host loadHost() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
-        if (host.hasClub()) { return host; }
+        String username = getCurrentUserUsername();
+        Host host = hostDAO.getHostByUsername(username);
+        if (host.hasClub()) {
+            return host;
+        }
         Club club = clubDAO.getClubByHostName(host.getUsername());
         if (club == null) {
             return host;
@@ -45,7 +45,7 @@ public class HostDashboardApplicationController extends ApplicationController {
         return HostMapper.toBean(host);
     }
 
-    public ClubBean getClubBean()  {
+    public ClubBean getClubBean() {
         Host host = loadHost();
         if (host.hasClub()) {
             return ClubMapper.toBean(host.getClub());

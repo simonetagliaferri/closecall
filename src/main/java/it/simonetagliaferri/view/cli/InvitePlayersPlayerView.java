@@ -1,6 +1,8 @@
 package it.simonetagliaferri.view.cli;
 
-import it.simonetagliaferri.beans.*;
+import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.InviteBean;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.utils.CliUtils;
 
@@ -10,22 +12,18 @@ import java.util.List;
 
 public class InvitePlayersPlayerView {
 
-    public enum AddClubToFavourites {
-        YES,
-        NO
-    }
-
     public int listNotifications(List<InviteBean> invites) {
         List<String> inv = new ArrayList<>();
         for (InviteBean invite : invites) {
-            String inviteInfo = "Invite for tournament " + invite.getTournament().getTournamentName() +
-                    " from club " + invite.getTournament().getClub().getName();
+            TournamentBean tournament = invite.getTournament();
+            String inviteInfo = "Invite for tournament " + tournament.getTournamentName() +
+                    " from club " + tournament.getClubName();
             inv.add(inviteInfo);
         }
         return CliUtils.multipleChoiceInt("Select the invite you want to handle(0 to go back): ", inv);
     }
 
-    public void expandedInvite(InviteBean invite){
+    public void expandedInvite(InviteBean invite) {
         TournamentBean tournament = invite.getTournament();
         ClubBean club = tournament.getClub();
         CliUtils.println("Invite for tournament " + tournament.getTournamentName() +
@@ -51,7 +49,7 @@ public class InvitePlayersPlayerView {
 
     public InviteStatus handleInvite() {
         int choice = CliUtils.multipleChoiceInt("What do you want to do?", "Accept", "Decline", "Ignore");
-        return InviteStatus.values()[choice-1];
+        return InviteStatus.values()[choice - 1];
     }
 
     public void noInvites() {
@@ -60,7 +58,12 @@ public class InvitePlayersPlayerView {
 
     public AddClubToFavourites addClubToFavourites() {
         int choice = CliUtils.multipleChoiceInt("Do you want to add this club to your favourites?", "Yes", "No");
-        return AddClubToFavourites.values()[choice-1];
+        return AddClubToFavourites.values()[choice - 1];
+    }
+
+    public enum AddClubToFavourites {
+        YES,
+        NO
     }
 
 }

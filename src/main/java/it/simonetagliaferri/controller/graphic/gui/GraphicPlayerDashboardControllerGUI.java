@@ -13,6 +13,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import org.kordamp.ikonli.javafx.FontIcon;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,11 +21,16 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicDashboardControl
 
     PlayerDashboardApplicationController controller;
 
-    @FXML private HBox contentWrapper;
-    @FXML private MenuButton account;
-    @FXML private ToggleButton home;
-    @FXML private ToggleButton joinTournament;
-    @FXML private MenuButton notifications;
+    @FXML
+    private HBox contentWrapper;
+    @FXML
+    private MenuButton account;
+    @FXML
+    private ToggleButton home;
+    @FXML
+    private ToggleButton joinTournament;
+    @FXML
+    private MenuButton notifications;
 
 
     @FXML

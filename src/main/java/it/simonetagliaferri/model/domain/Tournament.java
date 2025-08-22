@@ -94,13 +94,15 @@ public class Tournament implements Publisher, Serializable {
     }
 
     private void addParticipant(Player player) {
-        if (participants == null) { participants = new ArrayList<>();}
+        if (participants == null) {
+            participants = new ArrayList<>();
+        }
         participants.add(player);
         notifySubscribers(this);
     }
 
     private boolean inviteAccepted(Invite invite) {
-        return invite.getStatus()==InviteStatus.ACCEPTED;
+        return invite.getStatus() == InviteStatus.ACCEPTED;
     }
 
     public boolean playerAlreadyConfirmed(Player player) {
@@ -155,10 +157,6 @@ public class Tournament implements Publisher, Serializable {
         setTournamentFormatStrategy();
     }
 
-    public void setHost(Subscriber host) {
-        this.host = host;
-    }
-
     public void setTournamentCosts(double joinFee, double courtPrice) {
         this.tournamentRules.setTournamentCosts(joinFee, courtPrice);
     }
@@ -167,96 +165,129 @@ public class Tournament implements Publisher, Serializable {
         this.tournamentRules.setTournamentDates(startDate, signupDeadline, endDate);
     }
 
-    public void setPrizes(List<Double> prizes) {
-        this.prizes = prizes;
-    }
-    public void setClub(Club club) {
-        this.club = club;
-    }
-    public void setTeamsNumber(int teamsNumber) {
-        getTeamRegistry().setTeamsNumber(teamsNumber);
-    }
-    public void setTournamentRules(TournamentRules tournamentRules) {
-        this.tournamentRules = tournamentRules;
-    }
-    public void setTeamRegistry(TeamRegistry teamRegistry) {
-        this.teamRegistry = teamRegistry;
-    }
-
     public Club getClub() {
         return club;
     }
+
+    public void setClub(Club club) {
+        this.club = club;
+    }
+
     public String getName() {
         return name;
     }
+
     public List<Team> getConfirmedTeams() {
         if (getTeamRegistry() != null) {
             return getTeamRegistry().getConfirmedTeams();
         }
         return new ArrayList<>();
     }
+
     public List<Team> getPendingTeams() {
         if (getTeamRegistry() != null) {
             return getTeamRegistry().getPendingTeams();
         }
         return new ArrayList<>();
     }
+
     public List<Team> getPartialTeams() {
         if (getTeamRegistry() != null) {
             return getTeamRegistry().getPartialTeams();
         }
         return new ArrayList<>();
     }
+
     public Team getReservedTeam(Player player) {
         return getTeamRegistry().getReservedTeam(player);
     }
+
     public Subscriber getHost() {
         return host;
     }
+
+    public void setHost(Subscriber host) {
+        this.host = host;
+    }
+
     public String getTournamentType() {
         return getTournamentRules().getTournamentType();
     }
+
     public String getMatchFormat() {
         return getTournamentRules().getMatchFormat();
     }
+
     public String getCourtType() {
         return getTournamentRules().getCourtType();
     }
+
     public int getCourtNumber() {
         return getTournamentRules().getCourtNumber();
     }
+
     public int getTeamsNumber() {
         return getTeamRegistry().getTeamsNumber();
     }
+
+    public void setTeamsNumber(int teamsNumber) {
+        getTeamRegistry().setTeamsNumber(teamsNumber);
+    }
+
     public String getTournamentFormat() {
         return getTournamentRules().getTournamentFormat();
     }
+
     private TournamentRules getTournamentRules() {
         return tournamentRules;
     }
+
+    public void setTournamentRules(TournamentRules tournamentRules) {
+        this.tournamentRules = tournamentRules;
+    }
+
     public List<Double> getPrizes() {
         return prizes;
     }
+
+    public void setPrizes(List<Double> prizes) {
+        this.prizes = prizes;
+    }
+
     public LocalDate getStartDate() {
         return getTournamentRules().getStartDate();
     }
+
     public LocalDate getEndDate() {
         return getTournamentRules().getEndDate();
     }
+
     public LocalDate getSignupDeadline() {
         return getTournamentRules().getSignupDeadline();
     }
+
     public double getJoinFee() {
         return getTournamentRules().getJoinFee();
     }
+
     public double getCourtPrice() {
         return getTournamentRules().getCourtPrice();
     }
+
     public List<Player> getParticipants() {
         return participants;
     }
+
     public TeamRegistry getTeamRegistry() {
         return teamRegistry;
+    }
+
+    public void setTeamRegistry(TeamRegistry teamRegistry) {
+        this.teamRegistry = teamRegistry;
+    }
+
+    public String getClubName() {
+        return club.getName();
     }
 
 

@@ -1,11 +1,11 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-import it.simonetagliaferri.exception.InvalidDateException;
-import it.simonetagliaferri.exception.NavigationException;
-import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentApplicationController;
+import it.simonetagliaferri.exception.InvalidDateException;
+import it.simonetagliaferri.exception.NavigationException;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import javafx.beans.Observable;
@@ -23,41 +23,65 @@ import java.util.List;
 
 public class GraphicAddTournamentControllerGUI extends GraphicController implements GUIController {
 
-    private AddTournamentApplicationController controller;
+    private static final String PRIZE = "Prize #";
     private final TournamentBean tournamentBean = new TournamentBean();
-
-    @FXML private ChoiceBox<String> tournamentTypeChoice;
-    @FXML private ChoiceBox<String> tournamentFormatChoice;
-    @FXML private ChoiceBox<String> matchFormatChoice;
-    @FXML private ChoiceBox<String> courtTypeChoice;
-    @FXML private TextField tournamentNameField;
-    @FXML private TextField numOfCourtsField;
-    @FXML private TextField numOfTeamsField;
-    @FXML private TextField numOfPrizesField;
-    @FXML private Label startDateLabel;
-    @FXML private DatePicker startDatePicker;
-    @FXML private Label deadlineLabel;
-    @FXML private DatePicker deadlinePicker;
-    @FXML private Label endDateLabel1;
-    @FXML private Label endDateLabel2;
-    @FXML private Hyperlink endDateHyper;
-    @FXML private DatePicker endDatePicker;
-    @FXML private TextField joinFeeField;
-    @FXML private CheckBox courtCostCheckBox;
-    @FXML private TextField courtCostField;
-    @FXML private Button confirmButton;
-    @FXML private Label tournamentNameLabel;
-    @FXML private Label joinFeeLabel;
-    @FXML private Label courtCostLabel;
-    @FXML private Label numOfPrizesLabel;
-    @FXML private Label numOfTeamsLabel;
-    @FXML private Label numOfCourtsLabel;
-
     private final VBox prizesBox = new VBox();
     private final List<Label> prizesLabels = new ArrayList<>();
     private final List<TextField> prizesFields = new ArrayList<>();
     List<Double> prizes = new ArrayList<>();
-    private static final String PRIZE = "Prize #";
+    private AddTournamentApplicationController controller;
+    @FXML
+    private ChoiceBox<String> tournamentTypeChoice;
+    @FXML
+    private ChoiceBox<String> tournamentFormatChoice;
+    @FXML
+    private ChoiceBox<String> matchFormatChoice;
+    @FXML
+    private ChoiceBox<String> courtTypeChoice;
+    @FXML
+    private TextField tournamentNameField;
+    @FXML
+    private TextField numOfCourtsField;
+    @FXML
+    private TextField numOfTeamsField;
+    @FXML
+    private TextField numOfPrizesField;
+    @FXML
+    private Label startDateLabel;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private Label deadlineLabel;
+    @FXML
+    private DatePicker deadlinePicker;
+    @FXML
+    private Label endDateLabel1;
+    @FXML
+    private Label endDateLabel2;
+    @FXML
+    private Hyperlink endDateHyper;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private TextField joinFeeField;
+    @FXML
+    private CheckBox courtCostCheckBox;
+    @FXML
+    private TextField courtCostField;
+    @FXML
+    private Button confirmButton;
+    @FXML
+    private Label tournamentNameLabel;
+    @FXML
+    private Label joinFeeLabel;
+    @FXML
+    private Label courtCostLabel;
+    @FXML
+    private Label numOfPrizesLabel;
+    @FXML
+    private Label numOfTeamsLabel;
+    @FXML
+    private Label numOfCourtsLabel;
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -67,11 +91,12 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
                 appContext.getDAOFactory().getPlayerDAO());
     }
 
-    @FXML private void initialize() {
+    @FXML
+    private void initialize() {
         List<String> tournamentTypes = Arrays.asList("Men's singles", "Women's singles", "Men's doubles", "Women's doubles", "Mixed doubles");
-        List <String> tournamentFormat = Arrays.asList("RoundRobin", "Single-elimination", "Double-elimination");
-        List <String> matchFormat = Arrays.asList("Best of three sets", "Best of five sets");
-        List <String> courtType = Arrays.asList("Hard", "Clay", "Grass");
+        List<String> tournamentFormat = Arrays.asList("RoundRobin", "Single-elimination", "Double-elimination");
+        List<String> matchFormat = Arrays.asList("Best of three sets", "Best of five sets");
+        List<String> courtType = Arrays.asList("Hard", "Clay", "Grass");
         setChoiceBox(tournamentTypeChoice, tournamentTypes);
         setChoiceBox(tournamentFormatChoice, tournamentFormat);
         setChoiceBox(matchFormatChoice, matchFormat);
@@ -101,7 +126,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         updateConfirmButtonBinding();
     }
 
-    @FXML
+
     private void setChoiceBox(ChoiceBox<String> choiceBox, List<String> list) {
         choiceBox.getItems().addAll(list);
         choiceBox.getSelectionModel().select(0);
@@ -117,7 +142,6 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         }
     }
 
-    @FXML
     private void requestPrizes() {
         int numOfPrizes;
         if (numOfPrizesField.getText().isEmpty()) {
@@ -141,7 +165,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
             prizesBox.getChildren().addAll(prizeLabel, prizeTextField);
             prizesFields.add(prizeTextField);
             prizesLabels.add(prizeLabel);
-            int me = i+1;
+            int me = i + 1;
             prizeTextField.textProperty().addListener((obs, oldVal, newVal) -> checkPrize(me));
         }
         if (!box.getChildren().contains(prizesBox)) {
@@ -150,7 +174,6 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         updateConfirmButtonBinding();
     }
 
-    @FXML
     private void checkPrize(int i) {
         Label lbl = prizesLabels.get(i - 1);
         TextField tf = prizesFields.get(i - 1);
@@ -165,7 +188,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         tournamentBean.setPrizes(current);
     }
 
-    private boolean checkInt(TextField textField, Label label) {
+    private boolean validInt(TextField textField, Label label) {
         try {
             Integer.parseInt(textField.getText());
             return true;
@@ -179,7 +202,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     private void checkNumOfPrizes() {
         numOfPrizesLabel.setText("Number of prizes");
         numOfPrizesLabel.setTextFill(Color.BLACK);
-        checkInt(numOfPrizesField, numOfPrizesLabel);
+        validInt(numOfPrizesField, numOfPrizesLabel);
     }
 
     @FXML
@@ -231,7 +254,6 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         endDateLabel2.setText(DateConverter.dateToString(endDatePicker.getValue()));
     }
 
-    @FXML
     private void setTournamentName() {
         tournamentNameLabel.setText("Tournament name");
         tournamentNameLabel.setTextFill(Color.BLACK);
@@ -265,29 +287,26 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
 
-    @FXML
     private void setTeamsNumber() {
         numOfTeamsLabel.setText("Number of teams");
         numOfTeamsLabel.setTextFill(Color.BLACK);
-        if (checkInt(numOfTeamsField, numOfTeamsLabel)) {
+        if (validInt(numOfTeamsField, numOfTeamsLabel)) {
             int n = Integer.parseInt(numOfTeamsField.getText());
             tournamentBean.setTeamsNumber(n);
             estimateEndDate();
         }
     }
 
-    @FXML
     private void setCourtsNumber() {
         numOfCourtsLabel.setText("Number of available courts");
         numOfCourtsLabel.setTextFill(Color.BLACK);
-        if (checkInt(numOfCourtsField, numOfCourtsLabel)) {
+        if (validInt(numOfCourtsField, numOfCourtsLabel)) {
             int n = Integer.parseInt(numOfCourtsField.getText());
             tournamentBean.setCourtNumber(n);
             estimateEndDate();
         }
     }
 
-    @FXML
     private void setJoinFee() {
         joinFeeLabel.setText("Join fee");
         joinFeeLabel.setTextFill(Color.BLACK);
@@ -308,7 +327,6 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         }
     }
 
-    @FXML
     private void setCourtCost() {
         courtCostLabel.setText("Court cost");
         courtCostLabel.setTextFill(Color.BLACK);
@@ -322,10 +340,9 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
         }
     }
 
-    @FXML
     private void estimateEndDate() {
-        if ( (numOfTeamsField.getText().isEmpty() || checkInt(numOfTeamsField, numOfTeamsLabel)) &&
-        (numOfCourtsField.getText().isEmpty() || checkInt(numOfCourtsField, numOfCourtsLabel)) && startDatePicker.getValue() != null) {
+        if ((!numOfTeamsField.getText().isEmpty() || validInt(numOfTeamsField, numOfTeamsLabel)) &&
+                (!numOfCourtsField.getText().isEmpty() || validInt(numOfCourtsField, numOfCourtsLabel)) && startDatePicker.getValue() != null) {
             endDateLabel1.setVisible(true);
             LocalDate endDate = this.controller.estimateEndDate(tournamentBean);
             endDateLabel2.setText(DateConverter.dateToString(endDate));
@@ -407,11 +424,11 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private boolean isNumOfCourtsInvalid() {
-        return numOfCourtsField.getText().isEmpty() || !checkInt(numOfCourtsField, numOfCourtsLabel);
+        return numOfCourtsField.getText().isEmpty() || !validInt(numOfCourtsField, numOfCourtsLabel);
     }
 
     private boolean isNumOfTeamsInvalid() {
-        return numOfTeamsField.getText().isEmpty() || !checkInt(numOfTeamsField, numOfTeamsLabel);
+        return numOfTeamsField.getText().isEmpty() || !validInt(numOfTeamsField, numOfTeamsLabel);
     }
 
     private boolean isJoinFeeInvalid() {
@@ -423,7 +440,7 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private boolean isNumOfPrizesInvalid() {
-        return numOfPrizesField.getText().isEmpty() || !checkInt(numOfPrizesField, numOfPrizesLabel);
+        return numOfPrizesField.getText().isEmpty() || !validInt(numOfPrizesField, numOfPrizesLabel);
     }
 
     private boolean isStartDateInvalid() {
@@ -435,8 +452,9 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     }
 
     private boolean arePrizesInvalid() {
-        for (int i = 0 ; i < prizesFields.size(); i++) {
-            if (prizesFields.get(i).getText().isEmpty() || !checkDouble(prizesFields.get(i), prizesLabels.get(i))) return true;
+        for (int i = 0; i < prizesFields.size(); i++) {
+            if (prizesFields.get(i).getText().isEmpty() || !checkDouble(prizesFields.get(i), prizesLabels.get(i)))
+                return true;
         }
         return false;
     }

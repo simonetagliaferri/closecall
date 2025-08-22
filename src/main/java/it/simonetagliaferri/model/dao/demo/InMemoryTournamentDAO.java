@@ -4,48 +4,20 @@ import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryTournamentDAO implements TournamentDAO {
     Map<String, List<Tournament>> tournaments;
+
     public InMemoryTournamentDAO(Map<String, List<Tournament>> tournaments) {
         this.tournaments = tournaments;
     }
 
-    @Override
-    public void saveTournament(Club club, Tournament tournament) {
-        List<Tournament> clubTournaments = this.tournaments
-                .computeIfAbsent(club.getOwner().getUsername(), k -> new ArrayList<>());
-
-        for (int i = 0; i < clubTournaments.size(); i++) {
-            Tournament t = clubTournaments.get(i);
-            if (t.getName().equals(tournament.getName())) {
-                clubTournaments.set(i, tournament);
-                return;
-            }
-        }
-
-        clubTournaments.add(tournament);
-    }
-
-    @Override
-    public List<Tournament> getTournaments(Club club) {
-        List<Tournament> clubTournaments = this.tournaments.get(club.getOwner().getUsername());
-        if (clubTournaments == null) {
-            return new ArrayList<>();
-        }
-        return clubTournaments;
-    }
-
-    @Override
-    public Tournament getTournament(Club club, String name) {
-        return getTournament(club, name, tournaments);
-    }
-
     public static Tournament getTournament(Club club, String name, Map<String, List<Tournament>> tournaments) {
-        List<Tournament> tournamentList = tournaments.get(club.getOwner().getUsername());
+        List<Tournament> tournamentList = tournaments.get(club.getOwnerUsername());
         if (tournamentList != null) {
             for (Tournament tournament : tournamentList) {
                 if (tournament.getName().equals(name)) {
@@ -54,10 +26,6 @@ public class InMemoryTournamentDAO implements TournamentDAO {
             }
         }
         return null;
-    }
-
-    public List<Tournament> getTournamentsByCity(String city) {
-        return getTournaments(city, tournaments);
     }
 
     public static List<Tournament> getTournaments(String city, Map<String, List<Tournament>> tournaments) {
@@ -74,11 +42,6 @@ public class InMemoryTournamentDAO implements TournamentDAO {
         return tournamentList;
     }
 
-    @Override
-    public List<Tournament> getPlayerTournaments(Player player) {
-        return getPlayerTournaments(player, tournaments);
-    }
-
     public static List<Tournament> getPlayerTournaments(Player player, Map<String, List<Tournament>> tournaments) {
         List<Tournament> tournamentList = new ArrayList<>();
         for (Map.Entry<String, List<Tournament>> entry : tournaments.entrySet()) {
@@ -89,6 +52,45 @@ public class InMemoryTournamentDAO implements TournamentDAO {
             }
         }
         return tournamentList;
+    }
+
+    @Override
+    public void saveTournament(Club club, Tournament tournament) {
+        List<Tournament> clubTournaments = this.tournaments
+                .computeIfAbsent(club.getOwnerUsername(), k -> new ArrayList<>());
+
+        for (int i = 0; i < clubTournaments.size(); i++) {
+            Tournament t = clubTournaments.get(i);
+            if (t.getName().equals(tournament.getName())) {
+                clubTournaments.set(i, tournament);
+                return;
+            }
+        }
+
+        clubTournaments.add(tournament);
+    }
+
+    @Override
+    public List<Tournament> getTournaments(Club club) {
+        List<Tournament> clubTournaments = this.tournaments.get(club.getOwnerUsername());
+        if (clubTournaments == null) {
+            return new ArrayList<>();
+        }
+        return clubTournaments;
+    }
+
+    @Override
+    public Tournament getTournament(Club club, String name) {
+        return getTournament(club, name, tournaments);
+    }
+
+    public List<Tournament> getTournamentsByCity(String city) {
+        return getTournaments(city, tournaments);
+    }
+
+    @Override
+    public List<Tournament> getPlayerTournaments(Player player) {
+        return getPlayerTournaments(player, tournaments);
     }
 
 }

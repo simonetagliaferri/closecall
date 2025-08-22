@@ -29,8 +29,7 @@ public class GraphicHandleNotificationsControllerCLI extends GraphicController {
     public void start(Role role) {
         if (role == Role.PLAYER) {
             startPlayer();
-        }
-        else {
+        } else {
             startHost();
         }
     }

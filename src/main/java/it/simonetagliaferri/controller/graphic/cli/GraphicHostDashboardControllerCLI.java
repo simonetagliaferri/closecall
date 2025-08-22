@@ -1,12 +1,12 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.ClubBean;
-import it.simonetagliaferri.controller.logic.ManageTournamentsApplicationController;
-import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.HostBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.HostDashboardApplicationController;
+import it.simonetagliaferri.controller.logic.ManageTournamentsApplicationController;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.HostDashboardCLIView;
 
@@ -51,7 +51,7 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
                     clubInfo();
                     break;
                 case LOGOUT:
-                    home=false;
+                    home = false;
                     logout();
                     break;
                 case NOTIFICATIONS:
@@ -88,8 +88,7 @@ public class GraphicHostDashboardControllerCLI extends GraphicController {
         List<TournamentBean> tournaments = this.tournamentController.getTournaments();
         if (!tournaments.isEmpty()) {
             view.listTournaments(tournaments);
-        }
-        else {
+        } else {
             view.noTournaments();
         }
     }

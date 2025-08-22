@@ -41,6 +41,10 @@ public class AppContext {
         navigationManager = new NavigationManagerFactory().getNavigationManager(this, uiMode);
     }
 
+    public void startNavigation() {
+        navigationManager.start();
+    }
+
     public NavigationManager getNavigationManager() {
         return navigationManager;
     }

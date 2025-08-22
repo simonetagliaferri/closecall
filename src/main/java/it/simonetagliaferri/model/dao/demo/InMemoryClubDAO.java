@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
+
 import java.util.Map;
 
 public class InMemoryClubDAO implements ClubDAO {
@@ -19,7 +20,7 @@ public class InMemoryClubDAO implements ClubDAO {
 
     @Override
     public void saveClub(Club club) {
-        clubs.put(club.getOwner().getUsername(), club);
+        clubs.put(club.getOwnerUsername(), club);
     }
 
 }

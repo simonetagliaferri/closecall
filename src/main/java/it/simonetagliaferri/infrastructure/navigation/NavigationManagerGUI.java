@@ -13,12 +13,11 @@ import javafx.application.Application;
 
 public class NavigationManagerGUI extends NavigationManager {
 
+    private GraphicHostDashboardControllerGUI graphicHostDashboardControllerGUI;
+    private GraphicPlayerDashboardControllerGUI graphicPlayerDashboardControllerGUI;
     protected NavigationManagerGUI(AppContext context) {
         super(context);
     }
-
-    private GraphicHostDashboardControllerGUI graphicHostDashboardControllerGUI;
-    private GraphicPlayerDashboardControllerGUI graphicPlayerDashboardControllerGUI;
 
     /**
      * The start method calls the SceneManagerGUI's setAppContext method so that the app context can be passed to the graphic controller.

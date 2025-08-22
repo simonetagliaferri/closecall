@@ -9,9 +9,10 @@ import it.simonetagliaferri.model.domain.User;
  */
 public class SessionManager {
 
-    protected SessionManager() {}
-
     private User currentUser;
+
+    protected SessionManager() {
+    }
 
     public User getCurrentUser() {
         return currentUser;
@@ -23,6 +24,10 @@ public class SessionManager {
 
     public void clearSession() {
         currentUser = null;
+    }
+
+    public String getCurrentUserUsername() {
+        return currentUser.getUsername();
     }
 
 }

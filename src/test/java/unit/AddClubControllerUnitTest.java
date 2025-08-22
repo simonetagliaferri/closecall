@@ -81,7 +81,7 @@ class AddClubControllerUnitTest {
 
         @Override
         public void saveClub(Club club) {
-            String hostName = club.getOwner().getUsername();
+            String hostName = club.getOwnerUsername();
             clubs.put(hostName, club);
         }
     }

@@ -2,7 +2,6 @@ package it.simonetagliaferri.controller.logic;
 
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.domain.Role;
-import it.simonetagliaferri.model.domain.User;
 
 public class ApplicationController {
 
@@ -16,8 +15,8 @@ public class ApplicationController {
         return sessionManager.getCurrentUser().getRole();
     }
 
-    protected User getCurrentUser() {
-        return sessionManager.getCurrentUser();
+    protected String getCurrentUserUsername() {
+        return sessionManager.getCurrentUserUsername();
     }
 
     public void logout() {

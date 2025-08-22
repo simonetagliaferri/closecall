@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.demo;
 
 import it.simonetagliaferri.model.dao.LoginDAO;
 import it.simonetagliaferri.model.domain.User;
+
 import java.util.Map;
 
 public class InMemoryLoginDAO implements LoginDAO {
@@ -25,7 +26,9 @@ public class InMemoryLoginDAO implements LoginDAO {
     @Override
     public User findByEmail(String email) {
         for (User user : users.values()) {
-            if (user.getEmail().equalsIgnoreCase(email)) {return user; }
+            if (user.getEmail().equalsIgnoreCase(email)) {
+                return user;
+            }
         }
         return null;
     }

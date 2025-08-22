@@ -12,22 +12,34 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class GraphicAddClubControllerGUI extends GraphicController implements GUIController{
+public class GraphicAddClubControllerGUI extends GraphicController implements GUIController {
 
     private AddClubApplicationController controller;
 
-    @FXML private HBox addClub;
-    @FXML private VBox firstClubWarning;
-    @FXML private VBox clubDetails;
-    @FXML private TextField clubName;
-    @FXML private TextField clubStreet;
-    @FXML private TextField clubNumber;
-    @FXML private TextField clubCity;
-    @FXML private TextField clubZip;
-    @FXML private TextField clubState;
-    @FXML private TextField clubCountry;
-    @FXML private TextField clubPhone;
-    @FXML private Button confirmButton;
+    @FXML
+    private HBox addClub;
+    @FXML
+    private VBox firstClubWarning;
+    @FXML
+    private VBox clubDetails;
+    @FXML
+    private TextField clubName;
+    @FXML
+    private TextField clubStreet;
+    @FXML
+    private TextField clubNumber;
+    @FXML
+    private TextField clubCity;
+    @FXML
+    private TextField clubZip;
+    @FXML
+    private TextField clubState;
+    @FXML
+    private TextField clubCountry;
+    @FXML
+    private TextField clubPhone;
+    @FXML
+    private Button confirmButton;
 
     @Override
     public void initializeController(AppContext appContext) {

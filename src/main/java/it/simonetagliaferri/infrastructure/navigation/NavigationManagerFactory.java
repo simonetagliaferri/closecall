@@ -3,7 +3,8 @@ package it.simonetagliaferri.infrastructure.navigation;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.utils.PropertiesUtils;
 
-import static it.simonetagliaferri.utils.PropertiesUtils.*;
+import static it.simonetagliaferri.utils.PropertiesUtils.UI_KEY;
+import static it.simonetagliaferri.utils.PropertiesUtils.UI_PROPERTIES;
 
 public class NavigationManagerFactory {
 

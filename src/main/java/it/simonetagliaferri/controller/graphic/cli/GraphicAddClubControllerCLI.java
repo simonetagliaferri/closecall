@@ -7,6 +7,7 @@ import it.simonetagliaferri.controller.logic.AddClubApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.view.cli.AddClubCLIView;
 import it.simonetagliaferri.view.cli.AddClubCLIView.PreambleChoice;
+
 import static it.simonetagliaferri.view.cli.AddClubCLIView.PreambleChoice.ADD_CLUB;
 
 public class GraphicAddClubControllerCLI extends GraphicController {
@@ -26,12 +27,10 @@ public class GraphicAddClubControllerCLI extends GraphicController {
         PreambleChoice choice = view.preamble();
         if (choice.equals(ADD_CLUB)) {
             result = this.controller.addClub(addClub());
-        }
-        else return;
+        } else return;
         if (result) {
             view.newClubAdded();
-        }
-        else {
+        } else {
             view.clubAlreadyExists();
         }
     }

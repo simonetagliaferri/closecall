@@ -8,7 +8,10 @@ import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
-import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Host;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.model.invite.decorator.EmailDecorator;
@@ -37,8 +40,8 @@ public class SendPlayerInviteApplicationController extends ApplicationController
     }
 
     private Tournament loadTournament(TournamentBean tournamentBean) {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        Host host = hostDAO.getHostByUsername(username);
         Club club = clubDAO.getClubByHostName(host.getUsername());
         host.addClub(club);
         return tournamentDAO.getTournament(club, tournamentBean.getTournamentName());
@@ -71,7 +74,7 @@ public class SendPlayerInviteApplicationController extends ApplicationController
         Invite invite2 = createInvite(p2, inviteExpireDate, message2);
         sendInvite(invite1, email1);
         sendInvite(invite2, email2);
-        tournament.reserveSpot(p1,p2);
+        tournament.reserveSpot(p1, p2);
         playerDAO.savePlayer(p1);
         playerDAO.savePlayer(p2);
         tournamentDAO.saveTournament(tournament.getClub(), tournament);
@@ -83,8 +86,10 @@ public class SendPlayerInviteApplicationController extends ApplicationController
 
     private Player loadPlayer(PlayerBean playerBean) {
         Player player = playerDAO.findByUsername(playerBean.getUsername());
-        if (player == null) { player = PlayerMapper.fromBean(playerBean); }
-        /* If player is null it means it's not a registered player. It will be saved as a player that has email=username,
+        if (player == null) {
+            player = PlayerMapper.fromBean(playerBean);
+        }
+        /* If player is null it means it's not a registered player. It will be saved as a player that has email==username,
          * so that if the player ever signs up, the invite will be in their dashboard.
          */
         return player;
@@ -100,8 +105,7 @@ public class SendPlayerInviteApplicationController extends ApplicationController
         Player p;
         if (playerBean.setEmail(player)) {
             p = playerDAO.findByEmail(playerBean.getEmail());
-        }
-        else {
+        } else {
             playerBean.setEmail(null);
             playerBean.setUsername(player);
             p = playerDAO.findByUsername(player);
@@ -131,11 +135,11 @@ public class SendPlayerInviteApplicationController extends ApplicationController
         return tournament.minInviteExpiryDate();
     }
 
-    public boolean noSingleSpotsAvailable(){
+    public boolean noSingleSpotsAvailable() {
         return tournament.noSingleAvailableSpots();
     }
 
-    public boolean noTeamSpotsAvailable(){
+    public boolean noTeamSpotsAvailable() {
         return tournament.noTeamSpotsAvailable();
     }
 
@@ -146,7 +150,9 @@ public class SendPlayerInviteApplicationController extends ApplicationController
     }
 
     public boolean isExpireDateValid(LocalDate date) {
-        if (date == null) { return false; }
+        if (date == null) {
+            return false;
+        }
         return tournament.isInviteExpireDateValid(date);
     }
 }

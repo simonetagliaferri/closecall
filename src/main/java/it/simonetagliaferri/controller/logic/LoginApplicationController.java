@@ -25,10 +25,10 @@ public class LoginApplicationController extends ApplicationController {
     }
 
     /**
-        It tries to get a user from the DAO passing to it the provided username, it hashes the provided password,
-        then it checks that the user exists and then that the provided password matches with the user's password.
-        If the checks are successful a new UserBean is instantiated with the retrieved role and the session's current user is set.
-        A login response bean is used to communicate the outcome of the login process to the graphic controller.
+     * It tries to get a user from the DAO passing to it the provided username, it hashes the provided password,
+     * then it checks that the user exists and then that the provided password matches with the user's password.
+     * If the checks are successful a new UserBean is instantiated with the retrieved role and the session's current user is set.
+     * A login response bean is used to communicate the outcome of the login process to the graphic controller.
      */
     public boolean login(UserBean bean) {
         String username = bean.getUsername();
@@ -50,7 +50,7 @@ public class LoginApplicationController extends ApplicationController {
 
     /**
      * It creates a user from the bean and then passes it to loginDAO to sign the user up.
-    */
+     */
     public void signup(UserBean bean) {
         User user = UserMapper.fromBean(bean); // It's okay to go from bean to model because this user doesn't exist yet.
         user.hashPassword();
@@ -61,8 +61,7 @@ public class LoginApplicationController extends ApplicationController {
         if (user.isHost()) {
             Host host = new Host(user.getUsername(), user.getEmail());
             hostDAO.saveHost(host);
-        }
-        else {
+        } else {
             Player player = new Player(user.getUsername(), user.getEmail());
             playerDAO.savePlayer(player);
         }

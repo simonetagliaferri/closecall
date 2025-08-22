@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.jdbc;
 
 import it.simonetagliaferri.utils.CliUtils;
 import it.simonetagliaferri.utils.PropertiesUtils;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,10 +14,16 @@ public class ConnectionFactory {
     private static Connection connection;
 
     private static volatile Connection overrideForTests;
-    public static void setTestConnection(Connection c) { overrideForTests = c; }
-    public static void clearTestConnection() { overrideForTests = null; }
 
     private ConnectionFactory() {
+    }
+
+    public static void setTestConnection(Connection c) {
+        overrideForTests = c;
+    }
+
+    public static void clearTestConnection() {
+        overrideForTests = null;
     }
 
     /**

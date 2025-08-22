@@ -1,15 +1,22 @@
 package it.simonetagliaferri.controller.logic;
 
-import it.simonetagliaferri.beans.*;
+import it.simonetagliaferri.beans.ClubBean;
+import it.simonetagliaferri.beans.HostBean;
+import it.simonetagliaferri.beans.InviteBean;
+import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
-import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Team;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.model.invite.Invite;
 import it.simonetagliaferri.model.invite.InviteStatus;
 import it.simonetagliaferri.utils.converters.InviteMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +36,8 @@ public class ProcessPlayerInviteApplicationController extends ApplicationControl
     }
 
     private Player loadPlayer() {
-        User user = getCurrentUser();
-        return playerDAO.findByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        return playerDAO.findByUsername(username);
     }
 
     private Invite loadInvite(InviteBean inviteBean) {
@@ -50,8 +57,8 @@ public class ProcessPlayerInviteApplicationController extends ApplicationControl
     }
 
     public List<InviteBean> getInvites() {
-        User user = getCurrentUser();
-        Player player = playerDAO.findByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        Player player = playerDAO.findByUsername(username);
         List<InviteBean> inviteBeanList = new ArrayList<>();
         List<Invite> invites = player.getInvites();
         if (invites != null && !invites.isEmpty()) {
@@ -66,7 +73,7 @@ public class ProcessPlayerInviteApplicationController extends ApplicationControl
         return inviteBeanList;
     }
 
-    public void updateInvite(InviteBean inviteBean, InviteStatus status){
+    public void updateInvite(InviteBean inviteBean, InviteStatus status) {
         if (status != InviteStatus.PENDING) {
             Invite invite = loadInvite(inviteBean);
             Player player = invite.getPlayer();
@@ -91,7 +98,7 @@ public class ProcessPlayerInviteApplicationController extends ApplicationControl
         }
     }
 
-    public boolean expiredInvite(InviteBean inviteBean){
+    public boolean expiredInvite(InviteBean inviteBean) {
         Invite invite = loadInvite(inviteBean);
         Player player = invite.getPlayer();
         if (invite.hasExpired()) {

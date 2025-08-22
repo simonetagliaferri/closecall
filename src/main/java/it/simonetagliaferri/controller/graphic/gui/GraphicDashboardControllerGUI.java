@@ -7,7 +7,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.List;
 
-public abstract class GraphicDashboardControllerGUI extends GraphicController implements GUIController{
+public abstract class GraphicDashboardControllerGUI extends GraphicController implements GUIController {
 
     protected void setDashboardButtons(List<ToggleButton> buttons, List<FontIcon> icons) {
         ToggleGroup tabs = new ToggleGroup();

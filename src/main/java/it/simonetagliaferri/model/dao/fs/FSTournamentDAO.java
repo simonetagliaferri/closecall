@@ -7,11 +7,17 @@ import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FSTournamentDAO extends FSDAO implements TournamentDAO {
 
@@ -53,7 +59,7 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
     @Override
     public void saveTournament(Club club, Tournament tournament) {
         List<Tournament> clubTournaments = this.tournaments
-                .computeIfAbsent(club.getOwner().getUsername(), k -> new ArrayList<>());
+                .computeIfAbsent(club.getOwnerUsername(), k -> new ArrayList<>());
         for (int i = 0; i < clubTournaments.size(); i++) {
             Tournament t = clubTournaments.get(i);
             if (t.getName().equals(tournament.getName())) {
@@ -68,7 +74,7 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
 
     @Override
     public List<Tournament> getTournaments(Club club) {
-        List<Tournament> clubTournaments = this.tournaments.get(club.getOwner().getUsername());
+        List<Tournament> clubTournaments = this.tournaments.get(club.getOwnerUsername());
         if (clubTournaments == null) {
             return new ArrayList<>();
         }

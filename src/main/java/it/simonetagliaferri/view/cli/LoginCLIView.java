@@ -4,12 +4,6 @@ import it.simonetagliaferri.utils.CliUtils;
 
 public class LoginCLIView {
 
-    public enum LoginCommand {
-        LOGIN,
-        SIGNUP,
-        QUIT
-    }
-
     public LoginCommand showMenu() {
         CliUtils.println("Welcome to the court.");
         while (true) {
@@ -18,7 +12,7 @@ public class LoginCLIView {
             CliUtils.println("3. Quit");
             int choice = CliUtils.promptPositiveInt("Enter your choice: ");
             if (choice >= 1 && choice <= 3) {
-                return LoginCommand.values()[choice-1];
+                return LoginCommand.values()[choice - 1];
             }
             CliUtils.println("Invalid choice. Try again.");
         }
@@ -35,13 +29,6 @@ public class LoginCLIView {
     public String getPassword() {
         return CliUtils.prompt("Enter password: ");
     }
-
-
-    /* For email, password and role input validation I decided to call the bean's methods directly from the view,
-   without going through the GraphicController because I wanted to have direct validation after
-   each field was filled by the user and not just at the end, it's just less messy doing it this way.
-   This is what is done in signupSecondStep and signupThirdStep. The need to split signup in the CLI UI is given by
-   the fact that it would be inappropriate to ask the user multiple fields without giving a feedback on invalid inputs.*/
 
     public String getEmail() {
         return CliUtils.prompt("Enter email: ");
@@ -91,11 +78,13 @@ public class LoginCLIView {
         CliUtils.println("Signup successful");
     }
 
-    public void failedSignup() {
-        CliUtils.println("Signup failed. Try again.");
-    }
-
     public void emailAlreadyTaken() {
         CliUtils.println("Email already taken. Try again.");
+    }
+
+    public enum LoginCommand {
+        LOGIN,
+        SIGNUP,
+        QUIT
     }
 }

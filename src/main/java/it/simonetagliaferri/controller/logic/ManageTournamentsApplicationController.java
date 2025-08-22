@@ -8,7 +8,6 @@ import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Tournament;
-import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
 import java.util.ArrayList;
@@ -28,8 +27,8 @@ public class ManageTournamentsApplicationController extends ApplicationControlle
     }
 
     private List<Tournament> loadTournaments() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        Host host = hostDAO.getHostByUsername(username);
         Club club = clubDAO.getClubByHostName(host.getUsername());
         return tournamentDAO.getTournaments(club);
     }

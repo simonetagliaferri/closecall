@@ -11,7 +11,6 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     private static final String PASS = "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
 
-    // Storing here the hashmaps that will be passed to the DAOs constructors, so that consecutive calls reference the same memory area.
     private final Map<String, User> users = new HashMap<>();
     private final Map<String, List<Tournament>> tournaments = new HashMap<>();
     private final Map<String, Club> clubs = new HashMap<>();
@@ -52,31 +51,41 @@ public class InMemoryDAOFactory extends DAOFactory {
 
     @Override
     public LoginDAO getLoginDAO() {
-        if (loginDAO == null) { loginDAO = new InMemoryLoginDAO(users);}
+        if (loginDAO == null) {
+            loginDAO = new InMemoryLoginDAO(users);
+        }
         return loginDAO;
     }
 
     @Override
     public TournamentDAO getTournamentDAO() {
-        if (tournamentDAO == null) { tournamentDAO = new InMemoryTournamentDAO(tournaments);}
+        if (tournamentDAO == null) {
+            tournamentDAO = new InMemoryTournamentDAO(tournaments);
+        }
         return tournamentDAO;
     }
 
     @Override
     public HostDAO getHostDAO() {
-        if (hostDAO == null) { hostDAO = new InMemoryHostDAO(hosts);}
+        if (hostDAO == null) {
+            hostDAO = new InMemoryHostDAO(hosts);
+        }
         return hostDAO;
     }
 
     @Override
     public PlayerDAO getPlayerDAO() {
-        if (playerDAO == null) { playerDAO = new InMemoryPlayerDAO(players);}
+        if (playerDAO == null) {
+            playerDAO = new InMemoryPlayerDAO(players);
+        }
         return playerDAO;
     }
 
     @Override
     public ClubDAO getClubDAO() {
-        if (clubDAO == null) { clubDAO = new InMemoryClubDAO(clubs);}
+        if (clubDAO == null) {
+            clubDAO = new InMemoryClubDAO(clubs);
+        }
         return clubDAO;
     }
 

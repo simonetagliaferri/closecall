@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -28,33 +29,6 @@ public class SceneManagerGUI extends Application {
 
     public static void main(String[] args) {
         launch();
-    }
-
-    /**
-     * The start method is not static because it's the method called by JavaFX after initializing its runtime.
-     */
-    @Override
-    public void start(Stage stage) throws IOException {
-        /*
-         * These two properties are set to fix blurry text.
-         */
-        System.setProperty("prism.lcdtext", "false");
-        System.setProperty("prism.text", "t2k");
-        double baseWidth = 1280;
-        double baseHeight = 720;
-        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/logo.png")));
-        stage.getIcons().add(icon);
-        stage.setMinWidth(baseWidth / 2);
-        stage.setMinHeight(baseHeight / 2);
-        FXMLLoader loader = getLoader("login");
-        Scene s = new Scene(loadFXML(loader), baseWidth, baseHeight);
-        URL css = getCss();
-        s.getStylesheets().add(css.toExternalForm());
-        stage.setScene(s);
-        stage.centerOnScreen();
-        stage.setTitle("CloseCall");
-        stage.show();
-        setScene(s);
     }
 
     public static void login() {
@@ -141,6 +115,33 @@ public class SceneManagerGUI extends Application {
 
     public static void setAppContext(AppContext context) {
         appContext = context;
+    }
+
+    /**
+     * The start method is not static because it's the method called by JavaFX after initializing its runtime.
+     */
+    @Override
+    public void start(Stage stage) throws IOException {
+        /*
+         * These two properties are set to fix blurry text.
+         */
+        System.setProperty("prism.lcdtext", "false");
+        System.setProperty("prism.text", "t2k");
+        double baseWidth = 1280;
+        double baseHeight = 720;
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/logo.png")));
+        stage.getIcons().add(icon);
+        stage.setMinWidth(baseWidth / 2);
+        stage.setMinHeight(baseHeight / 2);
+        FXMLLoader loader = getLoader("login");
+        Scene s = new Scene(loadFXML(loader), baseWidth, baseHeight);
+        URL css = getCss();
+        s.getStylesheets().add(css.toExternalForm());
+        stage.setScene(s);
+        stage.centerOnScreen();
+        stage.setTitle("CloseCall");
+        stage.show();
+        setScene(s);
     }
 
 }

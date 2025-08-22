@@ -17,6 +17,7 @@ public class TeamBean {
         this.tournament = tournament;
         this.type = type;
     }
+
     public TeamBean(PlayerBean player1, PlayerBean player2, TournamentBean tournament) {
         this.player1 = player1;
         this.player2 = player2;

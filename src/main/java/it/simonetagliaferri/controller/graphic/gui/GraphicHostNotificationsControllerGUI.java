@@ -15,7 +15,8 @@ import java.util.Map;
 public class GraphicHostNotificationsControllerGUI extends GraphicController implements GUIController {
 
     HandleNotificationsApplicationController controller;
-    @FXML private VBox notificationList;
+    @FXML
+    private VBox notificationList;
 
     @Override
     public void initializeController(AppContext appContext) {

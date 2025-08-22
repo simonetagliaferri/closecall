@@ -31,8 +31,7 @@ public class NavigationManagerCLI extends NavigationManager {
     public void goToDashboard(Role role) {
         if (role == Role.HOST) {
             sceneManager.hostDashboard(this.appContext);
-        }
-        else {
+        } else {
             sceneManager.playerDashboard(this.appContext);
         }
     }

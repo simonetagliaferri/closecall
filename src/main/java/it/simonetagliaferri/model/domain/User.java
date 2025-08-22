@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private final String username;
-    private String password;
     private final String email;
+    private String password;
     private Role role;
 
     public User(String username, String email, String password, Role role) {
@@ -54,17 +54,12 @@ public class User implements Serializable {
 
     public boolean isPasswordCorrect(String password) {
         String hashedPassword = hashPassword(password);
-        if (this.password==null) return false;
+        if (this.password == null) return false;
         return this.password.equals(hashedPassword);
     }
 
     public boolean isHost() {
         return this.role == Role.HOST;
-    }
-
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public String getUsername() {
@@ -81,6 +76,10 @@ public class User implements Serializable {
 
     public Role getRole() {
         return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public boolean isSameAs(User user) {

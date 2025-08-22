@@ -12,97 +12,81 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="CENTER" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicAddTournamentControllerGUI">
+<HBox alignment="CENTER" styleClass="box" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicAddTournamentControllerGUI">
    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportWidth="450.0" HBox.hgrow="NEVER">
       <HBox.margin>
-         <Insets/>
+         <Insets />
       </HBox.margin>
       <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" styleClass="box">
          <VBox styleClass="box">
             <VBox.margin>
-               <Insets/>
+               <Insets />
             </VBox.margin>
-            <Label fx:id="tournamentNameLabel" styleClass="text" text="Tournament name"/>
-            <TextField fx:id="tournamentNameField" maxHeight="-Infinity" minHeight="-Infinity"
-                       onAction="#setTournamentName" prefHeight="30.0" prefWidth="441.0"
-                       styleClass="text-field" VBox.vgrow="NEVER"/>
+            <Label fx:id="tournamentNameLabel" styleClass="text" text="Tournament name" />
+            <TextField fx:id="tournamentNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label text="Tournament type"/>
-            <ChoiceBox fx:id="tournamentTypeChoice" maxHeight="-Infinity" minHeight="-Infinity"
-                       onAction="#setTournamentType" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER"/>
+            <Label text="Tournament type" />
+            <ChoiceBox fx:id="tournamentTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setTournamentType" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label text="Tournament format"/>
-            <ChoiceBox fx:id="tournamentFormatChoice" maxHeight="-Infinity" minHeight="-Infinity"
-                       onAction="#setTournamentFormat" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER"/>
+            <Label text="Tournament format" />
+            <ChoiceBox fx:id="tournamentFormatChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setTournamentFormat" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label text="Match format"/>
-            <ChoiceBox fx:id="matchFormatChoice" maxHeight="-Infinity" minHeight="-Infinity"
-                       onAction="#setMatchFormatChoice" prefHeight="30.0" prefWidth="441.0"
-                       VBox.vgrow="NEVER"/>
+            <Label text="Match format" />
+            <ChoiceBox fx:id="matchFormatChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setMatchFormatChoice" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label text="Court type"/>
-            <ChoiceBox fx:id="courtTypeChoice" maxHeight="-Infinity" minHeight="-Infinity"
-                       onAction="#setCourtTypeChoice" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER"/>
+            <Label text="Court type" />
+            <ChoiceBox fx:id="courtTypeChoice" maxHeight="-Infinity" minHeight="-Infinity" onAction="#setCourtTypeChoice" prefHeight="30.0" prefWidth="441.0" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="numOfCourtsLabel" styleClass="text" text="Number of available courts"/>
-            <TextField fx:id="numOfCourtsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
-                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+            <Label fx:id="numOfCourtsLabel" styleClass="text" text="Number of available courts" />
+            <TextField fx:id="numOfCourtsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="numOfTeamsLabel" styleClass="text" text="Number of teams"/>
-            <TextField fx:id="numOfTeamsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
-                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+            <Label fx:id="numOfTeamsLabel" styleClass="text" text="Number of teams" />
+            <TextField fx:id="numOfTeamsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="joinFeeLabel" styleClass="text" text="Join fee"/>
-            <TextField fx:id="joinFeeField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
-                       prefWidth="441.0" styleClass="text-field"/>
-            <CheckBox fx:id="courtCostCheckBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT"
-                      onAction="#courtCost" selected="true" text="Court costs included" wrapText="true"/>
+            <Label fx:id="joinFeeLabel" styleClass="text" text="Join fee" />
+            <TextField fx:id="joinFeeField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" />
+            <CheckBox fx:id="courtCostCheckBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#courtCost" selected="true" text="Court costs included" wrapText="true" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="courtCostLabel" styleClass="text" text="Court cost"/>
-            <TextField fx:id="courtCostField" disable="true" maxHeight="-Infinity" minHeight="-Infinity"
-                       prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+            <Label fx:id="courtCostLabel" styleClass="text" text="Court cost" />
+            <TextField fx:id="courtCostField" disable="true" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="numOfPrizesLabel" styleClass="text" text="Number of prizes"/>
-            <TextField fx:id="numOfPrizesField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
-                       prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER"/>
+            <Label fx:id="numOfPrizesLabel" styleClass="text" text="Number of prizes" />
+            <TextField fx:id="numOfPrizesField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="441.0" styleClass="text-field" VBox.vgrow="NEVER" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="startDateLabel" styleClass="text" text="Start date"/>
-            <DatePicker fx:id="startDatePicker" onAction="#checkStartDate"/>
+            <Label fx:id="startDateLabel" styleClass="text" text="Start date" />
+            <DatePicker fx:id="startDatePicker" onAction="#checkStartDate" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="deadlineLabel" styleClass="text" text="Signup deadline"/>
-            <DatePicker fx:id="deadlinePicker" onAction="#checkSignupDeadline"/>
+            <Label fx:id="deadlineLabel" styleClass="text" text="Signup deadline" />
+            <DatePicker fx:id="deadlinePicker" onAction="#checkSignupDeadline" />
          </VBox>
          <VBox styleClass="box">
-            <Label fx:id="endDateLabel1" styleClass="text" text="Estimated end date:" visible="false"/>
+            <Label fx:id="endDateLabel1" styleClass="text" text="Estimated end date:" visible="false" />
             <HBox>
-               <Label fx:id="endDateLabel2" styleClass="text" visible="false"/>
-               <Hyperlink fx:id="endDateHyper" onAction="#editEndDate" text="Edit" visible="false"/>
-               <DatePicker fx:id="endDatePicker" onAction="#updateEndDate" visible="false"/>
+               <Label fx:id="endDateLabel2" styleClass="text" visible="false" />
+               <Hyperlink fx:id="endDateHyper" onAction="#editEndDate" text="Edit" visible="false" />
+               <DatePicker fx:id="endDatePicker" onAction="#updateEndDate" visible="false" />
             </HBox>
          </VBox>
       </VBox>
    </ScrollPane>
    <VBox alignment="TOP_CENTER" styleClass="box" HBox.hgrow="NEVER">
       <HBox.margin>
-         <Insets bottom="20.0" right="20.0"/>
+         <Insets bottom="20.0" right="20.0" />
       </HBox.margin>
-      <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity"
-              mnemonicParsing="false" onAction="#confirmTournamentData" prefHeight="30.0" prefWidth="125.0"
-              styleClass="blue-button" text="Confirm">
+      <Button fx:id="confirmButton" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#confirmTournamentData" prefHeight="30.0" prefWidth="125.0" styleClass="blue-button" text="Confirm">
          <VBox.margin>
-            <Insets top="25.0"/>
+            <Insets top="25.0" />
          </VBox.margin>
       </Button>
    </VBox>

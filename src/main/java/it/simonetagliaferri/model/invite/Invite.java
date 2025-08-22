@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.invite;
 
 import it.simonetagliaferri.model.domain.Player;
 import it.simonetagliaferri.model.domain.Tournament;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -32,7 +33,7 @@ public class Invite implements Serializable {
     }
 
 
-    public void updateStatus(InviteStatus inviteStatus){
+    public void updateStatus(InviteStatus inviteStatus) {
         this.status = inviteStatus;
     }
 
@@ -47,9 +48,11 @@ public class Invite implements Serializable {
     public LocalDate getSendDate() {
         return sendDate;
     }
+
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
+
     public boolean hasExpired() {
         if (expiryDate.isBefore(LocalDate.now())) {
             if (status != InviteStatus.EXPIRED)
@@ -58,9 +61,11 @@ public class Invite implements Serializable {
         }
         return false;
     }
+
     public InviteStatus getStatus() {
         return status;
     }
+
     public String getMessage() {
         return message;
     }

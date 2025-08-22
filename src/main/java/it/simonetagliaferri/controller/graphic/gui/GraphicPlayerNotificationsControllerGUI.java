@@ -10,10 +10,11 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class GraphicPlayerNotificationsControllerGUI extends GraphicController implements GUIController{
+public class GraphicPlayerNotificationsControllerGUI extends GraphicController implements GUIController {
 
     HandleNotificationsApplicationController controller;
-    @FXML private VBox notificationList;
+    @FXML
+    private VBox notificationList;
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -34,7 +35,7 @@ public class GraphicPlayerNotificationsControllerGUI extends GraphicController i
     }
 
     private void showTournament(TournamentBean tournament) {
-        Label label = new Label("New tournament: " + tournament.getTournamentName() + " added by " + tournament.getClub().getName());
+        Label label = new Label("New tournament: " + tournament.getTournamentName() + " added by " + tournament.getClubName());
         notificationList.getChildren().add(label);
     }
 

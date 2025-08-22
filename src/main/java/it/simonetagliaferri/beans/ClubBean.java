@@ -11,59 +11,76 @@ public class ClubBean {
     private String phone;
     private HostBean owner;
 
-    public void setName(String clubName) {
-        this.name = clubName;
-    }
     public String getName() {
         return name;
     }
-    public void setStreet(String street) {
-        this.street = street;
+
+    public void setName(String clubName) {
+        this.name = clubName;
     }
+
     public String getStreet() {
         return street;
     }
-    public void setNumber(String number) {
-        this.number = number;
+
+    public void setStreet(String street) {
+        this.street = street;
     }
+
     public String getNumber() {
         return number;
     }
-    public void setCity(String city) {
-        this.city = city;
+
+    public void setNumber(String number) {
+        this.number = number;
     }
+
     public String getCity() {
         return city;
     }
-    public void setState(String state) {
-        this.state = state;
+
+    public void setCity(String city) {
+        this.city = city;
     }
+
     public String getState() {
         return state;
     }
-    public void setZip(String zip) {
-        this.zip = zip;
+
+    public void setState(String state) {
+        this.state = state;
     }
+
     public String getZip() {
         return zip;
     }
-    public void setCountry(String country) {
-        this.country = country;
+
+    public void setZip(String zip) {
+        this.zip = zip;
     }
+
     public String getCountry() {
         return country;
     }
-    public void setPhone(String phone) {
-        this.phone = phone;
+
+    public void setCountry(String country) {
+        this.country = country;
     }
+
     public String getPhone() {
         return phone;
     }
-    public void setOwner(HostBean owner) {
-        this.owner = owner;
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
+
     public HostBean getOwner() {
         return owner;
+    }
+
+    public void setOwner(HostBean owner) {
+        this.owner = owner;
     }
 
 }

@@ -5,7 +5,10 @@ import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
-import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Host;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.utils.converters.PlayerMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -26,13 +29,13 @@ public class HandleNotificationsApplicationController extends ApplicationControl
     }
 
     private Player loadPlayer() {
-        User user = getCurrentUser();
-        return playerDAO.findByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        return playerDAO.findByUsername(username);
     }
 
     private Host loadHost() {
-        User user = getCurrentUser();
-        return hostDAO.getHostByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        return hostDAO.getHostByUsername(username);
     }
 
     public List<TournamentBean> getPlayerNotifications() {

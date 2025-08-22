@@ -24,8 +24,7 @@ public class CliUtils {
                     System.exit(-1);
                 } else if (input.isEmpty()) {
                     println("Empty input not allowed. Try again.");
-                }
-                else return input;
+                } else return input;
             } catch (IOException e) {
                 println("Input error. Try again.");
                 return "";
@@ -46,8 +45,7 @@ public class CliUtils {
                 result = Integer.parseInt(input);
                 if (result < 0) {
                     println("Invalid input. Try again.");
-                }
-                else return result;
+                } else return result;
             } catch (NumberFormatException | IOException e) {
                 println("Please enter a valid number.");
             }
@@ -59,7 +57,7 @@ public class CliUtils {
         if (choice >= max) {
             println("Invalid choice. Try again.");
         }
-        return choice-1;
+        return choice - 1;
     }
 
     public static double promptPositiveDouble(String label) {
@@ -75,8 +73,7 @@ public class CliUtils {
                 result = Double.parseDouble(input);
                 if (result < 0) {
                     println("Invalid input. Try again.");
-                }
-                else return result;
+                } else return result;
             } catch (NumberFormatException | IOException e) {
                 println("Please enter a valid number.");
             }
@@ -94,11 +91,10 @@ public class CliUtils {
             }
             result = CliUtils.promptPositiveInt("Enter choice: ");
             if (result >= 1 && result <= choices.length) {
-                return choices[result-1];
-            }
-            else {
+                return choices[result - 1];
+            } else {
                 CliUtils.println("Please enter a valid choice.");
-                i=1;
+                i = 1;
             }
         }
     }
@@ -106,13 +102,15 @@ public class CliUtils {
     public static int multipleChoiceInt(String label, String... choices) {
         String choice = multipleChoice(label, choices);
         int i;
-        if (choice.isEmpty()) { return 0; }
+        if (choice.isEmpty()) {
+            return 0;
+        }
         for (i = 0; i <= choices.length; i++) {
             if (choices[i].equals(choice)) {
                 break;
             }
         }
-        return i+1;
+        return i + 1;
     }
 
     public static String multipleChoice(String label, List<String> choices) {
@@ -125,15 +123,13 @@ public class CliUtils {
                 i++;
             }
             result = CliUtils.promptPositiveInt("Enter choice: ");
-            if (result==0) {
+            if (result == 0) {
                 return "";
-            }
-            else if (result >= 1 && result <= choices.size()) {
-                return choices.get(result-1);
-            }
-            else {
+            } else if (result >= 1 && result <= choices.size()) {
+                return choices.get(result - 1);
+            } else {
                 CliUtils.println("Please enter a valid choice.");
-                i=1;
+                i = 1;
             }
         }
     }
@@ -141,7 +137,9 @@ public class CliUtils {
     public static int multipleChoiceInt(String label, List<String> choices) {
         String choice = multipleChoice(label, choices);
         int i;
-        if (choice.isEmpty()) { return 0; }
+        if (choice.isEmpty()) {
+            return 0;
+        }
         for (i = 0; i < choices.size(); i++) {
             if (choices.get(i).equals(choice)) {
                 break;

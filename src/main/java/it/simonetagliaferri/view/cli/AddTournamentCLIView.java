@@ -8,11 +8,6 @@ import java.util.List;
 
 public class AddTournamentCLIView {
 
-    public enum Choice {
-        YES,
-        NO
-    }
-
     public void welcome() {
         CliUtils.println("Welcome to the tournament generation.");
     }
@@ -65,6 +60,7 @@ public class AddTournamentCLIView {
         int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
         return Choice.values()[choice - 1];
     }
+
     public double courtCost() {
         return CliUtils.promptPositiveDouble("Enter court cost: ");
     }
@@ -113,7 +109,6 @@ public class AddTournamentCLIView {
         return CliUtils.prompt("Enter the player username or email: ");
     }
 
-
     public String startDate() {
         return CliUtils.prompt("Enter start date(MM/dd/yyyy): ");
     }
@@ -126,12 +121,17 @@ public class AddTournamentCLIView {
         CliUtils.println("Invalid date entered. Try again.");
     }
 
-
     public Choice askToAddPlayer() {
         String label = "Do you want to add a player/team to the tournament?";
         String choice1 = "Yes";
         String choice2 = "No";
         int choice = CliUtils.multipleChoiceInt(label, choice1, choice2);
         return Choice.values()[choice - 1];
+    }
+
+
+    public enum Choice {
+        YES,
+        NO
     }
 }

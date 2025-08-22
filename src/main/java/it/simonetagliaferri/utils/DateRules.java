@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 public class DateRules {
 
-    private DateRules() {}
+    private DateRules() {
+    }
 
     public static boolean isDateValid(LocalDate date) {
         return !date.isBefore(LocalDate.now());

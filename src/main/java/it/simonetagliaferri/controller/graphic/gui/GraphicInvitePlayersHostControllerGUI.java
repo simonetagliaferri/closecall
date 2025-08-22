@@ -16,23 +16,32 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class GraphicInvitePlayersHostControllerGUI extends GraphicController implements GUIController {
 
+    @FXML
+    RadioButton emailPlayer1;
     private TournamentBean tournamentBean;
     private SendPlayerInviteApplicationController controller;
-
-    @FXML private Button confirmButton;
-    @FXML private TextField player1NameField;
-    @FXML private TextField player1Message;
-    @FXML private DatePicker expireDatePicker;
-    @FXML private Label expDateLabel;
-    @FXML RadioButton emailPlayer1;
-    @FXML private VBox inviteDetails;
-    @FXML private VBox invitedTeams;
-    @FXML private Label title;
+    @FXML
+    private Button confirmButton;
+    @FXML
+    private TextField player1NameField;
+    @FXML
+    private TextField player1Message;
+    @FXML
+    private DatePicker expireDatePicker;
+    @FXML
+    private Label expDateLabel;
+    @FXML
+    private VBox inviteDetails;
+    @FXML
+    private VBox invitedTeams;
+    @FXML
+    private Label title;
     private TextField player2NameField;
     private TextField player2Message;
     private RadioButton emailPlayer2;
@@ -87,8 +96,7 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         if (!player2NameField.getText().trim().isEmpty()) {
             player2Message.setDisable(false);
             emailPlayer2.setDisable(false);
-        }
-        else {
+        } else {
             player2Message.clear();
             player2Message.setDisable(true);
             emailPlayer2.setDisable(true);
@@ -99,12 +107,10 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         if (tournamentBean.isSingles() && this.controller.noSingleSpotsAvailable()) {
             title.setText("There are no more open spots available.");
             confirmButton.disableProperty();
-        }
-        else if (!tournamentBean.isSingles() && this.controller.noTeamSpotsAvailable()) {
+        } else if (!tournamentBean.isSingles() && this.controller.noTeamSpotsAvailable()) {
             title.setText("There are no more spots to invite another team.");
             confirmButton.disableProperty();
-        }
-        else {
+        } else {
             title.setText("Invite players to the tournament");
         }
     }
@@ -123,15 +129,14 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
     public void inviteTeam() {
         if (tournamentBean.isSingles()) {
             invitePlayer();
-        }
-        else {
+        } else {
             invite();
         }
     }
 
     public void invitePlayer() {
         PlayerBean playerBean = getPlayerBean(player1NameField);
-        if (playerBean != null && !playerInvitedOrNotRegistered(playerBean, sendEmail(emailPlayer1), player1NameField)) {
+        if (playerBean != null && playerRegisteredOrNotInvited(playerBean, sendEmail(emailPlayer1), player1NameField)) {
             title.setText("Invite players to the tournament");
             InviteBean inviteBean = new InviteBean(playerBean, expireDatePicker.getValue(), getMessagePlayer(player1Message), sendEmail(emailPlayer1));
             this.controller.invitePlayer(inviteBean);
@@ -160,7 +165,7 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         return playerBean;
     }
 
-    public void addInvitedTeam(String ... players) {
+    public void addInvitedTeam(String... players) {
         boolean first = true;
         for (String s : players) {
             Label player;
@@ -175,17 +180,17 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         }
     }
 
-    private boolean playerInvitedOrNotRegistered(PlayerBean playerBean, boolean sendEmail, TextField playerNameField) {
+    private boolean playerRegisteredOrNotInvited(PlayerBean playerBean, boolean sendEmail, TextField playerNameField) {
         if (this.controller.playerAlreadyInvited(playerBean)) {
             title.setText("Player " + playerNameField.getText() + " has already been invited.");
             playerNameField.clear();
-            return true;
+            return false;
         } else if (!this.controller.isPlayerRegistered(playerBean) && !sendEmail) {
-            title.setText("The player " + playerNameField.getText() +" is not registered. You have to enable the email invite.");
+            title.setText("The player " + playerNameField.getText() + " is not registered. You have to enable the email invite.");
             playerNameField.clear();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public void invite() {
@@ -193,9 +198,9 @@ public class GraphicInvitePlayersHostControllerGUI extends GraphicController imp
         PlayerBean playerBean2 = getPlayerBean(player2NameField);
         InviteBean inviteBean1;
         InviteBean inviteBean2;
-        if (playerBean1 != null && !playerInvitedOrNotRegistered(playerBean1, sendEmail(emailPlayer1), player1NameField)) {
+        if (playerBean1 != null && playerRegisteredOrNotInvited(playerBean1, sendEmail(emailPlayer1), player1NameField)) {
             inviteBean1 = new InviteBean(playerBean1, expireDatePicker.getValue(), getMessagePlayer(player1Message), sendEmail(emailPlayer1));
-            if (playerBean2 != null && !playerInvitedOrNotRegistered(playerBean2, sendEmail(emailPlayer2), player2NameField)) {
+            if (playerBean2 != null && playerRegisteredOrNotInvited(playerBean2, sendEmail(emailPlayer2), player2NameField)) {
                 inviteBean2 = new InviteBean(playerBean2, expireDatePicker.getValue(), getMessagePlayer(player2Message), sendEmail(emailPlayer2));
                 this.controller.inviteTeam(inviteBean1, inviteBean2);
                 addInvitedTeam(playerBean1.getUsername(), playerBean2.getUsername());

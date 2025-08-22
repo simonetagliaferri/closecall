@@ -7,7 +7,8 @@ import it.simonetagliaferri.model.invite.Invite;
 
 public class InviteMapper {
 
-    private InviteMapper() {}
+    private InviteMapper() {
+    }
 
     public static InviteBean toBean(Invite invite) {
         TournamentBean tournamentBean = TournamentMapper.toBean(invite.getTournament());

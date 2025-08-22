@@ -67,7 +67,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
                 String playerEmail = getEmail();
                 return new PlayerBean(playerName, playerEmail);
             }
-            return new PlayerBean(playerName, playerName); // If the host entered an email address we create a player that has username=email.
+            return new PlayerBean(playerName, playerName); // If the host entered an email address we create a player that has username==email.
         }
         return null;
     }
@@ -122,9 +122,13 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
             return;
         }
         InviteBean invite1 = invitePlayer(inviteExpireDate);
-        if (invite1 == null) { return; }
+        if (invite1 == null) {
+            return;
+        }
         PlayerBean player1 = invite1.getPlayer();
-        if (player1 == null) {return;}
+        if (player1 == null) {
+            return;
+        }
         if (this.controller.playerAlreadyInvited(player1)) {
             view.playerAlreadyInvited();
             view.teamDeleted();
@@ -132,7 +136,9 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
         }
         if (view.askToAddTeammate() == InvitePlayersHostView.InviteChoices.YES) {
             InviteBean invite2 = invitePlayer(inviteExpireDate);
-            if (invite2 == null) { return; }
+            if (invite2 == null) {
+                return;
+            }
             PlayerBean player2 = invite2.getPlayer();
             if (this.controller.playerAlreadyInvited(player2)) {
                 view.playerAlreadyInvited();
@@ -140,8 +146,7 @@ public class GraphicInvitePlayerControllerCLI extends GraphicController {
                 return;
             }
             this.controller.inviteTeam(invite1, invite2);
-        }
-        else {
+        } else {
             this.controller.invitePlayer(invite1);
         }
     }

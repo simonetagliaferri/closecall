@@ -7,7 +7,6 @@ import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
-import it.simonetagliaferri.model.domain.User;
 import it.simonetagliaferri.utils.converters.ClubMapper;
 
 public class AddClubApplicationController extends ApplicationController {
@@ -30,8 +29,8 @@ public class AddClubApplicationController extends ApplicationController {
     }
 
     private Host loadHost() {
-        User user = getCurrentUser();
-        Host host = hostDAO.getHostByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        Host host = hostDAO.getHostByUsername(username);
         if (clubDAO.getClubByHostName(host.getUsername()) != null) {
             throw new ClubAlreadyAddedException("The host already has a club. Something went wrong during login.");
         }

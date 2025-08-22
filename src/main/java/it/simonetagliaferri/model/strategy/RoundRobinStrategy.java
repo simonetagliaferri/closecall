@@ -17,7 +17,7 @@ public class RoundRobinStrategy implements TournamentFormatStrategy, Serializabl
 
     private int dailyCapacity(int teams, int courts) {
         int courtCap = courts * MATCHES_A_DAY_PER_COURT;
-        int teamCap  = Math.max(1, teams / 2); // disjoint pairings per day
+        int teamCap = Math.max(1, teams / 2); // disjoint pairings per day
         return Math.max(1, Math.min(courtCap, teamCap));
     }
 

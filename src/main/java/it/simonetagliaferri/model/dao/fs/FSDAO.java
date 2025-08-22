@@ -16,7 +16,7 @@ abstract class FSDAO {
         } catch (IOException e) {
             throw new DAOException("Cannot create base dir " + baseDir, e);
         }
-        this.file = baseDir.resolve(fileName);   // <-- use the directory
+        this.file = baseDir.resolve(fileName);
         ensureFileExists();
     }
 

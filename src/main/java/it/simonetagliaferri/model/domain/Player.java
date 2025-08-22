@@ -7,9 +7,13 @@ import java.util.*;
 
 public class Player extends User implements Subscriber {
 
+    private List<Invite> invites;
+    private Map<Club, List<Tournament>> notifications;
+
     public Player(String username, String email, Role role) {
         super(username, email, role);
     }
+
     public Player(String username, String email) {
         super(username, email);
     }
@@ -17,18 +21,23 @@ public class Player extends User implements Subscriber {
         super(username);
     }
 
-    private List<Invite> invites;
-    private Map<Club, List<Tournament>> notifications;
-
     @Override
     public void update(Club club, Tournament newTournament) {
-        if (notifications == null) { notifications = new HashMap<>(); }
+        if (notifications == null) {
+            notifications = new HashMap<>();
+        }
         notifications.computeIfAbsent(club, k -> new ArrayList<>()).add(newTournament);
     }
 
     public Map<Club, List<Tournament>> getNotifications() {
-        if (notifications == null) { return Collections.emptyMap(); }
+        if (notifications == null) {
+            return Collections.emptyMap();
+        }
         return notifications;
+    }
+
+    public void setNotifications(Map<Club, List<Tournament>> notifications) {
+        this.notifications = notifications;
     }
 
     public void clearNotifications() {
@@ -37,14 +46,6 @@ public class Player extends User implements Subscriber {
                 clearNotificationsForClub(club);
             }
         }
-    }
-
-    public void setNotifications(Map<Club, List<Tournament>> notifications) {
-        this.notifications = notifications;
-    }
-
-    public void setInvites(List<Invite> invites) {
-        this.invites = invites;
     }
 
     public void clearNotificationsForClub(Club club) {
@@ -58,8 +59,14 @@ public class Player extends User implements Subscriber {
         return invites;
     }
 
+    public void setInvites(List<Invite> invites) {
+        this.invites = invites;
+    }
+
     public void addInvite(Invite invite) {
-        if (invites == null) { invites = new ArrayList<>(); }
+        if (invites == null) {
+            invites = new ArrayList<>();
+        }
         invites.add(invite);
     }
 

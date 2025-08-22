@@ -3,6 +3,7 @@ package it.simonetagliaferri.model.dao.jdbc;
 import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.dao.jdbc.queries.PlayerQueries;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
@@ -18,42 +19,6 @@ import java.util.Map;
 
 public class JDBCPlayerDAO implements PlayerDAO {
 
-    private static final String FIND_BY_USERNAME =
-            "SELECT username, email FROM players WHERE username = ?";
-
-    private static final String FIND_BY_EMAIL =
-            "SELECT username, email FROM players WHERE email = ?";
-
-    private static final String SAVE_PLAYER =
-            "INSERT INTO players (username, email) VALUES (?, ?)";
-
-    private static final String UPSERT_PLAYER_NOTIFICATION =
-            "INSERT INTO playernotifications (player, clubOwner, clubName, tournamentName, batchToken) " +
-                    "VALUES (?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE batchToken = VALUES(batchToken)";
-
-    private static final String DELETE_OLD_PLAYER_NOTIFICATIONS =
-            "DELETE FROM playernotifications " +
-                    "WHERE player = ? AND (batchToken IS NULL OR batchToken <> ?)";
-
-    private static final String DELETE_INVITE = "DELETE FROM invites WHERE " +
-        "player = ? AND clubOwner = ? and clubName = ? and tournamentName = ?";
-
-
-    private static final String GET_NOTIFICATIONS =
-            "SELECT clubName, tournamentName, clubOwner FROM playernotifications WHERE player = ?";
-
-    private static final String SAVE_INVITES =
-            "INSERT INTO invites (player, clubOwner, clubName, tournamentName, sendDate, expireDate, message, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE " +
-                    "sendDate = VALUES(sendDate), " +
-                    "expireDate = VALUES(expireDate), " +
-                    "message = VALUES(message), " +
-                    "status  = VALUES(status)";
-
-    private static final String GET_INVITES = "SELECT clubOwner, clubName, tournamentName, sendDate, expireDate, status, message FROM invites WHERE player = ?";
-
     TournamentDAO tournamentDAO;
 
     public JDBCPlayerDAO(TournamentDAO tournamentDAO) {
@@ -64,19 +29,8 @@ public class JDBCPlayerDAO implements PlayerDAO {
     public Player findByUsername(String username) {
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(FIND_BY_USERNAME);
-            ps.setString(1, username);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Player player = new Player(
-                            rs.getString("username"),
-                            rs.getString("email")
-                    );
-                    hydratePlayer(player);
-                    return player;
-                }
-                return null;
-            }
+            PreparedStatement ps = conn.prepareStatement(PlayerQueries.findByUsername());
+            return getPlayer(username, ps);
         } catch (SQLException e) {
             throw new DAOException("Error while fetching the player: " + e.getMessage());
         }
@@ -86,21 +40,25 @@ public class JDBCPlayerDAO implements PlayerDAO {
     public Player findByEmail(String email) {
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(FIND_BY_EMAIL);
-            ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Player player = new Player(
-                            rs.getString("username"),
-                            rs.getString("email")
-                    );
-                    hydratePlayer(player);
-                    return player;
-                }
-                return null;
-            }
+            PreparedStatement ps = conn.prepareStatement(PlayerQueries.findByEmail());
+            return getPlayer(email, ps);
         } catch (SQLException e) {
             throw new DAOException("Error while fetching the player: " + e.getMessage());
+        }
+    }
+
+    private Player getPlayer(String username, PreparedStatement ps) throws SQLException {
+        ps.setString(1, username);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                Player player = new Player(
+                        rs.getString("username"),
+                        rs.getString("email")
+                );
+                hydratePlayer(player);
+                return player;
+            }
+            return null;
         }
     }
 
@@ -115,7 +73,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
         Map<Club, List<Tournament>> map = new HashMap<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_NOTIFICATIONS);
+            PreparedStatement ps = conn.prepareStatement(PlayerQueries.getPlayerNotifications());
             ps.setString(1, player.getUsername());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -123,7 +81,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                     String clubName = rs.getString("clubName");
                     String tName = rs.getString("tournamentName");
 
-                    Host clubOwner = new Host(owner); // or your Owner/User class
+                    Host clubOwner = new Host(owner);
                     Club club = new Club(clubName, clubOwner);
                     Tournament t = tournamentDAO.getTournament(club, tName);
                     t.setClub(club);
@@ -141,7 +99,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
         List<Invite> invites = new ArrayList<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_INVITES);
+            PreparedStatement ps = conn.prepareStatement(PlayerQueries.getInvites());
             ps.setString(1, player.getUsername());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -171,11 +129,11 @@ public class JDBCPlayerDAO implements PlayerDAO {
     public void savePlayer(Player player) {
         try {
             if (findByUsername(player.getUsername()) == null) {
-            Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_PLAYER);
-            ps.setString(1, player.getUsername());
-            ps.setString(2, player.getEmail());
-            ps.executeUpdate();
+                Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement(PlayerQueries.savePlayer());
+                ps.setString(1, player.getUsername());
+                ps.setString(2, player.getEmail());
+                ps.executeUpdate();
             }
             saveInvites(player, player.getInvites());
             saveNotifications(player, player.getNotifications());
@@ -187,18 +145,20 @@ public class JDBCPlayerDAO implements PlayerDAO {
     private void saveNotifications(Player player, Map<Club, List<Tournament>> notifications) {
         String playerName = player.getUsername();
         String token = java.util.UUID.randomUUID().toString();
-        if (notifications == null) { return; }
+        if (notifications == null) {
+            return;
+        }
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement upsert = conn.prepareStatement(UPSERT_PLAYER_NOTIFICATION);
-            PreparedStatement purge = conn.prepareStatement(DELETE_OLD_PLAYER_NOTIFICATIONS);
+            PreparedStatement upsert = conn.prepareStatement(PlayerQueries.upsertPlayerNotification());
+            PreparedStatement purge = conn.prepareStatement(PlayerQueries.deleteOldPlayerNotifications());
             upsert.setString(5, token);
             upsert.setString(1, playerName);
             for (Map.Entry<Club, List<Tournament>> e : notifications.entrySet()) {
                 Club club = e.getKey();
                 List<Tournament> ts = e.getValue();
                 if (ts == null) continue;
-                upsert.setString(2, club.getOwner().getUsername());
+                upsert.setString(2, club.getOwnerUsername());
                 upsert.setString(3, club.getName());
                 for (Tournament t : ts) {
                     upsert.setString(4, t.getName());
@@ -223,15 +183,15 @@ public class JDBCPlayerDAO implements PlayerDAO {
         Club club;
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_INVITES);
-            PreparedStatement delete = conn.prepareStatement(DELETE_INVITE);
+            PreparedStatement ps = conn.prepareStatement(PlayerQueries.saveInvites());
+            PreparedStatement delete = conn.prepareStatement(PlayerQueries.deleteInvite());
             delete.setString(1, playerName);
             ps.setString(1, playerName);
             for (Invite invite : invites) {
                 tournament = invite.getTournament();
                 club = tournament.getClub();
                 if (invite.getStatus().equals(InviteStatus.PENDING)) {
-                    ps.setString(2, club.getOwner().getUsername());
+                    ps.setString(2, club.getOwnerUsername());
                     ps.setString(3, club.getName());
                     ps.setString(4, tournament.getName());
                     ps.setDate(5, Date.valueOf(invite.getSendDate()));
@@ -240,7 +200,7 @@ public class JDBCPlayerDAO implements PlayerDAO {
                     ps.setString(8, invite.getStatus().name());
                     ps.addBatch();
                 } else {
-                    delete.setString(2, club.getOwner().getUsername());
+                    delete.setString(2, club.getOwnerUsername());
                     delete.setString(3, club.getName());
                     delete.setString(4, tournament.getName());
                     delete.addBatch();

@@ -4,11 +4,6 @@ import it.simonetagliaferri.utils.CliUtils;
 
 public class AddClubCLIView {
 
-    public enum PreambleChoice{
-        ADD_CLUB,
-        NOT_ADD_CLUB
-    }
-
     public PreambleChoice preamble() {
         CliUtils.println("Hey there. It looks like it's your first time around here.");
         CliUtils.println("To be an actual host on our platform, you need to have at least one club.");
@@ -57,5 +52,10 @@ public class AddClubCLIView {
 
     public String getClubPhone() {
         return CliUtils.prompt("Please enter your club phone: ");
+    }
+
+    public enum PreambleChoice {
+        ADD_CLUB,
+        NOT_ADD_CLUB
     }
 }

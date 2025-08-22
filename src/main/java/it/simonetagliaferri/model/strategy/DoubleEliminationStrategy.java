@@ -24,7 +24,7 @@ public class DoubleEliminationStrategy implements TournamentFormatStrategy, Seri
 
     private int dailyCapacity(int teamsHere, int courts) {
         int courtCap = courts * MATCHES_A_DAY_PER_COURT;
-        int teamCap  = Math.max(1, teamsHere / 2);
+        int teamCap = Math.max(1, teamsHere / 2);
         return Math.max(1, Math.min(courtCap, teamCap));
     }
 

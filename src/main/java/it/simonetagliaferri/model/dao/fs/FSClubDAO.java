@@ -4,11 +4,15 @@ import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.domain.Club;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FSClubDAO extends FSDAO implements ClubDAO {
 
@@ -54,7 +58,7 @@ public class FSClubDAO extends FSDAO implements ClubDAO {
 
     @Override
     public void saveClub(Club club) {
-        clubs.put(club.getOwner().getUsername(), club);
+        clubs.put(club.getOwnerUsername(), club);
         saveClubs();
     }
 

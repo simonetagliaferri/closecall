@@ -1,10 +1,10 @@
 package it.simonetagliaferri.controller.graphic.gui;
 
-import it.simonetagliaferri.exception.NavigationException;
-import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.LoginApplicationController;
+import it.simonetagliaferri.exception.NavigationException;
+import it.simonetagliaferri.infrastructure.AppContext;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -23,21 +23,36 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
     private UIState state = UIState.USERNAME_INPUT;
     private boolean showingTempMessage = false;
 
-    @FXML private Text welcomeText;
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private Button mainButton;
-    @FXML private Button googleLogin;
-    @FXML private TextFlow subtitle;
-    @FXML private Text subText;
-    @FXML private Hyperlink subHyper;
-    @FXML private HBox divider;
-    @FXML private Hyperlink passResetHyper;
-    @FXML private TextField emailField;
-    @FXML private TextField passwordFieldSignup;
-    @FXML private TextField confirmPassField;
-    @FXML private Button signupButton;
-    @FXML private Spinner<String> roleSpinner;
+    @FXML
+    private Text welcomeText;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Button mainButton;
+    @FXML
+    private Button googleLogin;
+    @FXML
+    private TextFlow subtitle;
+    @FXML
+    private Text subText;
+    @FXML
+    private Hyperlink subHyper;
+    @FXML
+    private HBox divider;
+    @FXML
+    private Hyperlink passResetHyper;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField passwordFieldSignup;
+    @FXML
+    private TextField confirmPassField;
+    @FXML
+    private Button signupButton;
+    @FXML
+    private Spinner<String> roleSpinner;
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -61,7 +76,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
         passResetHyper.setVisible(false);
         bindMainButtonToFieldStates();
         bindSignupButtonToFieldStates();
-        Platform.runLater( () -> subHyper.requestFocus());
+        Platform.runLater(() -> subHyper.requestFocus());
     }
 
     @FXML
@@ -80,8 +95,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
                 divider.setVisible(false);
                 mainButton.requestFocus();
                 state = UIState.PASSWORD_INPUT;
-            }
-            else {
+            } else {
                 welcomeText.setText("Username not found.");
                 usernameField.clear();
             }
@@ -93,8 +107,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
                 } catch (NavigationException e) {
                     new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
                 }
-            }
-            else {
+            } else {
                 welcomeText.setText("Log in failed");
             }
         }
@@ -132,8 +145,7 @@ public class GraphicLoginControllerGUI extends GraphicController implements GUIC
             emailField.clear();
             roleSpinner.requestFocus();
             emailField.setPromptText("Email already in use");
-        }
-        else {
+        } else {
             user.setUsername(usernameField.getText());
             user.setRole(roleSpinner.getValue().toUpperCase());
             this.controller.signup(user);

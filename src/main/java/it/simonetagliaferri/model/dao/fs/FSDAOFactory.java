@@ -8,21 +8,20 @@ import java.nio.file.Paths;
 public class FSDAOFactory extends DAOFactory {
 
     private final Path baseDir;
-
-    public FSDAOFactory() {
-        this(Paths.get("data"));
-    }
-
-    /** Tests: point to @TempDir so every test is isolated. */
-    public FSDAOFactory(Path baseDir) {
-        this.baseDir = baseDir;
-    }
-
     private LoginDAO loginDAO;
     private TournamentDAO tournamentDAO;
     private HostDAO hostDAO;
     private PlayerDAO playerDAO;
     private ClubDAO clubDAO;
+    public FSDAOFactory() {
+        this(Paths.get("data"));
+    }
+    /**
+     * Tests: point to @TempDir so every test is isolated.
+     */
+    public FSDAOFactory(Path baseDir) {
+        this.baseDir = baseDir;
+    }
 
     @Override
     public LoginDAO getLoginDAO() {

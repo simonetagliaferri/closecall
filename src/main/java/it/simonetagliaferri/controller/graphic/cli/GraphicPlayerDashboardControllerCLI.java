@@ -1,9 +1,9 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
 import it.simonetagliaferri.beans.TournamentBean;
+import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.PlayerDashboardApplicationController;
 import it.simonetagliaferri.infrastructure.AppContext;
-import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.PlayerDashboardCLIView;
 
@@ -33,7 +33,7 @@ public class GraphicPlayerDashboardControllerCLI extends GraphicController {
                     searchTournament();
                     break;
                 case LOGOUT:
-                    home=false;
+                    home = false;
                     logout();
                     break;
                 case INVITES:

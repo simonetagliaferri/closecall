@@ -15,7 +15,7 @@ public class GraphicProcessPlayerInviteControllerCLI extends GraphicController {
 
     public GraphicProcessPlayerInviteControllerCLI(AppContext appContext) {
         super(appContext);
-        this. controller = new ProcessPlayerInviteApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
+        this.controller = new ProcessPlayerInviteApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
                 appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getHostDAO(), appContext.getDAOFactory().getClubDAO());
         this.view = new InvitePlayersPlayerView();
     }
@@ -40,7 +40,7 @@ public class GraphicProcessPlayerInviteControllerCLI extends GraphicController {
 
     private void favouriteClub(InviteBean invite) {
         if (this.controller.isNotSubscribed(invite) && view.addClubToFavourites() == InvitePlayersPlayerView.AddClubToFavourites.YES) {
-                this.controller.addClubToFavourites(invite);
+            this.controller.addClubToFavourites(invite);
         }
     }
 

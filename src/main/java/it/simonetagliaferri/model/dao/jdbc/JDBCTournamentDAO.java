@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.jdbc;
 
 import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.dao.jdbc.queries.TournamentQueries;
 import it.simonetagliaferri.model.domain.*;
 
 import java.sql.*;
@@ -11,37 +12,6 @@ import java.util.List;
 
 public class JDBCTournamentDAO implements TournamentDAO {
 
-    private static final String SAVE_TOURNAMENT =
-            "INSERT INTO tournaments (clubOwner, clubName, tournamentName, " +
-                    "tournamentFormat, tournamentType, matchFormat, courtType, teamsNumber, courtNumber, " +
-                    "joinFee, courtPrice, startDate, endDate, signupDeadline) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    private static final String SAVE_PRIZE =
-            "INSERT INTO prizes (place, clubOwner, clubName, tournamentName, value) " +
-                    "VALUES (?, ?, ?, ?, ?)";
-
-    private static final String SAVE_TEAM =
-            "INSERT INTO teams (id, clubName, clubOwner, tournamentName, player1, player2, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE " +
-                    "player1 = VALUES(player1), " +
-                    "player2 = VALUES(player2), " +
-                    "status  = VALUES(status)";
-
-    private static final String GET_TOURNAMENT = "SELECT tournamentName, tournamentFormat, tournamentType, matchFormat, courtType, courtNumber," +
-            "joinFee, courtPrice, startDate, signupDeadline, endDate, teamsNumber FROM tournaments WHERE clubOwner = ? AND clubName = ? AND tournamentName = ?";
-    private static final String GET_PRIZES = "SELECT value FROM prizes WHERE clubOwner = ? AND clubName = ? AND tournamentName = ?";
-    private static final String GET_TEAMS = "SELECT player1, player2, status FROM teams WHERE clubOwner = ? AND clubName = ? AND tournamentName = ? AND status = ?";
-    private static final String GET_TOURNAMENT_NAMES = "SELECT tournamentName FROM tournaments WHERE clubOwner = ? AND clubName = ?";
-
-    private static final String GET_TOURNAMENTS_BY_CITY = "SELECT DISTINCT clubs.clubName, clubOwner FROM tournaments JOIN clubs WHERE tournaments.clubOwner = clubs.owner " +
-            "AND tournaments.clubName = clubs.clubName AND clubs.city = ?";
-
-    private static final String GET_TOURNAMENTS_BY_PLAYER = "SELECT tournaments.clubName, tournaments.clubOwner, tournaments.tournamentName FROM tournaments JOIN teams " +
-            "WHERE tournaments.tournamentName = teams.tournamentName AND tournaments.clubName = teams.clubName AND tournaments.clubOwner = " +
-            "teams.clubOwner AND status = 'CONFIRMED' AND teams.player1 = ? OR teams.player2 = ?";
-
     public static final String TOURNAMENT_NAME = "tournamentName";
     public static final String PLAYER_1 = "player1";
     public static final String PLAYER_2 = "player2";
@@ -50,7 +20,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
     @Override
     public void saveTournament(Club club, Tournament tournament) {
         String clubName = club.getName();
-        String clubOwner = club.getOwner().getUsername();
+        String clubOwner = club.getOwnerUsername();
         String tournamentName = tournament.getName();
         String tournamentFormat = tournament.getTournamentFormat();
         String tournamentType = tournament.getTournamentType();
@@ -66,7 +36,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
         try {
             if (getTournament(club, tournamentName) == null) {
                 Connection conn = ConnectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SAVE_TOURNAMENT);
+                PreparedStatement ps = conn.prepareStatement(TournamentQueries.saveTournament());
                 ps.setString(1, clubOwner);
                 ps.setString(2, clubName);
                 ps.setString(3, tournamentName);
@@ -93,11 +63,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
     @Override
     public List<Tournament> getTournaments(Club club) {
         String clubName = club.getName();
-        String clubOwner = club.getOwner().getUsername();
+        String clubOwner = club.getOwnerUsername();
         List<Tournament> tournaments = new ArrayList<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_TOURNAMENT_NAMES);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.getTournamentNames());
             ps.setString(1, clubOwner);
             ps.setString(2, clubName);
 
@@ -119,12 +89,12 @@ public class JDBCTournamentDAO implements TournamentDAO {
     @Override
     public Tournament getTournament(Club club, String tournamentName) {
         String clubName = club.getName();
-        String clubOwner = club.getOwner().getUsername();
+        String clubOwner = club.getOwnerUsername();
         Tournament tournament = null;
         TournamentRules tournamentRules;
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_TOURNAMENT);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.getTournament());
             ps.setString(1, clubOwner);
             ps.setString(2, clubName);
             ps.setString(3, tournamentName);
@@ -157,11 +127,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     @Override
     public List<Tournament> getTournamentsByCity(String city) {
-        List <Tournament> tournaments = new ArrayList<>();
+        List<Tournament> tournaments = new ArrayList<>();
         List<Club> clubs = new ArrayList<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_TOURNAMENTS_BY_CITY);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.getTournamentsByCity());
             ps.setString(1, city);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -181,11 +151,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     @Override
     public List<Tournament> getPlayerTournaments(Player player) {
-        List <Tournament> tournaments = new ArrayList<>();
+        List<Tournament> tournaments = new ArrayList<>();
         String playerName = player.getUsername();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_TOURNAMENTS_BY_PLAYER);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.getTournamentsByPlayer());
             ps.setString(1, playerName);
             ps.setString(2, playerName);
             ResultSet rs = ps.executeQuery();
@@ -207,11 +177,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
         List<Double> prizes = tournament.getPrizes();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_PRIZE);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.savePrize());
             for (int i = 0; i < prizes.size(); i++) {
                 double prize = prizes.get(i);
                 ps.setInt(1, i);
-                ps.setString(2, club.getOwner().getUsername());
+                ps.setString(2, club.getOwnerUsername());
                 ps.setString(3, club.getName());
                 ps.setString(4, tournament.getName());
                 ps.setDouble(5, prize);
@@ -226,11 +196,11 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     private List<Double> getPrizes(Club club, String tournamentName) {
         String clubName = club.getName();
-        String clubOwner = club.getOwner().getUsername();
+        String clubOwner = club.getOwnerUsername();
         List<Double> prizes = new ArrayList<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_PRIZES);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.getPrizes());
             ps.setString(1, clubOwner);
             ps.setString(2, clubName);
             ps.setString(3, tournamentName);
@@ -246,61 +216,37 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     private TeamRegistry getTeamRegistry(Club club, Tournament tournament) {
         String clubName = club.getName();
-        String clubOwner = club.getOwner().getUsername();
-        List<Team> confirmedTeams = new ArrayList<>();
-        List<Team> pendingTeams = new ArrayList<>();
-        List<Team> partialTeams = new ArrayList<>();
+        String clubOwner = club.getOwnerUsername();
+        List<Team> confirmedTeams;
+        List<Team> pendingTeams;
+        List<Team> partialTeams;
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_TEAMS);
-            ps.setString(1, clubOwner);
-            ps.setString(2, clubName);
-            ps.setString(3, tournament.getName());
-            ps.setString(4, TeamStatus.CONFIRMED.name());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Team team = getTeam(rs.getString(PLAYER_1), rs.getString(PLAYER_2),
-                        TeamStatus.valueOf(rs.getString(STATUS)), tournament);
-                confirmedTeams.add(team);
-            }
-            PreparedStatement ps2 = conn.prepareStatement(GET_TEAMS);
-            ps2.setString(1, clubOwner);
-            ps2.setString(2, clubName);
-            ps2.setString(3, tournament.getName());
-            ps2.setString(4, TeamStatus.PENDING.name());
-            ResultSet rs2 = ps2.executeQuery();
-            while (rs2.next()) {
-                Team team = getTeam(rs2.getString(PLAYER_1), rs2.getString(PLAYER_2),
-                        TeamStatus.valueOf(rs2.getString(STATUS)), tournament);
-                pendingTeams.add(team);
-            }
-            PreparedStatement ps3 = conn.prepareStatement(GET_TEAMS);
-            ps3.setString(1, clubOwner);
-            ps3.setString(2, clubName);
-            ps3.setString(3, tournament.getName());
-            ps3.setString(4, TeamStatus.PARTIAL.name());
-            ResultSet rs3 = ps3.executeQuery();
-            while (rs3.next()) {
-                Team team = getTeam(rs3.getString(PLAYER_1), rs3.getString(PLAYER_2),
-                        TeamStatus.valueOf(rs3.getString(STATUS)), tournament);
-                partialTeams.add(team);
-            }
-            PreparedStatement ps4 = conn.prepareStatement(GET_TEAMS);
-            ps4.setString(1, clubOwner);
-            ps4.setString(2, clubName);
-            ps4.setString(3, tournament.getName());
-            ps4.setString(4, TeamStatus.PENDING_PARTIAL.name());
-            ResultSet rs4 = ps4.executeQuery();
-            while (rs4.next()) {
-                Team team = getTeam(rs4.getString(PLAYER_1), rs4.getString(PLAYER_2),
-                        TeamStatus.valueOf(rs4.getString(STATUS)), tournament);
-                partialTeams.add(team);
-                pendingTeams.add(team);
-            }
+            confirmedTeams = getTeams(conn, clubOwner, clubName, tournament, TeamStatus.CONFIRMED.name());
+            pendingTeams = getTeams(conn, clubOwner, clubName, tournament, TeamStatus.PENDING.name());
+            partialTeams = getTeams(conn, clubOwner, clubName, tournament, TeamStatus.PARTIAL.name());
+            pendingTeams.addAll(getTeams(conn, clubOwner, clubName, tournament, TeamStatus.PENDING_PARTIAL.name()));
+            partialTeams.addAll(getTeams(conn, clubOwner, clubName, tournament, TeamStatus.PENDING_PARTIAL.name()));
             return new TeamRegistry(confirmedTeams, pendingTeams, partialTeams);
         } catch (SQLException e) {
             throw new DAOException("Error while fetching the tournament's teams: " + e.getMessage());
         }
+    }
+
+    private List<Team> getTeams(Connection conn, String clubOwner, String clubName, Tournament tournament, String teamStatus) throws SQLException {
+        List<Team> teams = new ArrayList<>();
+        PreparedStatement ps = conn.prepareStatement(TournamentQueries.getTeams());
+        ps.setString(1, clubOwner);
+        ps.setString(2, clubName);
+        ps.setString(3, tournament.getName());
+        ps.setString(4, teamStatus);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Team team = getTeam(rs.getString(PLAYER_1), rs.getString(PLAYER_2),
+                    TeamStatus.valueOf(rs.getString(STATUS)), tournament);
+            teams.add(team);
+        }
+        return teams;
     }
 
     private Team getTeam(String p1, String p2, TeamStatus status, Tournament tournament) {
@@ -320,7 +266,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
         List<Team> pendingTeams = tournament.getPendingTeams();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_TEAM);
+            PreparedStatement ps = conn.prepareStatement(TournamentQueries.saveTeam());
             prepareTeam(club, tournament, confirmedTeams, ps);
             prepareTeam(club, tournament, partialTeams, ps);
             prepareTeam(club, tournament, pendingTeams, ps);
@@ -332,7 +278,7 @@ public class JDBCTournamentDAO implements TournamentDAO {
 
     private void prepareTeam(Club club, Tournament tournament, List<Team> teamList, PreparedStatement ps) throws SQLException {
         ps.setString(2, club.getName());
-        ps.setString(3, club.getOwner().getUsername());
+        ps.setString(3, club.getOwnerUsername());
         ps.setString(4, tournament.getName());
         for (int i = 0; i < teamList.size(); i++) {
             Team team = teamList.get(i);

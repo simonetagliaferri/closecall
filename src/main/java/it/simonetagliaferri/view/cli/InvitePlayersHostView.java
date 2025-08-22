@@ -4,11 +4,6 @@ import it.simonetagliaferri.utils.CliUtils;
 
 public class InvitePlayersHostView {
 
-    public enum InviteChoices {
-        YES,
-        NO
-    }
-
     public String inviteExpireDate() {
         return CliUtils.prompt("Enter invite expire date(MM/dd/yyyy): ");
     }
@@ -33,7 +28,6 @@ public class InvitePlayersHostView {
         return CliUtils.prompt("Enter the player username or email: ");
     }
 
-
     public void invalidExpireDate() {
         CliUtils.println("Invalid expire date entered. The expire date must be the same day or earlier than the signup deadline.");
     }
@@ -48,10 +42,6 @@ public class InvitePlayersHostView {
 
     public void noSpaceForTeam() {
         CliUtils.println("You do not have any space to add a full team.");
-    }
-
-    public void invalidPlayer() {
-        CliUtils.println("Player not found. Try again.");
     }
 
     public InviteChoices addMessage() {
@@ -79,5 +69,10 @@ public class InvitePlayersHostView {
     public InviteChoices askToAddTeammate() {
         int choice = CliUtils.multipleChoiceInt("Do you want to invite a teammate?", "Yes", "No");
         return InviteChoices.values()[choice - 1];
+    }
+
+    public enum InviteChoices {
+        YES,
+        NO
     }
 }

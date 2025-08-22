@@ -9,7 +9,7 @@ public class PlayerNotificationsView {
 
     public void listNotifications(List<TournamentBean> tournaments) {
         for (TournamentBean tournamentBean : tournaments) {
-            CliUtils.println("Club " + tournamentBean.getClub().getName() + " just added a new tournament: " + tournamentBean.getTournamentName());
+            CliUtils.println("Club " + tournamentBean.getClubName() + " just added a new tournament: " + tournamentBean.getTournamentName());
             CliUtils.println("");
         }
     }

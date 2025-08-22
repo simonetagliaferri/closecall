@@ -17,14 +17,14 @@ public class SingleEliminationStrategy implements TournamentFormatStrategy, Seri
             days += ceilDiv(matchesThisRound, perDay);
             t = (t + 1) / 2; // winners advance
         }
-        // Dedicated playoffs: one day for semiginals (if >=4), one day for final (if >=2)
+        // Dedicated playoffs: one day for semifinals (if >=4), one day for final (if >=2)
         days += playoffDays(t);
         return days;
     }
 
     private int dailyCapacity(int teamsHere, int courts) {
         int courtCap = courts * MATCHES_A_DAY_PER_COURT;
-        int teamCap  = Math.max(1, teamsHere / 2);
+        int teamCap = Math.max(1, teamsHere / 2);
         return Math.max(1, Math.min(courtCap, teamCap));
     }
 

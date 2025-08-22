@@ -6,7 +6,8 @@ import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
-import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.utils.converters.PlayerMapper;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 
@@ -27,8 +28,8 @@ public class PlayerDashboardApplicationController extends ApplicationController 
     }
 
     private Player loadPlayer() {
-        User user = getCurrentUser();
-        return playerDAO.findByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        return playerDAO.findByUsername(username);
     }
 
     private List<Tournament> loadTournaments() {

@@ -3,6 +3,7 @@ package it.simonetagliaferri.model.dao.jdbc;
 import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
+import it.simonetagliaferri.model.dao.jdbc.queries.HostQueries;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
@@ -16,26 +17,8 @@ import java.util.*;
 
 public class JDBCHostDAO implements HostDAO {
 
-    private static final String FIND_BY_USERNAME = "SELECT username, email " +
-            "FROM hosts " +
-            "WHERE username = ?";
-
-    private static final String SAVE_HOST =
-            "INSERT INTO hosts (username, email) VALUES (?, ?)";
-
-    private static final String UPSERT_NOTIFICATION =
-            "INSERT INTO hostnotifications (clubName, host, tournamentName, player, batchToken) " +
-                    "VALUES (?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE batchToken = VALUES(batchToken)";
-
-    private static final String DELETE_OLD_FOR_HOST =
-            "DELETE FROM hostnotifications " +
-                    "WHERE host = ? AND (batchToken IS NULL OR batchToken <> ?)";
-
-    private static final String GET_NOTIFICATIONS = "SELECT clubName, tournamentName, player FROM hostnotifications " +
-            "WHERE host = ?";
-
     TournamentDAO tournamentDAO;
+
     public JDBCHostDAO(TournamentDAO tournamentDAO) {
         this.tournamentDAO = tournamentDAO;
     }
@@ -44,7 +27,7 @@ public class JDBCHostDAO implements HostDAO {
     public Host getHostByUsername(String username) {
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(FIND_BY_USERNAME);
+            PreparedStatement ps = conn.prepareStatement(HostQueries.findByUsername());
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -67,7 +50,7 @@ public class JDBCHostDAO implements HostDAO {
         Map<Tournament, List<Player>> newPlayers = new HashMap<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_NOTIFICATIONS);
+            PreparedStatement ps = conn.prepareStatement(HostQueries.getHostNotifications());
             ps.setString(1, host.getUsername());
             ResultSet rs = ps.executeQuery();
             Tournament tournament;
@@ -100,7 +83,7 @@ public class JDBCHostDAO implements HostDAO {
         try {
             Connection conn = ConnectionFactory.getConnection();
             if (getHostByUsername(username) == null) {
-                PreparedStatement ps = conn.prepareStatement(SAVE_HOST);
+                PreparedStatement ps = conn.prepareStatement(HostQueries.saveHost());
                 ps.setString(1, username);
                 ps.setString(2, email);
                 ps.executeUpdate();
@@ -117,12 +100,12 @@ public class JDBCHostDAO implements HostDAO {
         String token = UUID.randomUUID().toString();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement upsert = conn.prepareStatement(UPSERT_NOTIFICATION);
-            PreparedStatement purge  = conn.prepareStatement(DELETE_OLD_FOR_HOST);
+            PreparedStatement upsert = conn.prepareStatement(HostQueries.upsertHostNotifications());
+            PreparedStatement purge = conn.prepareStatement(HostQueries.deleteOldHostNotifications());
             upsert.setString(5, token);
             for (Map.Entry<Tournament, List<Player>> entry : host.getNewPlayers().entrySet()) {
                 Tournament t = entry.getKey();
-                upsert.setString(1, t.getClub().getName());
+                upsert.setString(1, t.getClubName());
                 upsert.setString(2, host.getUsername());
                 for (Player p : entry.getValue()) {
                     upsert.setString(3, t.getName());

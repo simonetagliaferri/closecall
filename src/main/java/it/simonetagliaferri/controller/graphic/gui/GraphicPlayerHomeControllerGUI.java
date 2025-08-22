@@ -14,7 +14,8 @@ import java.util.List;
 
 public class GraphicPlayerHomeControllerGUI extends GraphicController implements GUIController {
 
-    @FXML private Accordion tournamentsAccordion;
+    @FXML
+    private Accordion tournamentsAccordion;
 
     @Override
     public void initializeController(AppContext appContext) {

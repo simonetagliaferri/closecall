@@ -8,9 +8,13 @@ import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.HostDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
-import it.simonetagliaferri.model.domain.*;
+import it.simonetagliaferri.model.domain.Club;
+import it.simonetagliaferri.model.domain.Host;
+import it.simonetagliaferri.model.domain.Player;
+import it.simonetagliaferri.model.domain.Tournament;
 import it.simonetagliaferri.utils.converters.TournamentMapper;
 import it.simonetagliaferri.view.cli.JoinTournamentView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +27,15 @@ public class JoinTournamentApplicationController extends ApplicationController {
 
     public JoinTournamentApplicationController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
         super(sessionManager);
-        this.tournamentDAO=tournamentDAO;
-        this.clubDAO=clubDAO;
+        this.tournamentDAO = tournamentDAO;
+        this.clubDAO = clubDAO;
         this.hostDAO = hostDAO;
         this.playerDAO = playerDAO;
     }
 
     private Player loadPlayer() {
-        User user = getCurrentUser();
-        return playerDAO.findByUsername(user.getUsername());
+        String username = getCurrentUserUsername();
+        return playerDAO.findByUsername(username);
     }
 
     private Host loadHost(TournamentBean tournament) {
@@ -48,7 +52,7 @@ public class JoinTournamentApplicationController extends ApplicationController {
     private List<Tournament> loadTournaments(String search) {
         List<Tournament> tournaments = tournamentDAO.getTournamentsByCity(search);
         for (Tournament tournament : tournaments) {
-            String hostName = tournament.getClub().getOwner().getUsername();
+            String hostName = tournament.getClub().getOwnerUsername();
             Host host = hostDAO.getHostByUsername(hostName);
             Club club = clubDAO.getClubByHostName(hostName);
             host.addClub(club);

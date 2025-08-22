@@ -21,11 +21,14 @@ import java.util.List;
 public class GraphicJoinTournamentControllerGUI extends GraphicController implements GUIController {
 
     public static final String BLUE_BUTTON = "blue-button";
-    private JoinTournamentApplicationController controller;
-    @FXML private Button searchButton;
-    @FXML private TextField searchField;
-    @FXML private Accordion tournamentList;
     List<TitledPane> tournaments;
+    private JoinTournamentApplicationController controller;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Accordion tournamentList;
 
     @Override
     public void initializeController(AppContext appContext) {
@@ -38,7 +41,8 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
                 appContext.getDAOFactory().getPlayerDAO()));
     }
 
-    @FXML private void searchTournaments() {
+    @FXML
+    private void searchTournaments() {
         tournamentList.getPanes().clear();
         List<TournamentBean> tournamentBeans = this.controller.searchTournament(searchField.getText());
         for (TournamentBean tournamentBean : tournamentBeans) {
@@ -60,8 +64,7 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
                 vBox.getChildren().add(vBox.getChildren().indexOf(joinButton), errorLabel);
                 joinButton.setDisable(true);
                 joinButton.setVisible(false);
-            }
-            else {
+            } else {
                 if (this.controller.isNotSubscribed(tournamentBean)) {
                     Label subscribeLabel = new Label("Do you want to add this club to your favourites?");
                     Button yesButton = new Button("Yes");
@@ -77,8 +80,7 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
                     vBox.getChildren().add(vBox.getChildren().indexOf(joinButton), subscribeLabel);
                     vBox.getChildren().remove(joinButton);
                     vBox.getChildren().add(hBox);
-                }
-                else {
+                } else {
                     showConfirmation(event);
                 }
             }
@@ -98,8 +100,7 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
             VBox vBox = (VBox) parent;
             vBox.getChildren().remove(button);
             vBox.getChildren().add(confirmLabel);
-        }
-        else if (parent instanceof HBox) {
+        } else if (parent instanceof HBox) {
             HBox hBox = (HBox) parent;
             Parent parent1 = hBox.getParent();
             if (parent1 instanceof VBox) {
@@ -114,7 +115,7 @@ public class GraphicJoinTournamentControllerGUI extends GraphicController implem
     private TitledPane createTournamentPane(TournamentBean tournamentBean) {
         GraphicTournamentDetails tournamentDetailsController = new GraphicTournamentDetails();
         TitledPane tournamentPane = new TitledPane();
-        tournamentPane.setText("Tournament " + tournamentBean.getTournamentName() + " hosted by " + tournamentBean.getClub().getName());
+        tournamentPane.setText("Tournament " + tournamentBean.getTournamentName() + " hosted by " + tournamentBean.getClubName());
         HBox hbox1 = new HBox();
         hbox1.setSpacing(20);
         VBox vbox1 = new VBox();

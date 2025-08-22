@@ -1,4 +1,5 @@
 package it.simonetagliaferri.model.domain;
+
 import it.simonetagliaferri.model.observer.Publisher;
 import it.simonetagliaferri.model.observer.Subscriber;
 
@@ -26,10 +27,6 @@ public class Club implements Publisher, Serializable {
 
     public Club(String name) {
         this.name = name;
-    }
-
-    public void setOwner(Host owner) {
-        this.owner = owner;
     }
 
     public Club(String name, String street, String number, String city, Host owner) {
@@ -91,6 +88,14 @@ public class Club implements Publisher, Serializable {
 
     public Host getOwner() {
         return this.owner;
+    }
+
+    public void setOwner(Host owner) {
+        this.owner = owner;
+    }
+
+    public String getOwnerUsername() {
+        return this.owner.getUsername();
     }
 
     public void setClubTournaments(List<Tournament> clubTournaments) {

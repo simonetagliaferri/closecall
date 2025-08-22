@@ -2,6 +2,7 @@ package it.simonetagliaferri.model.dao.jdbc;
 
 import it.simonetagliaferri.exception.DAOException;
 import it.simonetagliaferri.model.dao.ClubDAO;
+import it.simonetagliaferri.model.dao.jdbc.queries.ClubQueries;
 import it.simonetagliaferri.model.domain.Club;
 import it.simonetagliaferri.model.domain.Host;
 import it.simonetagliaferri.model.domain.Player;
@@ -16,24 +17,11 @@ import java.util.List;
 
 public class JDBCClubDAO implements ClubDAO {
 
-    private static final String SAVE_CLUB =
-            "INSERT INTO clubs (clubName, street, number, city, state, zip, country, phone, owner) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    private static final String SAVE_SUBSCRIBERS =
-            "INSERT INTO favouriteclubs (player, clubName, clubOwner) VALUES (?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE " +
-                    "clubName = VALUES(clubName), " +
-                    "clubOwner = VALUES(clubOwner)";
-
-    private static final String GET_CLUB = "SELECT owner, clubName, street, number, city, state, zip, country, phone FROM clubs WHERE owner = ?";
-    private static final String GET_SUBSCRIBERS = "SELECT player FROM favouriteclubs WHERE clubName = ? AND clubOwner = ?";
-
     @Override
     public Club getClubByHostName(String hostName) {
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_CLUB);
+            PreparedStatement ps = conn.prepareStatement(ClubQueries.getClub());
             ps.setString(1, hostName);
             ResultSet rs = ps.executeQuery();
             Club club = null;
@@ -62,7 +50,7 @@ public class JDBCClubDAO implements ClubDAO {
         List<Subscriber> subscribers = new ArrayList<>();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(GET_SUBSCRIBERS);
+            PreparedStatement ps = conn.prepareStatement(ClubQueries.getSubscribers());
             ps.setString(1, clubName);
             ps.setString(2, owner);
             ResultSet rs = ps.executeQuery();
@@ -79,9 +67,9 @@ public class JDBCClubDAO implements ClubDAO {
     @Override
     public void saveClub(Club club) {
         try {
-            if (getClubByHostName(club.getOwner().getUsername()) == null) {
+            if (getClubByHostName(club.getOwnerUsername()) == null) {
                 Connection conn = ConnectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SAVE_CLUB);
+                PreparedStatement ps = conn.prepareStatement(ClubQueries.saveClub());
                 ps.setString(1, club.getName());
                 ps.setString(2, club.getStreet());
                 ps.setString(3, club.getNumber());
@@ -90,7 +78,7 @@ public class JDBCClubDAO implements ClubDAO {
                 ps.setString(6, club.getZip());
                 ps.setString(7, club.getCountry());
                 ps.setString(8, club.getPhone());
-                ps.setString(9, club.getOwner().getUsername());
+                ps.setString(9, club.getOwnerUsername());
                 ps.executeUpdate();
             }
             saveSubscribers(club);
@@ -102,10 +90,10 @@ public class JDBCClubDAO implements ClubDAO {
     private void saveSubscribers(Club club) {
         List<Player> subscribers = club.getSubscribedPlayers();
         String clubName = club.getName();
-        String clubOwner = club.getOwner().getUsername();
+        String clubOwner = club.getOwnerUsername();
         try {
             Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(SAVE_SUBSCRIBERS);
+            PreparedStatement ps = conn.prepareStatement(ClubQueries.saveSubscribers());
             ps.setString(2, clubName);
             ps.setString(3, clubOwner);
             for (Player p : subscribers) {

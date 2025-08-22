@@ -1,11 +1,11 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
-import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.UserBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
+import it.simonetagliaferri.controller.logic.LoginApplicationController;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.model.domain.Role;
 import it.simonetagliaferri.view.cli.LoginCLIView;
-import it.simonetagliaferri.controller.logic.LoginApplicationController;
 
 public class GraphicLoginControllerCLI extends GraphicController {
 
@@ -28,13 +28,13 @@ public class GraphicLoginControllerCLI extends GraphicController {
             choice = view.showMenu();
             switch (choice) {
                 case LOGIN:
-                    loginScreen=login();
+                    loginScreen = login();
                     break;
                 case SIGNUP:
                     signup();
                     break;
                 case QUIT:
-                    loginScreen=false;
+                    loginScreen = false;
                     break;
             }
         }
@@ -46,8 +46,7 @@ public class GraphicLoginControllerCLI extends GraphicController {
             Role role = this.controller.getCurrentUserRole();
             navigationManager.goToDashboard(role);
             return false;
-        }
-        else {
+        } else {
             view.failedLogin();
             return true;
         }
@@ -63,7 +62,7 @@ public class GraphicLoginControllerCLI extends GraphicController {
             password = view.getPassword();
             String confirmPassword = view.getPasswordConfirm();
             /*
-             * Check done in bean since it's not really a business rule that pass and confPass should match/
+             * Check done in bean since it's not really a business rule that pass and confPass should match.
              * It's more of a syntax problem to ensure the user doesn't mistype the password.
              */
             if (user.setPassword(password, confirmPassword)) {
@@ -94,13 +93,11 @@ public class GraphicLoginControllerCLI extends GraphicController {
                 if (!this.controller.isUsernameValid(user)) {
                     validUsername = false;
                     view.emailAsUsername();
-                }
-                else if (this.controller.usernameLookUp(user)) {
+                } else if (this.controller.usernameLookUp(user)) {
                     validUsername = false;
                     view.userAlreadyExists();
                 }
-            }
-            else {
+            } else {
                 validUsername = false;
                 view.invalidUsername();
             }
@@ -133,11 +130,9 @@ public class GraphicLoginControllerCLI extends GraphicController {
             String choice = view.getConfirmation();
             if (choice.equalsIgnoreCase("Y")) {
                 return true;
-            }
-            else if (choice.equalsIgnoreCase("N")) {
+            } else if (choice.equalsIgnoreCase("N")) {
                 return false;
-            }
-            else {
+            } else {
                 view.invalidChoice();
             }
         }

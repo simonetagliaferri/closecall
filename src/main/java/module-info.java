@@ -34,5 +34,6 @@ module it.simonetagliaferri {
     opens it.simonetagliaferri.controller.graphic.gui to javafx.fxml, javafx.graphics;
     opens it.simonetagliaferri.infrastructure to javafx.fxml, javafx.graphics;
     opens it.simonetagliaferri.infrastructure.navigation to javafx.fxml, javafx.graphics;
+    exports it.simonetagliaferri.model.dao.jdbc.queries;
 
 }

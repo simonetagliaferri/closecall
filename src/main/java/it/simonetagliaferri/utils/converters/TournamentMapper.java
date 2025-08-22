@@ -4,12 +4,14 @@ import it.simonetagliaferri.beans.TeamBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.model.domain.Team;
 import it.simonetagliaferri.model.domain.Tournament;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentMapper {
 
-    private TournamentMapper() {}
+    private TournamentMapper() {
+    }
 
     public static TournamentBean toBean(Tournament tournament) {
         TournamentBean tournamentBean = new TournamentBean();

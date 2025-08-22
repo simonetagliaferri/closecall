@@ -1,12 +1,13 @@
 package it.simonetagliaferri.controller.graphic.cli;
 
-import it.simonetagliaferri.exception.InvalidDateException;
-import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.controller.graphic.GraphicController;
 import it.simonetagliaferri.controller.logic.AddTournamentApplicationController;
+import it.simonetagliaferri.exception.InvalidDateException;
+import it.simonetagliaferri.infrastructure.AppContext;
 import it.simonetagliaferri.utils.converters.DateConverter;
 import it.simonetagliaferri.view.cli.AddTournamentCLIView;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
@@ -15,13 +16,15 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
     AddTournamentCLIView view;
     TournamentBean tournamentBean;
     AddTournamentApplicationController controller;
+
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);
         this.controller = new AddTournamentApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getClubDAO() ,appContext.getDAOFactory().getPlayerDAO());
+                appContext.getDAOFactory().getClubDAO(), appContext.getDAOFactory().getPlayerDAO());
         this.view = new AddTournamentCLIView();
         this.tournamentBean = new TournamentBean();
     }
+
     public void start() {
         view.welcome();
         tournamentBean.setTournamentName(view.tournamentName());
@@ -40,8 +43,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         AddTournamentCLIView.Choice courtCost = view.includedCourt();
         if (courtCost == AddTournamentCLIView.Choice.NO) {
             tournamentBean.setCourtPrice(view.courtCost());
-        }
-        else {
+        } else {
             tournamentBean.setCourtPrice(0);
         }
         setStartDate();
@@ -59,7 +61,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         String strDate;
         LocalDate startDate;
         while (!validDate) {
-            strDate=view.startDate();
+            strDate = view.startDate();
             try {
                 startDate = DateConverter.formatDate(strDate);
                 if (this.controller.validStartDate(tournamentBean, startDate)) {
@@ -77,7 +79,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
         String strDate;
         LocalDate deadline;
         while (!validDate) {
-            strDate=view.signupDeadline();
+            strDate = view.signupDeadline();
             try {
                 deadline = DateConverter.formatDate(strDate);
                 if (this.controller.validSignupDeadline(tournamentBean, deadline)) {
@@ -97,7 +99,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             String strEndDate;
             boolean validDate = false;
             while (!validDate) {
-                strEndDate=view.editEndDate();
+                strEndDate = view.editEndDate();
                 try {
                     LocalDate newEndDate = DateConverter.formatDate(strEndDate);
                     if (this.controller.validEndDate(tournamentBean, newEndDate)) {
@@ -108,8 +110,7 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                     view.invalidDate();
                 }
             }
-        }
-        else {
+        } else {
             if (this.controller.validEndDate(tournamentBean, endDate)) {
                 tournamentBean.setEndDate(endDate);
             }

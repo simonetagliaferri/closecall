@@ -11,11 +11,6 @@ public enum TournamentFormats {
         this.label = label;
     }
 
-    @Override
-    public String toString() {
-        return label;
-    }
-
     public static TournamentFormats fromString(String label) {
         for (TournamentFormats format : values()) {
             if (format.label.equalsIgnoreCase(label)) {
@@ -23,6 +18,11 @@ public enum TournamentFormats {
             }
         }
         throw new IllegalArgumentException("Unknown tournament format: " + label);
+    }
+
+    @Override
+    public String toString() {
+        return label;
     }
 }
 

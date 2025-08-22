@@ -6,9 +6,10 @@ import java.time.format.DateTimeFormatter;
 
 public class DateConverter {
 
-    private DateConverter() {}
-
     private static final String DATE_FORMAT = "MM/dd/yyyy";
+
+    private DateConverter() {
+    }
 
     public static LocalDate formatDate(String date) throws DateTimeException {
         DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_FORMAT);

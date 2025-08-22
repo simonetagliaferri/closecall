@@ -44,30 +44,39 @@ public class TournamentRules implements Serializable {
     public LocalDate getStartDate() {
         return startDate;
     }
+
     public LocalDate getSignupDeadline() {
         return signupDeadline;
     }
+
     public LocalDate getEndDate() {
         return endDate;
     }
+
     public String getTournamentFormat() {
         return tournamentFormat;
     }
+
     public String getTournamentType() {
         return tournamentType;
     }
+
     public String getMatchFormat() {
         return matchFormat;
     }
+
     public String getCourtType() {
         return courtType;
     }
+
     public int getCourtNumber() {
         return courtNumber;
     }
+
     public double getJoinFee() {
         return joinFee;
     }
+
     public double getCourtPrice() {
         return courtPrice;
     }

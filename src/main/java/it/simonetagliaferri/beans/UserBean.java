@@ -6,11 +6,12 @@ import org.apache.commons.validator.routines.EmailValidator;
 public class UserBean {
 
     protected String username;
-    private String password;
     protected String email;
+    private String password;
     private Role role;
 
-    public UserBean() {}
+    public UserBean() {
+    }
 
     public UserBean(String username) {
         this.username = username;
@@ -57,8 +58,7 @@ public class UserBean {
         if (validEmail(email)) {
             this.email = email;
             return true;
-        }
-        else {
+        } else {
             this.email = null;
             return false;
         }
