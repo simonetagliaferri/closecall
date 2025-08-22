@@ -86,4 +86,15 @@ public class Player extends User implements Subscriber {
         invites.remove(invite);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Player)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode());
+    }
+
 }

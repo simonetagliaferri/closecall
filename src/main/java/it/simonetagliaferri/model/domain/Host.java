@@ -66,4 +66,15 @@ public class Host extends User implements Subscriber {
     public Club getClub() {
         return club;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Host)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode());
+    }
 }
