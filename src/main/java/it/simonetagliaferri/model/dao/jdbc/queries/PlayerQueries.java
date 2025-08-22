@@ -37,6 +37,9 @@ public class PlayerQueries {
 
     private static final String GET_INVITES = "SELECT clubOwner, clubName, tournamentName, sendDate, expireDate, status, message FROM invites WHERE player = ?";
 
+    private PlayerQueries() {
+    }
+
     public static String findByUsername() {
         return FIND_BY_USERNAME;
     }

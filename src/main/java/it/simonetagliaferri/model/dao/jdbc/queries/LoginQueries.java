@@ -11,6 +11,9 @@ public class LoginQueries {
 
     private static final String SIGNUP = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
 
+    private LoginQueries() {
+    }
+
     public static String findByUsername() {
         return FIND_BY_USERNAME;
     }

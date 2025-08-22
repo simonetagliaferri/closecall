@@ -32,6 +32,9 @@ public class TournamentQueries {
             "WHERE tournaments.tournamentName = teams.tournamentName AND tournaments.clubName = teams.clubName AND tournaments.clubOwner = " +
             "teams.clubOwner AND status = 'CONFIRMED' AND teams.player1 = ? OR teams.player2 = ?";
 
+    private TournamentQueries() {
+    }
+
     public static String saveTournament() {
         return SAVE_TOURNAMENT;
     }
