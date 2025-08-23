@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class InMemoryDAOFactory extends DAOFactory {
 
-    private static final String PASS = "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
-
     private final Map<String, User> users = new HashMap<>();
     private final Map<String, List<Tournament>> tournaments = new HashMap<>();
     private final Map<String, Club> clubs = new HashMap<>();
@@ -22,32 +20,6 @@ public class InMemoryDAOFactory extends DAOFactory {
     private HostDAO hostDAO;
     private PlayerDAO playerDAO;
     private ClubDAO clubDAO;
-
-    public InMemoryDAOFactory() {
-        populate();
-    }
-
-    // Just for tests
-    public void populate() {
-        User marco = new User("marco", "marco@gmail.com", PASS, Role.HOST);
-        User p1 = new User("p1", "p1@gmail.com", PASS, Role.PLAYER);
-        User p2 = new User("p2", "p2@gmail.com", PASS, Role.PLAYER);
-        users.put(marco.getUsername(), marco);
-        users.put(p1.getUsername(), p1);
-        users.put(p2.getUsername(), p2);
-        hosts.put(marco.getUsername(), new Host(marco.getUsername(), marco.getEmail()));
-        HostDAO hostDAO1 = getHostDAO();
-        Host host = hostDAO1.getHostByUsername(marco.getUsername());
-        players.put(p1.getUsername(), new Player(p1.getUsername(), p1.getEmail()));
-        players.put(p2.getUsername(), new Player(p2.getUsername(), p2.getEmail()));
-        Club sanP = new Club("SanP", host);
-        sanP.updateAddress("a", "a", "a", "a", "a", "a");
-        sanP.updateContacts("a");
-        ClubDAO clubDAO1 = getClubDAO();
-        host.addClub(sanP);
-        hostDAO1.saveHost(host);
-        clubDAO1.saveClub(sanP);
-    }
 
     @Override
     public LoginDAO getLoginDAO() {
