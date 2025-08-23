@@ -77,7 +77,8 @@ public class GraphicProcessPlayerInviteControllerGUI extends GraphicController i
             if (this.controller.isNotSubscribed(invite)) {
                 VBox vBox = getParentVBox(hBox);
                 if (vBox == null) return;
-                Label subscribeLabel = new Label("Do you want to add this club to your favourites?");
+                Label subscribeLabel = new Label("Add this club to your favourites?");
+                subscribeLabel.setWrapText(true);
                 Button yesButton = new Button("Yes");
                 yesButton.getStyleClass().add(BLUE_BUTTON);
                 yesButton.setOnAction(event1 -> addClubToFavourites(event1, invite));
