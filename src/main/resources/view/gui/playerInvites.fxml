@@ -3,9 +3,6 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox fx:id="invitesContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicProcessPlayerInviteControllerGUI">
-   <Accordion fx:id="tournamentList" maxWidth="-Infinity" minWidth="1000.0" prefWidth="1000.0"/>
+<VBox fx:id="invitesContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.simonetagliaferri.controller.graphic.gui.GraphicProcessPlayerInviteControllerGUI">
+   <Accordion fx:id="tournamentList" minWidth="1000.0" prefWidth="1000.0" />
 </VBox>
