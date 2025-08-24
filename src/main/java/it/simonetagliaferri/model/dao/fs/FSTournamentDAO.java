@@ -86,6 +86,7 @@ public class FSTournamentDAO extends FSDAO implements TournamentDAO {
         return InMemoryTournamentDAO.getTournament(club, name, tournaments);
     }
 
+    @Override
     public List<Tournament> getTournamentsByCity(String city) {
         return InMemoryTournamentDAO.getTournaments(city, tournaments);
     }

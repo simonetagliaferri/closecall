@@ -16,6 +16,46 @@ public class InMemoryTournamentDAO implements TournamentDAO {
         this.tournaments = tournaments;
     }
 
+    @Override
+    public void saveTournament(Club club, Tournament tournament) {
+        List<Tournament> clubTournaments = this.tournaments
+                .computeIfAbsent(club.getOwnerUsername(), k -> new ArrayList<>());
+
+        for (int i = 0; i < clubTournaments.size(); i++) {
+            Tournament t = clubTournaments.get(i);
+            if (t.getName().equals(tournament.getName())) {
+                clubTournaments.set(i, tournament);
+                return;
+            }
+        }
+
+        clubTournaments.add(tournament);
+    }
+
+    @Override
+    public List<Tournament> getTournaments(Club club) {
+        List<Tournament> clubTournaments = this.tournaments.get(club.getOwnerUsername());
+        if (clubTournaments == null) {
+            return new ArrayList<>();
+        }
+        return clubTournaments;
+    }
+
+    @Override
+    public Tournament getTournament(Club club, String name) {
+        return getTournament(club, name, tournaments);
+    }
+
+    @Override
+    public List<Tournament> getTournamentsByCity(String city) {
+        return getTournaments(city, tournaments);
+    }
+
+    @Override
+    public List<Tournament> getPlayerTournaments(Player player) {
+        return getPlayerTournaments(player, tournaments);
+    }
+
     public static Tournament getTournament(Club club, String name, Map<String, List<Tournament>> tournaments) {
         List<Tournament> tournamentList = tournaments.get(club.getOwnerUsername());
         if (tournamentList != null) {
@@ -52,45 +92,6 @@ public class InMemoryTournamentDAO implements TournamentDAO {
             }
         }
         return tournamentList;
-    }
-
-    @Override
-    public void saveTournament(Club club, Tournament tournament) {
-        List<Tournament> clubTournaments = this.tournaments
-                .computeIfAbsent(club.getOwnerUsername(), k -> new ArrayList<>());
-
-        for (int i = 0; i < clubTournaments.size(); i++) {
-            Tournament t = clubTournaments.get(i);
-            if (t.getName().equals(tournament.getName())) {
-                clubTournaments.set(i, tournament);
-                return;
-            }
-        }
-
-        clubTournaments.add(tournament);
-    }
-
-    @Override
-    public List<Tournament> getTournaments(Club club) {
-        List<Tournament> clubTournaments = this.tournaments.get(club.getOwnerUsername());
-        if (clubTournaments == null) {
-            return new ArrayList<>();
-        }
-        return clubTournaments;
-    }
-
-    @Override
-    public Tournament getTournament(Club club, String name) {
-        return getTournament(club, name, tournaments);
-    }
-
-    public List<Tournament> getTournamentsByCity(String city) {
-        return getTournaments(city, tournaments);
-    }
-
-    @Override
-    public List<Tournament> getPlayerTournaments(Player player) {
-        return getPlayerTournaments(player, tournaments);
     }
 
 }
