@@ -7,7 +7,7 @@ public abstract class ApplicationController {
 
     protected final SessionManager sessionManager;
 
-    public ApplicationController(SessionManager sessionManager) {
+    protected ApplicationController(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
