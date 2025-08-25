@@ -61,34 +61,27 @@ public class AddTournamentApplicationController extends ApplicationController {
         return tournament.estimateEndDate();
     }
 
-    public boolean validStartDate(TournamentBean tournamentBean, LocalDate startDate) {
+    public void assertValidStartDate(TournamentBean tournamentBean, LocalDate startDate) {
         LocalDate signupDeadline = tournamentBean.getSignupDeadline();
         LocalDate endDate = tournamentBean.getEndDate();
-        if (startDate == null || !DateRules.isDateValid(startDate) || !DateRules.isStartDateValid(startDate, signupDeadline, endDate)) {
+        if (startDate == null || !DateRules.isStartDateValid(startDate, signupDeadline, endDate)) {
             throw new InvalidDateException();
         }
-        return true;
     }
 
-    public boolean validSignupDeadline(TournamentBean tournamentBean, LocalDate deadline) {
+    public void assertValidSignupDeadline(TournamentBean tournamentBean, LocalDate deadline) {
         LocalDate startDate = tournamentBean.getStartDate();
-        if (deadline == null || !DateRules.isDeadlineValid(deadline, startDate) || !DateRules.isDateValid(deadline)) {
+        if (deadline == null || !DateRules.isDeadlineValid(deadline, startDate)) {
             throw new InvalidDateException();
         }
-        return true;
     }
 
-    public boolean validEndDate(TournamentBean tournamentBean, LocalDate endDate) {
+    public void assertValidEndDate(TournamentBean tournamentBean, LocalDate endDate) {
         LocalDate startDate = tournamentBean.getStartDate();
-        if (endDate == null || !DateRules.isEndDateValid(endDate, startDate) || !DateRules.isDateValid(endDate)) {
+        if (endDate == null || !DateRules.isEndDateValid(endDate, startDate)) {
             throw new InvalidDateException();
         }
-        return true;
     }
-
-    /*
-     * The following methods are used to dynamically update the date pickers in the GUI disabling all the invalid dates.
-     */
 
     public LocalDate minimumStartDate() {
         return DateRules.minimumStartDate();

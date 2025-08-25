@@ -7,11 +7,8 @@ public class DateRules {
     private DateRules() {
     }
 
-    public static boolean isDateValid(LocalDate date) {
-        return !date.isBefore(LocalDate.now());
-    }
-
     public static boolean isStartDateValid(LocalDate startDate, LocalDate signupDeadline, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now().plusDays(2))) return false;
         if (signupDeadline != null) {
             return startDate.isAfter(signupDeadline);
         }
@@ -19,6 +16,7 @@ public class DateRules {
     }
 
     public static boolean isDeadlineValid(LocalDate deadline, LocalDate startDate) {
+        if (deadline.isBefore(LocalDate.now().plusDays(1))) return false;
         if (startDate != null) {
             return deadline.isBefore(startDate);
         }
@@ -26,6 +24,7 @@ public class DateRules {
     }
 
     public static boolean isEndDateValid(LocalDate endDate, LocalDate startDate) {
+        if (endDate.isBefore(LocalDate.now().plusDays(2))) return false;
         return !endDate.isBefore(startDate);
     }
 

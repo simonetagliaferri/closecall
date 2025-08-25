@@ -150,7 +150,7 @@ public class Tournament implements Publisher, Serializable {
     }
 
     public boolean isInviteExpireDateValid(LocalDate date) {
-        return !date.isAfter(getSignupDeadline());
+        return !date.isAfter(maxInviteExpiryDate()) && !date.isBefore(minInviteExpiryDate());
     }
 
 

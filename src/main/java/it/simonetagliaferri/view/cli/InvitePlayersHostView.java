@@ -29,7 +29,7 @@ public class InvitePlayersHostView {
     }
 
     public void invalidExpireDate() {
-        CliUtils.println("Invalid expire date entered. The expire date must be the same day or earlier than the signup deadline.");
+        CliUtils.println("Invalid expire date entered. The expire date must be not after the signup deadline and not earlier than today.");
     }
 
     public void invalidDate() {

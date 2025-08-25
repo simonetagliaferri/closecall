@@ -217,9 +217,8 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     @FXML
     private void checkStartDate() {
         try {
-            if (this.controller.validStartDate(tournamentBean, startDatePicker.getValue())) {
-                tournamentBean.setStartDate(startDatePicker.getValue());
-            }
+            this.controller.assertValidStartDate(tournamentBean, startDatePicker.getValue());
+            tournamentBean.setStartDate(startDatePicker.getValue());
             startDateLabel.setText("Start date");
             startDateLabel.setTextFill(Color.BLACK);
             deadlinePicker.setDayCellFactory(param -> new DateCell() {
@@ -239,9 +238,8 @@ public class GraphicAddTournamentControllerGUI extends GraphicController impleme
     @FXML
     private void checkSignupDeadline() {
         try {
-            if (this.controller.validSignupDeadline(tournamentBean, deadlinePicker.getValue())) {
-                tournamentBean.setSignupDeadline(deadlinePicker.getValue());
-            }
+            this.controller.assertValidSignupDeadline(tournamentBean, deadlinePicker.getValue());
+            tournamentBean.setSignupDeadline(deadlinePicker.getValue());
             deadlineLabel.setText("Signup deadline");
             deadlineLabel.setTextFill(Color.BLACK);
             startDatePicker.setDayCellFactory(param -> new DateCell() {

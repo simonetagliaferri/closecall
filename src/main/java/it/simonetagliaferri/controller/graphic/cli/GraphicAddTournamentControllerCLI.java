@@ -64,10 +64,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             strDate = view.startDate();
             try {
                 startDate = DateConverter.formatDate(strDate);
-                if (this.controller.validStartDate(tournamentBean, startDate)) {
-                    tournamentBean.setStartDate(startDate);
-                    validDate = true;
-                }
+                this.controller.assertValidStartDate(tournamentBean, startDate);
+                tournamentBean.setStartDate(startDate);
+                validDate = true;
             } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
             }
@@ -82,10 +81,9 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
             strDate = view.signupDeadline();
             try {
                 deadline = DateConverter.formatDate(strDate);
-                if (this.controller.validSignupDeadline(tournamentBean, deadline)) {
-                    tournamentBean.setSignupDeadline(deadline);
-                    validDate = true;
-                }
+                this.controller.assertValidSignupDeadline(tournamentBean, deadline);
+                tournamentBean.setSignupDeadline(deadline);
+                validDate = true;
             } catch (DateTimeException | InvalidDateException e) {
                 view.invalidDate();
             }
@@ -102,18 +100,16 @@ public class GraphicAddTournamentControllerCLI extends GraphicController {
                 strEndDate = view.editEndDate();
                 try {
                     LocalDate newEndDate = DateConverter.formatDate(strEndDate);
-                    if (this.controller.validEndDate(tournamentBean, newEndDate)) {
-                        tournamentBean.setEndDate(newEndDate);
-                        validDate = true;
-                    }
+                    this.controller.assertValidEndDate(tournamentBean, newEndDate);
+                    tournamentBean.setEndDate(newEndDate);
+                    validDate = true;
                 } catch (DateTimeException | InvalidDateException e) {
                     view.invalidDate();
                 }
             }
         } else {
-            if (this.controller.validEndDate(tournamentBean, endDate)) {
-                tournamentBean.setEndDate(endDate);
-            }
+            this.controller.assertValidEndDate(tournamentBean, endDate);
+            tournamentBean.setEndDate(endDate);
         }
     }
 
