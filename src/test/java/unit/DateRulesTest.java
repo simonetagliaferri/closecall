@@ -32,13 +32,13 @@ class DateRulesTest {
 
     @Test
     void isStartDateValidReturnsFalseWhenNotAfterSignupDeadline() {
-        LocalDate signupDeadline = LocalDate.now();
+        LocalDate signupDeadline = LocalDate.now().plusDays(1);
         assertFalse(DateRules.isStartDateValid(signupDeadline, signupDeadline, null));
     }
 
     @Test
     void isEndDateValidReturnsFalseWhenEndBeforeStart() {
-        LocalDate startDate = LocalDate.now();
+        LocalDate startDate = LocalDate.now().plusDays(2);
         LocalDate endDate = startDate.minusDays(1);
         assertFalse(DateRules.isEndDateValid(endDate, startDate));
     }
