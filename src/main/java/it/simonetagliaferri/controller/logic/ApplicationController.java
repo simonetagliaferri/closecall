@@ -3,7 +3,7 @@ package it.simonetagliaferri.controller.logic;
 import it.simonetagliaferri.infrastructure.SessionManager;
 import it.simonetagliaferri.model.domain.Role;
 
-public class ApplicationController {
+public abstract class ApplicationController {
 
     protected final SessionManager sessionManager;
 
