@@ -13,9 +13,9 @@ import java.time.LocalDate;
 
 public class GraphicAddTournamentControllerCLI extends GraphicController {
 
-    AddTournamentCLIView view;
-    TournamentBean tournamentBean;
-    AddTournamentApplicationController controller;
+    private final AddTournamentCLIView view;
+    private final TournamentBean tournamentBean;
+    private final AddTournamentApplicationController controller;
 
     public GraphicAddTournamentControllerCLI(AppContext appContext) {
         super(appContext);

@@ -20,10 +20,10 @@ import java.util.List;
 
 public class JoinTournamentApplicationController extends ApplicationController {
 
-    TournamentDAO tournamentDAO;
-    ClubDAO clubDAO;
-    HostDAO hostDAO;
-    PlayerDAO playerDAO;
+    private final TournamentDAO tournamentDAO;
+    private final ClubDAO clubDAO;
+    private final HostDAO hostDAO;
+    private final PlayerDAO playerDAO;
 
     public JoinTournamentApplicationController(SessionManager sessionManager, TournamentDAO tournamentDAO, ClubDAO clubDAO, HostDAO hostDAO, PlayerDAO playerDAO) {
         super(sessionManager);

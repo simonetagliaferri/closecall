@@ -21,7 +21,7 @@ import java.util.List;
 public class GraphicJoinTournamentControllerGUI extends GraphicController implements GUIController {
 
     public static final String BLUE_BUTTON = "blue-button";
-    List<TitledPane> tournaments;
+    private List<TitledPane> tournaments;
     private JoinTournamentApplicationController controller;
     @FXML
     private Button searchButton;

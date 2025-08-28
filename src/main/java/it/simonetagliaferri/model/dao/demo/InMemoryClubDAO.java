@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class InMemoryClubDAO implements ClubDAO {
 
-    Map<String, Club> clubs;
+    private final Map<String, Club> clubs;
 
     InMemoryClubDAO(Map<String, Club> clubs) {
         this.clubs = clubs;

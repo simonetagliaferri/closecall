@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class InMemoryPlayerDAO implements PlayerDAO {
 
-    Map<String, Player> players;
+    private final Map<String, Player> players;
 
     InMemoryPlayerDAO(Map<String, Player> players) {
         this.players = players;

@@ -12,10 +12,10 @@ import java.util.List;
 
 public class JDBCTournamentDAO implements TournamentDAO {
 
-    public static final String TOURNAMENT_NAME = "tournamentName";
-    public static final String PLAYER_1 = "player1";
-    public static final String PLAYER_2 = "player2";
-    public static final String STATUS = "status";
+    private static final String TOURNAMENT_NAME = "tournamentName";
+    private static final String PLAYER_1 = "player1";
+    private static final String PLAYER_2 = "player2";
+    private static final String STATUS = "status";
 
     @Override
     public void saveTournament(Club club, Tournament tournament) {

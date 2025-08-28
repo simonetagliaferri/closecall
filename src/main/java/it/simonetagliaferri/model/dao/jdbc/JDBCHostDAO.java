@@ -17,7 +17,7 @@ import java.util.*;
 
 public class JDBCHostDAO implements HostDAO {
 
-    TournamentDAO tournamentDAO;
+    private final TournamentDAO tournamentDAO;
 
     public JDBCHostDAO(TournamentDAO tournamentDAO) {
         this.tournamentDAO = tournamentDAO;

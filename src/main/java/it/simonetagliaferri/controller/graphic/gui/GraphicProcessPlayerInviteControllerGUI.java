@@ -23,7 +23,7 @@ import java.util.List;
 public class GraphicProcessPlayerInviteControllerGUI extends GraphicController implements GUIController {
 
     public static final String BLUE_BUTTON = "blue-button";
-    List<TitledPane> invitesList;
+    private List<TitledPane> invitesList;
     private ProcessPlayerInviteApplicationController controller;
     @FXML
     private Accordion tournamentList;

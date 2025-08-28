@@ -22,10 +22,10 @@ import java.util.List;
 
 public class ProcessPlayerInviteApplicationController extends ApplicationController {
 
-    PlayerDAO playerDAO;
-    TournamentDAO tournamentDAO;
-    HostDAO hostDAO;
-    ClubDAO clubDAO;
+    private final PlayerDAO playerDAO;
+    private final TournamentDAO tournamentDAO;
+    private final HostDAO hostDAO;
+    private final ClubDAO clubDAO;
 
     public ProcessPlayerInviteApplicationController(SessionManager sessionManager, PlayerDAO playerDAO, TournamentDAO tournamentDAO, HostDAO hostDAO, ClubDAO clubDAO) {
         super(sessionManager);

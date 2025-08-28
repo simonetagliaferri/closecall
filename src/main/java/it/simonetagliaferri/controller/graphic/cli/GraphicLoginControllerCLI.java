@@ -9,8 +9,8 @@ import it.simonetagliaferri.view.cli.LoginCLIView;
 
 public class GraphicLoginControllerCLI extends GraphicController {
 
-    LoginCLIView view;
-    LoginApplicationController controller;
+    private final LoginCLIView view;
+    private final LoginApplicationController controller;
 
     public GraphicLoginControllerCLI(AppContext appContext) {
         super(appContext);

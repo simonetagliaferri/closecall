@@ -14,9 +14,9 @@ import java.time.LocalDate;
 
 public class GraphicInvitePlayerControllerCLI extends GraphicController {
 
-    InvitePlayersHostView view;
-    TournamentBean tournamentBean;
-    SendPlayerInviteApplicationController controller;
+    private final InvitePlayersHostView view;
+    private final TournamentBean tournamentBean;
+    private final SendPlayerInviteApplicationController controller;
 
     public GraphicInvitePlayerControllerCLI(AppContext appContext, TournamentBean tournamentBean) {
         super(appContext);

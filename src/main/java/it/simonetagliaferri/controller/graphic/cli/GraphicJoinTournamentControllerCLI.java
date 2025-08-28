@@ -10,8 +10,8 @@ import java.util.List;
 
 public class GraphicJoinTournamentControllerCLI extends GraphicController {
 
-    JoinTournamentApplicationController controller;
-    JoinTournamentView view;
+    private final JoinTournamentApplicationController controller;
+    private final JoinTournamentView view;
 
     public GraphicJoinTournamentControllerCLI(AppContext appContext) {
         super(appContext);

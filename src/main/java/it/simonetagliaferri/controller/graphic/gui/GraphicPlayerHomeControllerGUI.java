@@ -21,7 +21,7 @@ public class GraphicPlayerHomeControllerGUI extends GraphicController implements
     public void initializeController(AppContext appContext) {
         this.navigationManager = appContext.getNavigationManager();
         PlayerDashboardApplicationController controller = new PlayerDashboardApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getClubDAO());
+                appContext.getDAOFactory().getTournamentDAO());
         postInit(controller.getMyTournaments());
     }
 

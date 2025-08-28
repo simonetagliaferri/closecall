@@ -12,8 +12,8 @@ import it.simonetagliaferri.utils.converters.HostMapper;
 
 public class HostDashboardApplicationController extends ApplicationController {
 
-    HostDAO hostDAO;
-    ClubDAO clubDAO;
+    private final HostDAO hostDAO;
+    private final ClubDAO clubDAO;
 
     public HostDashboardApplicationController(SessionManager sessionManager, HostDAO hostDAO, ClubDAO clubDAO) {
         super(sessionManager);

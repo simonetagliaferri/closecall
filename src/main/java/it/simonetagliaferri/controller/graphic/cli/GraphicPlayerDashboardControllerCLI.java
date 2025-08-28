@@ -11,14 +11,14 @@ import java.util.List;
 
 public class GraphicPlayerDashboardControllerCLI extends GraphicController {
 
-    PlayerDashboardApplicationController controller;
-    PlayerDashboardCLIView view;
+    private final PlayerDashboardApplicationController controller;
+    private final PlayerDashboardCLIView view;
 
     public GraphicPlayerDashboardControllerCLI(AppContext appContext) {
         super(appContext);
         this.view = new PlayerDashboardCLIView();
         this.controller = new PlayerDashboardApplicationController(appContext.getSessionManager(), appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getTournamentDAO(), appContext.getDAOFactory().getClubDAO());
+                appContext.getDAOFactory().getTournamentDAO());
     }
 
     public void showHome() {

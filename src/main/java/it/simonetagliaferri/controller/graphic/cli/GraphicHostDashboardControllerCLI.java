@@ -14,11 +14,10 @@ import java.util.List;
 
 public class GraphicHostDashboardControllerCLI extends GraphicController {
 
-    HostDashboardCLIView view;
-    HostDashboardApplicationController controller;
-    HostBean currentUser;
-
-    ManageTournamentsApplicationController tournamentController;
+    private final HostDashboardCLIView view;
+    private final HostDashboardApplicationController controller;
+    private final HostBean currentUser;
+    private final ManageTournamentsApplicationController tournamentController;
 
     public GraphicHostDashboardControllerCLI(AppContext appContext) {
         super(appContext);

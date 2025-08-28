@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GraphicPlayerNotificationsControllerGUI extends GraphicController implements GUIController {
 
-    HandleNotificationsApplicationController controller;
+    private HandleNotificationsApplicationController controller;
     @FXML
     private VBox notificationList;
 

@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class HandleNotificationsApplicationController extends ApplicationController {
 
-    PlayerDAO playerDAO;
-    HostDAO hostDAO;
+    private final PlayerDAO playerDAO;
+    private final HostDAO hostDAO;
 
     public HandleNotificationsApplicationController(SessionManager sessionManager, PlayerDAO playerDAO, HostDAO hostDAO) {
         super(sessionManager);

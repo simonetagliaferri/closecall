@@ -24,11 +24,11 @@ import java.time.LocalDate;
 
 public class SendPlayerInviteApplicationController extends ApplicationController {
 
-    PlayerDAO playerDAO;
-    TournamentDAO tournamentDAO;
-    HostDAO hostDAO;
-    ClubDAO clubDAO;
-    Tournament tournament;
+    private final PlayerDAO playerDAO;
+    private final TournamentDAO tournamentDAO;
+    private final HostDAO hostDAO;
+    private final ClubDAO clubDAO;
+    private final Tournament tournament;
 
     public SendPlayerInviteApplicationController(SessionManager sessionManager, PlayerDAO playerDAO, TournamentDAO tournamentDAO, HostDAO hostDAO, ClubDAO clubDAO, TournamentBean tournamentBean) {
         super(sessionManager);

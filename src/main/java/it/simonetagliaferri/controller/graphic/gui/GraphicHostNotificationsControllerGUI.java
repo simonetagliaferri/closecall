@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class GraphicHostNotificationsControllerGUI extends GraphicController implements GUIController {
 
-    HandleNotificationsApplicationController controller;
+    private HandleNotificationsApplicationController controller;
     @FXML
     private VBox notificationList;
 

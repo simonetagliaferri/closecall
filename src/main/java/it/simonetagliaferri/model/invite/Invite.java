@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Invite implements Serializable {
-    Tournament tournament;
-    Player player;
-    LocalDate sendDate;
-    LocalDate expiryDate;
-    InviteStatus status;
-    String message;
+    private Tournament tournament;
+    private final Player player;
+    private LocalDate sendDate;
+    private LocalDate expiryDate;
+    private InviteStatus status;
+    private String message;
 
     public Invite(Tournament tournament, Player player, LocalDate sendDate, LocalDate expiryDate, InviteStatus status, String message) {
         this.tournament = tournament;

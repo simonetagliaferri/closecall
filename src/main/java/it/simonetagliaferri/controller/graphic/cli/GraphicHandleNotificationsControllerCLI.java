@@ -14,9 +14,9 @@ import java.util.Map;
 
 public class GraphicHandleNotificationsControllerCLI extends GraphicController {
 
-    HandleNotificationsApplicationController controller;
-    PlayerNotificationsView playerView;
-    HostNotificationsView hostView;
+    private final HandleNotificationsApplicationController controller;
+    private final PlayerNotificationsView playerView;
+    private final HostNotificationsView hostView;
 
     public GraphicHandleNotificationsControllerCLI(AppContext appContext) {
         super(appContext);

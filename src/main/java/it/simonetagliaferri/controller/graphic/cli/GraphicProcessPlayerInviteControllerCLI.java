@@ -10,8 +10,8 @@ import java.util.List;
 
 public class GraphicProcessPlayerInviteControllerCLI extends GraphicController {
 
-    ProcessPlayerInviteApplicationController controller;
-    InvitePlayersPlayerView view;
+    private final ProcessPlayerInviteApplicationController controller;
+    private final InvitePlayersPlayerView view;
 
     public GraphicProcessPlayerInviteControllerCLI(AppContext appContext) {
         super(appContext);

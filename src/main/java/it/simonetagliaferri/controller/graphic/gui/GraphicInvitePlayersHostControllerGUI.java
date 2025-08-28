@@ -23,7 +23,7 @@ import java.time.LocalDate;
 public class GraphicInvitePlayersHostControllerGUI extends GraphicController implements GUIController {
 
     @FXML
-    RadioButton emailPlayer1;
+    private RadioButton emailPlayer1;
     private TournamentBean tournamentBean;
     private SendPlayerInviteApplicationController controller;
     @FXML

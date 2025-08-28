@@ -12,8 +12,8 @@ import static it.simonetagliaferri.view.cli.AddClubCLIView.PreambleChoice.ADD_CL
 
 public class GraphicAddClubControllerCLI extends GraphicController {
 
-    AddClubCLIView view;
-    AddClubApplicationController controller;
+    private final AddClubCLIView view;
+    private final AddClubApplicationController controller;
 
     public GraphicAddClubControllerCLI(AppContext appContext) {
         super(appContext);

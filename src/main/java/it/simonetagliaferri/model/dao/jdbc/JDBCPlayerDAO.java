@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class JDBCPlayerDAO implements PlayerDAO {
 
-    TournamentDAO tournamentDAO;
+    private final TournamentDAO tournamentDAO;
 
     public JDBCPlayerDAO(TournamentDAO tournamentDAO) {
         this.tournamentDAO = tournamentDAO;

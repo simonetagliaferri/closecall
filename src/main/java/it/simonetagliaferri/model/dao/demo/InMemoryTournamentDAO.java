@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTournamentDAO implements TournamentDAO {
-    Map<String, List<Tournament>> tournaments;
+    private final Map<String, List<Tournament>> tournaments;
 
     public InMemoryTournamentDAO(Map<String, List<Tournament>> tournaments) {
         this.tournaments = tournaments;

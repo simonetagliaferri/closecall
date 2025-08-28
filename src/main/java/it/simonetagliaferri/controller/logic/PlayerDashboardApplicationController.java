@@ -3,7 +3,6 @@ package it.simonetagliaferri.controller.logic;
 import it.simonetagliaferri.beans.PlayerBean;
 import it.simonetagliaferri.beans.TournamentBean;
 import it.simonetagliaferri.infrastructure.SessionManager;
-import it.simonetagliaferri.model.dao.ClubDAO;
 import it.simonetagliaferri.model.dao.PlayerDAO;
 import it.simonetagliaferri.model.dao.TournamentDAO;
 import it.simonetagliaferri.model.domain.Player;
@@ -16,15 +15,13 @@ import java.util.List;
 
 public class PlayerDashboardApplicationController extends ApplicationController {
 
-    PlayerDAO playerDAO;
-    TournamentDAO tournamentDAO;
-    ClubDAO clubDAO;
+    private final PlayerDAO playerDAO;
+    private final TournamentDAO tournamentDAO;
 
-    public PlayerDashboardApplicationController(SessionManager sessionManager, PlayerDAO playerDAO, TournamentDAO tournamentDAO, ClubDAO clubDAO) {
+    public PlayerDashboardApplicationController(SessionManager sessionManager, PlayerDAO playerDAO, TournamentDAO tournamentDAO) {
         super(sessionManager);
         this.playerDAO = playerDAO;
         this.tournamentDAO = tournamentDAO;
-        this.clubDAO = clubDAO;
     }
 
     private Player loadPlayer() {

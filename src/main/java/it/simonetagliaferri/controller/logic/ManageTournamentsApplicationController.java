@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ManageTournamentsApplicationController extends ApplicationController {
 
-    TournamentDAO tournamentDAO;
-    HostDAO hostDAO;
-    ClubDAO clubDAO;
+    private final TournamentDAO tournamentDAO;
+    private final HostDAO hostDAO;
+    private final ClubDAO clubDAO;
 
     public ManageTournamentsApplicationController(SessionManager sessionManager, TournamentDAO tournamentDAO, HostDAO hostDAO, ClubDAO clubDAO) {
         super(sessionManager);

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class GraphicPlayerDashboardControllerGUI extends GraphicDashboardControllerGUI {
 
-    PlayerDashboardApplicationController controller;
+    private PlayerDashboardApplicationController controller;
 
     @FXML
     private HBox contentWrapper;
@@ -52,8 +52,7 @@ public class GraphicPlayerDashboardControllerGUI extends GraphicDashboardControl
         this.navigationManager = appContext.getNavigationManager();
         this.controller = new PlayerDashboardApplicationController(appContext.getSessionManager(),
                 appContext.getDAOFactory().getPlayerDAO(),
-                appContext.getDAOFactory().getTournamentDAO(),
-                appContext.getDAOFactory().getClubDAO());
+                appContext.getDAOFactory().getTournamentDAO());
         postInit();
     }
 
